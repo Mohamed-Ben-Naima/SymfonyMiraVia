@@ -1,0 +1,98 @@
+/* Footer Styling */
+.custom-footer {
+    font-family: 'Arial', sans-serif;
+    color: #ffffff;
+}
+
+.footer-top {
+    background-color: #013a71; /* Dark blue */
+    padding: 2rem 1rem;
+}
+
+.footer-bottom {
+    background-color: #00254c; /* Even darker blue */
+    padding: 1rem 1rem;
+}
+
+.dropdown-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-select {
+    max-width: 100%; /* Ensure it fits within its container */
+    background-color: #ffffff;
+    color: #013a71; /* Dark blue text */
+    border: 1px solid #81a8c5; /* Light blue border */
+    border-radius: 5px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-select:focus {
+    border-color: #7d8c6d; /* Olive green focus */
+    outline: none;
+}
+
+.payment-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.payment-icons img {
+    height: 40px;
+    margin: 0 0.5rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.8;
+}
+
+.payment-icons img:hover {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-icon {
+    color: #ffffff;
+    font-size: 1.5rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icon:hover {
+    color: #81a8c5; /* Light blue hover effect */
+    transform: scale(1.2);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .footer-top {
+        text-align: center;
+    }
+
+    .payment-icons img {
+        height: 30px;
+        margin: 0 0.3rem;
+    }
+
+    .social-icon {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-select {
+        max-width: 100%;
+    }
+
+    .dropdown-section {
+        gap: 0.5rem;
+    }
+}
