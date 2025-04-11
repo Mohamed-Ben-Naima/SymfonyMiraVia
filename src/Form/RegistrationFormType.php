@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
@@ -20,63 +21,100 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('prenom', TextType::class, [
-                'label' => 'Prénom',
+                'label' => 'Prénom *',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Jean'
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer votre prénom.',
                     ]),
+                    new Length([
+                        'min' => 2,
+                        'max' => 50,
+                        'minMessage' => 'Le prénom doit contenir au moins {{ limit }} caractères',
+                        'maxMessage' => 'Le prénom ne peut pas dépasser {{ limit }} caractères'
+                    ]),
                 ],
             ])
             ->add('nom', TextType::class, [
-                'label' => 'Nom de famille',
+                'label' => 'Nom de famille *',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Dupont'
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer votre nom de famille.',
                     ]),
+                    new Length([
+                        'min' => 2,
+                        'max' => 50,
+                        'minMessage' => 'Le nom doit contenir au moins {{ limit }} caractères',
+                        'maxMessage' => 'Le nom ne peut pas dépasser {{ limit }} caractères'
+                    ]),
                 ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Adresse e-mail',
+                'label' => 'Adresse e-mail *',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'exemple@domaine.com'
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer une adresse e-mail.',
                     ]),
                 ],
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
             ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
+                'label' => 'Mot de passe *',
                 'mapped' => false,
-                'label' => 'Mot de passe',
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => [
+                    'class' => 'form-control password-input',
+                    'autocomplete' => 'new-password',
+                    'placeholder' => '••••••••',
+                    'data-password-toggle' => 'true'
+                ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Veuillez entrer un mot de passe',
                     ]),
                     new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
+                        'min' => 8,
+                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
                         'max' => 4096,
+                    ]),
+                    new Regex([
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+                        'message' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial'
                     ]),
                 ],
             ])
-        ;
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'label' => 'J\'accepte les <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">conditions d\'utilisation</a> *',
+                'label_html' => true,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez accepter nos conditions.',
+                    ]),
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'novalidate' => 'novalidate', // Disable HTML5 validation
+            'attr' => [
+                'novalidate' => 'novalidate',
+                'class' => 'needs-validation',
+            ],
+            'error_mapping' => [
+                '.' => 'plainPassword', // Map general errors to password field
+            ],
         ]);
     }
 }
