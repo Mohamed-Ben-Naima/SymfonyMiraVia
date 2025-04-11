@@ -1,4 +1,4 @@
-/* Footer Styling */
+/* General Styling */
 .custom-footer {
     font-family: 'Arial', sans-serif;
     color: #ffffff;
@@ -7,6 +7,7 @@
 .footer-top {
     background-color: #013a71; /* Dark blue */
     padding: 2rem 1rem;
+    border-bottom: 2px solid #00254c;
 }
 
 .footer-bottom {
@@ -14,33 +15,36 @@
     padding: 1rem 1rem;
 }
 
-.dropdown-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.form-select {
-    max-width: 100%; /* Ensure it fits within its container */
-    background-color: #ffffff;
-    color: #013a71; /* Dark blue text */
-    border: 1px solid #81a8c5; /* Light blue border */
-    border-radius: 5px;
-    padding: 0.5rem;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.form-select:focus {
-    border-color: #7d8c6d; /* Olive green focus */
-    outline: none;
-}
-
-.payment-title {
-    font-size: 1rem;
+.footer-title {
+    font-size: 1.3rem;
     font-weight: bold;
     margin-bottom: 1rem;
     color: #ffffff;
+    text-transform: uppercase;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-links a:hover {
+    color: #81a8c5; /* Light blue hover effect */
+    transform: translateX(4px);
 }
 
 .payment-icons img {
@@ -53,6 +57,24 @@
 .payment-icons img:hover {
     transform: scale(1.1);
     opacity: 1;
+}
+
+.enterprise-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-top: 1rem;
+}
+
+.enterprise-link {
+    color: #81a8c5;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.enterprise-link:hover {
+    text-decoration: underline;
 }
 
 .social-icons {
@@ -75,6 +97,11 @@
 @media (max-width: 768px) {
     .footer-top {
         text-align: center;
+        padding: 2rem 1.5rem;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.5rem;
     }
 
     .payment-icons img {
@@ -93,6 +120,18 @@
     }
 
     .dropdown-section {
-        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.3rem;
+    }
+
+    .footer-title {
+        font-size: 1.1rem;
+    }
+
+    .enterprise-title {
+        font-size: 1rem;
     }
 }
