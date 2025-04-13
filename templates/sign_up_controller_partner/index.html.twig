@@ -7,9 +7,9 @@
         margin: 0;
         padding: 0;
         font-family: 'Roboto', sans-serif;
-        background: linear-gradient(to bottom, #87CEEB, #E3FDFD); /* Sky gradient with soft tones */
+        background: linear-gradient(to bottom, #87CEEB, #E3FDFD);
         color: #333;
-        overflow-x: hidden; /* Prevent horizontal scrolling */
+        overflow-x: hidden;
     }
 
     .background {
@@ -20,7 +20,7 @@
         height: 100%;
         z-index: -1;
         overflow: hidden;
-        pointer-events: none; /* Background is not interactive */
+        pointer-events: none;
     }
 
     .background .realistic-cloud {
@@ -31,17 +31,29 @@
         animation: cloud-move 40s linear infinite;
     }
 
-    /* Different cloud positions and animations */
-    .realistic-cloud:nth-child(1) { width: 250px; height: 120px; top: 10%; left: -15%; animation-duration: 25s; }
-    .realistic-cloud:nth-child(2) { width: 350px; height: 180px; top: 25%; left: 10%; animation-duration: 40s; }
-    .realistic-cloud:nth-child(3) { width: 300px; height: 150px; top: 55%; left: -20%; animation-duration: 35s; }
-    .realistic-cloud:nth-child(4) { width: 400px; height: 200px; top: 75%; left: 15%; animation-duration: 50s; }
-    .realistic-cloud:nth-child(5) { width: 500px; height: 250px; top: 5%; left: 60%; animation-duration: 60s; }
-    .realistic-cloud:nth-child(6) { width: 300px; height: 170px; top: 85%; left: 40%; animation-duration: 45s; }
+    .background .trajectory {
+        position: absolute;
+        width: 200%;
+        height: 400px;
+        background: none;
+        border-top: 2px dashed rgba(1, 58, 113, 0.4);
+        border-radius: 50%;
+        animation: trajectory-animation 8s infinite ease-in-out;
+    }
+
+    .background .trajectory:nth-child(7) { top: 12%; left: -60%; animation-duration: 6s; }
+    .background .trajectory:nth-child(8) { top: 35%; left: -70%; animation-duration: 9s; }
+    .background .trajectory:nth-child(9) { top: 55%; left: -80%; animation-duration: 7s; }
+    .background .trajectory:nth-child(10) { top: 75%; left: -90%; animation-duration: 10s; }
 
     @keyframes cloud-move {
         0% { transform: translateX(0); }
         100% { transform: translateX(120%); }
+    }
+
+    @keyframes trajectory-animation {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(50%); }
     }
 
     .form-container {
@@ -86,40 +98,50 @@
         display: block;
     }
 
-    .input-group {
-        margin-bottom: 1.2rem;
-        position: relative; /* For password toggle icon positioning */
-    }
-
-    .input-group-text {
-        background-color: #f0faff;
-        border-color: #81a8c5;
-        padding: 0.5rem 0.9rem;
-        border-radius: 8px 0 0 8px;
+    .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
     }
 
     .form-control {
-        border-radius: 0 8px 8px 0;
-        border: 2px solid #81a8c5;
-        background: #ffffff;
-        padding: 0.6rem 0.9rem;
-        font-size: 0.9rem;
+        padding-right: 40px;
+        padding-left: 40px;
+        height: 50px;
+        border-radius: 10px;
+        border: 1px solid #ced4da;
         transition: border-color 0.3s, box-shadow 0.3s;
+        background: #f9f9f9;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .form-control:focus {
         border-color: #013a71;
         box-shadow: 0 0 8px rgba(1, 58, 113, 0.3);
+        background: #ffffff;
     }
+
+    .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    z-index: 5;
+    font-size: 0.9rem;
+    margin-left: 8px;
+}
+
 
     .password-toggle {
         position: absolute;
-        right: 10px;
+        right: 15px;
         top: 50%;
+        margin-right:10px;
         transform: translateY(-50%);
         cursor: pointer;
-        color: #aaa;
-        transition: color 0.2s;
+        color: #6c757d;
+        z-index: 5;
+        font-size: 0.9rem;
     }
 
     .password-toggle:hover {
@@ -130,6 +152,7 @@
         border-radius: 12px;
         font-weight: bold;
         font-size: 1rem;
+        padding: 12px;
         transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
     }
 
@@ -146,15 +169,14 @@
     }
 
     .form-footer {
-        margin-top: 2rem;
         text-align: center;
+        margin-top: 1.5rem;
     }
 
     .form-footer a {
-        color: #013A71;
+        color: #013a71;
+        font-weight: 500;
         text-decoration: none;
-        font-weight: bold;
-        font-size: 0.85rem;
     }
 
     .form-footer a:hover {
@@ -163,29 +185,15 @@
 
     @media (max-width: 768px) {
         .form-container {
-            margin: 1rem;
+            margin: 1rem auto;
+        }
+
+        .form-content {
+            padding: 1.5rem;
         }
 
         .form-content h2 {
             font-size: 1.5rem;
-        }
-
-        .form-control {
-            font-size: 0.85rem;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .form-content h2 {
-            font-size: 1.3rem;
-        }
-
-        .form-control {
-            font-size: 0.8rem;
-        }
-
-        .btn {
-            font-size: 0.85rem;
         }
     }
 </style>
@@ -199,104 +207,84 @@
     <div class="realistic-cloud"></div>
     <div class="realistic-cloud"></div>
     <div class="realistic-cloud"></div>
+
+    <div class="trajectory"></div>
+    <div class="trajectory"></div>
+    <div class="trajectory"></div>
+    <div class="trajectory"></div>
 </div>
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="form-container shadow-lg">
         <div class="form-image"></div>
-
-        <!-- Sign-Up Form -->
         <div class="form-content">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
-            <h2>Créer un compte</h2>
+            <h2>Bienvenue à bord – Inscrivez-vous !</h2>
 
-            <form method="post" action="{{ path('app_sign_up_controller_partner') }}" class="needs-validation" novalidate>
-                <div class="row">
-                    <!-- First Name -->
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa fa-user"></i></span>
-                            <input type="text" name="first_name" class="form-control" placeholder="Prénom" required>
-                        </div>
-                    </div>
-
-                    <!-- Last Name -->
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa fa-user"></i></span>
-                            <input type="text" name="last_name" class="form-control" placeholder="Nom de famille" required>
-                        </div>
-                    </div>
+            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+            
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <i class="fas fa-user input-icon"></i>
+                    {{ form_widget(form.first_name, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
                 </div>
-
-                <div class="row mt-3">
-                    <!-- Email -->
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa fa-envelope"></i></span>
-                            <input type="email" name="email" class="form-control" placeholder="Adresse email" required>
-                        </div>
-                    </div>
-
-                    <!-- Phone -->
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa fa-phone"></i></span>
-                            <input type="text" name="phone" class="form-control" placeholder="Numéro de téléphone" required>
-                        </div>
-                    </div>
+                <div class="col-md-6 form-group">
+                    <i class="fas fa-user input-icon"></i>
+                    {{ form_widget(form.last_name, {'attr': {'class': 'form-control', 'placeholder': 'Nom de famille'}}) }}
                 </div>
+            </div>
 
-                <div class="row mt-3">
-                    <!-- Password -->
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa fa-lock"></i></span>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="Mot de passe" required>
-                            <span class="password-toggle" onclick="togglePasswordVisibility('password')">
-                                <i class="fa fa-eye"></i>
-                            </span>
-                        </div>
-                    </div>
+            <div class="form-group">
+                <i class="fas fa-map-marker-alt input-icon"></i>
+                {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Adresse'}}) }}
+            </div>
 
-                    <!-- Confirm Password -->
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa fa-lock"></i></span>
-                            <input type="password" name="confirm_password" id="confirmPassword" class="form-control" placeholder="Confirmer le mot de passe" required>
-                            <span class="password-toggle" onclick="togglePasswordVisibility('confirmPassword')">
-                                <i class="fa fa-eye"></i>
-                            </span>
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Adresse email'}}) }}
                 </div>
-
-                <!-- Address -->
-                <div class="input-group mt-3">
-                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
-                    <input type="text" name="address" class="form-control" placeholder="Adresse">
+                <div class="col-md-6 form-group">
+                    <i class="fas fa-phone input-icon"></i>
+                    {{ form_widget(form.phone, {'attr': {'class': 'form-control', 'placeholder': 'Numéro de téléphone'}}) }}
                 </div>
+            </div>
 
-                <!-- CAPTCHA -->
-                <div class="text-center mt-4">
-                    <p class="fw-bold">CAPTCHA</p>
-                    <img src="{{ path('captcha') }}" alt="Captcha" class="mb-2" style="height: 60px; width: 160px;">
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="refreshCaptcha()">Rafraîchir CAPTCHA</button>
-                    <input type="text" name="captcha" class="form-control mt-2" placeholder="Entrez le texte ici" required>
-                </div>
+  <!-- Password and Confirm Password -->
+<div class="row">
+    <div class="col-md-6 form-group">
+        <i class="fas fa-lock input-icon"></i>
+        {{ form_widget(form.password.first, {
+            attr: {
+                class: 'form-control password-field',
+                placeholder: 'Mot de passe'
+            }
+        }) }}
+        <i class="far fa-eye-slash password-toggle" onclick="togglePasswordVisibility(this)" aria-label="Afficher/Masquer le mot de passe"></i>
+    </div>
+    <div class="col-md-6 form-group">
+        <i class="fas fa-lock input-icon"></i>
+        {{ form_widget(form.password.second, {
+            attr: {
+                class: 'form-control password-field',
+                placeholder: 'Confirmer le mot de passe'
+            }
+        }) }}
+        <i class="far fa-eye-slash password-toggle" onclick="togglePasswordVisibility(this)" aria-label="Afficher/Masquer le mot de passe"></i>
+    </div>
+</div>
 
-                <!-- Terms and Conditions -->
-                <div class="form-check mt-4">
-                    <input class="form-check-input" type="checkbox" name="terms" id="termsCheckBox" required>
-                    <label class="form-check-label" for="termsCheckBox">
-                        J'ai lu, compris et accepté les <a href="#" class="text-primary">conditions générales</a>.
-                    </label>
-                </div>
+            <div class="form-check">
+                {{ form_widget(form.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                <label class="form-check-label" for="{{ form.agreeTerms.vars.id }}">
+                    J'accepte les termes et conditions
+                </label>
+            </div>
 
-                <button type="submit" class="btn btn-primary w-100 mt-4">S'inscrire</button>
-            </form>
+            <button type="submit" class="btn btn-primary w-100 mt-4">S'inscrire</button>
+            {{ form_end(form) }}
 
-            <div class="form-footer mt-4">
+            <div class="form-footer">
                 <p>Vous avez un compte ? <a href="{{ path('app_login_controller_partner') }}">Connectez-vous</a></p>
             </div>
         </div>
@@ -304,20 +292,20 @@
 </div>
 
 <script>
-    function togglePasswordVisibility(fieldId) {
-        const field = document.getElementById(fieldId);
-        const icon = field.nextElementSibling.querySelector('i');
-        if (field.type === 'password') {
-            field.type = 'text';
-            icon.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            field.type = 'password';
-            icon.classList.replace('fa-eye-slash', 'fa-eye');
-        }
-    }
+function togglePasswordVisibility(iconElement) {
+    const input = iconElement.parentElement.querySelector('.password-field');
+    if (!input) return;
 
-    function refreshCaptcha() {
-        document.querySelector('img[alt="Captcha"]').src = "{{ path('captcha') }}?" + Date.now();
+    if (input.type === 'password') {
+        input.type = 'text';
+        iconElement.classList.remove('fa-eye-slash');
+        iconElement.classList.add('fa-eye');
+    } else {
+        input.type = 'password';
+        iconElement.classList.remove('fa-eye');
+        iconElement.classList.add('fa-eye-slash');
     }
+}
 </script>
+
 {% endblock %}
