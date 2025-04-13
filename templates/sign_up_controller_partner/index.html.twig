@@ -1,0 +1,323 @@
+{% block stylesheets %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    /* Global Styling */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(to bottom, #87CEEB, #E3FDFD); /* Sky gradient with soft tones */
+        color: #333;
+        overflow-x: hidden; /* Prevent horizontal scrolling */
+    }
+
+    .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+        pointer-events: none; /* Background is not interactive */
+    }
+
+    .background .realistic-cloud {
+        position: absolute;
+        background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.7) 60%, rgba(255, 255, 255, 0) 100%);
+        filter: blur(15px);
+        border-radius: 60% 40% 60% 40%;
+        animation: cloud-move 40s linear infinite;
+    }
+
+    /* Different cloud positions and animations */
+    .realistic-cloud:nth-child(1) { width: 250px; height: 120px; top: 10%; left: -15%; animation-duration: 25s; }
+    .realistic-cloud:nth-child(2) { width: 350px; height: 180px; top: 25%; left: 10%; animation-duration: 40s; }
+    .realistic-cloud:nth-child(3) { width: 300px; height: 150px; top: 55%; left: -20%; animation-duration: 35s; }
+    .realistic-cloud:nth-child(4) { width: 400px; height: 200px; top: 75%; left: 15%; animation-duration: 50s; }
+    .realistic-cloud:nth-child(5) { width: 500px; height: 250px; top: 5%; left: 60%; animation-duration: 60s; }
+    .realistic-cloud:nth-child(6) { width: 300px; height: 170px; top: 85%; left: 40%; animation-duration: 45s; }
+
+    @keyframes cloud-move {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(120%); }
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 650px;
+        width: 95%;
+        margin: 2rem auto;
+        background: linear-gradient(to bottom, #ffffff, #f0faff);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .form-container:hover {
+        transform: scale(1.02);
+    }
+
+    .form-image {
+        height: 200px;
+        background-image: url('{{ asset('images/airplane.jpg') }}');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .form-content {
+        padding: 2rem;
+    }
+
+    .form-content h2 {
+        color: #013a71;
+        font-weight: bold;
+        font-size: 1.8rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-content img.logo {
+        max-width: 100px;
+        margin: 0 auto 20px;
+        display: block;
+    }
+
+    .input-group {
+        margin-bottom: 1.2rem;
+        position: relative; /* For password toggle icon positioning */
+    }
+
+    .input-group-text {
+        background-color: #f0faff;
+        border-color: #81a8c5;
+        padding: 0.5rem 0.9rem;
+        border-radius: 8px 0 0 8px;
+    }
+
+    .form-control {
+        border-radius: 0 8px 8px 0;
+        border: 2px solid #81a8c5;
+        background: #ffffff;
+        padding: 0.6rem 0.9rem;
+        font-size: 0.9rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #013a71;
+        box-shadow: 0 0 8px rgba(1, 58, 113, 0.3);
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #aaa;
+        transition: color 0.2s;
+    }
+
+    .password-toggle:hover {
+        color: #013a71;
+    }
+
+    .btn {
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #013a71, #015a91);
+        border: none;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #012a51, #014a71);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(1, 58, 113, 0.3);
+    }
+
+    .form-footer {
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .form-footer a {
+        color: #013A71;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.85rem;
+    }
+
+    .form-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .form-container {
+            margin: 1rem;
+        }
+
+        .form-content h2 {
+            font-size: 1.5rem;
+        }
+
+        .form-control {
+            font-size: 0.85rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .form-content h2 {
+            font-size: 1.3rem;
+        }
+
+        .form-control {
+            font-size: 0.8rem;
+        }
+
+        .btn {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="background">
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+</div>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="form-container shadow-lg">
+        <div class="form-image"></div>
+
+        <!-- Sign-Up Form -->
+        <div class="form-content">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+            <h2>Créer un compte</h2>
+
+            <form method="post" action="{{ path('app_sign_up_controller_partner') }}" class="needs-validation" novalidate>
+                <div class="row">
+                    <!-- First Name -->
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-user"></i></span>
+                            <input type="text" name="first_name" class="form-control" placeholder="Prénom" required>
+                        </div>
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-user"></i></span>
+                            <input type="text" name="last_name" class="form-control" placeholder="Nom de famille" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <!-- Email -->
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                            <input type="email" name="email" class="form-control" placeholder="Adresse email" required>
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                            <input type="text" name="phone" class="form-control" placeholder="Numéro de téléphone" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <!-- Password -->
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Mot de passe" required>
+                            <span class="password-toggle" onclick="togglePasswordVisibility('password')">
+                                <i class="fa fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                            <input type="password" name="confirm_password" id="confirmPassword" class="form-control" placeholder="Confirmer le mot de passe" required>
+                            <span class="password-toggle" onclick="togglePasswordVisibility('confirmPassword')">
+                                <i class="fa fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="input-group mt-3">
+                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                    <input type="text" name="address" class="form-control" placeholder="Adresse">
+                </div>
+
+                <!-- CAPTCHA -->
+                <div class="text-center mt-4">
+                    <p class="fw-bold">CAPTCHA</p>
+                    <img src="{{ path('captcha') }}" alt="Captcha" class="mb-2" style="height: 60px; width: 160px;">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="refreshCaptcha()">Rafraîchir CAPTCHA</button>
+                    <input type="text" name="captcha" class="form-control mt-2" placeholder="Entrez le texte ici" required>
+                </div>
+
+                <!-- Terms and Conditions -->
+                <div class="form-check mt-4">
+                    <input class="form-check-input" type="checkbox" name="terms" id="termsCheckBox" required>
+                    <label class="form-check-label" for="termsCheckBox">
+                        J'ai lu, compris et accepté les <a href="#" class="text-primary">conditions générales</a>.
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mt-4">S'inscrire</button>
+            </form>
+
+            <div class="form-footer mt-4">
+                <p>Vous avez un compte ? <a href="{{ path('app_login_controller_partner') }}">Connectez-vous</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePasswordVisibility(fieldId) {
+        const field = document.getElementById(fieldId);
+        const icon = field.nextElementSibling.querySelector('i');
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            field.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+
+    function refreshCaptcha() {
+        document.querySelector('img[alt="Captcha"]').src = "{{ path('captcha') }}?" + Date.now();
+    }
+</script>
+{% endblock %}
