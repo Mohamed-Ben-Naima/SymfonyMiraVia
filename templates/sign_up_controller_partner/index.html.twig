@@ -273,6 +273,15 @@
         <i class="far fa-eye-slash password-toggle" onclick="togglePasswordVisibility(this)" aria-label="Afficher/Masquer le mot de passe"></i>
     </div>
 </div>
+<div class="form-group text-center">
+    <p class="fw-bold">CAPTCHA</p>
+    <img src="{{ path('captcha') }}" alt="Captcha" class="mb-2" style="height: 60px; width: 160px;">
+    <button type="button" class="btn btn-secondary btn-sm" onclick="refreshCaptcha()">
+        <i class="fas fa-sync-alt"></i> <!-- Icône de rafraîchissement -->
+    </button>
+    <input type="text" name="captcha" class="form-control mt-2" placeholder="Entrez le texte ici" required>
+</div>
+
 
             <div class="form-check">
                 {{ form_widget(form.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
@@ -306,6 +315,9 @@ function togglePasswordVisibility(iconElement) {
         iconElement.classList.add('fa-eye-slash');
     }
 }
+ function refreshCaptcha() {
+        document.querySelector('img[alt="Captcha"]').src = "{{ path('captcha') }}?" + Date.now();
+    }
 </script>
 
 {% endblock %}
