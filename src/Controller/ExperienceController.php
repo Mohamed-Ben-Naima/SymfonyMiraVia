@@ -6,13 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class ForgetPasswordController extends AbstractController
+final class ExperienceController extends AbstractController
 {
-    #[Route('/forget/password', name: 'app_forget_password')]
+    #[Route('/experience', name: 'app_experience')]
     public function index(): Response
     {
-        return $this->render('forget_password/index.html.twig', [
-            'controller_name' => 'ForgetPasswordController',
+        return $this->render('experience/index.html.twig', [
+            'controller_name' => 'ExperienceController',
         ]);
     }
 }
