@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+<<<<<<< HEAD
         .card {
             border: none; /* Supprime la bordure par défaut */
             border-radius: 15px; /* Coins arrondis */
@@ -70,6 +71,47 @@
             gap: 20px; /* Espace entre les cartes */
             justify-content: space-between; /* Distribution uniforme des cartes */
             flex-wrap: nowrap; /* Empêche les cartes de passer à la ligne suivante */
+=======
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        .card-title i {
+            margin-right: 10px;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #E8E7DE; /* Hover effect */
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+        }
+        .card.bg-primary {
+            background-color: #81A8C5 !important;
+        }
+        .card.bg-success {
+            background-color: #7D8C6D !important;
+        }
+        .card.bg-warning {
+            background-color: #E8E7DE !important;
+            color: #013A71;
+        }
+        .card.bg-danger {
+            background-color: #013A71 !important;
+            color: #ffffff;
+        }
+        .badge.bg-danger {
+            background-color: #013A71 !important;
+        }
+        .badge.bg-warning {
+            background-color: #E8E7DE !important;
+            color: #013A71;
+        }
+        .badge.bg-success {
+            background-color: #7D8C6D !important;
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
         }
     </style>
 {% endblock %}
@@ -79,45 +121,103 @@
     <div class="row">
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+<<<<<<< HEAD
 
             <!-- Cards Section with White Background -->
             <div class="cards-background">
                 <div class="cards-container">
                     <div class="card bg-primary">
+=======
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Dashboard</h1>
+            </div>
+
+            <!-- Cards Section -->
+            <div class="row">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card text-white bg-primary mb-3">
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
                         <div class="card-body">
                             <h5 class="card-title"><i class="fas fa-users"></i> Total Users</h5>
                             <p class="card-text">78,250</p>
                         </div>
                     </div>
+<<<<<<< HEAD
                     <div class="card bg-success">
+=======
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card text-white bg-success mb-3">
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
                         <div class="card-body">
                             <h5 class="card-title"><i class="fas fa-dollar-sign"></i> Total Sales</h5>
                             <p class="card-text">$35,078</p>
                         </div>
                     </div>
+<<<<<<< HEAD
                     <div class="card bg-warning">
+=======
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card bg-warning mb-3">
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
                         <div class="card-body">
                             <h5 class="card-title"><i class="fas fa-shopping-cart"></i> Total Orders</h5>
                             <p class="card-text">18,800</p>
                         </div>
                     </div>
+<<<<<<< HEAD
                     <div class="card bg-danger">
+=======
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card bg-danger mb-3">
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
                         <div class="card-body">
                             <h5 class="card-title"><i class="fas fa-chart-line"></i> Revenue</h5>
                             <p class="card-text">$7,650</p>
                         </div>
                     </div>
+<<<<<<< HEAD
                     <div class="card bg-info">
                         <div class="card-body">
                             <h5 class="card-title"><i class="fas fa-comments"></i> Feedbacks</h5>
                             <p class="card-text">1,245</p>
+=======
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Stacked Bar Chart
+                        </div>
+                        <div class="card-body">
+                            <div id="stackedBarChart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Radar Chart
+                        </div>
+                        <div class="card-body">
+                            <div id="radarChart"></div>
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Recent Orders -->
+<<<<<<< HEAD
             <div class="recent-orders card mt-4">
+=======
+            <div class="card mb-4">
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
                 <div class="card-header">
                     Recent Orders
                 </div>
@@ -167,12 +267,19 @@
         </main>
     </div>
 </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
 {% endblock %}
 
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
+<<<<<<< HEAD
+=======
+        // Graphique à barres empilées
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
         var stackedBarOptions = {
             chart: {
                 type: 'bar',
@@ -192,6 +299,10 @@
         var stackedBarChart = new ApexCharts(document.querySelector("#stackedBarChart"), stackedBarOptions);
         stackedBarChart.render();
 
+<<<<<<< HEAD
+=======
+        // Graphique en radar avec données statiques
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
         var radarOptions = {
             chart: {
                 type: 'radar',
