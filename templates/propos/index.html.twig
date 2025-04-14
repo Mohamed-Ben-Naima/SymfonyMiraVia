@@ -1,36 +1,196 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProposController!
-{% endblock %}
+{% block title %}À propos de Miravia | Plateforme d'engagement solidaire{% endblock %}
 
 {% block body %}
-	<style>
-		.example-wrapper {
-			margin: 1em auto;
-			max-width: 800px;
-			width: 95%;
-			font: 18px / 1.5 sans-serif;
-		}
-		.example-wrapper code {
-			background: #F5F5F5;
-			padding: 2px 6px;
-		}
-	</style>
+    <!-- Hero Section -->
+    <section class="hero-section s position-relative overflow-hidden">
+        <div class="container py-8 py-lg-10">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 order-lg-1 order-2">
+                    <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Engagement citoyen</span>
+                    <h1 class="display-4 fw-bold mb-4">Chaque <span class="text-primary">connexion</span> crée un <span class="text-primary">changement</span></h1>
+                    <p class="lead text-muted mb-5">Miravia n'est pas une plateforme, c'est un mouvement. Nous croyons que l'engagement citoyen devrait être aussi fluide qu'une conversation entre amis.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="{{ path('app_register') }}" class="btn btn-primary btn-lg px-4">
+                            <i class="bi bi-people-fill me-2"></i> Nous rejoindre
+                        </a>
+                        <a href="#valeurs" class="btn btn-outline-primary btn-lg px-4">
+                            <i class="bi bi-compass me-2"></i> Nos valeurs
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-2 order-1">
+                        <img src="{{ asset('images/about/hero-illustration.jpeg') }}" alt="Communauté solidaire" class="img-fluid rounded-4 shadow-lg" loading="lazy">
+                    <div class="hero-image position-relative">
+                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary bg-opacity-5 rounded-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-	<div
-		class="example-wrapper">
-		{# TODO: Imporve the propos Design make it come to life #}
-		<h1>Hello
-			{{ controller_name }}! ✅</h1>
+    <!-- Values Section -->
+    <section id="valeurs" class="py-8 py-lg-10 bg-white">
+        <div class="container">
+            <div class="text-center mb-7">
+                <span class="badge bg-secondary bg-opacity-10 text-secondary mb-3">Notre ADN</span>
+                <h2 class="display-5 fw-bold mb-3">Des principes, pas des slogans</h2>
+                <p class="lead text-muted mx-auto" style="max-width: 700px;">La boussole qui guide chacune de nos actions</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Value 1 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+                        <div class="card-body p-5 text-center">
+                            <div class="icon-square bg-primary bg-opacity-10 text-primary rounded-3 mb-4 mx-auto">
+                                <i class="bi bi-people fs-2"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Connecteur d'énergies</h3>
+                            <p class="text-muted mb-0">Nous créons des synergies improbables entre bénévoles, associations et entreprises.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Value 2 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+                        <div class="card-body p-5 text-center">
+                            <div class="icon-square bg-primary bg-opacity-10 text-primary rounded-3 mb-4 mx-auto">
+                                <i class="bi bi-bar-chart fs-2"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Impact mesurable</h3>
+                            <p class="text-muted mb-0">Chaque heure de bénévolat, chaque don est traduit en impact concret.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Value 3 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+                        <div class="card-body p-5 text-center">
+                            <div class="icon-square bg-primary bg-opacity-10 text-primary rounded-3 mb-4 mx-auto">
+                                <i class="bi bi-heart fs-2"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Authenticité radicale</h3>
+                            <p class="text-muted mb-0">Zero greenwashing. Des actions réelles, des résultats vérifiables.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-		This friendly message is coming from:
-		<ul>
-			<li>Your controller at
-				<code>C:/ProjetWebMira/miravia/src/Controller/ProposController.php</code>
-			</li>
-			<li>Your template at
-				<code>C:/ProjetWebMira/miravia/templates/propos/index.html.twig</code>
-			</li>
-		</ul>
-	</div>
+    <!-- Timeline Section -->
+    <section class="py-8 py-lg-10 bg-light">
+        <div class="container">
+            <div class="text-center mb-7">
+                <span class="badge bg-secondary bg-opacity-10 text-secondary mb-3">Notre parcours</span>
+                <h2 class="display-5 fw-bold mb-3">Construire l'engagement de demain</h2>
+            </div>
+            
+            <div class="timeline position-relative">
+                <div class="timeline-line position-absolute top-0 bottom-0 start-50 translate-middle-x bg-primary bg-opacity-25" style="width: 2px;"></div>
+                
+                <!-- Timeline Item 1 -->
+                <div class="row g-0 mb-5 mb-lg-7 position-relative">
+                    <div class="col-md-6 mb-4 mb-md-0 pe-md-5 text-md-end">
+                        <div class="h-100 p-4 p-lg-5 pe-lg-6">
+                            <span class="badge bg-primary rounded-pill mb-2">2023</span>
+                            <h3 class="h4 mb-3">Naissance d'une idée</h3>
+                            <p class="text-muted mb-0">Lancé par 3 amis frustrés par la complexité de l'engagement associatif.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ps-md-5">
+                        <div class="h-100 p-4 p-lg-5 ps-lg-6">
+                            <div class="timeline-dot position-absolute top-50 start-50 translate-middle bg-white border border-4 border-primary rounded-circle" style="width: 20px; height: 20px;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 2 -->
+                <div class="row g-0 mb-5 mb-lg-7 position-relative">
+                    <div class="col-md-6 pe-md-5">
+                        <div class="h-100 p-4 p-lg-5 pe-lg-6">
+                            <div class="timeline-dot position-absolute top-50 start-50 translate-middle bg-white border border-4 border-primary rounded-circle" style="width: 20px; height: 20px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4 mb-md-0 ps-md-5">
+                        <div class="h-100 p-4 p-lg-5 ps-lg-6">
+                            <span class="badge bg-primary rounded-pill mb-2">2024</span>
+                            <h3 class="h4 mb-3">Premier impact</h3>
+                            <p class="text-muted mb-0">500 bénévoles mobilisés pour des maraudes hivernales à Paris.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 3 -->
+                <div class="row g-0 position-relative">
+                    <div class="col-md-6 mb-4 mb-md-0 pe-md-5 text-md-end">
+                        <div class="h-100 p-4 p-lg-5 pe-lg-6">
+                            <span class="badge bg-primary rounded-pill mb-2">2025</span>
+                            <h3 class="h4 mb-3">Révolution en marche</h3>
+                            <p class="text-muted mb-0">32 départements couverts, 180 associations partenaires.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ps-md-5">
+                        <div class="h-100 p-4 p-lg-5 ps-lg-6">
+                            <div class="timeline-dot position-absolute top-50 start-50 translate-middle bg-white border border-4 border-primary rounded-circle" style="width: 20px; height: 20px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-8 py-lg-10 bg-white">
+        <div class="container">
+            <div class="text-center mb-7">
+                <span class="badge bg-secondary bg-opacity-10 text-secondary mb-3">L'âme de Miravia</span>
+                <h2 class="display-5 fw-bold mb-3">Des passionnés, pas des employés</h2>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm overflow-hidden">
+                        <div class="row g-0">
+                            <div class="col-md-6 position-relative">
+                                <img src="{{ asset('images/about/values-collage.webp') }}" class="img-fluid h-100 object-cover" alt="Équipe Miravia" loading="lazy">
+                                <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary bg-opacity-10"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card-body p-5">
+                                    <h3 class="h2 mb-4">L'équipe</h3>
+                                    <p class="text-muted mb-5">Développeurs, travailleurs sociaux et activistes unis par une conviction commune : rendre l'engagement accessible à tous.</p>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <span class="badge bg-primary bg-opacity-10 text-primary">Engagement</span>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary">Innovation</span>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary">Transparence</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-8 py-lg-10 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="display-5 fw-bold mb-4">Prêt à transformer votre bonne volonté en action ?</h2>
+            <p class="lead text-white-50 mb-5 mx-auto" style="max-width: 600px;">Rejoignez 2 500 citoyens qui ont déjà franchi le pas.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="{{ path('app_register') }}" class="btn btn-light btn-lg px-4">
+                    <i class="bi bi-rocket me-2"></i> Démarrer maintenant
+                </a>
+                <a href="{{ path('app_evenement') }}" class="btn btn-outline-light btn-lg px-4">
+                    <i class="bi bi-calendar-event me-2"></i> Voir les événements
+                </a>
+            </div>
+        </div>
+    </section>
 {% endblock %}
