@@ -2,24 +2,24 @@
     <ul class="nav nav-pills flex-column mb-auto">
         <!-- Dashboard -->
         <li class="nav-item">
-            <a href="{{ path('app_admin_dashboard') }}" class="nav-link {% if app.request.attributes.get('_route') == 'admin_dashboard' %}active{% endif %}">
+            <a href="{{ path('app_admin_dashboard') }}" class="nav-link" data-title="Tableau de bord" onclick="updateNavbarTitle(event)">
                 <i class="fas fa-home me-2"></i> Dashboard
             </a>
         </li>
 
         <!-- Utilisateurs Section with Submenus -->
         <li>
-            <a href="#usersSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="nav-link">
+            <a href="#usersSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="nav-link" data-title="Utilisateurs" onclick="updateNavbarTitle(event)">
                 <i class="fas fa-users me-2"></i> Utilisateurs
             </a>
             <ul class="collapse list-unstyled ps-4" id="usersSubmenu">
                 <li>
-                    <a href="{{ path('app_admin_partner') }}" class="nav-link {% if app.request.attributes.get('_route') == 'admin_partner' %}active{% endif %}">
+                    <a href="{{ path('app_admin_partner') }}" class="nav-link" data-title="Partenaire" onclick="updateNavbarTitle(event)">
                         Partenaire
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_admin_client') }}" class="nav-link {% if app.request.attributes.get('_route') == 'admin_client' %}active{% endif %}">
+                    <a href="{{ path('app_admin_client') }}" class="nav-link" data-title="Client" onclick="updateNavbarTitle(event)">
                         Client
                     </a>
                 </li>
@@ -28,54 +28,55 @@
 
         <!-- Demandes Partenaires -->
         <li>
-            <a href="{{ path('app_admin_demande_partner') }}" class="nav-link {% if app.request.attributes.get('_route') == 'admin_partner_requests' %}active{% endif %}">
+            <a href="{{ path('app_admin_demande_partner') }}" class="nav-link" data-title="Demandes Partenaires" onclick="updateNavbarTitle(event)">
                 <i class="fas fa-handshake me-2"></i> Demandes Partenaires
             </a>
         </li>
 
         <!-- Demandes Aide -->
         <li>
-            <a href="{{ path('app_admin_aid_requests') }}" class="nav-link {% if app.request.attributes.get('_route') == 'admin_aid_requests' %}active{% endif %}">
+            <a href="{{ path('app_admin_aid_requests') }}" class="nav-link" data-title="Demandes Aide" onclick="updateNavbarTitle(event)">
                 <i class="fas fa-hands-helping me-2"></i> Demandes Aide
             </a>
         </li>
 
         <!-- Messagerie -->
         <li>
-            <a href="{{ path('app_admin_messaging') }}" class="nav-link {% if app.request.attributes.get('_route') == 'admin_messaging' %}active{% endif %}">
+            <a href="{{ path('app_admin_messaging') }}" class="nav-link" data-title="Messagerie" onclick="updateNavbarTitle(event)">
                 <i class="fas fa-envelope me-2"></i> Messagerie
             </a>
         </li>
 
         <!-- Paramètre -->
         <li>
-            <a href="{{ path('app_admin_settings') }}" class="nav-link {% if app.request.attributes.get('_route') == 'admin_settings' %}active{% endif %}">
+            <a href="{{ path('app_admin_settings') }}" class="nav-link" data-title="Paramètre" onclick="updateNavbarTitle(event)">
                 <i class="fas fa-cogs me-2"></i> Paramètre
             </a>
         </li>
 
         <!-- Don -->
         <li>
-            <a href="{{ path('app_admin_donations') }}" class="nav-link {% if app.request.attributes.get('_route') == 'admin_donations' %}active{% endif %}">
+            <a href="{{ path('app_admin_donations') }}" class="nav-link" data-title="Don" onclick="updateNavbarTitle(event)">
                 <i class="fas fa-donate me-2"></i> Don
             </a>
         </li>
 
         <!-- Bénévolat -->
         <li>
-            <a href="{{ path('app_admin_volunteering') }}" class="nav-link {% if app.request.attributes.get('_route') == 'admin_volunteering' %}active{% endif %}">
+            <a href="{{ path('app_admin_volunteering') }}" class="nav-link" data-title="Bénévolat" onclick="updateNavbarTitle(event)">
                 <i class="fas fa-hands me-2"></i> Bénévolat
             </a>
         </li>
 
         <!-- Événement -->
         <li>
-            <a href="{{ path('app_admin_events') }}" class="nav-link {% if app.request.attributes.get('_route') == 'admin_events' %}active{% endif %}">
+            <a href="{{ path('app_admin_events') }}" class="nav-link" data-title="Événement" onclick="updateNavbarTitle(event)">
                 <i class="fas fa-calendar-alt me-2"></i> Événement
             </a>
         </li>
     </ul>
 </div>
+
 <style>
 /* Sidebar styling */
 .sidebar {
