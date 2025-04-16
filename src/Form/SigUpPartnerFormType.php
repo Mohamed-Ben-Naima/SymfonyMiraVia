@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\IsTrue;
-use App\Entity\User; // Assurez-vous que la classe User est importée
+use App\Entity\User;
 
 class SigUpPartnerFormType extends AbstractType
 {
@@ -24,6 +24,7 @@ class SigUpPartnerFormType extends AbstractType
             ->add('first_name', TextType::class, [
                 'label' => 'Prénom',
                 'attr' => ['placeholder' => 'Entrez votre prénom'],
+                'property_path' => 'prenom', // Mappe le champ "first_name" à la propriété "prenom" de l'entité
                 'constraints' => [
                     new NotBlank(['message' => 'Le prénom est obligatoire.']),
                     new Length(['max' => 50, 'maxMessage' => 'Le prénom ne peut pas dépasser 50 caractères.']),
@@ -32,6 +33,7 @@ class SigUpPartnerFormType extends AbstractType
             ->add('last_name', TextType::class, [
                 'label' => 'Nom de famille',
                 'attr' => ['placeholder' => 'Entrez votre nom de famille'],
+                'property_path' => 'nom', // Mappe le champ "last_name" à la propriété "nom" de l'entité
                 'constraints' => [
                     new NotBlank(['message' => 'Le nom de famille est obligatoire.']),
                     new Length(['max' => 50, 'maxMessage' => 'Le nom de famille ne peut pas dépasser 50 caractères.']),
@@ -48,6 +50,7 @@ class SigUpPartnerFormType extends AbstractType
             ->add('phone', TextType::class, [
                 'label' => 'Numéro de téléphone',
                 'attr' => ['placeholder' => 'Entrez votre numéro de téléphone'],
+                'property_path' => 'telephone', // Mappe le champ "phone" à la propriété "telephone" de l'entité
                 'constraints' => [
                     new NotBlank(['message' => 'Le numéro de téléphone est obligatoire.']),
                     new Length([
@@ -61,7 +64,8 @@ class SigUpPartnerFormType extends AbstractType
             ->add('address', TextType::class, [
                 'label' => 'Adresse',
                 'attr' => ['placeholder' => 'Entrez votre adresse'],
-                'required' => false, // L'adresse n'est pas obligatoire
+                'property_path' => 'adresse_utilisateur', // Mappe le champ "address" à la propriété "adresse_utilisateur" de l'entité
+                'required' => false,
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -74,6 +78,7 @@ class SigUpPartnerFormType extends AbstractType
                     'attr' => ['placeholder' => 'Répétez le mot de passe'],
                 ],
                 'invalid_message' => 'Les mots de passe doivent correspondre.',
+                'property_path' => 'mot_de_passe', // Maps the form field to the "mot_de_passe" property
                 'constraints' => [
                     new NotBlank(['message' => 'Le mot de passe est obligatoire.']),
                     new Length([
@@ -95,7 +100,7 @@ class SigUpPartnerFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class, // Associe le formulaire à l'entité User
+            'data_class' => User::class,
         ]);
     }
 }

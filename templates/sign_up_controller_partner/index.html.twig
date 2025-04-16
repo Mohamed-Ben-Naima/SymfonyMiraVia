@@ -1,5 +1,5 @@
 {% block stylesheets %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{ asset('style-partner/bootstrap.min.css') }}" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
     /* Global Styling */
@@ -75,7 +75,7 @@
 
     .form-image {
         height: 200px;
-        background-image: url('{{ asset('images/airplane.jpg') }}');
+        background-image: url('{{ asset('images-partner/airplane.jpg') }}');
         background-size: cover;
         background-position: center;
     }
@@ -120,23 +120,33 @@
         background: #ffffff;
     }
 
-    .input-icon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6c757d;
-    z-index: 5;
-    font-size: 0.9rem;
-    margin-left: 8px;
-}
+    .is-invalid {
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 5px rgba(220, 53, 69, 0.5) !important;
+    }
 
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+        z-index: 5;
+        font-size: 0.9rem;
+        margin-left: 8px;
+    }
 
     .password-toggle {
         position: absolute;
         right: 15px;
         top: 50%;
-        margin-right:10px;
+        margin-right: 10px;
         transform: translateY(-50%);
         cursor: pointer;
         color: #6c757d;
@@ -174,7 +184,7 @@
     }
 
     .form-footer a {
-        color: #013a71;
+        color:rgb(9, 89, 164);
         font-weight: 500;
         text-decoration: none;
     }
@@ -227,75 +237,82 @@
                 <div class="col-md-6 form-group">
                     <i class="fas fa-user input-icon"></i>
                     {{ form_widget(form.first_name, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+                    {{ form_errors(form.first_name) }}
                 </div>
                 <div class="col-md-6 form-group">
                     <i class="fas fa-user input-icon"></i>
                     {{ form_widget(form.last_name, {'attr': {'class': 'form-control', 'placeholder': 'Nom de famille'}}) }}
+                    {{ form_errors(form.last_name) }}
                 </div>
             </div>
 
             <div class="form-group">
                 <i class="fas fa-map-marker-alt input-icon"></i>
                 {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Adresse'}}) }}
+                {{ form_errors(form.address) }}
             </div>
 
             <div class="row">
                 <div class="col-md-6 form-group">
                     <i class="fas fa-envelope input-icon"></i>
                     {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Adresse email'}}) }}
+                    {{ form_errors(form.email) }}
                 </div>
                 <div class="col-md-6 form-group">
                     <i class="fas fa-phone input-icon"></i>
                     {{ form_widget(form.phone, {'attr': {'class': 'form-control', 'placeholder': 'Numéro de téléphone'}}) }}
+                    {{ form_errors(form.phone) }}
                 </div>
             </div>
 
-  <!-- Password and Confirm Password -->
-<div class="row">
-    <div class="col-md-6 form-group">
-        <i class="fas fa-lock input-icon"></i>
-        {{ form_widget(form.password.first, {
-            attr: {
-                class: 'form-control password-field',
-                placeholder: 'Mot de passe'
-            }
-        }) }}
-        <i class="far fa-eye-slash password-toggle" onclick="togglePasswordVisibility(this)" aria-label="Afficher/Masquer le mot de passe"></i>
-    </div>
-    <div class="col-md-6 form-group">
-        <i class="fas fa-lock input-icon"></i>
-        {{ form_widget(form.password.second, {
-            attr: {
-                class: 'form-control password-field',
-                placeholder: 'Confirmer le mot de passe'
-            }
-        }) }}
-        <i class="far fa-eye-slash password-toggle" onclick="togglePasswordVisibility(this)" aria-label="Afficher/Masquer le mot de passe"></i>
-    </div>
-</div>
-<div class="form-group text-center">
-    <p class="fw-bold">CAPTCHA</p>
-    <img src="{{ path('captcha') }}" alt="Captcha" class="mb-2" style="height: 60px; width: 160px;">
-    <button type="button" class="btn btn-secondary btn-sm" onclick="refreshCaptcha()">
-        <i class="fas fa-sync-alt"></i> <!-- Icône de rafraîchissement -->
-    </button>
-    <input type="text" name="captcha" class="form-control mt-2" placeholder="Entrez le texte ici" required>
-</div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    {{ form_widget(form.password.first, {
+                        attr: {
+                            class: 'form-control password-field',
+                            placeholder: 'Mot de passe'
+                        }
+                    }) }}
+                    <i class="far fa-eye-slash password-toggle" onclick="togglePasswordVisibility(this)" aria-label="Afficher/Masquer le mot de passe"></i>
+                    {{ form_errors(form.password.first) }}
+                </div>
+                <div class="col-md-6 form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    {{ form_widget(form.password.second, {
+                        attr: {
+                            class: 'form-control password-field',
+                            placeholder: 'Confirmer le mot de passe'
+                        }
+                    }) }}
+                    <i class="far fa-eye-slash password-toggle" onclick="togglePasswordVisibility(this)" aria-label="Afficher/Masquer le mot de passe"></i>
+                    {{ form_errors(form.password.second) }}
+                </div>
+            </div>
 
+            <div class="form-group text-center">
+                <p class="fw-bold">CAPTCHA</p>
+                <img src="{{ path('captcha') }}" alt="Captcha" class="mb-2" style="height: 60px; width: 160px;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="refreshCaptcha()">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <input type="text" name="captcha" class="form-control mt-2" placeholder="Entrez le texte ici" required>
+            </div>
 
             <div class="form-check">
                 {{ form_widget(form.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
                 <label class="form-check-label" for="{{ form.agreeTerms.vars.id }}">
                     J'accepte les termes et conditions
                 </label>
+                {{ form_errors(form.agreeTerms) }}
             </div>
 
             <button type="submit" class="btn btn-primary w-100 mt-4">S'inscrire</button>
             {{ form_end(form) }}
 
-            <div class="form-footer">
-                <p>Vous avez un compte ? <a href="{{ path('app_login_controller_partner') }}">Connectez-vous</a></p>
-            </div>
+              <p class="text-center">
+                <a href="{{ path('app_login_controller_partner') }}" class="text-primary text-decoration-none">Retour à la connexion</a>
+            </p>
         </div>
     </div>
 </div>
@@ -315,9 +332,10 @@ function togglePasswordVisibility(iconElement) {
         iconElement.classList.add('fa-eye-slash');
     }
 }
- function refreshCaptcha() {
-        document.querySelector('img[alt="Captcha"]').src = "{{ path('captcha') }}?" + Date.now();
-    }
+
+function refreshCaptcha() {
+    document.querySelector('img[alt="Captcha"]').src = "{{ path('captcha') }}?" + Date.now();
+}
 </script>
 
 {% endblock %}
