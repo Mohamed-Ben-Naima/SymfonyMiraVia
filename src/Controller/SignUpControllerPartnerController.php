@@ -31,8 +31,8 @@ final class SignUpControllerPartnerController extends AbstractController
 
             // Create a new User entity
             $user = new User();
-            $user->setFirstName($formData['first_name']);
-            $user->setLastName($formData['last_name']);
+            $user->setNom($formData['first_name']);
+            $user->setPrenom($formData['last_name']);
             $user->setEmail($formData['email']);
 
             // Hash the password
