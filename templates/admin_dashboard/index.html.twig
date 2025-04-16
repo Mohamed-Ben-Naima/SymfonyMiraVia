@@ -1,50 +1,114 @@
 {% extends 'baseAdmin.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}
+    Dashboard
+{% endblock %}
 
 {% block stylesheets %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 50%;
+            overflow-y: auto; /* Active le scroll vertical pour toute la page */
+        }
+
+        main {
+            flex: 1;
+            overflow-y: auto; /* Active le scroll pour le contenu principal */
+            padding-bottom: 20px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
         .card-title {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.25rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
         }
+
         .card-title i {
             margin-right: 10px;
+            font-size: 1.5rem;
         }
-        .table-hover tbody tr:hover {
-            background-color: #E8E7DE; /* Hover effect */
-        }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-        }
+
         .card.bg-primary {
-            background-color: #81A8C5 !important;
+            background-color: #FFCDD2FF !important;
+            color: #000000;
         }
+
         .card.bg-success {
-            background-color: #7D8C6D !important;
+            background-color: #C8E6C9FF !important;
+            color: #000000;
         }
+
         .card.bg-warning {
-            background-color: #E8E7DE !important;
-            color: #013A71;
+            background-color: #FFE0B2FF !important;
+            color: #000000;
         }
+
         .card.bg-danger {
-            background-color: #013A71 !important;
-            color: #ffffff;
+            background-color: #E1BEE7FF !important;
+            color: #000000;
         }
-        .badge.bg-danger {
-            background-color: #013A71 !important;
+
+        .card.bg-info {
+            background-color: #BBDEFBFF !important;
+            color: #000000;
         }
-        .badge.bg-warning {
-            background-color: #E8E7DE !important;
-            color: #013A71;
+
+        .cards-background {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 2rem;
         }
-        .badge.bg-success {
-            background-color: #7D8C6D !important;
+
+        .cards-container {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+        }
+
+        .graphs-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+            margin-top: 20px; /* Sépare les graphiques de la table */
+        }
+
+        .graph-container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 48%; /* Ajuste la largeur pour un affichage responsive */
+            min-height: 350px; /* Définit une hauteur minimale pour que les graphiques soient visibles */
+        }
+
+        .recent-orders {
+            overflow-x: auto; /* Permet un défilement horizontal si nécessaire */
         }
     </style>
 {% endblock %}
@@ -52,119 +116,94 @@
 {% block body %}
 <div class="container-fluid">
     <div class="row">
-        <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Dashboard</h1>
-            </div>
-
-            <!-- Cards Section -->
-            <div class="row">
-                <div class="col-md-6 col-lg-3">
-                    <div class="card text-white bg-primary mb-3">
+            <div class="cards-background">
+                <h2 class=" mb-3" style="font-size: 1.5rem; font-weight: bold;">Statistiques</h2>
+                <div class="cards-container">
+                    <div class="card bg-primary">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-users"></i> Total Users</h5>
+                            <h5 class="card-title"><i class="fas fa-user-friends"></i> Clients</h5>
                             <p class="card-text">78,250</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="card text-white bg-success mb-3">
+                    <div class="card bg-success">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-dollar-sign"></i> Total Sales</h5>
-                            <p class="card-text">$35,078</p>
+                            <h5 class="card-title"><i class="fas fa-handshake"></i> Partenaires</h5>
+                            <p class="card-text">250</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="card bg-warning mb-3">
+                    <div class="card bg-warning">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-shopping-cart"></i> Total Orders</h5>
-                            <p class="card-text">18,800</p>
+                            <h5 class="card-title"><i class="fas fa-calendar-alt"></i> Evenements</h5>
+                            <p class="card-text">180</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="card bg-danger mb-3">
+                    <div class="card bg-danger">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-chart-line"></i> Revenue</h5>
-                            <p class="card-text">$7,650</p>
+                            <h5 class="card-title"><i class="fas fa-life-ring"></i> Demandes d'aide</h5>
+                            <p class="card-text">40</p>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Charts Section -->
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            Stacked Bar Chart
-                        </div>
+                    <div class="card bg-info">
                         <div class="card-body">
-                            <div id="stackedBarChart"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            Radar Chart
-                        </div>
-                        <div class="card-body">
-                            <div id="radarChart"></div>
+                            <h5 class="card-title"><i class="fas fa-donate"></i> Dons</h5>
+                            <p class="card-text">12</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Recent Orders -->
-            <div class="card mb-4">
+            <div class="recent-orders card mt-4">
                 <div class="card-header">
                     Recent Orders
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Tracking No.</th>
-                                    <th>Product Name</th>
-                                    <th>Total Order</th>
-                                    <th>Status</th>
-                                    <th>Total Amount</th>
-                                    <th>Image</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>84564564</td>
-                                    <td>Camera Lens</td>
-                                    <td>40</td>
-                                    <td><span class="badge bg-danger">Rejected</span></td>
-                                    <td>$40,570</td>
-                                    <td><img src="/images/camera-lens.jpg" alt="Camera Lens" class="img-thumbnail" width="50"></td>
-                                </tr>
-                                <tr>
-                                    <td>84564565</td>
-                                    <td>Laptop</td>
-                                    <td>300</td>
-                                    <td><span class="badge bg-warning">Pending</span></td>
-                                    <td>$180,139</td>
-                                    <td><img src="/images/laptop.jpg" alt="Laptop" class="img-thumbnail" width="50"></td>
-                                </tr>
-                                <tr>
-                                    <td>84564566</td>
-                                    <td>Mobile</td>
-                                    <td>355</td>
-                                    <td><span class="badge bg-success">Approved</span></td>
-                                    <td>$180,139</td>
-                                    <td><img src="/images/mobile.jpg" alt="Mobile" class="img-thumbnail" width="50"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Tracking No.</th>
+                                <th>Product Name</th>
+                                <th>Total Order</th>
+                                <th>Status</th>
+                                <th>Total Amount</th>
+                                <th>Image</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>84564564</td>
+                                <td>Camera Lens</td>
+                                <td>40</td>
+                                <td><span class="badge" style="background-color: #FFCDD2FF; color: #000;">Rejected</span></td>
+                                <td>$40,570</td>
+                                <td><img src="/images/camera-lens.jpg" alt="Camera Lens" class="img-thumbnail" width="50"></td>
+                            </tr>
+                            <tr>
+                                <td>84564565</td>
+                                <td>Laptop</td>
+                                <td>300</td>
+                                <td><span class="badge" style="background-color: #FFE0B2FF; color: #000;">Pending</span></td>
+                                <td>$180,139</td>
+                                <td><img src="/images/laptop.jpg" alt="Laptop" class="img-thumbnail" width="50"></td>
+                            </tr>
+                            <tr>
+                                <td>84564566</td>
+                                <td>Mobile</td>
+                                <td>355</td>
+                                <td><span class="badge" style="background-color: #C8E6C9FF; color: #000;">Approved</span></td>
+                                <td>$180,139</td>
+                                <td><img src="/images/mobile.jpg" alt="Mobile" class="img-thumbnail" width="50"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+
+            <div class="graphs-section">
+                <div class="graph-container" id="stackedBarChart"></div>
+                <div class="graph-container" id="radarChart"></div>
+                <div class="graph-container" id="lineChart"></div>
+                <div class="graph-container" id="pieChart"></div>
             </div>
         </main>
     </div>
@@ -172,41 +211,45 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script>
-        // Graphique à barres empilées
-        var stackedBarOptions = {
-            chart: {
-                type: 'bar',
-                height: 350,
-                stacked: true
-            },
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Stacked Bar Chart
+        const stackedBarOptions = {
+            chart: { type: 'bar', height: 350, stacked: true },
             series: [
                 { name: 'Product A', data: [60, 70, 80, 90, 100, 110] },
                 { name: 'Product B', data: [50, 60, 70, 80, 90, 100] },
                 { name: 'Product C', data: [40, 50, 60, 70, 80, 90] }
             ],
-            xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
-            },
-            colors: ['#81A8C5', '#E8E7DE', '#7D8C6D']
+            xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'] }
         };
-        var stackedBarChart = new ApexCharts(document.querySelector("#stackedBarChart"), stackedBarOptions);
-        stackedBarChart.render();
+        new ApexCharts(document.querySelector("#stackedBarChart"), stackedBarOptions).render();
 
-        // Graphique en radar avec données statiques
-        var radarOptions = {
-            chart: {
-                type: 'radar',
-                height: 350
-            },
-            series: [{
-                name: 'Performance',
-                data: [70, 60, 80, 90, 100, 50]
-            }],
+        // Radar Chart
+        const radarOptions = {
+            chart: { type: 'radar', height: 350 },
+            series: [{ name: 'Performance', data: [70, 60, 80, 90, 100, 50] }],
             labels: ['Communication', 'Sales', 'Support', 'Development', 'Marketing', 'Design']
         };
-        var radarChart = new ApexCharts(document.querySelector("#radarChart"), radarOptions);
-        radarChart.render();
-    </script>
+        new ApexCharts(document.querySelector("#radarChart"), radarOptions).render();
+
+        // Line Chart
+        const lineChartOptions = {
+            chart: { type: 'line', height: 350 },
+            series: [{ name: 'Revenue', data: [1000, 2000, 3000, 4000, 5000, 6000] }],
+            xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'] }
+        };
+        new ApexCharts(document.querySelector("#lineChart"), lineChartOptions).render();
+
+        // Pie Chart
+        const pieChartOptions = {
+            chart: { type: 'pie', height: 350 },
+            series: [12, 30, 25, 18, 15],
+            labels: ['France', 'Tunisia', 'Germany', 'USA', 'Others'],
+            colors: ['#FFCDD2', '#C8E6C9', '#FFE0B2', '#E1BEE7', '#BBDEFB']
+        };
+        new ApexCharts(document.querySelector("#pieChart"), pieChartOptions).render();
+    });
+</script>
 {% endblock %}
