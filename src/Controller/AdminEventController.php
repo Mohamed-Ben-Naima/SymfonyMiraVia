@@ -13,6 +13,8 @@ final class AdminEventController extends AbstractController
     {
         return $this->render('admin_event/index.html.twig', [
             'controller_name' => 'AdminEventController',
+            'pageTitle' => 'Evénement', // Le titre dynamique
+
         ]);
     }
 }

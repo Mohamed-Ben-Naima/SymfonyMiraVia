@@ -6,6 +6,10 @@
     height: 30px;
     cursor: pointer;
 }
+.navbar-text h4 {
+    color: #013A71;
+    margin-left: 100px; /* Déplacer légèrement le titre vers la droite */
+}
 
 .search-bar {
     width: 500px;
@@ -74,6 +78,9 @@
         <a class="navbar-brand d-flex align-items-center custom-logo" onclick="toggleSidebar()">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="me-2 logo-img">
         </a>
+    <div class="navbar-text ms-auto me-auto">
+    <h4 class="mb-0">{{ pageTitle|default('Titre par défaut') }}</h4> <!-- Valeur par défaut -->
+</div>
 
         <!-- Burger Menu for Mobile -->
         <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

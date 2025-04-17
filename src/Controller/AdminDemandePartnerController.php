@@ -13,6 +13,8 @@ final class AdminDemandePartnerController extends AbstractController
     {
         return $this->render('admin_demande_partner/index.html.twig', [
             'controller_name' => 'AdminDemandePartnerController',
+            'pageTitle' => 'Demandes Partenaires', // Le titre dynamique
+
         ]);
     }
 }

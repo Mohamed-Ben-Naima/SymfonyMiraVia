@@ -1,0 +1,171 @@
+<div class="container-fluid d-flex">
+    <!-- Include Sidebar Partial -->
+    {% include '/partials/_sidebar.html.twig' %}
+
+    <!-- Main Content -->
+    <main class="flex-grow-1 px-md-4" id="main-content">
+        <!-- Default Content -->
+        <div id="default-section">
+            <h2 class="mt-4">Informations Personnelles</h2>
+            <p>Bienvenue dans votre espace utilisateur. Sélectionnez une section dans la barre latérale pour voir plus de détails.</p>
+        </div>
+    </main>
+</div>
+
+<style>
+/* General Layout */
+.container-fluid {
+    display: flex;
+    height: 100vh; /* Full height of the viewport */
+    overflow: hidden;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 280px; /* Fixed width for the sidebar */
+    background-color: #ffffff; /* White background */
+    border-right: 1px solid #e0e0e0; /* Subtle border for separation */
+    height: 100vh; /* Full height of the viewport */
+    overflow-y: auto; /* Allow scrolling if content exceeds height */
+    position: sticky; /* Sidebar stays fixed while scrolling */
+    top: 0; /* Aligns sticky sidebar to the top */
+}
+.sidebar img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid #0d6efd; /* Blue border around the profile picture */
+    padding: 2px;
+}
+.sidebar h5 {
+    font-size: 1.25rem;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.sidebar p {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+.sidebar .nav-link {
+    color: #013A71;
+    padding: 10px 15px;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+.sidebar .nav-link.active {
+    background-color: #e6e6e6;
+    color: #013A71;
+    font-weight: bold;
+}
+.sidebar .nav-link:hover {
+    background-color: #81A8C5;
+    color: #ffffff;
+}
+
+/* Main Content Styling */
+main {
+    flex-grow: 1; /* Main content takes up remaining space */
+    padding: 20px;
+    background-color: #f8f9fa; /* Light gray background for content area */
+    overflow-y: auto; /* Scrollable content if necessary */
+    height: 100vh; /* Full height of the viewport */
+}
+main h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #013A71;
+    margin-bottom: 20px;
+}
+main p {
+    font-size: 1rem;
+    color: #495057;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%; /* Sidebar takes full width on smaller screens */
+        height: auto; /* Height adjusts based on content */
+        position: relative; /* Not fixed on smaller screens */
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0; /* Add bottom border for separation */
+    }
+    main {
+        height: auto; /* Allow content to flow naturally */
+    }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const navLinks = document.querySelectorAll(".nav-link");
+    const mainContent = document.getElementById("main-content");
+
+    // Function to dynamically update the main content
+    const sections = {
+        "link-informations": `
+            <h2 class="mt-4">Informations Personnelles</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="prenom" class="form-label">Prénom</label>
+                    <input type="text" class="form-control" id="prenom" placeholder="Jean" value="Ali">
+                </div>
+                <div class="mb-3">
+                    <label for="nom" class="form-label">Nom</label>
+                    <input type="text" class="form-control" id="nom" placeholder="Dupont" value="Ben Salah">
+                </div>
+                <div class="mb-3">
+                    <label for="date_naissance" class="form-label">Date de Naissance</label>
+                    <input type="date" class="form-control" id="date_naissance" value="1886-02-15">
+                </div>
+            </form>
+        `,
+        "link-favoris": `
+            <h2 class="mt-4">Favoris</h2>
+            <p>Voici vos éléments favoris. Ajoutez ou supprimez vos favoris depuis cette page.</p>
+        `,
+        "link-benevolat": `
+            <h2 class="mt-4">Bénévolat</h2>
+            <p>Gérez vos activités de bénévolat ici.</p>
+        `,
+        "link-demande": `
+            <h2 class="mt-4">Demande D'aide</h2>
+            <p>Suivez et gérez vos demandes d'aide.</p>
+        `,
+        "link-evenements": `
+            <h2 class="mt-4">Événements</h2>
+            <p>Découvrez les événements auxquels vous êtes inscrits ou intéressés.</p>
+        `,
+        "link-experiences": `
+            <h2 class="mt-4">Expériences</h2>
+            <p>Ajoutez et gérez vos expériences professionnelles ou bénévoles ici.</p>
+        `,
+        "link-parametres": `
+            <h2 class="mt-4">Paramètres</h2>
+            <p>Modifiez vos préférences et paramètres de compte.</p>
+        `,
+    };
+
+    navLinks.forEach(link => {
+        link.addEventListener("click", event => {
+            event.preventDefault();
+
+            // Remove the active class from all links
+            navLinks.forEach(nav => nav.classList.remove("active"));
+
+            // Add the active class to the clicked link
+            link.classList.add("active");
+
+            // Update the main content dynamically
+            const sectionId = link.id;
+            mainContent.innerHTML = sections[sectionId] || `
+                <h2 class="mt-4">Page Non Trouvée</h2>
+                <p>La section demandée n'existe pas.</p>
+            `;
+        });
+    });
+});
+</script>

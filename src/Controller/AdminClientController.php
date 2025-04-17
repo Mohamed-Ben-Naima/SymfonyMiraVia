@@ -13,6 +13,8 @@ final class AdminClientController extends AbstractController
     {
         return $this->render('admin_client/index.html.twig', [
             'controller_name' => 'AdminClientController',
+            'pageTitle' => 'Client', // Le titre dynamique
+
         ]);
     }
 }
