@@ -6,20 +6,19 @@
 <style>
 html, body {
     height: 100vh;
-    overflow: hidden;
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #fdfdfd;
+    overflow: hidden; /* Supprime le scroll global */
 }
 
 .example-wrapper {
     margin: 0 auto;
     padding: 20px;
-    margin-right: 0%;
     margin-left: 15%;
-    max-height: 100vh;
-    overflow-y: auto;
+    max-height: calc(100vh - 40px); /* Ajuste la hauteur au viewport */
+    overflow: visible; /* Supprime le scroll interne */
 }
 
 .example-wrapper h1 {
@@ -40,9 +39,8 @@ html, body {
 
 .search-box {
     position: relative;
-    width: 87%; /* ou 60% selon ce que tu veux */
+    width: 87%;
 }
-
 
 .search-box input {
     width: 100%;
@@ -57,8 +55,7 @@ html, body {
     border-radius: 6px;
     border: 1px solid #7D8C6D;
     font-size: 14px;
-      margin-left: -1%;
-                margin-right: 0%;
+    margin-left: -1%;
 }
 
 .header button {
@@ -82,15 +79,17 @@ table {
     font-size: 14px;
     background-color: white;
     box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    table-layout: fixed; /* Limite la largeur des colonnes */
 }
 
 th, td {
     padding: 10px;
     text-align: left;
+    word-wrap: break-word; /* Empêche le débordement du texte */
 }
 
 th {
-    background-color:rgb(176, 203, 223);
+    background-color: rgb(176, 203, 223);
     color: black;
 }
 
@@ -122,6 +121,7 @@ tr:hover {
     background-color: #999;
     color: white;
 }
+
 @media (max-width: 992px) {
     .example-wrapper {
         margin-left: 5%;
@@ -162,18 +162,16 @@ tr:hover {
         width: 100%;
         margin-bottom: 4px;
     }
-    @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     table {
         display: block;
-        overflow-x: auto;
+        overflow-x: auto; /* Permet un défilement horizontal si nécessaire */
         white-space: nowrap;
     }
 }
 
-
-
-
-}
 .actions button.consulter-btn {
     background-color: #7D8C6D;
     color: white;

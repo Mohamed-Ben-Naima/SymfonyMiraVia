@@ -13,6 +13,7 @@ final class AdminDemandeAideController extends AbstractController
     {
         return $this->render('admin_demande_aide/index.html.twig', [
             'controller_name' => 'AdminDemandeAideController',
+            'pageTitle' => 'Demandes Aide', // Le titre dynamique
         ]);
     }
 }

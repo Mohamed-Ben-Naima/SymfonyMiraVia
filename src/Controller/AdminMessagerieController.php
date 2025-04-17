@@ -13,6 +13,8 @@ final class AdminMessagerieController extends AbstractController
     {
         return $this->render('admin_messagerie/index.html.twig', [
             'controller_name' => 'AdminMessagerieController',
+            'pageTitle' => 'Messagerie', // Le titre dynamique
+
         ]);
     }
 }

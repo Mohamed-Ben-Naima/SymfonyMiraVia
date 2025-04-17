@@ -40,12 +40,27 @@
             </a>
         </li>
 
-        <!-- Messagerie -->
+    <!-- Don -->
         <li>
-            <a href="{{ path('app_admin_messaging') }}" class="nav-link" data-title="Messagerie" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-envelope me-2"></i> Messagerie
+            <a href="{{ path('app_admin_donations') }}" class="nav-link" data-title="Don" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-donate me-2"></i> Don
             </a>
         </li>
+
+                <!-- Événement -->
+        <li>
+            <a href="{{ path('app_admin_events') }}" class="nav-link" data-title="Événement" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-calendar-alt me-2"></i> Événement
+            </a>
+        </li>
+
+                <!-- Bénévolat -->
+        <li>
+            <a href="{{ path('app_admin_volunteering') }}" class="nav-link" data-title="Bénévolat" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-hands me-2"></i> Bénévolat
+            </a>
+        </li>
+
 
         <!-- Paramètre -->
         <li>
@@ -53,27 +68,19 @@
                 <i class="fas fa-cogs me-2"></i> Paramètre
             </a>
         </li>
-
-        <!-- Don -->
+        <!-- Messagerie -->
         <li>
-            <a href="{{ path('app_admin_donations') }}" class="nav-link" data-title="Don" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-donate me-2"></i> Don
+            <a href="{{ path('app_admin_messaging') }}" class="nav-link" data-title="Messagerie" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-envelope me-2"></i> Messagerie
             </a>
         </li>
 
-        <!-- Bénévolat -->
         <li>
-            <a href="{{ path('app_admin_volunteering') }}" class="nav-link" data-title="Bénévolat" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-hands me-2"></i> Bénévolat
-            </a>
-        </li>
+    <a href="{{ path('app_login_controller_partner') }}" class="nav-link" data-title="Se déconnecter" onclick="updateNavbarTitle(event)">
+        <i class="fas fa-sign-out-alt me-2"></i> Se déconnecter
+    </a>
+</li>
 
-        <!-- Événement -->
-        <li>
-            <a href="{{ path('app_admin_events') }}" class="nav-link" data-title="Événement" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-calendar-alt me-2"></i> Événement
-            </a>
-        </li>
     </ul>
 </div>
 
@@ -97,8 +104,8 @@
 }
 
 .sidebar .nav-link.active {
-    background-color: #e6e6e6; /* Slightly darker background for active link */
-    color: #013A71; /* Retain text color for active link */
+    background-color: #81A8C5; /* Slightly darker background for active link */
+    color: #ffffff; /* Retain text color for active link */
     font-weight: bold;
 }
 
@@ -130,3 +137,28 @@
     transition: height 0.3s ease;
 }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Sélectionnez tous les liens de la barre latérale
+    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            // Supprimez la classe active de tous les liens
+            navLinks.forEach(nav => nav.classList.remove('active'));
+
+            // Ajoutez la classe active au lien cliqué
+            link.classList.add('active');
+        });
+    });
+
+    // Marquer le lien actif en fonction de l'URL actuelle
+    const currentUrl = window.location.href;
+    navLinks.forEach(link => {
+        if (link.href === currentUrl) {
+            link.classList.add('active');
+        }
+    });
+});
+</script>

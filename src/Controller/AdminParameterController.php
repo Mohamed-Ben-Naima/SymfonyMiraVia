@@ -13,6 +13,8 @@ final class AdminParameterController extends AbstractController
     {
         return $this->render('admin_parameter/index.html.twig', [
             'controller_name' => 'AdminParameterController',
+            'pageTitle' => 'Paramètre', // Le titre dynamique
+
         ]);
     }
 }

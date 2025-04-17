@@ -13,6 +13,7 @@ final class AdminDonController extends AbstractController
     {
         return $this->render('admin_don/index.html.twig', [
             'controller_name' => 'AdminDonController',
+            'pageTitle' => 'Don', // Le titre dynamique
         ]);
     }
 }

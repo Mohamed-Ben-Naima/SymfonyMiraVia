@@ -13,6 +13,9 @@ final class AdminBenevolatController extends AbstractController
     {
         return $this->render('admin_benevolat/index.html.twig', [
             'controller_name' => 'AdminBenevolatController',
+            'pageTitle' => 'Bénévolat', // Le titre dynamique
+            
+
         ]);
     }
 }

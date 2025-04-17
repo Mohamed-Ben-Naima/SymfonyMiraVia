@@ -51,6 +51,9 @@ final class AdminDashboardController extends AbstractController
         return $this->render('admin_dashboard/index.html.twig', [
             'controller_name' => 'AdminDashboardController',
             'cards' => $cards,
+            'pageTitle' => 'Dashboard', // Le titre dynamique
+
         ]);
+        
     }
 }
