@@ -1,20 +1,311 @@
 {% extends 'baseAdmin.html.twig' %}
 
-{% block title %}Hello AdminMessagerieController!{% endblock %}
+{% block title %}Messagerie{% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    /* Wrapper for messagerie */
+    .messagerie-wrapper {
+        padding-left: 190px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem; /* Space between the containers */
+        max-width: 90%; /* Adjust width for responsiveness */
+        margin: 1.5rem auto;
+    }
+
+    /* Contacts container */
+    .contacts-container {
+        flex: 1 1 40%; /* Control width of contacts */
+        max-width: 500px;
+        background-color: #f9fafb;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .contacts-container .search-bar {
+        position: relative;
+        padding: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .contacts-container .search-bar input {
+        width: 100%;
+        padding: 0.5rem 2.5rem; /* Adjust padding to leave space for the icon */
+        border-radius: 0.5rem;
+        border: 1px solid #e5e7eb;
+        background-color: #ffffff;
+        color: #4b5563;
+    }
+
+    .contacts-container .search-bar .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #013A71; /* Blue color for the search icon */
+        font-size: 1rem;
+    }
+
+    .contacts-container .people-list {
+        overflow-y: auto; /* Scrollable area for the list */
+        padding: 1rem;
+        height: calc(90vh - 4rem); /* Adjust height to fit within container */
+    }
+
+    .contacts-container .person {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+
+    .contacts-container .person:hover {
+        background-color: #eef2f7; /* Highlight on hover */
+    }
+
+    .contacts-container .person.selected {
+        background-color: #dbeafe; /* Highlight selected person */
+    }
+
+    .contacts-container .person img {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .contacts-container .person-info {
+        margin-left: 0.75rem;
+    }
+
+    .contacts-container .person-info .name {
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .contacts-container .person-info .status {
+        font-size: 0.75rem;
+        color: #9ca3af;
+    }
+
+    .contacts-container .person-info .message-preview {
+        font-size: 0.75rem;
+        color: #6b7280; /* Gray color for message preview */
+        margin-top: 0.25rem;
+    }
+
+    .contacts-container .message-count {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #10b981;
+    }
+
+    /* Chat container */
+    .chat-container {
+        flex: 1 1 30%; /* Control width of chat */
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-container .chat-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        background-color: #f1f5f9; /* Light background for header */
+    }
+
+    .chat-container .chat-header img {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .chat-container .chat-header .name {
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .chat-container .chat-header .status {
+        font-size: 0.75rem;
+        color: #9ca3af;
+    }
+
+    .chat-container .chat-area {
+        flex: 1;
+        padding: 1.5rem;
+        overflow-y: auto; /* Chat content is scrollable */
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        background-color: #f9fafb; /* Light background for chat area */
+    }
+
+    .chat-container .chat-bubble {
+        max-width: 18rem;
+        padding: 0.75rem 1rem;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        display: inline-block;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s;
+    }
+
+    .chat-container .chat-bubble.left {
+        background-color: #e5e7eb;
+        color: #111827;
+    }
+
+    .chat-container .chat-bubble.right {
+        background-color: #3b82f6;
+        color: #ffffff;
+        margin-left: auto;
+    }
+
+    .chat-container .chat-footer {
+        display: flex;
+        gap: 0.75rem;
+        padding: 1rem;
+        border-top: 1px solid #e5e7eb;
+        background-color: #f1f5f9; /* Light background for footer */
+    }
+
+    .chat-container .chat-footer input {
+        flex: 1;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        border: 1px solid #e5e7eb;
+        font-size: 0.875rem;
+        color: #4b5563;
+    }
+
+    .chat-container .chat-footer button {
+        background-color: #3b82f6; /* Updated button color */
+        padding: 0.75rem;
+        border-radius: 9999px;
+        color: #ffffff;
+        font-size: 1rem;
+        transition: background-color 0.2s;
+    }
+
+    .chat-container .chat-footer button:hover {
+        background-color: #2563eb; /* Slightly darker shade for hover effect */
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .messagerie-wrapper {
+            flex-direction: column; /* Stack containers on small screens */
+        }
+
+        .contacts-container,
+        .chat-container {
+            flex: 1 1 100%; /* Take full width */
+        }
+    }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="messagerie">
+    <div class="messagerie-wrapper">
+        <!-- Contacts container -->
+        <div class="contacts-container">
+            <div class="search-bar">
+                <input type="text" placeholder="Search">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="people-list">
+                <!-- User 1 -->
+                <div class="person">
+                    <div class="flex items-center">
+                        <img alt="Profile picture of User 1" src="{{ asset('images/payment/paypal.jpeg') }}">
+                        <div class="person-info">
+                            <p class="name">User 1</p>
+                            <p class="status">Active 1 min ago</p>
+                            <p class="message-preview">Hello, how are you?</p>
+                        </div>
+                    </div>
+                    <span class="message-count">+17</span>
+                </div>
+                <!-- User 2 -->
+                <div class="person">
+                    <div class="flex items-center">
+                        <img alt="Profile picture of User 2" src="{{ asset('images/payment/paypal.jpeg') }}">
+                        <div class="person-info">
+                            <p class="name">User 2</p>
+                            <p class="status">Active 3 mins ago</p>
+                            <p class="message-preview">See you tomorrow!</p>
+                        </div>
+                    </div>
+                    <span class="message-count">+9</span>
+                </div>
+            </div>
+        </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/chaab/Downloads/SymfonyMiraVia-main/SymfonyMiraVia-main/src/Controller/AdminMessagerieController.php</code></li>
-        <li>Your template at <code>C:/Users/chaab/Downloads/SymfonyMiraVia-main/SymfonyMiraVia-main/templates/admin_messagerie/index.html.twig</code></li>
-    </ul>
+        <!-- Chat container -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <img alt="Profile picture of User 1" src="{{ asset('images/payment/paypal.jpeg') }}">
+                <div>
+                    <p class="name">User 1</p>
+                    <p class="status">Online · Last seen, 2:06pm</p>
+                </div>
+            </div>
+            <div class="chat-area">
+                <div class="chat-bubble left">Hey There!</div>
+                <div class="chat-bubble right">Hello!</div>
+            </div>
+            <form class="chat-footer">
+                <input type="text" id="message-input" placeholder="Type your message here...">
+                <button aria-label="Send message" type="submit">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const chatArea = document.querySelector('.chat-area');
+        const chatFooter = document.querySelector('.chat-footer');
+        const messageInput = document.getElementById('message-input');
+
+        chatFooter.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const messageText = messageInput.value.trim();
+            if (messageText) {
+                const newMessage = document.createElement('div');
+                newMessage.classList.add('chat-bubble', 'right');
+                newMessage.textContent = messageText;
+                chatArea.appendChild(newMessage);
+
+                messageInput.value = '';
+                chatArea.scrollTo({
+                    top: chatArea.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        const contacts = document.querySelectorAll('.person');
+        contacts.forEach(contact => {
+            contact.addEventListener('click', () => {
+                contacts.forEach(c => c.classList.remove('selected'));
+                contact.classList.add('selected');
+            });
+        });
+    });
+</script>
 {% endblock %}
