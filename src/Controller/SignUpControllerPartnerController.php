@@ -2,14 +2,15 @@
 
 namespace App\Controller;
 
-use App\Form\SigUpPartnerFormType;
+use App\Form\SignUpFormType;
+use App\Entity\Utilisateur;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\User;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class SignUpControllerPartnerController extends AbstractController
 {
@@ -17,37 +18,54 @@ final class SignUpControllerPartnerController extends AbstractController
     public function index(
         Request $request, 
         EntityManagerInterface $entityManager, 
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        SessionInterface $session
     ): Response {
-        // Create the form
-        $form = $this->createForm(SigUpPartnerFormType::class);
-
-        // Handle the form submission
+        // Créer le formulaire
+        $form = $this->createForm(SignUpFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Get form data
+            // Récupérer les données du formulaire
+            /** @var Utilisateur $formData */
             $formData = $form->getData();
 
-            // Create a new User entity
-            $user = new User();
-            $user->setNom($formData['first_name']);
-            $user->setPrenom($formData['last_name']);
-            $user->setEmail($formData['email']);
+            // Créer une nouvelle entité Utilisateur
+            $utilisateur = new Utilisateur();
+            $utilisateur->setNom($formData->getNom());
+            $utilisateur->setPrenom($formData->getPrenom());
+            $utilisateur->setEmail($formData->getEmail());
+            $utilisateur->setTelephone($formData->getTelephone());
+            $utilisateur->setAdresseUtilisateur($formData->getAdresseUtilisateur());
 
-            // Hash the password
-            $hashedPassword = $passwordHasher->hashPassword($user, $formData['password']);
-            $user->setPassword($hashedPassword);
+            // Définir le statut par défaut comme "inactif"
+            $utilisateur->setStatus('inactif');
 
-            // Persist the user entity
-            $entityManager->persist($user);
+            // Définir le statut de vérification par défaut comme "en attente"
+            $utilisateur->setStatutVerification('en attente');
+
+            // Définir la date de naissance si elle est fournie
+           if ($formData->getBirthday() instanceof \DateTimeInterface) {
+            $utilisateur->setBirthday($formData->getBirthday());
+        } else {
+            $utilisateur->setBirthday(null); // Handle invalid dates
+        }
+            // Hacher le mot de passe
+            $hashedPassword = $passwordHasher->hashPassword($utilisateur, $formData->getMotDePasse());
+            $utilisateur->setMotDePasse($hashedPassword);
+
+            // Sauvegarder l'utilisateur dans la base de données
+            $entityManager->persist($utilisateur);
             $entityManager->flush();
 
-            // Redirect to a success or login page
-            return $this->redirectToRoute('app_login');
+            // Ajouter un message flash de succès
+            $this->addFlash('success', 'Votre inscription a été réalisée avec succès. Vous pouvez maintenant vous connecter.');
+
+            // Rediriger vers la page de connexion
+            return $this->redirectToRoute('app_login_controller_partner');
         }
 
-        // Render the form in the template
+        // Afficher le formulaire
         return $this->render('sign_up_controller_partner/index.html.twig', [
             'form' => $form->createView(),
         ]);

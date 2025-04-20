@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Form;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -14,26 +16,27 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\IsTrue;
-use App\Entity\User;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType; 
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use App\Entity\Utilisateur;
 
-class SigUpPartnerFormType extends AbstractType
+class SignUpFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('first_name', TextType::class, [
-                'label' => 'Prénom',
-                'attr' => ['placeholder' => 'Entrez votre prénom'],
-                'property_path' => 'prenom', // Mappe le champ "first_name" à la propriété "prenom" de l'entité
-                'constraints' => [
-                    new NotBlank(['message' => 'Le prénom est obligatoire.']),
-                    new Length(['max' => 50, 'maxMessage' => 'Le prénom ne peut pas dépasser 50 caractères.']),
-                ],
-            ])
-            ->add('last_name', TextType::class, [
+        ->add('prenom', TextType::class, [
+            'label' => 'Prénom',
+            'attr' => ['placeholder' => 'Entrez votre prénom'],
+            'constraints' => [
+                new NotBlank(['message' => 'Le prénom est obligatoire.']),
+                new Length(['max' => 50, 'maxMessage' => 'Le prénom ne peut pas dépasser 50 caractères.']),
+            ],
+            'empty_data' => '', // Ensures a string is passed even if the field is empty
+        ])
+            ->add('nom', TextType::class, [
                 'label' => 'Nom de famille',
                 'attr' => ['placeholder' => 'Entrez votre nom de famille'],
-                'property_path' => 'nom', // Mappe le champ "last_name" à la propriété "nom" de l'entité
                 'constraints' => [
                     new NotBlank(['message' => 'Le nom de famille est obligatoire.']),
                     new Length(['max' => 50, 'maxMessage' => 'Le nom de famille ne peut pas dépasser 50 caractères.']),
@@ -47,12 +50,11 @@ class SigUpPartnerFormType extends AbstractType
                     new Email(['message' => 'Veuillez fournir une adresse email valide.']),
                 ],
             ])
-            ->add('phone', TextType::class, [
+            ->add('telephone', TextType::class, [
                 'label' => 'Numéro de téléphone',
                 'attr' => ['placeholder' => 'Entrez votre numéro de téléphone'],
-                'property_path' => 'telephone', // Mappe le champ "phone" à la propriété "telephone" de l'entité
+                'required' => false,
                 'constraints' => [
-                    new NotBlank(['message' => 'Le numéro de téléphone est obligatoire.']),
                     new Length([
                         'min' => 10,
                         'max' => 15,
@@ -61,13 +63,21 @@ class SigUpPartnerFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('address', TextType::class, [
+            ->add('adresse_utilisateur', TextType::class, [
                 'label' => 'Adresse',
                 'attr' => ['placeholder' => 'Entrez votre adresse'],
-                'property_path' => 'adresse_utilisateur', // Mappe le champ "address" à la propriété "adresse_utilisateur" de l'entité
                 'required' => false,
             ])
-            ->add('password', RepeatedType::class, [
+            ->add('birthday', DateType::class, [
+                'widget' => 'single_text', // Utilise un champ HTML <input type="text">
+                'required' => false,       // Rend le champ non obligatoire
+                'html5' => false,          // Désactive le widget natif HTML5
+                'attr' => [
+                    'class' => 'flatpickr', // Classe utilisée pour cibler Flatpickr
+                    'placeholder' => 'JJ/MM/AAAA', // Indication pour l'utilisateur
+                ],
+            ])
+            ->add('mot_de_passe', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
                     'label' => 'Mot de passe',
@@ -78,7 +88,6 @@ class SigUpPartnerFormType extends AbstractType
                     'attr' => ['placeholder' => 'Répétez le mot de passe'],
                 ],
                 'invalid_message' => 'Les mots de passe doivent correspondre.',
-                'property_path' => 'mot_de_passe', // Maps the form field to the "mot_de_passe" property
                 'constraints' => [
                     new NotBlank(['message' => 'Le mot de passe est obligatoire.']),
                     new Length([
@@ -86,6 +95,17 @@ class SigUpPartnerFormType extends AbstractType
                         'minMessage' => 'Le mot de passe doit comporter au moins {{ limit }} caractères.',
                         'max' => 4096, // Symfony default security limit
                     ]),
+                ],
+            ])
+            ->add('type_utilisateur', ChoiceType::class, [
+                'label' => 'Type d\'utilisateur',
+                'choices' => [
+                    'Admin' => 'admin',       // Label affiché => valeur stockée
+                    'Partenaire' => 'partenaire',
+                ],
+                'placeholder' => 'Choisissez un type', // Optionnelle : affiche un message par défaut
+                'constraints' => [
+                    new NotBlank(['message' => 'Le type d\'utilisateur est obligatoire.']),
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
@@ -100,7 +120,7 @@ class SigUpPartnerFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Utilisateur::class,
         ]);
     }
 }
