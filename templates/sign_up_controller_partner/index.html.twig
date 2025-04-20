@@ -4,53 +4,169 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <style>
+   
     /* Global Styling */
     body {
         margin: 0;
         padding: 0;
         font-family: 'Roboto', sans-serif;
-        background: linear-gradient(to bottom, #87CEEB, #E3FDFD);
+        background: linear-gradient(to bottom, #87CEEB, #f0f9ff); /* Sky gradient with sunlight effect */
+        overflow: hidden; /* Prevent scrolling */
         color: #333;
-        overflow-x: hidden;
     }
 
+    /* Sky and Floating Clouds */
     .background {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: -1;
         overflow: hidden;
-        pointer-events: none;
+        z-index: -1; /* Place behind content */
     }
 
+    /* Dynamic Clouds */
     .background .realistic-cloud {
         position: absolute;
-        background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.7) 60%, rgba(255, 255, 255, 0) 100%);
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6)); /* Sunlit cloud gradient */
         filter: blur(15px);
-        border-radius: 60% 40% 60% 40%;
+        border-radius: 60% 40% 60% 40%; /* Irregular shape for natural clouds */
         animation: cloud-move 40s linear infinite;
     }
 
+    .background .realistic-cloud:nth-child(1) {
+        width: 350px;
+        height: 200px;
+        top: 5%;
+        left: -30%;
+        animation-duration: 40s;
+    }
+
+    .background .realistic-cloud:nth-child(2) {
+        width: 500px;
+        height: 250px;
+        top: 15%;
+        left: 10%;
+        animation-duration: 60s;
+    }
+
+    .background .realistic-cloud:nth-child(3) {
+        width: 400px;
+        height: 220px;
+        top: 40%;
+        left: -40%;
+        animation-duration: 50s;
+    }
+
+    .background .realistic-cloud:nth-child(4) {
+        width: 600px;
+        height: 300px;
+        top: 60%;
+        left: 15%;
+        animation-duration: 70s;
+    }
+
+    .background .realistic-cloud:nth-child(5) {
+        width: 700px;
+        height: 400px;
+        top: 80%;
+        left: 40%;
+        animation-duration: 80s;
+    }
+
+    /* Cloud Movement */
+    @keyframes cloud-move {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(120%);
+        }
+    }
+
+    /* Trajectories */
     .background .trajectory {
         position: absolute;
         width: 200%;
         height: 400px;
         background: none;
-        border-top: 2px dashed rgba(1, 58, 113, 0.4);
+        border-top: 2px dashed rgba(1, 58, 113, 0.4); /* Dashed semi-transparent blue line */
         border-radius: 50%;
         animation: trajectory-animation 8s infinite ease-in-out;
     }
 
-    @keyframes cloud-move {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(120%); }
+    .background .trajectory:nth-child(6) {
+        top: 12%;
+        left: -60%;
+        animation-duration: 6s;
+    }
+
+    .background .trajectory:nth-child(7) {
+        top: 35%;
+        left: -70%;
+        animation-duration: 9s;
+    }
+
+    .background .trajectory:nth-child(8) {
+        top: 55%;
+        left: -80%;
+        animation-duration: 7s;
+    }
+
+    .background .trajectory:nth-child(9) {
+        top: 75%;
+        left: -90%;
+        animation-duration: 10s;
+    }
+
+    /* Airplanes */
+    .background .airplane {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: url('{{ asset('images-partner/airplane-icon.png') }}') no-repeat center center;
+        background-size: contain;
+        animation: airplane-fly 12s infinite ease-in-out;
+    }
+
+    .background .airplane:nth-child(10) {
+        top: 15%;
+        left: -10%;
+        animation-duration: 8s;
+    }
+
+    .background .airplane:nth-child(11) {
+        top: 45%;
+        left: -20%;
+        animation-duration: 10s;
+    }
+
+    .background .airplane:nth-child(12) {
+        top: 65%;
+        left: -30%;
+        animation-duration: 9s;
     }
 
     @keyframes trajectory-animation {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(50%); }
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(50%);
+        }
+    }
+
+    @keyframes airplane-fly {
+        0% {
+            transform: translateX(0) rotate(0deg);
+        }
+        50% {
+            transform: translateX(25%) rotate(3deg);
+        }
+        100% {
+            transform: translateX(50%) rotate(0deg);
+        }
     }
 
     .form-container {
@@ -351,6 +467,10 @@
 
             <button type="submit" class="btn btn-primary w-100 mt-4">S'inscrire</button>
             {{ form_end(form) }}
+            <!-- Back to Login Link -->
+            <p class="text-center mt-3">
+                <a href="{{ path('app_login_controller_partner') }}" class="text-primary text-decoration-none">Retour à la page de connexion</a>
+            </p>
         </div>
     </div>
 </div>
