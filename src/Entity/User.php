@@ -66,6 +66,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->date_inscription = new \DateTimeImmutable();
     }
 
+    // Ajouter cette propriété
+    #[Assert\When(
+        expression: 'this.getPlainPassword() !== null',
+        constraints: [
+            new Assert\NotCompromisedPassword()
+        ]
+    )]
+    private ?string $plainPassword = null;
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
     /**
      * @see UserInterface
      * @return list<string>
