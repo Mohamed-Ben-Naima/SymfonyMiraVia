@@ -1,0 +1,712 @@
+/* Style général */
+.root {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+}
+
+/* Barre supérieure */
+.top-bar {
+    -fx-background-color: #ffffff;
+    -fx-pref-height: 60px;
+}
+
+.logo-box {
+    -fx-padding: 0 0 0 30px;
+}
+
+.title-label {
+    -fx-text-fill: #013A71;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 0 80px;
+}
+
+.search-box {
+    -fx-padding: 5px;
+    -fx-background-radius: 10px;
+}
+
+.search-button {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5px;
+}
+
+.search-button:hover {
+    -fx-background-color: #aecee6;
+}
+
+.search-field {
+    -fx-pref-width: 400px;
+    -fx-background-radius: 16px;
+    -fx-border-radius: 16px;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-padding: 5px;
+}
+
+.profile-image {
+    -fx-fit-height: 30px;
+    -fx-fit-width: 30px;
+}
+
+.profile-name {
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+}
+
+/* Barre latérale */
+.sidebar-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.sidebar {
+    -fx-background-color: #ffffff;
+    -fx-pref-width: 280px;
+    -fx-pref-height: 630px;
+    -fx-padding: 10px;
+}
+
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 15;
+}
+
+.sidebar-button-content {
+    -fx-padding: 5 0 5 15;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #aecee6;
+}
+
+.sidebar-button-text {
+    -fx-text-fill: #013A71;
+    -fx-font-size: 16px;
+}
+
+/* Contenu principal */
+.main-scroll-pane {
+    -fx-background-color: #f9f9f9;
+}
+
+.icon-message {
+    -fx-font-family: 'FontAwesome'; /* Utiliser la police FontAwesome */
+    -fx-font-size: 20px;
+    -fx-text-fill: #013A71; /* Couleur des icônes en bleu */
+}
+
+/* Style des icônes */
+.icon-bar-chart,
+.icon-users,
+.icon-help,
+.icon-donate,
+.icon-calendar,
+.icon-handshake,
+.fa-cog,
+.icon-message {
+    -fx-font-family: 'FontAwesome';
+    -fx-font-size: 20px;
+    -fx-text-fill: #013A71;
+}
+.footer-box {
+    -fx-padding: 10px;
+    -fx-border-top-width: 1px; /* Fixed border-top issue */
+    -fx-border-top-color: #ddd;
+    -fx-background-color: #f7f7f7;
+    -fx-margin-top: auto;
+    -fx-text-align: center;
+}
+
+.copyright-text {
+    -fx-font-size: 8px;
+    -fx-text-fill: #888;
+}
+
+.footer-box img {
+    -fx-vertical-align: middle;
+    -fx-margin-right: 15px;
+}
+
+.etat-acceptee {
+    -fx-background-color: #d6ffa5;
+    -fx-text-fill: #0b8a00;
+}
+
+.etat-refusee {
+    -fx-background-color: #F44336;
+    -fx-text-fill: white;
+}
+
+.etat-en-attente {
+    -fx-background-color: #FF9800;
+    -fx-text-fill: white;
+}
+
+.table-view .column-header-background,
+.table-view .column-header,
+.table-view .table-cell,
+.table-view .table-row-cell {
+    -fx-padding: 0 0 0 0;
+}
+.table-view .column-header-background {
+    -fx-padding: 0; /* Réduire le padding */
+}
+
+.table-view .column-header {
+    -fx-padding: 0; /* Réduire le padding */
+}
+
+.table-view .table-cell {
+    -fx-padding: 2 5; /* Réduire le padding des cellules */
+}
+
+.table-view .table-row-cell {
+    -fx-cell-size: 25px;
+}
+.event-date {
+    -fx-font-style: italic; /* Italic text */
+}
+
+/* Style pour chaque carte d'événement */
+.event-card {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
+    -fx-padding: 15px;
+    -fx-margin: 10px 0; /* Espacement vertical autour de chaque carte */
+    -fx-alignment: center-left;
+}
+
+/* Style pour le titre de l'événement */
+.event-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: #013A71;
+}
+
+/* Style pour la description de l'événement */
+.event-description {
+    -fx-text-fill: #4a4a4a;
+    -fx-font-size: 14px;
+}
+
+.event-detail {
+    -fx-text-fill: #4a4a4a;
+    -fx-font-size: 14px;
+}
+
+.event-status {
+    /* Style pour le statut de l'événement */
+
+    .event-status {
+        -fx-font-weight: bold;
+        -fx-font-size: 14px;
+        -fx-text-fill: #013A71;
+    }
+
+    /* Style pour le bouton Ajouter */
+
+    #addButton {
+        -fx-background-color: #aecee6;
+        -fx-text-fill: #003073;
+        -fx-font-weight: bold;
+        -fx-padding: 8 16 8 16;
+        -fx-background-radius: 4px;
+    }
+
+    #addButton:hover {
+        -fx-background-color: #9cbdd6;
+    }
+
+    /* Style pour le conteneur des cartes */
+
+    .card-container {
+        -fx-padding: 20px; /* Espacement autour du conteneur */
+        -fx-spacing: 20px; /* Espacement entre les cartes */
+    }
+
+    /* Style pour chaque carte */
+
+    .card {
+        -fx-background-color: #ffffff;
+        -fx-border-color: #e0e0e0;
+        -fx-border-radius: 8px;
+        -fx-background-radius: 8px;
+        -fx-padding: 15px;
+        -fx-margin: 10px; /* Espacement entre les cartes */
+    }
+
+    /* Style pour le titre de la carte */
+
+    .card-title {
+        -fx-font-weight: bold;
+        -fx-font-size: 16px;
+        -fx-text-fill: #000000;
+    }
+
+    /* Style pour le contenu de la carte */
+
+    .card-content {
+        -fx-text-fill: #4a4a4a;
+        -fx-font-size: 14px;
+    }
+
+    /* Style pour le bouton Ajouter Demande */
+
+    .add-request-button {
+        -fx-background-color: #aecee6;
+        -fx-text-fill: #003073;
+        -fx-font-weight: bold;
+        -fx-padding: 8px 16px;
+        -fx-background-radius: 4px;
+    }
+
+    .add-request-button:hover {
+        -fx-background-color: #9cbdd6;
+    }
+
+    /* Style pour le séparateur */
+    .separator {
+        -fx-padding: 10px 0; /* Espacement vertical autour du séparateur */
+    }
+    /* Style for the MenuButton with text "Gérer" */
+    .menu-button {
+        -fx-background-color: #9cbdd6 !important; /* Blue background */
+        -fx-text-fill: white !important; /* White text */
+    }
+
+}
+.dashboard-container {
+    -fx-background-color: #f4f4f4;
+}
+
+.card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0.2, 0, 4);
+    -fx-min-width: 500px;
+    -fx-alignment: center;
+}
+
+.dashboard-container {
+    -fx-background-color: #f4f4f4;
+}
+
+.card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0.2, 0, 4);
+    -fx-min-width: 450px;
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #013A71;
+}
+
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #013A71;
+}
+
+.clock-container {
+    -fx-alignment: center;
+    -fx-padding: 20px;
+}
+
+.clock-text {
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.import-button {
+    -fx-background-color: #aecee6;
+    -fx-text-fill: #003073;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand; /* Curseur en forme de main */
+}
+
+.import-button:hover {
+    -fx-background-color: #003073; /* Couleur de fond au survol */
+    -fx-text-fill: white;
+}
+.modifier-Button {
+    -fx-background-color: #7d8c6d; /* Couleur de fond verte */
+    -fx-text-fill: white; /* Texte en blanc */
+    -fx-background-radius: 2px; /* Bordures arrondies */
+    -fx-font-weight: bold; /* Texte en gras */
+}
+.modifier-Button:hover {
+    -fx-background-color: #3b4c2c;
+    -fx-text-fill: white;/* Couleur de fond verte plus foncée au survol */
+  }
+
+/* Style pour le bouton Ajouter */
+#ajouterButton, .ajouter-button {
+    -fx-background-color: #7d8c6d; /* Couleur de fond verte */
+    -fx-text-fill: white; /* Texte en blanc */
+    -fx-background-radius: 2px; /* Bordures arrondies */
+    -fx-font-weight: bold; /* Texte en gras */
+}
+
+#ajouterButton:hover, .ajouter-button:hover {
+    -fx-background-color: #3b4c2c;
+    -fx-text-fill: white;/* Couleur de fond verte plus foncée au survol */
+}
+
+/* Style pour le bouton Annuler */
+#annulerButton, .annuler-button {
+    -fx-background-color: #013A71; /* Couleur de fond bleue */
+    -fx-text-fill: white; /* Texte en blanc */
+    -fx-background-radius: 2px; /* Bordures arrondies */
+    -fx-font-weight: bold; /* Texte en gras */
+}
+
+#annulerButton:hover, .annuler-button:hover {
+    -fx-background-color: #9cbdd6; /* Couleur de fond bleue plus claire au survol */
+    -fx-text-fill: #013A71;
+}
+
+.button-oui {
+    -fx-background-color: #7d8c6d;
+    -fx-text-fill: white;
+}
+
+.button-non {
+    -fx-background-color: #dc6f6f;
+    -fx-text-fill: white;
+}
+
+.download-button {
+    -fx-background-color: #aecee6;
+    -fx-text-fill: #003073;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand; /* Curseur en forme de main */
+}
+
+.download-button:hover {
+    -fx-background-color: #003073; /* Couleur de fond au survol */
+    -fx-text-fill: white;
+}
+
+.download-button:pressed {
+    -fx-background-color:  #aecee6; /* Vert encore plus foncé lors du clic */
+}
+
+/* style.css */
+.chatbot-image {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-cursor: hand; /* Change le curseur en main au survol */
+}
+
+.chatbot-image:hover {
+    -fx-opacity: 0.8; /* Réduit l'opacité au survol */
+}
+
+/* chatbot.css */
+.popup {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+}
+
+.text-flow {
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+.user-message {
+    -fx-background-color: #d1e7dd; /* Couleur pour les messages de l'utilisateur */
+}
+
+.bot-message {
+    -fx-background-color: #f8d7da; /* Couleur pour les messages du chatbot */
+}
+
+/* style.css */
+
+#mainVBox {
+    -fx-background-color: #f4f4f4;
+}
+
+#statisticsVBox {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 5);
+}
+
+#statisticsLabel {
+    -fx-font-family: "Poppins";
+    -fx-font-weight: 600; /* SemiBold */
+    -fx-font-size: 20px; /* Ajustez la taille selon vos besoins */
+    -fx-text-fill: #003073; /* Couleur du texte */
+    -fx-padding: 10px 10px 0px 10px; /* haut droite bas gauche */
+
+}
+#clientVBox HBox {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 5;
+}
+
+#clientVBox {
+    -fx-background-color: #ffe2e5;
+    -fx-border-color : #fa5a7d ;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 10px;
+}
+#eventVBox{
+    -fx-background-color: #dcfce7;
+    -fx-border-color : #3cd856 ;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 10px;
+}
+#helpRequestVBox {
+    -fx-background-color: #f3e8ff;
+    -fx-border-color : #bf83ff ;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 10px;
+}
+#benevoleVBox{
+    -fx-background-color: #d1e9f9;
+    -fx-border-color : #81a8c5 ;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 10px;
+}
+/* Style pour le conteneur horizontal */
+#eventVBox HBox {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 5;
+}
+
+#donationVBox {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 5);
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+}
+#helpRequestCountLabel {
+    -fx-font-family: "Poppins";
+    -fx-font-weight: 600; /* SemiBold */
+    -fx-font-size: 18px; /* Ajustez la taille selon vos besoins */
+    -fx-text-fill: #003073; /* Couleur du texte */
+}
+#eventTableLabel {
+    -fx-font-family: "Poppins";
+    -fx-font-weight: 600; /* SemiBold */
+    -fx-font-size: 18px; /* Ajustez la taille selon vos besoins */
+    -fx-text-fill: #003073; /* Couleur du texte */
+}
+#donationLabel {
+    -fx-font-family: "Poppins";
+    -fx-font-weight: 600; /* SemiBold */
+    -fx-font-size: 18px; /* Ajustez la taille selon vos besoins */
+    -fx-text-fill: #003073; /* Couleur du texte */
+}
+/* Charger la police Poppins */
+@font-face {
+    src: url("/fonts/Poppins-SemiBold.ttf");
+    font-family: "Poppins";
+    font-weight: 600; /* SemiBold */
+}
+
+#clientCountLabel {
+    -fx-font-family: "Poppins";
+    -fx-font-weight: 600; /* SemiBold */
+    -fx-font-size: 18px; /* Ajustez la taille selon vos besoins */
+    -fx-text-fill: #003073; /* Couleur du texte */
+}
+
+#eventTableVBox {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 5);
+}
+/* Style pour le label eventCountLabel */
+#eventCountLabel {
+    -fx-font-family: "Poppins";
+    -fx-font-weight: 600; /* SemiBold */
+    -fx-font-size: 18px; /* Ajustez la taille selon vos besoins */
+    -fx-text-fill: #003073; /* Couleur du texte */
+}
+#hourHand {
+    -fx-stroke: darkslategray;
+    -fx-stroke-width: 4;
+    -fx-stroke-line-cap: round;
+}
+
+#minuteHand {
+    -fx-stroke: derive(darkslategray, -5%);
+    -fx-stroke-width: 3;
+    -fx-stroke-line-cap: round;
+}
+
+#secondHand {
+    -fx-stroke: derive(firebrick, -15%);
+    -fx-stroke-width: 2;
+    -fx-stroke-line-cap: round;
+}
+.active-button {
+    -fx-background-color:  #aecee6; /* Couleur de fond bleue */
+    -fx-text-fill: #003073; /* Couleur du texte en blanc */
+}
+.chart-series-area-fill {
+    -fx-fill: rgba(255, 0, 0, 0.3); /* Rouge avec transparence */
+}
+.chart-series-area-line {
+    -fx-stroke: #ff0000; /* Rouge */
+}
+.area-chart {
+    -fx-background-color: #ffffff; /* Blanc */
+}
+/* Style général pour l'AreaChart */
+.area-chart {
+    -fx-background-color: #f4f4f4; /* Couleur de fond du graphique */
+    -fx-padding: 10px; /* Espacement interne */
+}
+
+/* Style pour les axes */
+.axis {
+    -fx-tick-label-fill: #333333; /* Couleur des étiquettes des axes */
+    -fx-tick-length: 5px; /* Longueur des ticks */
+}
+
+.axis-label {
+    -fx-text-fill: #003073; /* Couleur du texte des étiquettes des axes */
+    -fx-font-size: 14px; /* Taille de la police */
+    -fx-font-weight: bold; /* Gras */
+}
+
+
+.default-color2.chart-series-area-line { /* Truites */
+    -fx-stroke: #00ff00; /* Couleur de la ligne */
+    -fx-stroke-width: 2px; /* Épaisseur de la ligne */
+}
+
+.default-color2.chart-series-area-fill { /* Truites */
+    -fx-fill: rgba(0, 255, 0, 0.3); /* Couleur de remplissage avec transparence */
+}
+
+/* Style pour la légende */
+.chart-legend {
+    -fx-background-color: #ffffff; /* Couleur de fond de la légende */
+    -fx-border-color: #cccccc; /* Couleur de la bordure */
+    -fx-border-width: 1px; /* Épaisseur de la bordure */
+    -fx-padding: 5px; /* Espacement interne */
+}
+
+.chart-legend-item {
+    -fx-text-fill: #003073; /* Couleur du texte de la légende */
+    -fx-font-size: 12px; /* Taille de la police */
+}
+
+/* Style pour le titre du graphique */
+.chart-title {
+    -fx-text-fill: #003073; /* Couleur du titre */
+    -fx-font-size: 16px; /* Taille de la police */
+    -fx-font-weight: bold; /* Gras */
+}
+
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #013A71;
+}
+
+.custom-chart {
+    -fx-background-color: transparent;
+    -fx-border-color: #013A71;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+.chart-line-symbol {
+    -fx-background-color: #FF5733, white;
+    -fx-padding: 5px;
+    -fx-background-radius: 10px;
+}
+
+.chart-series-line {
+    -fx-stroke-width: 2px;
+}
+
+.chart-plot-background {
+    -fx-background-color: #f9f9f9;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+.default-color0.chart-series-area-fill {
+    -fx-fill: rgba(255, 99, 132, 0.5); /* Rouge Rosé */
+}
+.default-color1.chart-series-area-fill {
+    -fx-fill: rgba(255, 206, 86, 0.5); /* Jaune Clair */
+}
+.default-color2.chart-series-area-fill {
+    -fx-fill: rgba(75, 192, 192, 0.5); /* Bleu-Vert Pastel */
+}
+
+.default-color0.chart-series-area-line {
+    -fx-stroke: #ffe2e5; /* Rouge */
+}
+.default-color1.chart-series-area-line {
+    -fx-stroke: #FFCE56; /* Jaune */
+}
+.default-color2.chart-series-area-line {
+    -fx-stroke: #4BC0C0; /* Bleu-Vert */
+}
+.default-color0.chart-series-area-fill {
+    -fx-fill: rgba(255, 99, 132, 0.5); /* Rouge Rosé */
+}
+.default-color1.chart-series-area-fill {
+    -fx-fill: rgba(255, 206, 86, 0.5); /* Jaune Clair */
+}
+.default-color2.chart-series-area-fill {
+    -fx-fill: rgba(75, 192, 192, 0.5); /* Bleu-Vert Pastel */
+}
+
+.default-color0.chart-series-area-line {
+    -fx-stroke: #ffe2e5; /* Rouge */
+}
+.default-color1.chart-series-area-line {
+    -fx-stroke: #FFCE56; /* Jaune */
+}
+.default-color2.chart-series-area-line {
+    -fx-stroke: #4BC0C0; /* Bleu-Vert */
+}
+/* Style pour le titre de la carte */
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #013A71; /* Couleur du texte */
+}
+
+/* Style pour le sous-titre de la carte */
+.card-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #4a4a4a; /* Couleur du texte */
+}

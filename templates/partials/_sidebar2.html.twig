@@ -1,0 +1,65 @@
+<aside
+	class="sidebar p-3 d-flex flex-column position-lg-sticky top-0">
+	<!-- User Profile Section -->
+	<div class="text-center mb-4 px-2">
+		<div class="avatar-wrapper mb-3 position-relative">
+			<div class="avatar-wrapper mb-3 position-relative">
+				<img src="{{ user.avatar ? asset('uploads/avatars/' ~ user.avatar) : 'https://i.pravatar.cc/120' }}" class="rounded-circle object-fit-cover shadow-sm border border-3 border-primary" alt="Avatar utilisateur" style="width: 120px; height: 120px">
+				<button class="position-absolute bottom-0 end-0 bg-primary-dark rounded-circle p-2 border border-2 border-white">
+					<i class="fas fa-camera text-white fs-7"></i>
+				</button>
+			</div>
+			<h5 class="mb-1 fw-bold text-primary-dark">{{ user.prenom }}
+				{{ user.nom }}</h5>
+			<div class="text-accent-green small">
+				<p class="mb-1">
+					<i class="fas fa-map-marker-alt me-1"></i>
+					{{ user.adresseUtilisateur ?? 'Tunisie' }}
+				</p>
+				{% if user.birthday %}
+					<p class="mb-0">
+						<i class="fas fa-birthday-cake me-1"></i>
+						{{ user.birthday|date('d M') }}
+					</p>
+				{% endif %}
+			</div>
+		</div>
+
+		<!-- Navigation Menu -->
+		<nav class="flex-grow-1 overflow-auto pe-2">
+			<div class="d-flex flex-column gap-2">
+				<a href="{{ path('app_profile') }}" class="sidebar-menu-item list-group-item list-group-item-action d-flex align-items-center rounded-3 py-3">
+					<i class="fas fa-user-circle me-3 fs-5 text-secondary-blue"></i>
+					<span class="fw-medium">Informations Personnelles</span>
+				</a>
+				<a href="{{ path('app_client_favoris') }}" class="sidebar-menu-item list-group-item list-group-item-action d-flex align-items-center rounded-3 py-3">
+					<i class="fas fa-star me-3 fs-5 text-secondary-blue"></i>
+					<span class="fw-medium">Favoris</span>
+				</a>
+				<a href="#" class="sidebar-menu-item list-group-item list-group-item-action d-flex align-items-center rounded-3 py-3">
+					<i class="fas fa-hand-holding-heart me-3 fs-5 text-secondary-blue"></i>
+					<span class="fw-medium">Don</span>
+				</a>
+				<a href="{{ path('app_client_benevole') }}" class="sidebar-menu-item list-group-item list-group-item-action d-flex align-items-center rounded-3 py-3">
+					<i class="fas fa-hands-helping me-3 fs-5 text-secondary-blue"></i>
+					<span class="fw-medium">Bénévole</span>
+				</a>
+				<a href="#" class="sidebar-menu-item list-group-item list-group-item-action d-flex align-items-center rounded-3 py-3">
+					<i class="fas fa-question-circle me-3 fs-5 text-secondary-blue"></i>
+					<span class="fw-medium">Demande D'aide</span>
+				</a>
+				<a href="{{ path('app_client_evenement') }}" class="sidebar-menu-item list-group-item list-group-item-action d-flex align-items-center rounded-3 py-3">
+					<i class="fas fa-calendar-alt me-3 fs-5 text-secondary-blue"></i>
+					<span class="fw-medium">Événements</span>
+				</a>
+				<a href="#" class="sidebar-menu-item list-group-item list-group-item-action d-flex align-items-center rounded-3 py-3">
+					<i class="fas fa-briefcase me-3 fs-5 text-secondary-blue"></i>
+					<span class="fw-medium">Expériences</span>
+				</a>
+				<a href="#" class="sidebar-menu-item list-group-item list-group-item-action d-flex align-items-center rounded-3 py-3">
+					<i class="fas fa-cog me-3 fs-5 text-secondary-blue"></i>
+					<span class="fw-medium">Paramètres</span>
+				</a>
+			</div>
+		</nav>
+	</aside>

@@ -1,0 +1,181 @@
+{% extends 'base.client.html.twig' %}
+
+{% block title %}Mes Favoris - MiraVia
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<style>:root
+	{
+		--primary-dark: #013a71;
+		--secondary-blue: #81a8c5;
+		--accent-green: #7d8c6d;
+		--light-beige: #e8e7de;
+	}
+
+	.favoris-container {
+		max-width: 1440px;
+		margin: 0 auto;
+		padding: 2rem 1.5rem;
+	}
+
+	.favori-card {
+		border: 1px solid var(--light-beige);
+		border-radius: 1.25rem;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		background: white;
+		margin-bottom: 2rem;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.favori-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+	}
+
+	.favori-image {
+		height: 200px;
+		object-fit: cover;
+		border-radius: 1.25rem 0 0 1.25rem;
+	}
+
+	.favori-badge {
+		position: absolute;
+		top: 1rem;
+		left: 1rem;
+		background: rgba(255, 255, 255, 0.9);
+		padding: 0.5rem 1rem;
+		border-radius: 2rem;
+		font-size: 0.9rem;
+		font-weight: 500;
+	}
+
+	.favori-content {
+		padding: 2rem;
+	}
+
+	.favori-title {
+		color: var(--primary-dark);
+		font-size: 1.5rem;
+		margin-bottom: 0.75rem;
+		font-weight: 700;
+	}
+
+	.favori-meta {
+		color: var(--accent-green);
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.favori-actions {
+		border-top: 1px solid var(--light-beige);
+		padding: 1.5rem 2rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.empty-state {
+		padding: 4rem 2rem;
+		text-align: center;
+		background: rgba(232, 231, 222, 0.15);
+		border-radius: 1.25rem;
+	}
+
+	@media(max-width: 768px) {
+		.favori-image {
+			border-radius: 1.25rem 1.25rem 0 0;
+			height: 180px;
+		}
+
+		.favori-content {
+			padding: 1.5rem;
+		}
+
+		.favori-title {
+			font-size: 1.3rem;
+		}
+	}
+</style>{% endblock %}{% block body %}
+<div class="favoris-container">
+	<div class="d-flex justify-content-between align-items-center mb-5">
+		<h1 class="text-primary fw-bold display-5 mb-0">Mes Favoris</h1>
+		<span class="badge bg-primary fs-6">
+			{{ favoris|length }}
+			élément(s)
+		</span>
+	</div>
+
+	<div class="row g-4">
+		{% for favori in favoris %}
+			<div class="col-12">
+				<div class="favori-card">
+					<div class="row g-0">
+						<div class="col-md-4">
+							<img src="{{ favori.entite.image }}" class="favori-image w-100" alt="{{ favori.entite.titre }}" loading="lazy">
+							<span class="favori-badge">
+								{{ favori.type_entite == 'evenement' ? 'Événement' : 'Bénévolat' }}
+							</span>
+						</div>
+
+						<div class="col-md-8 d-flex flex-column">
+							<div class="favori-content">
+								<h2 class="favori-title">{{ favori.entite.titre }}</h2>
+
+								<div class="favori-meta">
+									<span>
+										<i class="fas fa-calendar-alt me-2"></i>
+										{{ favori.entite.date|date('d M Y') }}
+									</span>
+									<span>
+										<i class="fas fa-map-marker-alt me-2"></i>
+										{{ favori.entite.lieu }}
+									</span>
+								</div>
+
+								<div class="d-flex align-items-center gap-2 text-muted">
+									<i class="fas fa-building me-2"></i>
+									Organisé par
+									{{ favori.entite.partenaire }}
+								</div>
+							</div>
+
+							<div class="favori-actions mt-auto">
+								<a href="#" class="btn btn-outline-primary">
+									<i class="fas fa-eye me-2"></i>Voir détails
+								</a>
+								<button class="btn btn-danger btn-remove-favori" data-favori-id="{{ favori.id_favori }}">
+									<i class="fas fa-heart-broken me-2"></i>Retirer
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<div class="empty-state">
+				<i class="fas fa-heart-broken text-primary mb-3" style="font-size: 3rem;"></i>
+				<h3 class="text-muted mb-2">Aucun favori pour le moment</h3>
+				<p class="text-muted">Commencez à ajouter des éléments à vos favoris pour les retrouver ici</p>
+			</div>
+		{% endfor %}
+	</div>
+</div>{% endblock %}{% block javascripts %}
+{{ parent() }}
+ <script>
+        // Remove favorite functionality
+        document.querySelectorAll('.btn-remove-favori').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.favori-card');
+                const title = card.querySelector('.favori-title').textContent;
+                
+                if (confirm(`Retirer "${title}" de vos favoris ?`)) {
+                    card.style.opacity = '0';
+                    setTimeout(() => card.remove(), 300);
+                }
+            });
+        });
+    </script>{% endblock %}

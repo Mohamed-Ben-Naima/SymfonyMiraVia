@@ -1,0 +1,164 @@
+<div class="sidebar d-flex flex-column flex-shrink-0 p-3">
+    <ul class="nav nav-pills flex-column mb-auto">
+        <!-- Dashboard -->
+        <li class="nav-item">
+            <a href="{{ path('app_admin_dashboard') }}" class="nav-link" data-title="Tableau de bord" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-home me-2"></i> Dashboard
+            </a>
+        </li>
+
+        <!-- Utilisateurs Section with Submenus -->
+        <li>
+            <a href="#usersSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="nav-link" data-title="Utilisateurs" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-users me-2"></i> Utilisateurs
+            </a>
+            <ul class="collapse list-unstyled ps-4" id="usersSubmenu">
+                <li>
+                    <a href="{{ path('app_admin_partner') }}" class="nav-link" data-title="Partenaire" onclick="updateNavbarTitle(event)">
+                        Partenaire
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('app_admin_client') }}" class="nav-link" data-title="Client" onclick="updateNavbarTitle(event)">
+                        Client
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Demandes Partenaires -->
+        <li>
+            <a href="{{ path('app_admin_demande_partner') }}" class="nav-link" data-title="Demandes Partenaires" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-handshake me-2"></i> Demandes Partenaires
+            </a>
+        </li>
+
+        <!-- Demandes Aide -->
+        <li>
+            <a href="{{ path('app_admin_aid_requests') }}" class="nav-link" data-title="Demandes Aide" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-hands-helping me-2"></i> Demandes Aide
+            </a>
+        </li>
+
+    <!-- Don -->
+        <li>
+            <a href="{{ path('app_admin_donations') }}" class="nav-link" data-title="Don" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-donate me-2"></i> Don
+            </a>
+        </li>
+
+                <!-- Événement -->
+        <li>
+            <a href="{{ path('app_admin_events') }}" class="nav-link" data-title="Événement" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-calendar-alt me-2"></i> Événement
+            </a>
+        </li>
+
+                <!-- Bénévolat -->
+        <li>
+            <a href="{{ path('app_admin_volunteering') }}" class="nav-link" data-title="Bénévolat" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-hands me-2"></i> Bénévolat
+            </a>
+        </li>
+
+
+        <!-- Paramètre -->
+        <li>
+            <a href="{{ path('app_admin_settings') }}" class="nav-link" data-title="Paramètre" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-cogs me-2"></i> Paramètre
+            </a>
+        </li>
+        <!-- Messagerie -->
+        <li>
+            <a href="{{ path('app_admin_messaging') }}" class="nav-link" data-title="Messagerie" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-envelope me-2"></i> Messagerie
+            </a>
+        </li>
+
+        <li>
+    <a href="{{ path('app_login_controller_partner') }}" class="nav-link" data-title="Se déconnecter" onclick="updateNavbarTitle(event)">
+        <i class="fas fa-sign-out-alt me-2"></i> Se déconnecter
+    </a>
+</li>
+
+    </ul>
+</div>
+
+<style>
+/* Sidebar styling */
+.sidebar {
+    width: 280px; 
+    background-color: #ffffff; /* White background */
+    position: fixed;
+    color: #013A71; /* Text color */
+}
+
+.sidebar .nav-link {
+    color: #013A71; /* Text color for links */
+    padding: 10px 15px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    display: block; /* Ensure the link takes the full width of the sidebar */
+    width: 100%; /* Full width */
+    text-decoration: none; /* Remove underline */
+}
+
+.sidebar .nav-link.active {
+    background-color: #81A8C5; /* Slightly darker background for active link */
+    color: #ffffff; /* Retain text color for active link */
+    font-weight: bold;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #81A8C5; /* Hover effect background */
+    color: #ffffff; /* Change text color on hover */
+    transform: translateX(0); /* Remove or limit the animation */
+    width: 100%; /* Ensure hover covers the full width */
+}
+
+.sidebar .nav-pills .collapse .nav-link {
+    padding-left: 30px;
+    font-size: 14px;
+}
+
+.sidebar .nav-pills .collapse .nav-link:hover {
+    background-color: #81A8C5; /* Hover effect for submenu links */
+    color: #ffffff; /* Change text color on hover */
+    width: 100%; /* Ensure hover covers the full width */
+}
+
+/* Icons styling */
+.sidebar .nav-link i {
+    font-size: 18px;
+}
+
+/* Submenu collapse animation */
+.collapse {
+    transition: height 0.3s ease;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Sélectionnez tous les liens de la barre latérale
+    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            // Supprimez la classe active de tous les liens
+            navLinks.forEach(nav => nav.classList.remove('active'));
+
+            // Ajoutez la classe active au lien cliqué
+            link.classList.add('active');
+        });
+    });
+
+    // Marquer le lien actif en fonction de l'URL actuelle
+    const currentUrl = window.location.href;
+    navLinks.forEach(link => {
+        if (link.href === currentUrl) {
+            link.classList.add('active');
+        }
+    });
+});
+</script>

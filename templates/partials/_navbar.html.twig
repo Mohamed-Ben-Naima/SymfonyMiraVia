@@ -1,0 +1,115 @@
+<link rel="stylesheet" href="{{ asset('styles/partials/navbar.css') }}">
+
+<nav class="navbar navbar-expand-lg navbar-light custom-navbar">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center custom-logo" href="{{ path('app_home') }}">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="me-2 logo-img" style="height:50px;">
+        </a>
+
+        <!-- Burger Menu for Mobile -->
+        <button 
+            class="navbar-toggler custom-toggler" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" 
+            aria-expanded="false" 
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links and Buttons -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 custom-nav-links">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">
+                        <i class="fas fa-home me-2"></i>Accueil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_propos') }}">
+                        <i class="fas fa-info-circle me-2"></i>À propos de nous
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_benevolat') }}">
+                        <i class="fas fa-map-marker-alt me-2"></i>Bénévolat
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_don') }}">
+                        <i class="fas fa-tags me-2"></i>Dons
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_evenement') }}">
+                        <i class="fas fa-calendar-alt me-2"></i>Évènements
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_experience') }}">
+                        <i class="fas fa-lightbulb me-2"></i>Expériences
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_aide') }}">
+                        <i class="fas fa-question-circle me-2"></i>Aide
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Authentication Section -->
+            <div class="d-flex align-items-center">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <!-- Avatar and Dropdown Menu -->
+                    <div class="dropdown">
+                        <a 
+                            href="#" 
+                            class="d-flex align-items-center text-decoration-none dropdown-toggle" 
+                            id="userDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false" 
+                            aria-label="User Menu">
+                            <img 
+                                src="{{ app.user.avatar ? asset('uploads/avatars/' ~ app.user.avatar) : 'https://i.pravatar.cc/120' }}" 
+                                alt="{{ app.user.prenom|e }}'s avatar" 
+                                class="rounded-circle me-2" 
+                                style="width: 40px; height: 40px;">
+                            <span>{{ app.user.prenom|e }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_profile') }}">
+                                    <i class="fas fa-user me-2"></i> Profile
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a 
+                                    class="dropdown-item" 
+                                    href="{{ path('app_logout') }}" 
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </a>
+                                <form id="logout-form" action="{{ path('app_logout') }}" method="post" style="display: none;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <!-- Register and Login Buttons -->
+                    <a href="{{ path('app_register') }}" class="btn btn-outline-primary custom-btn-outline me-2">
+                        <i class="fas fa-user-plus me-2"></i>S'inscrire
+                    </a>
+                    <a href="{{ path('app_login') }}" class="btn btn-primary custom-btn-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

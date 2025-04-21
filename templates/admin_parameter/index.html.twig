@@ -1,0 +1,168 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Paramètres Administrateur{% endblock %}
+
+{% block body %}
+<style>
+    /* Wrapper for the settings page */
+    .settings-wrapper {
+        margin: 2rem auto;
+        max-width: calc(100% - 250px); /* Ajuste la largeur totale en tenant compte de la largeur de la sidebar */
+        margin-left: 250px; /* Correspond à la largeur de la sidebar */
+        font-family: 'Arial', sans-serif;
+    }
+
+    .settings-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .settings-header h1 {
+        font-size: 2.5rem;
+        color: #374151;
+        position: relative;
+        display: inline-block;
+    }
+
+    .settings-header h1::after {
+        content: "";
+        display: block;
+        width: 50%;
+        height: 4px;
+        background-color: #013A71;
+        margin: 0.5rem auto 0;
+        border-radius: 2px;
+        animation: slide-in 1s ease-in-out;
+    }
+
+    @keyframes slide-in {
+        from {
+            width: 0;
+        }
+        to {
+            width: 50%;
+        }
+    }
+
+    .settings-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: space-around;
+    }
+
+    .settings-card {
+        flex: 1 1 calc(33% - 2rem);
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    .settings-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .settings-card i {
+        font-size: 3rem;
+        color: #013A71;
+        margin-bottom: 1rem;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .settings-card h3 {
+        font-size: 1.5rem;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+
+    .settings-card p {
+        font-size: 1rem;
+        color: #6b7280;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .settings-wrapper {
+            margin-left: 0; /* Supprime le décalage sur les petits écrans */
+            max-width: 100%;
+        }
+        .settings-card {
+            flex: 1 1 calc(50% - 2rem);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .settings-card {
+            flex: 1 1 100%;
+        }
+    }
+</style>
+
+<div class="settings-wrapper">
+    <div class="settings-header">
+        <h1>Paramètres Administrateur</h1>
+        <p>Gérez vos paramètres pour personnaliser et optimiser votre expérience.</p>
+    </div>
+
+    <div class="settings-container">
+        <!-- Card 1 -->
+        <div class="settings-card">
+            <i class="fas fa-user-cog"></i>
+            <h3>Paramètres Utilisateur</h3>
+            <p>Gérez les rôles et permissions des utilisateurs.</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="settings-card">
+            <i class="fas fa-bell"></i>
+            <h3>Notifications</h3>
+            <p>Configurez vos préférences de notifications.</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="settings-card">
+            <i class="fas fa-database"></i>
+            <h3>Base de Données</h3>
+            <p>Effectuez des sauvegardes et gérez vos données.</p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="settings-card">
+            <i class="fas fa-paint-brush"></i>
+            <h3>Personnalisation</h3>
+            <p>Changez le thème et les couleurs de l'interface.</p>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="settings-card">
+            <i class="fas fa-lock"></i>
+            <h3>Sécurité</h3>
+            <p>Mettez à jour les mots de passe et les politiques de sécurité.</p>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="settings-card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Statistiques</h3>
+            <p>Consultez les rapports et les performances.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome Icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+{% endblock %}

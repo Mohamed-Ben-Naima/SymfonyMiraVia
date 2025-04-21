@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateur{% endblock %}
+
+{% block body %}
+    <h1>Utilisateur</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id_utilisateur</th>
+                <td>{{ utilisateur.idUtilisateur }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ utilisateur.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ utilisateur.prenom }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ utilisateur.email }}</td>
+            </tr>
+            <tr>
+                <th>Mot_de_passe</th>
+                <td>{{ utilisateur.motDePasse }}</td>
+            </tr>
+            <tr>
+                <th>Telephone</th>
+                <td>{{ utilisateur.telephone }}</td>
+            </tr>
+            <tr>
+                <th>Date_inscription</th>
+                <td>{{ utilisateur.dateInscription ? utilisateur.dateInscription|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Type_utilisateur</th>
+                <td>{{ utilisateur.typeUtilisateur }}</td>
+            </tr>
+            <tr>
+                <th>Avatar</th>
+                <td>{{ utilisateur.avatar }}</td>
+            </tr>
+            <tr>
+                <th>Statut_verification</th>
+                <td>{{ utilisateur.statutVerification }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ utilisateur.status }}</td>
+            </tr>
+            <tr>
+                <th>Birthday</th>
+                <td>{{ utilisateur.birthday ? utilisateur.birthday|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Adresse_utilisateur</th>
+                <td>{{ utilisateur.adresseUtilisateur }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_utilisateur_index') }}">back to list</a>
+
+    <a href="{{ path('app_utilisateur_edit', {'id_utilisateur': utilisateur.id_utilisateur}) }}">edit</a>
+
+    {{ include('utilisateur/_delete_form.html.twig') }}
+{% endblock %}
