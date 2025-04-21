@@ -288,7 +288,8 @@
 {% endblock %}
 
 {% block body %}
-<!-- Dynamic Clouds -->
+<div class="background">
+    <!-- Dynamic Clouds -->
     <div class="realistic-cloud"></div>
     <div class="realistic-cloud"></div>
     <div class="realistic-cloud"></div>
@@ -330,6 +331,13 @@
                 {{ form_widget(loginPartnerForm.password, {'attr': {'class': 'form-control', 'required': 'required', 'placeholder': '********'}}) }}
                 {{ form_errors(loginPartnerForm.password) }}
             </div>
+            <div class="mb-3">
+    <label for="role" class="form-label">Rôle</label>
+    <select id="role" name="role" class="form-control" required>
+        <option value="partner">Partenaire</option>
+        <option value="admin">Administrateur</option>
+    </select>
+</div>
 
             <!-- Buttons -->
             <button type="submit" class="btn btn-primary w-100 mb-3">Se connecter</button>
