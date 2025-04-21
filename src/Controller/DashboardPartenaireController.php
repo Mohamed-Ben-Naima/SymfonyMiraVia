@@ -10,7 +10,7 @@ final class DashboardPartenaireController extends AbstractController{
     #[Route('/dashboard/partenaire', name: 'app_dashboard_partenaire')]
     public function index(): Response
     {
-        return $this->render('dashboard_partenaire/dashboard.html.twig', [
+        return $this->render('dashboard_partenaire/index.html.twig', [
             'controller_name' => 'DashboardPartenaireController',
         ]);
     }
