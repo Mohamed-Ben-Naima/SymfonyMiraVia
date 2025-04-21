@@ -68,7 +68,7 @@ class SignUpFormType extends AbstractType
                 'attr' => ['placeholder' => 'Entrez votre adresse'],
                 'required' => false,
             ])
-            ->add('birthday', DateType::class, [
+            /*->add('birthday', DateType::class, [
                 'widget' => 'single_text', // Utilise un champ HTML <input type="text">
                 'required' => false,       // Rend le champ non obligatoire
                 'html5' => false,          // Désactive le widget natif HTML5
@@ -76,7 +76,7 @@ class SignUpFormType extends AbstractType
                     'class' => 'flatpickr', // Classe utilisée pour cibler Flatpickr
                     'placeholder' => 'JJ/MM/AAAA', // Indication pour l'utilisateur
                 ],
-            ])
+            ])*/
             ->add('mot_de_passe', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [

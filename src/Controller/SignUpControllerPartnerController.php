@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Psr\Log\LoggerInterface;
 
 final class SignUpControllerPartnerController extends AbstractController
 {
@@ -19,18 +20,37 @@ final class SignUpControllerPartnerController extends AbstractController
         Request $request, 
         EntityManagerInterface $entityManager, 
         UserPasswordHasherInterface $passwordHasher,
-        SessionInterface $session
+        SessionInterface $session,
+        LoggerInterface $logger // Inject the logger to capture errors
     ): Response {
-        // Créer le formulaire
+        // Create the form
         $form = $this->createForm(SignUpFormType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer les données du formulaire
+        if ($form->isSubmitted()) {
+            if (!$form->isValid()) {
+                // Log validation errors
+                foreach ($form->getErrors(true, false) as $error) {
+                    if ($error instanceof \Symfony\Component\Form\FormError) { // Ensure error is an instance of FormError
+                        $logger->error('Validation Error: ' . $error->getMessage());
+                    }
+                }
+            
+                // Display the errors in the console
+                foreach ($form->getErrors(true, false) as $error) {
+                    if ($error instanceof \Symfony\Component\Form\FormError) { // Ensure error is an instance of FormError
+                        dump($error->getMessage());
+                    }
+                }
+            
+                dd('Validation failed'); // Stop execution for debugging
+            }
+
+            // Retrieve the form data
             /** @var Utilisateur $formData */
             $formData = $form->getData();
 
-            // Créer une nouvelle entité Utilisateur
+            // Create a new Utilisateur entity
             $utilisateur = new Utilisateur();
             $utilisateur->setNom($formData->getNom());
             $utilisateur->setPrenom($formData->getPrenom());
@@ -38,34 +58,41 @@ final class SignUpControllerPartnerController extends AbstractController
             $utilisateur->setTelephone($formData->getTelephone());
             $utilisateur->setAdresseUtilisateur($formData->getAdresseUtilisateur());
 
-            // Définir le statut par défaut comme "inactif"
+            // Set default statuses
             $utilisateur->setStatus('inactif');
-
-            // Définir le statut de vérification par défaut comme "en attente"
             $utilisateur->setStatutVerification('en attente');
 
-            // Définir la date de naissance si elle est fournie
-           if ($formData->getBirthday() instanceof \DateTimeInterface) {
-            $utilisateur->setBirthday($formData->getBirthday());
-        } else {
-            $utilisateur->setBirthday(null); // Handle invalid dates
-        }
-            // Hacher le mot de passe
+            // Set the birthday if provided
+            if ($formData->getBirthday() instanceof \DateTimeInterface) {
+                $utilisateur->setBirthday($formData->getBirthday());
+            } else {
+                $utilisateur->setBirthday(null); // Handle invalid dates
+            }
+
+            // Hash the password
             $hashedPassword = $passwordHasher->hashPassword($utilisateur, $formData->getMotDePasse());
             $utilisateur->setMotDePasse($hashedPassword);
 
-            // Sauvegarder l'utilisateur dans la base de données
-            $entityManager->persist($utilisateur);
-            $entityManager->flush();
+            try {
+                // Save the user to the database
+                $entityManager->persist($utilisateur);
+                $entityManager->flush();
 
-            // Ajouter un message flash de succès
-            $this->addFlash('success', 'Votre inscription a été réalisée avec succès. Vous pouvez maintenant vous connecter.');
+                // Add a success flash message
+                $this->addFlash('success', 'Votre inscription a été réalisée avec succès. Vous pouvez maintenant vous connecter.');
 
-            // Rediriger vers la page de connexion
-            return $this->redirectToRoute('app_login_controller_partner');
+                // Redirect to the login page
+                return $this->redirectToRoute('app_login_controller_partner');
+            } catch (\Exception $e) {
+                // Log database errors
+                $logger->error('Error saving the user: ' . $e->getMessage());
+
+                // Display the error in the console
+                dd($e->getMessage());
+            }
         }
 
-        // Afficher le formulaire
+        // Render the form
         return $this->render('sign_up_controller_partner/index.html.twig', [
             'form' => $form->createView(),
         ]);
