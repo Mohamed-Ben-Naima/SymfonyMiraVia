@@ -40,6 +40,18 @@
             "./tests/bootstrap.php"
         ]
     },
+<<<<<<< HEAD
+    "siburuxue/doctrine-helper": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "b5d5e097e1037ea03aa254078130a32e1ca2e066"
+        }
+    },
+=======
+>>>>>>> 2fc177a6689f7a5096b05c09a5aefbde96752beb
     "symfony/asset-mapper": {
         "version": "7.2",
         "recipe": {
