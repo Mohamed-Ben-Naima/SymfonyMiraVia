@@ -217,6 +217,25 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
+  // Gestion du header flottant
+window.addEventListener('scroll', function() {
+    const header = document.querySelector('.floating-header');
+    if (window.scrollY > 50) {
+        
+        header.style.backgroundColor = '#f5f5f9';
+    } else {
+        
+        header.style.backgroundColor = '#f5f5f9';
+    }
+});
+
+// Raccourci clavier CTRL+K pour la recherche
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+        document.querySelector('.search-input').focus();
+    }
+});
   // Clock functionality
     const hour = document.getElementById('clock-hour'),
           minutes = document.getElementById('clock-minutes'),
@@ -278,7 +297,7 @@
           label: 'Dons financiers',
           data: [1200, 1900, 1500, 2000, 2200, 2500, 2800, 2600, 3000, 3200, 3500, 4000],
           borderColor: '#d6336c',
-          backgroundColor:' #ffe2e6',
+          backgroundColor: '#ffe2e6',
           tension: 0.4,
           fill: true
         }]
@@ -297,24 +316,6 @@
         }
       }
     });
-    // Gestion du header flottant
-window.addEventListener('scroll', function() {
-    const header = document.querySelector('.floating-header');
-    if (window.scrollY > 50) {
-        header.style.backgroundColor = '#f5f5f9';
-    } else {
-        header.style.backgroundColor = '
-        ';
-    }
-});
-
-// Raccourci clavier CTRL+K pour la recherche
-document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.key === 'k') {
-        e.preventDefault();
-        document.querySelector('.search-input').focus();
-    }
-});
   </script>
 </body>
 </html>

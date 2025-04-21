@@ -26,13 +26,12 @@
     <a href="#"><i class="bi bi-chat-quote-fill"></i> Messagerie</a>
     <a href="#"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
   </div>
-
-
    <!-- Main Content Section -->
     <main class="flex-grow-1">
-      {{ block('body') }}
+      {% block body %}
+      <!-- Content goes here -->
+      {% endblock %}
     </main>
   </div>
-
   </body>
   </html>
