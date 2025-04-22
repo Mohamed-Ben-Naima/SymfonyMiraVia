@@ -12,6 +12,9 @@ html, body {
     background-color: #fdfdfd;
     overflow: hidden; /* Supprime le défilement général */
 }
+.no-scroll {
+    overflow: hidden;
+}
 
 .example-wrapper {
     margin: 0 auto;
@@ -180,6 +183,116 @@ tr:hover {
 .actions button.consulter-btn:hover {
     background-color: #5c7352;
 }
+
+.modal {
+    display: none; /* Par défaut, caché */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Défilement interne uniquement */
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+
+.modal-content {
+    position: fixed; /* Permet de positionner l'élément par rapport à la fenêtre */
+    top: 50%; /* Centre verticalement */
+    left: 50%; /* Centre horizontalement */
+    transform: translate(-50%, -50%); /* Ajuste pour centrer parfaitement */
+    background-color: #fff;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 40%;
+    height: auto; /* Ajuste automatiquement la hauteur au contenu */
+    box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto; /* Ajoute un défilement interne si nécessaire */
+    text-align: left;
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: color 0.3s ease;
+}
+
+.modal-header .close-btn:hover {
+    color: #ff0000;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.modal-body p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-footer button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-footer .download-btn {
+    background-color: #013A71;
+    color: white;
+}
+
+.modal-footer .download-btn:hover {
+    background-color: rgb(24, 95, 162);
+}
+
+.modal-footer .cancel-btn {
+    background-color: #7D8C6D;
+    color: white;
+}
+
+.modal-footer .cancel-btn:hover {
+    background-color: #5c7352;
+}
+
+body.no-scroll {
+    overflow: hidden; /* Désactive le défilement global */
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        margin: 2% auto;
+    }
+}
 </style>
 
 <div class="example-wrapper">
@@ -223,28 +336,72 @@ tr:hover {
                 <td>Commerce</td>
                 <td>{{ i is even ? 'Accepté' : 'Refusé' }}</td>
                 <td class="actions">
-                   <button class="consulter-btn" onclick="editUser({{ i }})">Consulter</button>
+                    <button class="consulter-btn" onclick="viewDetails({{ i }})">Consulter</button>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-
+<!-- Modal for displaying details -->
+<div id="detailsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Détail de la demande</span>
+            <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- Les détails seront remplis dynamiquement -->
+        </div>
+        <div class="modal-footer">
+            <button class="download-btn" id="downloadButton">Télécharger la preuve</button>
+            <button class="cancel-btn" onclick="closeModal()">Fermer</button>
+        </div>
+    </div>
+</div>
 <script>
-    function addUser() {
-        alert('Ajouter un nouvel utilisateur');
+
+
+ let currentUserId;
+
+    function viewDetails(id) {
+        currentUserId = id;
+
+    // Désactiver le scroll et compenser la largeur de la barre de défilement
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.paddingRight = `${scrollBarWidth}px`;
+    document.body.classList.add('no-scroll');
+
+        // Exemple de contenu dynamique (vous pouvez remplacer par des données réelles)
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = `
+            <p><strong>Nom de demandeur :</strong> Nom ${id}</p>
+            <p><strong>Téléphone :</strong> +123456789${id}</p>
+            <p><strong>Email :</strong> nom${id}@example.com</p>
+            <p><strong>Adresse :</strong> Adresse ${id}</p>
+            <p><strong>Date de demande :</strong> 2025-12-${id}</p>
+            <p><strong>Type d'activité :</strong> Commerce</p>
+            <p><strong>État :</strong> ${id % 2 === 0 ? 'Accepté' : 'Refusé'}</p>
+            <p><strong>Description :</strong> Ceci est une description de la demande pour le client ${id}.</p>
+            <p><strong>Preuve :</strong> <a href="preuve${id}.pdf" target="_blank">preuve${id}.pdf</a></p>
+        `;
+
+        // Configurer le bouton de téléchargement
+        const downloadButton = document.getElementById('downloadButton');
+        downloadButton.onclick = function () {
+            window.open(`preuve${id}.pdf`, '_blank');
+        };
+
+        // Afficher le modal
+        document.getElementById('detailsModal').style.display = 'block';
     }
 
-    function editUser(id) {
-        alert('Modifier utilisateur #' + id);
-    }
-
-    function deleteUser(id) {
-        if (confirm('Voulez-vous vraiment supprimer l’utilisateur #' + id + ' ?')) {
-            alert('Utilisateur supprimé');
-        }
-    }
+function closeModal() {
+    // Supprimer le padding ajouté et réactiver le scroll
+    document.body.style.paddingRight = '';
+    document.body.classList.remove('no-scroll');
+    document.getElementById('detailsModal').style.display = 'none';
+}
 
     document.getElementById('search').addEventListener('input', filterTable);
     document.getElementById('statusFilter').addEventListener('change', filterTable);

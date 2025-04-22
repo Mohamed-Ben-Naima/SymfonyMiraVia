@@ -69,6 +69,24 @@ html, body {
     transition: background-color 0.3s ease;
 }
 
+.button-unblock {
+    background-color: #013A71; /* Couleur bleue */
+    color: white; /* Texte blanc */
+}
+
+.button-unblock:hover {
+    background-color:rgb(38, 86, 131); /* Couleur bleue foncée au survol */
+}
+.button-block {
+    background-color:rgb(146, 151, 155); /* Couleur bleue */
+    color: white; /* Texte blanc */
+}
+
+.button-block:hover {
+    background-color:rgb(116, 118, 120); /* Couleur bleue foncée au survol */
+}
+
+
 .header button:hover {
     background-color: #5c7352;
 }
@@ -110,7 +128,6 @@ tr:hover {
 }
 
 .actions button {
-    background-color: #ccc;
     border: none;
     padding: 5px 8px;
     font-size: 12px;
@@ -119,9 +136,110 @@ tr:hover {
     transition: background 0.2s;
 }
 
-.actions button:hover {
-    background-color: #999;
+/* Styles pour le modal */
+.modal {
+    display: none; /* Par défaut, le modal est caché */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Couleur de fond semi-transparente */
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 30%; /* Largeur du modal */
+    box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
+    max-width: 500px; /* Largeur maximale */
+    text-align: center;
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-body label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    text-align: left;
+    font-weight: bold; /* Rend le texte en gras */
+}
+
+.modal-body input,
+.modal-body select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center; /* Centre les éléments horizontalement */
+    gap: 10px; /* Ajoute un espace entre les boutons */
+}
+
+.modal-footer button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-footer .confirm-btn {
+    background-color: #7D8C6D;
     color: white;
+}
+
+.modal-footer .confirm-btn:hover {
+    background-color: #5c7352;
+}
+
+.modal-footer .cancel-btn {
+    background-color:  #013A71;;
+    color: white;
+}
+
+.modal-footer .cancel-btn:hover {
+    background-color:rgb(24, 95, 162);
+}
+
+/* Style for the close button */
+.modal-header .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    outline: none;
+    transition: color 0.3s ease;
+}
+
+.modal-header .close-btn:hover {
+    color: #ff0000; /* Red color on hover */
 }
 
 @media (max-width: 992px) {
@@ -214,8 +332,8 @@ tr:hover {
                 <td>Commerce</td>
                 <td>{{ i is even ? 'Actif' : 'Inactif' }}</td>
                 <td class="actions">
-                    <button onclick="editUser({{ i }})">Bloquer</button>
-                    <button onclick="deleteUser({{ i }})">Débloquer</button>
+            <button class="button-block" onclick="blockUser({{ i }})">Bloquer</button>
+            <button class="button-unblock" onclick="unblockUser({{ i }})">Débloquer</button> 
                 </td>
             </tr>
             {% endfor %}
@@ -223,19 +341,76 @@ tr:hover {
     </table>
 </div>
 
+<!-- Confirmation Modal -->
+<div id="actionModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            Confirmation
+            <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p id="successMessageAction" style="color: green; font-size: 13px; display: none; margin-bottom: 10px;">
+                L'action a été réalisée avec succès.
+            </p>
+            <p id="actionMessage"></p>
+        </div>
+        <div class="modal-footer">
+            <button class="confirm-btn" onclick="confirmAction()">Confirmer</button>
+            <button class="cancel-btn" onclick="closeModal()">Annuler</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    function addUser() {
-        alert('Ajouter un nouvel utilisateur');
+
+    let actionCallback; // Variable to store the callback function
+
+    // Open confirmation modal for blocking/unblocking
+    function openConfirmationModal(message, callback) {
+        const modal = document.getElementById('actionModal');
+        const actionMessage = document.getElementById('actionMessage');
+        actionMessage.textContent = message; // Update modal message
+        modal.style.display = 'block'; // Show modal
+        actionCallback = callback; // Store callback
     }
 
-    function editUser(id) {
-        alert('Modifier utilisateur #' + id);
-    }
-
-    function deleteUser(id) {
-        if (confirm('Voulez-vous vraiment supprimer l’utilisateur #' + id + ' ?')) {
-            alert('Utilisateur supprimé');
+    // Confirm blocking/unblocking action
+    function confirmAction() {
+        if (typeof actionCallback === 'function') {
+            actionCallback(); // Execute callback
+            const successMessage = document.getElementById('successMessageAction');
+            successMessage.style.display = 'block'; // Show success message
+            setTimeout(() => {
+                successMessage.style.display = 'none'; // Hide message after 3 seconds
+                closeModal(); // Close modal
+            }, 3000);
         }
+    }
+
+    
+    // Block a user
+    function blockUser(id) {
+        openConfirmationModal(`Êtes-vous sûr de bloquer l'utilisateur #${id} ?`, function() {
+            console.log(`Utilisateur #${id} bloqué.`);
+        });
+    }
+
+    // Unblock a user
+    function unblockUser(id) {
+        openConfirmationModal(`Êtes-vous sûr de débloquer l'utilisateur #${id} ?`, function() {
+            console.log(`Utilisateur #${id} débloqué.`);
+        });
+    }
+
+        // Open date update modal
+    function openModal() {
+        document.getElementById('modal').style.display = 'block';
+        document.getElementById('successMessageDate').style.display = 'none'; // Hide success message
+    }
+
+    // Close all modals
+    function closeModal() {
+        document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
     }
 
     document.getElementById('search').addEventListener('input', filterTable);

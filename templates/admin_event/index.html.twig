@@ -180,6 +180,144 @@ tr:hover {
 .actions button.consulter-btn:hover {
     background-color: #5c7352;
 }
+.modal {
+    display: none; /* Par défaut, caché */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Défilement interne uniquement */
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+
+.modal-content {
+    position: fixed; /* Permet de positionner l'élément par rapport à la fenêtre */
+    top: 50%; /* Centre verticalement */
+    left: 50%; /* Centre horizontalement */
+    transform: translate(-50%, -50%); /* Ajuste pour centrer parfaitement */
+    background-color: #fff;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 40%;
+    height: auto; /* Ajuste automatiquement la hauteur au contenu */
+    box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto; /* Ajoute un défilement interne si nécessaire */
+    text-align: left;
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: color 0.3s ease;
+}
+
+.modal-header .close-btn:hover {
+    color: #ff0000;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    resize: vertical;
+}
+.modal-body p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-footer button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-footer .download-btn {
+    background-color: #013A71;
+    color: white;
+}
+
+.modal-footer .download-btn:hover {
+    background-color: rgb(24, 95, 162);
+}
+
+.modal-footer .cancel-btn {
+    background-color: #013A71;
+    color: white;
+}
+
+.modal-footer .cancel-btn:hover {
+    background-color:rgb(24, 95, 162);
+}
+.modal-footer .save-btn {
+    background-color: #7D8C6D;
+    color: white;
+}
+
+.modal-footer .save-btn:hover {
+    background-color: #5c7352;
+}
+
+body.no-scroll {
+    overflow: hidden; /* Désactive le défilement global */
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        margin: 2% auto;
+    }
+}
 </style>
 
 <div class="example-wrapper">
@@ -216,15 +354,15 @@ tr:hover {
             {% for i in 1..30 %}
             <tr>
                 <td>{{ i }}</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>Adresse {{ i }}</td>
-                <td>Adresse {{ i }}</td>
-                <td>2025-12-31</td>
-                <td>Commerce</td>
-                <td>{{ i is even ? 'Accepté' : 'Refusé' }}</td>
+                <td>Évènement {{ i }}</td>
+                <td>Description {{ i }}</td>
+                <td>2025-12-{{ i }}</td>
+                <td>Lieu {{ i }}</td>
+                <td>Partenaire {{ i }}</td>
+                <td>{{ i is even ? 'Actif' : 'Inactif' }}</td>
+                <td>{{ i is even ? 'En cours' : 'Annulé' }}</td>
                 <td class="actions">
-                   <button class="consulter-btn" onclick="editUser({{ i }})">Bloquer</button>
+                   <button class="consulter-btn" onclick="blockEvent({{ i }})">Bloquer</button>
                 </td>
             </tr>
             {% endfor %}
@@ -232,19 +370,86 @@ tr:hover {
     </table>
 </div>
 
+<div id="blockModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Bloquer évènement</span>
+            <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+<p id="modalMessage" style="font-weight: bold; color: #013A71; text-align: center;">
+            <br>
+            <br>
+            <div class="form-group">
+              <br>
+                <label for="reason">Raison du blocage :</label>
+                <br>
+                <div id="reason">
+                    <label><input type="checkbox" name="reason[]" value="Contenu indésirable"> Contenu indésirable</label><br>
+                    <label><input type="checkbox" name="reason[]" value="Spam"> Spam</label><br>
+                    <label><input type="checkbox" name="reason[]" value="Violation des règles"> Violation des règles</label><br>
+                    <label><input type="checkbox" name="reason[]" value="Autres"> Autres</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="explanation">Explication :</label>
+                <textarea id="explanation" rows="4" placeholder="Ajoutez une explication..." required></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="save-btn" onclick="saveBlock()">Enregistrer</button>
+            <button class="cancel-btn" onclick="closeModal()">Annuler</button>
+        </div>
+    </div>
+</div>
+
+
 <script>
-    function addUser() {
-        alert('Ajouter un nouvel utilisateur');
+
+
+   let currentEventId;
+
+    function blockEvent(id) {
+        currentEventId = id;
+        document.body.classList.add('no-scroll');
+        document.getElementById('blockModal').style.display = 'block';
+
+        // Reset the modal message and form fields
+        document.getElementById('modalMessage').innerText = "Voulez-vous vraiment bloquer cet évènement ?";
+        document.getElementById('modalMessage').style.color = "#013A71"; // Default blue color
+        document.querySelectorAll('#reason input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+        document.getElementById('explanation').value = '';
     }
 
-    function editUser(id) {
-        alert('Modifier utilisateur #' + id);
+    function closeModal() {
+        document.body.classList.remove('no-scroll');
+        document.getElementById('blockModal').style.display = 'none';
     }
 
-    function deleteUser(id) {
-        if (confirm('Voulez-vous vraiment supprimer l’utilisateur #' + id + ' ?')) {
-            alert('Utilisateur supprimé');
+    function saveBlock() {
+        const reasons = Array.from(document.querySelectorAll('#reason input[type="checkbox"]:checked'))
+            .map(checkbox => checkbox.value);
+        const explanation = document.getElementById('explanation').value.trim();
+
+        if (reasons.length === 0 || explanation === "") {
+            // Show validation error in modal
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.innerText = "Veuillez sélectionner une raison et fournir une explication.";
+            modalMessage.style.color = "red"; // Highlight error message in red
+            return;
         }
+
+        // Show success message in modal
+        const modalMessage = document.getElementById('modalMessage');
+        modalMessage.innerText = `L'évènement #${currentEventId} a été bloqué avec succès pour les raisons : "${reasons.join(", ")}" et l'explication : "${explanation}".`;
+        modalMessage.style.color = "green"; // Highlight success message in green
+
+        // Optionally, you can clear the form after success
+        document.querySelectorAll('#reason input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+        document.getElementById('explanation').value = '';
+
+        // Optionally close the modal after a delay
+        setTimeout(closeModal, 3000); // Close the modal after 3 seconds
     }
 
     document.getElementById('search').addEventListener('input', filterTable);
