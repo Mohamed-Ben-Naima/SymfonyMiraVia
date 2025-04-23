@@ -1,0 +1,152 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2fc177a6689f7a5096b05c09a5aefbde96752beb
+/* General sidebar styling */
+.sidebar {
+  background-color: #f8f9fa; /* Light gray background */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  border-right: 1px solid #ddd; /* Border on the right */
+  padding: 20px;
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  overflow-y: auto; /* Enable scrolling if needed */
+}
+
+/* Navigation links styling */
+.sidebar .nav-link {
+  color: #343a40; /* Dark gray color */
+  font-weight: 500; /* Semi-bold text */
+  padding: 10px 15px;
+  border-radius: 4px; /* Rounded corners */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+.sidebar .nav-link:hover {
+  background-color: #007bff; /* Blue background on hover */
+  color: #fff; /* White text on hover */
+}
+
+/* Active link highlight */
+.sidebar .nav-link.active {
+  background-color: #0056b3; /* Darker blue for active link */
+  color: #fff; /* White text for active link */
+}
+
+/* Icons styling */
+.sidebar .nav-link i {
+  font-size: 18px;
+  margin-right: 10px;
+  color: #6c757d; /* Muted icon color */
+  transition: color 0.3s ease; /* Smooth icon color transition */
+}
+
+.sidebar .nav-link:hover i,
+.sidebar .nav-link.active i {
+  color: #fff; /* White icons on hover and active */
+}
+
+/* Submenu styling */
+.sidebar .collapse {
+  background-color: #e9ecef; /* Slightly darker background for submenus */
+  padding-left: 15px;
+  border-left: 2px solid #007bff; /* Blue line indicating submenu */
+  margin-top: 5px;
+}
+
+.sidebar .collapse .nav-link {
+  font-size: 14px; /* Smaller font size for submenu items */
+  padding: 5px 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+      width: 100%; /* Full-width for smaller screens */
+      height: auto; /* Adjust height */
+      position: relative; /* No fixed position */
+  }
+
+  .sidebar .nav-link {
+      padding: 10px; /* More compact padding */
+  }
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 2fc177a6689f7a5096b05c09a5aefbde96752beb
+/* General sidebar styling */
+.sidebar {
+  background-color: #f8f9fa; /* Light gray background */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  border-right: 1px solid #ddd; /* Border on the right */
+  padding: 20px;
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  overflow-y: auto; /* Enable scrolling if needed */
+}
+
+/* Navigation links styling */
+.sidebar .nav-link {
+  color: #343a40; /* Dark gray color */
+  font-weight: 500; /* Semi-bold text */
+  padding: 10px 15px;
+  border-radius: 4px; /* Rounded corners */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+.sidebar .nav-link:hover {
+  background-color: #007bff; /* Blue background on hover */
+  color: #fff; /* White text on hover */
+}
+
+/* Active link highlight */
+.sidebar .nav-link.active {
+  background-color: #0056b3; /* Darker blue for active link */
+  color: #fff; /* White text for active link */
+}
+
+/* Icons styling */
+.sidebar .nav-link i {
+  font-size: 18px;
+  margin-right: 10px;
+  color: #6c757d; /* Muted icon color */
+  transition: color 0.3s ease; /* Smooth icon color transition */
+}
+
+.sidebar .nav-link:hover i,
+.sidebar .nav-link.active i {
+  color: #fff; /* White icons on hover and active */
+}
+
+/* Submenu styling */
+.sidebar .collapse {
+  background-color: #e9ecef; /* Slightly darker background for submenus */
+  padding-left: 15px;
+  border-left: 2px solid #007bff; /* Blue line indicating submenu */
+  margin-top: 5px;
+}
+
+.sidebar .collapse .nav-link {
+  font-size: 14px; /* Smaller font size for submenu items */
+  padding: 5px 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+      width: 100%; /* Full-width for smaller screens */
+      height: auto; /* Adjust height */
+      position: relative; /* No fixed position */
+  }
+
+  .sidebar .nav-link {
+      padding: 10px; /* More compact padding */
+  }
+<<<<<<< HEAD
+>>>>>>> 070d559ba0e60247768af19955d5d9b7c345d7c7
+=======
+}
+>>>>>>> 2fc177a6689f7a5096b05c09a5aefbde96752beb
+}

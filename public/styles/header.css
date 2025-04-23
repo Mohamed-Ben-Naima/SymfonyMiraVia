@@ -1,0 +1,156 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: "Mulish", sans-serif;
+}
+
+/* Header Styles */
+.main-header, .profile-header {
+    background-color: transparent;
+    padding: 24px 20px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo img {
+    height: 42px;
+    width: 194px;
+}
+
+/* Navigation Bar */
+.nav-bar {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-label {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.nav-label:hover {
+    color: white;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-button {
+    background-color: #013A71;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.20);
+}
+
+/* Profile Dropdown */
+.profile-container {
+    position: relative;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.arrow {
+    font-size: 20px;
+}
+
+.profile-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 5px;
+}
+
+.profile-menu button {
+    background: transparent;
+    border: none;
+    color: #013A71;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-menu button:hover {
+    color: black;
+}
+
+/* Input Box */
+.input-box {
+    border-bottom: 2px solid #013A71;
+    padding: 5px 0;
+}
+
+.text-field, .password-field {
+    background-color: transparent;
+    border: none;
+    color: #013A71;
+    font-size: 14px;
+    padding: 5px;
+}
+
+/* Wrapper */
+.wrapper {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    width: 400px;
+    height: 440px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Close Icon */
+.icon-close {
+    background-color: #013A71;
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 0 20px 0 20px;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+}
+
+/* Form Box */
+.form-box {
+    width: 100%;
+    padding: 40px;
+}
+
+.form-box .title {
+    font-size: 2em;
+    color: #013A71;
+    text-align: center;
+}

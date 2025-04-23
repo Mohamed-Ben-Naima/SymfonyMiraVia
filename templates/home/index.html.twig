@@ -1,41 +1,115 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* Style for the container to position elements */
+        .container {
+            position: relative;
+            width: 100%;
+        }
 
-{% block title %}Hello HomeController!
-{% endblock %}
+        /* Style for the replaced iframe (header) */
+        .header-include {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: 1;
+        }
 
-{% block body %}
-	<style>
-		.example-wrapper {
-			margin: 1em auto;
-			max-width: 800px;
-			width: 95%;
-			font: 18px / 1.5 sans-serif;
-		}
-		.example-wrapper code {
-			background: #F5F5F5;
-			padding: 2px 6px;
-		}
-	</style>
+        /* Style for the image */
+        .rectangle {
+            display: block;
+            width: 100%; /* Force full width */
+            height: 740px; /* Fixed height */
+            object-fit: cover; /* Optional: Ensures the image fills the area without distortion */
+            z-index: 0;
+        }
 
-	<div class="example-wrapper">
-		<h1>Hello
-			{{ controller_name }}! ✅</h1>
+        /* Style for the text */
+        .text-overlay {
+            position: absolute;
+            top: 213px; /* Adjusted to 213px from the top */
+            left: 50%;
+            transform: translateX(-50%);
+            color: #013A71;
+            text-align: center;
+            text-shadow: 0px 5px 13px rgba(255, 255, 255, 0.40);
+            font-family: Volkhov, serif;
+            font-size: 48px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            width: 90%; /* Responsive width */
+            max-width: 744px; /* Limit maximum width */
+            z-index: 2;
+        }
 
-		This friendly message is coming from:
-		<ul>
-			<li>Your controller at
-				<code>C:/ProjetWebMira/miravia/src/Controller/HomeController.php</code>
-			</li>
-			<li>Your template at
-				<code>C:/ProjetWebMira/miravia/templates/home/index.html.twig</code>
-			</li>
-		</ul>
-		{% if app.user %}
-			<div class="mb-3">
-				You are logged in as
-				{{ app.user.userIdentifier }},
-				<a href="{{ path('app_logout') }}">Logout</a>
-			</div>
-		{% endif %}
-	</div>
-{% endblock %}
+        /* Style for the flex container */
+        .video-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 43px; /* Adjusted to 43px from the top */
+        }
+
+        /* Style for the image */
+        .load-image {
+            display: block;
+            margin: 0; /* Remove margin to align with text */
+        }
+
+        /* Style for the additional text */
+        .video-text {
+            color: var(--Main-Dark, #1C2B38);
+            text-align: center;
+            font-family: Mulish, sans-serif;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            margin-left: 10px; /* Add spacing between the image and text */
+        }
+
+        /* Style for the new block */
+        .styled-block {
+            position: absolute; /* Position it absolutely */
+            top: 480px; /* Adjusted to 252px from the top */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Ensure perfect centering */
+            width: 966.404px; /* Responsive width */
+            height: 90px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            background: #FFF;
+            box-shadow: 0px 10px 30px 0px rgba(123, 188, 176, 0.50);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Add the text -->
+        <div class="text-overlay">
+            Nous trouvons les meilleures excursions pour vous.
+            
+            <!-- Flex container for image and text -->
+            <div class="video-container">
+                <img class="load-image" src="{{ asset('images/looad.png') }}" alt="Load Image" />
+                <div class="video-text">Regarder la vidéo</div>
+            </div>
+            
+            <!-- Add the new styled block -->
+            <div class="styled-block"></div>
+        </div>
+        
+        <!-- Add the image -->
+        <img class="rectangle" src="https://c.animaapp.com/m9u73nw5frNzDy/img/rectangle-143.svg" />
+        
+        <!-- Replace iframe with header include -->
+        <div class="header-include">
+            {% include 'partials/_header.html.twig' %}
+        </div>
+    </div>
+</body>
+</html>
