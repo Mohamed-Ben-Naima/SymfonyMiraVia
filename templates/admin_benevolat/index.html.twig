@@ -327,15 +327,26 @@ body.no-scroll {
             </tr>
         </thead>
         <tbody id="userTable">
-            {% for i in 1..30 %}
+            {% for benevolat in benevolats %}
             <tr>
-                <td>{{ i }}</td>
-                <td>Bénévolat {{ i }}</td>
-                <td>Description {{ i }}</td>
-                <td>2025-12-{{ i }}</td>
-                <td>{{ i is even ? 'Ouvert' : 'Terminé' }}</td>
+                <td>{{ benevolat.idBenevolat }}</td>
+                <td>{{ benevolat.titre }}</td>
+                <td>{{ benevolat.description }}</td>
+                <td>{{ benevolat.dateBenevolat ? benevolat.dateBenevolat|date('Y-m-d') : '' }}</td>
+                <td>{{ benevolat.status }}</td>
                 <td class="actions">
-                   <button class="consulter-btn" onclick="viewDetails({{ i }})">Consulter</button>
+                    <button 
+                        class="consulter-btn" 
+                        data-id="{{ benevolat.idBenevolat }}"
+                        data-titre="{{ benevolat.titre }}"
+                        data-description="{{ benevolat.description }}"
+                        data-date-benevolat="{{ benevolat.dateBenevolat ? benevolat.dateBenevolat|date('Y-m-d') : '' }}"
+                        data-status="{{ benevolat.status }}"
+                        data-image="{{ benevolat.imagename|default('') }}"
+                        onclick="viewDetails(this)"
+                    >
+                        Consulter
+                    </button>
                 </td>
             </tr>
             {% endfor %}
@@ -353,6 +364,7 @@ body.no-scroll {
             <!-- Les détails seront ajoutés dynamiquement ici -->
         </div>
         <div class="modal-footer">
+            <button class="download-btn" id="downloadButton" style="display: none;">Télécharger l'image</button>
             <button class="cancel-btn" onclick="closeModal()">Fermer</button>
         </div>
     </div>
@@ -360,17 +372,45 @@ body.no-scroll {
 
 
 <script>
-    function viewDetails(id) {
-        const modalBody = document.getElementById('modalBody');
-        modalBody.innerHTML = `
-            <p><strong>Titre :</strong> Bénévolat ${id}</p>
-            <p><strong>Description :</strong> Description ${id}</p>
-            <p><strong>Date de bénévolat :</strong> 2025-12-${id}</p>
-            <p><strong>Status :</strong> ${id % 2 === 0 ? 'Ouvert' : 'Terminé'}</p>
-        `;
-        document.getElementById('detailsModal').style.display = 'block';
-        document.body.style.overflow = 'hidden'; // Désactiver le scroll de la page
+
+
+function viewDetails(button) {
+    // Récupérer les données depuis les attributs `data-*`
+    const titre = button.getAttribute('data-titre');
+    const description = button.getAttribute('data-description');
+    const dateBenevolat = button.getAttribute('data-date-benevolat');
+    const status = button.getAttribute('data-status');
+    const image = button.getAttribute('data-image');
+
+    // Mettre à jour le contenu du modal
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = `
+        <p><strong>Titre :</strong> ${titre}</p>
+        <p><strong>Description :</strong> ${description}</p>
+        <p><strong>Date de bénévolat :</strong> ${dateBenevolat}</p>
+        <p><strong>Status :</strong> ${status}</p>
+        <p><strong>Image :</strong> ${
+            image 
+            ? `<a href="${image}" target="_blank">${image}</a>` 
+            : 'Aucune image disponible'
+        }</p>
+    `;
+
+    // Afficher ou masquer le bouton de téléchargement
+    const downloadButton = document.getElementById('downloadButton');
+    if (image) {
+        downloadButton.style.display = 'inline-block';
+        downloadButton.onclick = () => window.location.href = image;
+    } else {
+        downloadButton.style.display = 'none';
     }
+
+    // Afficher le modal
+    const modal = document.getElementById('detailsModal');
+    modal.style.display = 'block';
+    document.body.classList.add('no-scroll');
+}
+
 
     function closeModal() {
         document.getElementById('detailsModal').style.display = 'none';

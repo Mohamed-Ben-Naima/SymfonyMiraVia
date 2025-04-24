@@ -308,41 +308,41 @@ tr:hover {
 
         <button onclick="openModal()">Modifier date d'expiration</button>
     </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nom de partenaire</th>
-                <th>Téléphone</th>
-                <th>Email</th>
-                <th>Adresse</th>
-                <th>Nom d'entreprise</th>
-                <th>Date d'expiration</th>
-                <th>Type d'activité</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="userTable">
-            {% for i in 1..30 %}
-            <tr>
-                <td>{{ i }}</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>Adresse {{ i }}</td>
-                <td>Entreprise {{ i }}</td>
-                <td>2025-12-31</td>
-                <td>Commerce</td>
-                <td>{{ i is even ? 'Actif' : 'Inactif' }}</td>
-                <td class="actions">
-            <button class="button-block" onclick="blockUser({{ i }})">Bloquer</button>
-            <button class="button-unblock" onclick="unblockUser({{ i }})">Débloquer</button>            </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nom de partenaire</th>
+            <th>Téléphone Partenaire</th>
+            <th>Email</th>
+            <th>Adresse</th>
+            <th>Nom d'entreprise</th>
+            <th>Date d'expiration</th>
+            <th>Type d'activité</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="userTable">
+        {% for partenaire in partenaires %}
+        <tr>
+            <td>{{ partenaire.id_partenaire }}</td>
+            <td>{{ partenaire.nom }} {{ partenaire.prenom }}</td>
+            <td>{{ partenaire.partenaire_telephone }}</td>
+            <td>{{ partenaire.email }}</td>
+            <td>{{ partenaire.adresse }}</td>
+            <td>{{ partenaire.nom_entreprise }}</td>
+            <td>{{ partenaire.date_expiration ? partenaire.date_expiration|date('Y-m-d') : 'N/A' }}</td>
+            <td>{{ partenaire.type_activite }}</td>
+        <td>{{ partenaire.utilisateur_status }}</td>
+            <td class="actions">
+                <button class="button-block" onclick="blockUser({{ partenaire.id_partenaire }})">Bloquer</button>
+                <button class="button-unblock" onclick="unblockUser({{ partenaire.id_partenaire }})">Débloquer</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </div>
 
 <!-- Modal for updating expiration date -->
@@ -402,41 +402,67 @@ tr:hover {
 <script>
     let actionCallback; // Variable to store the callback function
 
-    // Open confirmation modal for blocking/unblocking
-    function openConfirmationModal(message, callback) {
-        const modal = document.getElementById('actionModal');
-        const actionMessage = document.getElementById('actionMessage');
-        actionMessage.textContent = message; // Update modal message
-        modal.style.display = 'block'; // Show modal
-        actionCallback = callback; // Store callback
-    }
+function openConfirmationModal(message, callback) {
+    const modal = document.getElementById('actionModal'); // Sélectionner le modal
+    const actionMessage = document.getElementById('actionMessage'); // Sélectionner l'élément de message
+    actionMessage.textContent = message; // Mettre à jour le message dans le modal
+    modal.style.display = 'block'; // Afficher le modal
+    actionCallback = callback; // Stocker le callback pour l'action de confirmation
+}
 
     // Confirm blocking/unblocking action
-    function confirmAction() {
-        if (typeof actionCallback === 'function') {
-            actionCallback(); // Execute callback
-            const successMessage = document.getElementById('successMessageAction');
-            successMessage.style.display = 'block'; // Show success message
-            setTimeout(() => {
-                successMessage.style.display = 'none'; // Hide message after 3 seconds
-                closeModal(); // Close modal
-            }, 3000);
+function confirmAction() {
+    if (typeof actionCallback === 'function') {
+        actionCallback(); // Exécuter le callback passé
+        const successMessage = document.getElementById('successMessageAction');
+        successMessage.style.display = 'block'; // Afficher un message de succès
+        setTimeout(() => {
+            successMessage.style.display = 'none'; // Masquer le message après 3 secondes
+            closeModal(); // Fermer le modal
+        }, 3000);
+    }
+}
+
+function updateStatus(id, status) {
+    console.log('Sending data:', { id, status }); // Log les données envoyées
+
+    fetch('/admin/partner/change-status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({ id: id, status: status }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-    }
+        // Pas besoin de traitement de réponse car le serveur retourne 204 No Content
+    })
+    .then(() => {
+        location.reload(); // Recharger la page entière pour voir les changements
+    })
+    .catch(error => {
+        console.error('Error:', error); // Affiche les erreurs dans la console
+    });
+}
 
-    // Block a user
-    function blockUser(id) {
-        openConfirmationModal(`Êtes-vous sûr de bloquer l'utilisateur #${id} ?`, function() {
-            console.log(`Utilisateur #${id} bloqué.`);
-        });
-    }
 
-    // Unblock a user
-    function unblockUser(id) {
-        openConfirmationModal(`Êtes-vous sûr de débloquer l'utilisateur #${id} ?`, function() {
-            console.log(`Utilisateur #${id} débloqué.`);
-        });
-    }
+// Fonction pour bloquer un utilisateur
+function blockUser(id) {
+    openConfirmationModal(`Êtes-vous sûr de vouloir bloquer l'utilisateur #${id} ?`, function () {
+        updateStatus(id, 'Inactif');
+    });
+}
+
+// Fonction pour débloquer un utilisateur
+function unblockUser(id) {
+    openConfirmationModal(`Êtes-vous sûr de vouloir débloquer l'utilisateur #${id} ?`, function () {
+        updateStatus(id, 'Actif');
+    });
+}
+
 
     // Open date update modal
     function openModal() {
@@ -476,20 +502,22 @@ tr:hover {
     document.getElementById('search').addEventListener('input', filterTable);
     document.getElementById('statusFilter').addEventListener('change', filterTable);
 
-    function filterTable() {
-        const searchFilter = document.getElementById('search').value.toLowerCase();
-        const statusFilter = document.getElementById('statusFilter').value;
-        const rows = document.querySelectorAll('#userTable tr');
+function filterTable() {
+    const searchFilter = document.getElementById('search').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+    const rows = document.querySelectorAll('#userTable tr');
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const textMatch = Array.from(cells).slice(0, 9)
-                .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
-            const status = cells[8].textContent.trim();
-            const statusMatch = statusFilter === "" || status === statusFilter;
-            row.style.display = (textMatch && statusMatch) ? '' : 'none';
-        });
-    }
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const textMatch = Array.from(cells) // Vérifie si une cellule contient le texte recherché
+            .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
+        
+        const status = cells[6]?.textContent.toLowerCase().trim(); // 6ème colonne pour le statut
+        const statusMatch = statusFilter === "" || status === statusFilter;
+
+        row.style.display = (textMatch && statusMatch) ? '' : 'none';
+    });
+}
 
     // Close modal on Escape key press
 document.addEventListener('keydown', function(event) {

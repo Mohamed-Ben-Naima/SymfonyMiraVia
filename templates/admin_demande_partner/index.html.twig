@@ -303,11 +303,12 @@ body.no-scroll {
             <input type="text" id="search" placeholder="Rechercher ...">
         </div>
 
-        <select id="statusFilter">
-            <option value="">Tous les états</option>
-            <option value="Refusé">Refusé</option>
-            <option value="Accepté">Accepté</option>
-        </select>
+  <select id="statusFilter">
+    <option value="">Tous les états</option>
+    <option value="Refusée">Refusée</option>
+    <option value="Acceptée">Acceptée</option>
+    <option value="En attente">En attente</option>
+</select>
     </div>
 
     <table>
@@ -325,24 +326,41 @@ body.no-scroll {
             </tr>
         </thead>
         <tbody id="userTable">
-            {% for i in 1..30 %}
+            {% for demande in demandes %}
             <tr>
-                <td>{{ i }}</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>Adresse {{ i }}</td>
-                <td>Adresse {{ i }}</td>
-                <td>2025-12-31</td>
-                <td>Commerce</td>
-                <td>{{ i is even ? 'Accepté' : 'Refusé' }}</td>
+                <td>{{ demande.id }}</td>
+                <td>{{ demande.demandeur }}</td>
+                <td>{{ demande.telephone }}</td>
+                <td>{{ demande.email }}</td>
+                <td>{{ demande.adresse }}</td>
+                <td>{{ demande.dateDemande ? demande.dateDemande|date('Y-m-d') : '' }}</td>
+                <td>{{ demande.typeActivite }}</td>
+                <td>{{ demande.etat }}</td>
                 <td class="actions">
-                    <button class="consulter-btn" onclick="viewDetails({{ i }})">Consulter</button>
+                    <!-- Ajout des données dans des attributs `data-*` -->
+                    <button 
+                        class="consulter-btn" 
+                        data-id="{{ demande.id }}"
+                        data-demandeur="{{ demande.demandeur }}"
+                        data-telephone="{{ demande.telephone }}"
+                        data-email="{{ demande.email }}"
+                        data-adresse="{{ demande.adresse }}"
+                        data-date-demande="{{ demande.dateDemande ? demande.dateDemande|date('Y-m-d') : '' }}"
+                        data-type-activite="{{ demande.typeActivite }}"
+                        data-etat="{{ demande.etat }}"
+                        data-description="{{ demande.description|default('Aucune description disponible') }}"
+                        data-preuve="{{ demande.preuve|default('') }}"
+                        onclick="viewDetails(this)"
+                    >
+                        Consulter
+                    </button>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+
 <!-- Modal for displaying details -->
 <div id="detailsModal" class="modal">
     <div class="modal-content">
@@ -354,73 +372,90 @@ body.no-scroll {
             <!-- Les détails seront remplis dynamiquement -->
         </div>
         <div class="modal-footer">
-            <button class="download-btn" id="downloadButton">Télécharger la preuve</button>
+            <button class="download-btn" id="downloadButton" style="display: none;">Télécharger la preuve</button>
             <button class="cancel-btn" onclick="closeModal()">Fermer</button>
         </div>
     </div>
 </div>
+
 <script>
+    // Fonction pour afficher les détails dans le modal
+function viewDetails(button) {
+    // Récupérer les données depuis les attributs `data-*`
+    const demandeur = button.getAttribute('data-demandeur');
+    const telephone = button.getAttribute('data-telephone');
+    const email = button.getAttribute('data-email');
+    const adresse = button.getAttribute('data-adresse');
+    const dateDemande = button.getAttribute('data-date-demande');
+    const typeActivite = button.getAttribute('data-type-activite');
+    const etat = button.getAttribute('data-etat');
+    const description = button.getAttribute('data-description');
+    const preuve = button.getAttribute('data-preuve');
 
+    // Mettre à jour le contenu du modal
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = `
+        <p><strong>Nom de demandeur :</strong> ${demandeur}</p>
+        <p><strong>Téléphone :</strong> ${telephone}</p>
+        <p><strong>Email :</strong> ${email}</p>
+        <p><strong>Adresse :</strong> ${adresse}</p>
+        <p><strong>Date de demande :</strong> ${dateDemande}</p>
+        <p><strong>Type d'activité :</strong> ${typeActivite}</p>
+        <p><strong>État :</strong> ${etat}</p>
+        <p><strong>Description :</strong> ${description}</p>
+        <p><strong>Preuve :</strong> ${
+            preuve 
+            ? `<a href="${preuve}" target="_blank">${preuve}</a>`
+            : 'Aucune preuve disponible'
+        }</p>
+    `;
 
- let currentUserId;
-
-    function viewDetails(id) {
-        currentUserId = id;
-
-    // Désactiver le scroll et compenser la largeur de la barre de défilement
-    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.paddingRight = `${scrollBarWidth}px`;
-    document.body.classList.add('no-scroll');
-
-        // Exemple de contenu dynamique (vous pouvez remplacer par des données réelles)
-        const modalBody = document.getElementById('modalBody');
-        modalBody.innerHTML = `
-            <p><strong>Nom de demandeur :</strong> Nom ${id}</p>
-            <p><strong>Téléphone :</strong> +123456789${id}</p>
-            <p><strong>Email :</strong> nom${id}@example.com</p>
-            <p><strong>Adresse :</strong> Adresse ${id}</p>
-            <p><strong>Date de demande :</strong> 2025-12-${id}</p>
-            <p><strong>Type d'activité :</strong> Commerce</p>
-            <p><strong>État :</strong> ${id % 2 === 0 ? 'Accepté' : 'Refusé'}</p>
-            <p><strong>Description :</strong> Ceci est une description de la demande pour le client ${id}.</p>
-            <p><strong>Preuve :</strong> <a href="preuve${id}.pdf" target="_blank">preuve${id}.pdf</a></p>
-        `;
-
-        // Configurer le bouton de téléchargement
-        const downloadButton = document.getElementById('downloadButton');
-        downloadButton.onclick = function () {
-            window.open(`preuve${id}.pdf`, '_blank');
-        };
-
-        // Afficher le modal
-        document.getElementById('detailsModal').style.display = 'block';
+    // Afficher ou masquer le bouton de téléchargement
+    const downloadButton = document.getElementById('downloadButton');
+    if (preuve) {
+        downloadButton.style.display = 'inline-block';
+        downloadButton.onclick = () => window.location.href = preuve; // Redirect to the file URL
+    } else {
+        downloadButton.style.display = 'none';
     }
 
-function closeModal() {
-    // Supprimer le padding ajouté et réactiver le scroll
-    document.body.style.paddingRight = '';
-    document.body.classList.remove('no-scroll');
-    document.getElementById('detailsModal').style.display = 'none';
+    // Afficher le modal
+    const modal = document.getElementById('detailsModal');
+    modal.style.display = 'block';
+    document.body.classList.add('no-scroll');
 }
 
+    // Fonction pour fermer le modal
+    function closeModal() {
+        const modal = document.getElementById('detailsModal');
+        modal.style.display = 'none';
+        document.body.classList.remove('no-scroll');
+    }
+
+    // Ajouter les filtres de recherche et état
     document.getElementById('search').addEventListener('input', filterTable);
     document.getElementById('statusFilter').addEventListener('change', filterTable);
 
-    function filterTable() {
-        const searchFilter = document.getElementById('search').value.toLowerCase();
-        const statusFilter = document.getElementById('statusFilter').value;
-        const rows = document.querySelectorAll('#userTable tr');
+function filterTable() {
+    console.log('Filtrage du tableau...'); // Log pour débogage
+    const searchFilter = document.getElementById('search').value.toLowerCase(); // Texte de recherche
+    const statusFilter = document.getElementById('statusFilter').value; // Valeur sélectionnée dans le filtre d'état
+    const rows = document.querySelectorAll('#userTable tr'); // Récupère toutes les lignes du tableau
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const textMatch = Array.from(cells).slice(0, 9)
-                .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td'); // Récupère toutes les cellules de la ligne
+        const textMatch = Array.from(cells).slice(0, 9) // Vérifie la correspondance avec le texte de recherche
+            .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
 
-            const status = cells[8].textContent.trim();
-            const statusMatch = statusFilter === "" || status === statusFilter;
+        const etat = cells[7]?.textContent?.trim() || ''; // Récupère la valeur de la colonne "Etat"
+        console.log('Etat extrait:', etat, 'Filtre sélectionné:', statusFilter); // Log pour voir les valeurs d'état
 
-            row.style.display = (textMatch && statusMatch) ? '' : 'none';
-        });
-    }
+        // Vérifie si l'état correspond ou si aucun filtre n'est appliqué
+        const etatMatch = statusFilter === "" || etat === statusFilter;
+
+        // Affiche la ligne si elle correspond au texte et au filtre, sinon la masque
+        row.style.display = (textMatch && etatMatch) ? '' : 'none';
+    });
+}
 </script>
 {% endblock %}
