@@ -26,6 +26,9 @@
             "./migrations/.gitignore"
         ]
     },
+    "gregwar/captcha-bundle": {
+        "version": "v2.3.0"
+    },
     "phpunit/phpunit": {
         "version": "9.6",
         "recipe": {
@@ -40,7 +43,6 @@
             "./tests/bootstrap.php"
         ]
     },
-<<<<<<< HEAD
     "siburuxue/doctrine-helper": {
         "version": "1.0",
         "recipe": {
@@ -50,8 +52,6 @@
             "ref": "b5d5e097e1037ea03aa254078130a32e1ca2e066"
         }
     },
-=======
->>>>>>> 2fc177a6689f7a5096b05c09a5aefbde96752beb
     "symfony/asset-mapper": {
         "version": "7.2",
         "recipe": {

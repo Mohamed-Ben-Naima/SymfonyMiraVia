@@ -317,25 +317,23 @@
                 </div>
             </div>
 
-            <!-- Type utilisateur -->
-            <div class="form-group">
-                <i class="fas fa-users input-icon"></i>
-                {{ form_widget(form.type_utilisateur, {'attr': {'class': 'form-control', 'placeholder': 'Type utilisateur'}}) }}
-                <div class="invalid-feedback">
-                    <i class="fas fa-exclamation-circle"></i>
-                    {{ form_errors(form.type_utilisateur) }}
-                </div>
-            </div>
 
             <!-- CAPTCHA -->
             <div class="captcha">
-                <p class="fw-bold">CAPTCHA</p>
-                <img src="{{ path('captcha') }}" alt="Captcha" class="captcha-image">
-                <button type="button" onclick="refreshCaptcha()">
-                    <i class="fas fa-sync-alt"></i> Rafraîchir
-                </button>
-                <input type="text" name="captcha" class="form-control mt-2" placeholder="Entrez le texte ici" required>
-            </div>
+    <div class="mb-3">
+        <p class="fw-bold">CAPTCHA</p>
+        {{ form_widget(form.captcha, {
+            'attr': {
+                'class': 'form-control mt-2',
+                'placeholder': 'Entrez le texte ici'
+            }
+        }) }}
+        <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ form_errors(form.captcha) }}
+        </div>
+    </div>
+</div>
 
             <!-- Conditions générales -->
             <div class="form-check mt-3">
@@ -350,6 +348,10 @@
             </div>
 
             <button type="submit" class="btn btn-primary w-100 mt-4">S'inscrire</button>
+            <!-- Lien retour à la connexion -->
+            <div class="text-center mt-3">
+    <a href="{{ path('app_login_controller_partner') }}" class="text-primary text-decoration-none">Retour à la connexion</a>
+             </div>
             {{ form_end(form) }}
         </div>
     </div>
@@ -357,7 +359,7 @@
 
 <script>
     function togglePasswordVisibility(iconElement) {
-    const input = iconElement.previousElementSibling; // Sélectionne l'input avant l'icône
+    const input = iconElement.previousElementSibling; 
     if (!input) return;
 
     if (input.type === 'password') {
@@ -371,12 +373,12 @@
     }
 }
 
-    function refreshCaptcha() {
-        const captchaImage = document.querySelector('.captcha-image');
-        if (captchaImage) {
-            captchaImage.src = "{{ path('captcha') }}?" + new Date().getTime();
-        }
+  function refreshCaptcha() {
+    const captchaImage = document.querySelector('.captcha-image');
+    if (captchaImage) {
+        captchaImage.src = "{{ path('captcha') }}?" + new Date().getTime();
     }
+}
     document.querySelector('form').addEventListener('submit', function(e) {
     const birthdayInput = document.querySelector('.flatpickr');
     if (!birthdayInput.value) {
