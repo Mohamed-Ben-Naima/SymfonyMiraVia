@@ -302,8 +302,9 @@ body.no-scroll {
 
         <select id="statusFilter">
             <option value="">Tous les statuts</option>
-            <option value="Refusé">Refusé</option>
-            <option value="Accepté">Accepté</option>
+            <option value="En attente">En attente</option>
+            <option value="Validé">Validé</option>
+            <option value="Rejeté">Rejeté</option>
         </select>
     </div>
 
@@ -311,8 +312,8 @@ body.no-scroll {
         <thead>
             <tr>
                 <th>#</th>
-                <th>Nom de client</th>
-                <th>Nom de partenaire</th>
+                <th>ID Client</th>
+                <th>ID Partenaire</th>
                 <th>Montant</th>
                 <th>Date de don</th>
                 <th>Status</th>
@@ -320,16 +321,16 @@ body.no-scroll {
             </tr>
         </thead>
         <tbody id="userTable">
-            {% for i in 1..30 %}
+            {% for don in dons %}
             <tr>
-                <td>{{ i }}</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>250DT</td>
-                <td>2025-12-31</td>
-                <td>{{ i is even ? 'Accepté' : 'Refusé' }}</td>
+                <td>{{ don.idDon }}</td>
+                <td>{{ don.idClient }}</td>
+                <td>{{ don.idPartenaire }}</td>
+                <td>{{ don.montant }}</td>
+                <td>{{ don.dateDon ? don.dateDon|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                <td>{{ don.status }}</td>
                 <td class="actions">
-                   <button class="consulter-btn" onclick="viewDetails({{ i }})">Consulter</button>
+                    <button class="consulter-btn" onclick="viewDetails({{ don.idDon }})">Consulter</button>
                 </td>
             </tr>
             {% endfor %}
@@ -344,7 +345,7 @@ body.no-scroll {
             <button class="close-btn" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body" id="modalBody">
-            <!-- Details will be dynamically loaded here -->
+            <!-- Les détails seront chargés dynamiquement ici -->
         </div>
         <div class="modal-footer">
             <button class="cancel-btn" onclick="closeModal()">Fermer</button>
@@ -353,22 +354,22 @@ body.no-scroll {
 </div>
 
 <script>
-
    function viewDetails(id) {
         const modalBody = document.getElementById('modalBody');
         modalBody.innerHTML = `
-            <p><strong>Nom de client :</strong> Client ${id}</p>
-            <p><strong>Nom de partenaire :</strong> Partenaire ${id}</p>
+            <p><strong>ID Don :</strong> ${id}</p>
+            <p><strong>ID Client :</strong> Client ${id}</p>
+            <p><strong>ID Partenaire :</strong> Partenaire ${id}</p>
             <p><strong>Montant :</strong> ${id * 100} DT</p>
             <p><strong>Date de don :</strong> 2025-12-${id}</p>
-            <p><strong>Status :</strong> ${id % 2 === 0 ? 'Accepté' : 'Refusé'}</p>
+            <p><strong>Status :</strong> En attente</p>
         `;
-        document.body.style.overflow = 'hidden'; // Disable scrolling
+        document.body.style.overflow = 'hidden'; // Désactiver le défilement
         document.getElementById('detailsModal').style.display = 'block';
     }
 
     function closeModal() {
-        document.body.style.overflow = ''; // Re-enable scrolling
+        document.body.style.overflow = ''; // Réactiver le défilement
         document.getElementById('detailsModal').style.display = 'none';
     }
 
@@ -376,21 +377,22 @@ body.no-scroll {
     document.getElementById('search').addEventListener('input', filterTable);
     document.getElementById('statusFilter').addEventListener('change', filterTable);
 
-    function filterTable() {
-        const searchFilter = document.getElementById('search').value.toLowerCase();
-        const statusFilter = document.getElementById('statusFilter').value;
-        const rows = document.querySelectorAll('#userTable tr');
+  function filterTable() {
+    const searchFilter = document.getElementById('search').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value.toLowerCase(); // Convertir en minuscules pour la comparaison
+    const rows = document.querySelectorAll('#userTable tr');
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const textMatch = Array.from(cells).slice(0, 9)
-                .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const textMatch = Array.from(cells).slice(0, 6) // Parcourir uniquement les colonnes pertinentes
+            .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
 
-            const status = cells[8].textContent.trim();
-            const statusMatch = statusFilter === "" || status === statusFilter;
+        const status = cells[5].textContent.trim().toLowerCase(); // Statut dans la 6e colonne (0-indexé)
+        const statusMatch = statusFilter === "" || status === statusFilter;
 
-            row.style.display = (textMatch && statusMatch) ? '' : 'none';
-        });
-    }
+        // Afficher la ligne si elle correspond au filtre texte et au filtre statut
+        row.style.display = (textMatch && statusMatch) ? '' : 'none';
+    });
+}
 </script>
 {% endblock %}

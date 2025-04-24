@@ -329,7 +329,7 @@ body.no-scroll {
         </div>
 
         <select id="statusFilter">
-            <option value="">Tous les status</option>
+            <option value="">Tous les statuts</option>
             <option value="En cours">En cours</option>
             <option value="Annulé">Annulé</option>
             <option value="Terminé">Terminé</option>
@@ -345,24 +345,34 @@ body.no-scroll {
                 <th>Date d'évènement</th>
                 <th>Lieu</th>
                 <th>Partenaire</th>
-                <th>Etat</th>
                 <th>Status</th>
+                <th>État</th>
+                <th>Image</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody id="userTable">
-            {% for i in 1..30 %}
+            {% for evenement in evenements %}
             <tr>
-                <td>{{ i }}</td>
-                <td>Évènement {{ i }}</td>
-                <td>Description {{ i }}</td>
-                <td>2025-12-{{ i }}</td>
-                <td>Lieu {{ i }}</td>
-                <td>Partenaire {{ i }}</td>
-                <td>{{ i is even ? 'Actif' : 'Inactif' }}</td>
-                <td>{{ i is even ? 'En cours' : 'Annulé' }}</td>
+                <td>{{ evenement.idEvenement }}</td>
+                <td>{{ evenement.titre }}</td>
+                <td>{{ evenement.description }}</td>
+                <td>{{ evenement.dateEvenement ? evenement.dateEvenement|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                <td>{{ evenement.lieu }}</td>
+                <td>{{ evenement.idPartenaire }}</td>
+                <td>{{ evenement.status }}</td>
+                <td id="etat-{{ evenement.idEvenement }}">{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}</td>
+                <td>
+                    {% if evenement.imagename %}
+                        <img src="{{ asset('images/' ~ evenement.imagename) }}" alt="Image {{ evenement.titre }}" style="width: 50px; height: auto;">
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
                 <td class="actions">
-                   <button class="consulter-btn" onclick="blockEvent({{ i }})">Bloquer</button>
+                    <button class="consulter-btn" onclick="blockEvent({{ evenement.idEvenement }}, '{{ evenement.estBloque }}')">
+                        {{ evenement.estBloque == 1 ? 'Activer' : 'Bloquer' }}
+                    </button>
                 </td>
             </tr>
             {% endfor %}
@@ -373,17 +383,15 @@ body.no-scroll {
 <div id="blockModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <span>Bloquer évènement</span>
+            <span>Modifier l'état de l'évènement</span>
             <button class="close-btn" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
-<p id="modalMessage" style="font-weight: bold; color: #013A71; text-align: center;">
-            <br>
-            <br>
+            <p id="modalMessage" style="font-weight: bold; color: #013A71; text-align: center;">
+                Voulez-vous vraiment modifier l'état de cet évènement ?
+            </p>
             <div class="form-group">
-              <br>
-                <label for="reason">Raison du blocage :</label>
-                <br>
+                <label for="reason">Raison :</label>
                 <div id="reason">
                     <label><input type="checkbox" name="reason[]" value="Contenu indésirable"> Contenu indésirable</label><br>
                     <label><input type="checkbox" name="reason[]" value="Spam"> Spam</label><br>
@@ -403,73 +411,74 @@ body.no-scroll {
     </div>
 </div>
 
-
 <script>
+let currentEventId;
 
+function blockEvent(id, estBloque) {
+    currentEventId = id;
+    document.body.classList.add('no-scroll');
+    document.getElementById('blockModal').style.display = 'block';
 
-   let currentEventId;
+    const modalMessage = document.getElementById('modalMessage');
+    const buttonText = estBloque == 1 ? 'Activer' : 'Bloquer';
 
-    function blockEvent(id) {
-        currentEventId = id;
-        document.body.classList.add('no-scroll');
-        document.getElementById('blockModal').style.display = 'block';
+    modalMessage.innerText = `Voulez-vous vraiment ${buttonText.toLowerCase()} cet évènement ?`;
+    modalMessage.style.color = "#013A71"; // Default blue color
+    document.querySelectorAll('#reason input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+    document.getElementById('explanation').value = '';
+}
 
-        // Reset the modal message and form fields
-        document.getElementById('modalMessage').innerText = "Voulez-vous vraiment bloquer cet évènement ?";
-        document.getElementById('modalMessage').style.color = "#013A71"; // Default blue color
-        document.querySelectorAll('#reason input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
-        document.getElementById('explanation').value = '';
-    }
+function closeModal() {
+    document.body.classList.remove('no-scroll');
+    document.getElementById('blockModal').style.display = 'none';
+}
 
-    function closeModal() {
-        document.body.classList.remove('no-scroll');
-        document.getElementById('blockModal').style.display = 'none';
-    }
+function saveBlock() {
+    const reasons = Array.from(document.querySelectorAll('#reason input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.value);
+    const explanation = document.getElementById('explanation').value.trim();
 
-    function saveBlock() {
-        const reasons = Array.from(document.querySelectorAll('#reason input[type="checkbox"]:checked'))
-            .map(checkbox => checkbox.value);
-        const explanation = document.getElementById('explanation').value.trim();
-
-        if (reasons.length === 0 || explanation === "") {
-            // Show validation error in modal
-            const modalMessage = document.getElementById('modalMessage');
-            modalMessage.innerText = "Veuillez sélectionner une raison et fournir une explication.";
-            modalMessage.style.color = "red"; // Highlight error message in red
-            return;
-        }
-
-        // Show success message in modal
+    if (reasons.length === 0 || explanation === "") {
         const modalMessage = document.getElementById('modalMessage');
-        modalMessage.innerText = `L'évènement #${currentEventId} a été bloqué avec succès pour les raisons : "${reasons.join(", ")}" et l'explication : "${explanation}".`;
-        modalMessage.style.color = "green"; // Highlight success message in green
-
-        // Optionally, you can clear the form after success
-        document.querySelectorAll('#reason input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
-        document.getElementById('explanation').value = '';
-
-        // Optionally close the modal after a delay
-        setTimeout(closeModal, 3000); // Close the modal after 3 seconds
+        modalMessage.innerText = "Veuillez sélectionner une raison et fournir une explication.";
+        modalMessage.style.color = "red"; // Highlight error
+        return;
     }
 
-    document.getElementById('search').addEventListener('input', filterTable);
-    document.getElementById('statusFilter').addEventListener('change', filterTable);
+    const etatCell = document.getElementById(`etat-${currentEventId}`);
+    const actionButton = document.querySelector(`.actions button[onclick*="${currentEventId}"]`);
 
-    function filterTable() {
-        const searchFilter = document.getElementById('search').value.toLowerCase();
-        const statusFilter = document.getElementById('statusFilter').value;
-        const rows = document.querySelectorAll('#userTable tr');
-
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const textMatch = Array.from(cells).slice(0, 9)
-                .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
-
-            const status = cells[8].textContent.trim();
-            const statusMatch = statusFilter === "" || status === statusFilter;
-
-            row.style.display = (textMatch && statusMatch) ? '' : 'none';
-        });
+    if (etatCell.innerText === "Actif") {
+        etatCell.innerText = "Bloqué";
+        actionButton.innerText = "Activer";
+    } else {
+        etatCell.innerText = "Actif";
+        actionButton.innerText = "Bloquer";
     }
+
+    const modalMessage = document.getElementById('modalMessage');
+    modalMessage.innerText = `L'état de l'évènement #${currentEventId} a été modifié avec succès.`;
+    modalMessage.style.color = "green"; // Success message
+
+    setTimeout(closeModal, 3000); // Close modal after 3 seconds
+}
+
+document.getElementById('search').addEventListener('input', filterTable);
+document.getElementById('statusFilter').addEventListener('change', filterTable);
+
+function filterTable() {
+    const searchFilter = document.getElementById('search').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+    const rows = document.querySelectorAll('#userTable tr');
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const textMatch = Array.from(cells).slice(0, 6).some(cell => cell.textContent.toLowerCase().includes(searchFilter));
+        const status = cells[6].textContent.trim().toLowerCase();
+        const statusMatch = statusFilter === "" || status === statusFilter;
+
+        row.style.display = (textMatch && statusMatch) ? '' : 'none';
+    });
+}
 </script>
 {% endblock %}

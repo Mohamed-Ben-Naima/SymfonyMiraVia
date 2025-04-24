@@ -179,47 +179,45 @@
             </div>
         </div>
 
-        <form class="form-container">
+        <form class="form-container" action="{{ path('app_admin_profil_update') }}" method="post">
             <h4>Informations Personnelles</h4>
+            <input type="hidden" name="idUtilisateur" value="{{ userData.idUtilisateur }}">
             <div>
                 <label for="nom">Nom :</label>
-                <input id="nom" type="text" value="{{ userData.nom }}" />
+                <input id="nom" name="nom" type="text" value="{{ userData.nom }}" />
             </div>
             <div>
                 <label for="dateNaissance">Date de Naissance :</label>
-                <input id="dateNaissance" type="date" value="{{ userData.birthday|date('Y-m-d') }}" />
+                <input id="dateNaissance" name="birthday" type="date" value="{{ userData.birthday|date('Y-m-d') }}" />
             </div>
             <div>
                 <label for="telephone">Téléphone :</label>
-                <input id="telephone" type="text" value="{{ userData.telephone }}" />
+                <input id="telephone" name="telephone" type="text" value="{{ userData.telephone }}" />
             </div>
             <div>
                 <label for="emplacement">Emplacement :</label>
-                <input id="emplacement" type="text" value="{{ userData.adresseUtilisateur }}" />
+                <input id="emplacement" name="adresseUtilisateur" type="text" value="{{ userData.adresseUtilisateur }}" />
             </div>
             <button type="submit">Enregistrer</button>
 
             <h4>Sécurité</h4>
             <div>
                 <label for="email">Adresse E-Mail :</label>
-                <input id="email" type="email" value="{{ userData.email }}" />
+                <input id="email" name="email" type="email" value="{{ userData.email }}" />
             </div>
             <div>
                 <label for="password">Mot de Passe :</label>
-                <input id="password" type="password" value="********" />
+                <input id="password" name="password" type="password" value="********" />
             </div>
             <div>
                 <label for="confirmPassword">Confirmez le Mot de Passe :</label>
-                <input id="confirmPassword" type="password" value="********" />
+                <input id="confirmPassword" name="confirmPassword" type="password" value="********" />
             </div>
             <button type="submit">Enregistrer</button>
         </form>
     </div>
 </div>
 
-<script>
-    </div>
-</div>
 <script>
     // Fonction pour changer l'image du profil
     function updateProfileImage(event) {
