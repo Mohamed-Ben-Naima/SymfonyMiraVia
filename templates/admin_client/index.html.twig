@@ -453,9 +453,10 @@ function filterTable() {
         const textMatch = Array.from(cells) // Vérifie si une cellule contient le texte recherché
             .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
         
-        const status = cells[6]?.textContent.toLowerCase().trim(); // 6ème colonne pour le statut
+        const status = cells[6]?.textContent.toLowerCase().trim(); // 7ème colonne pour le statut (index 6)
         const statusMatch = statusFilter === "" || status === statusFilter;
 
+        // Affiche ou masque la ligne selon les critères de filtrage
         row.style.display = (textMatch && statusMatch) ? '' : 'none';
     });
 }

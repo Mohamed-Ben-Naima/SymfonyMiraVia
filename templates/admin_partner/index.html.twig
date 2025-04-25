@@ -357,12 +357,12 @@ tr:hover {
                 La date d'expiration a été modifiée avec succès.
             </p>
             <label for="partnerSelect">Partenaire :</label>
-            <select id="partnerSelect" required>
-                <option value="">-- Sélectionnez un partenaire --</option>
-                {% for i in 1..30 %}
-                <option value="{{ i }}">Partenaire {{ i }}</option>
-                {% endfor %}
-            </select>
+<select id="partnerSelect" required>
+    <option value="">-- Sélectionnez un partenaire --</option>
+    {% for partenaire in partenaires %}
+    <option value="{{ partenaire.id_partenaire }}">{{ partenaire.nom }} {{ partenaire.prenom }}</option>
+    {% endfor %}
+</select>
             <label for="expirationDate">Date d'expiration :</label>
             <input type="date" id="expirationDate" required>
             <p id="errorMessage" style="color: red; font-size: 13px; display: none; margin-top: 10px;">
@@ -476,27 +476,66 @@ function unblockUser(id) {
     }
 
     // Confirm expiration date update
-    function confirmExpiration() {
-        const partnerSelect = document.getElementById('partnerSelect');
-        const expirationDate = document.getElementById('expirationDate');
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessageDate');
+function confirmExpiration() {
+    const partnerSelect = document.getElementById('partnerSelect');
+    const expirationDate = document.getElementById('expirationDate');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessageDate');
+    
+    const today = new Date().toISOString().split('T')[0]; // Obtenir la date actuelle au format YYYY-MM-DD
 
-        if (partnerSelect.value === "" || expirationDate.value === "") {
-            errorMessage.style.display = 'block';
-            successMessage.style.display = 'none'; // Hide success message
-            return;
+    if (partnerSelect.value === "" || expirationDate.value === "") {
+        errorMessage.textContent = "Veuillez remplir tous les champs correctement.";
+        errorMessage.style.display = 'block';
+        successMessage.style.display = 'none'; // Cacher le message de succès
+        return;
+    }
+
+    if (expirationDate.value < today) {
+        errorMessage.textContent = "Veuillez sélectionner une date valide (postérieure ou égale à la date d'aujourd'hui).";
+        errorMessage.style.display = 'block';
+        successMessage.style.display = 'none'; // Cacher le message de succès
+        return;
+    }
+
+    // Préparer les données pour l'API
+    const data = {
+        id: partnerSelect.value,
+        expirationDate: expirationDate.value
+    };
+
+    // Envoyer les données au serveur
+    fetch('/admin/partner/update-expiration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
-        errorMessage.style.display = 'none'; // Hide error message
-        successMessage.innerText = `La date d'expiration pour le partenaire ${partnerSelect.value} a été modifiée au ${expirationDate.value}.`;
+        return response.json();
+    })
+    .then(responseData => {
+        successMessage.innerText = responseData.message;
         successMessage.style.display = 'block';
+        errorMessage.style.display = 'none'; // Cacher le message d'erreur
 
         setTimeout(() => {
-            successMessage.style.display = 'none'; // Hide success message after 3 seconds
-            closeModal(); // Close modal
+            successMessage.style.display = 'none'; // Cacher le message après 3 secondes
+            closeModal(); // Fermer le modal
+            location.reload(); // Recharger la page pour voir les changements
         }, 3000);
-    }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        errorMessage.textContent = 'Erreur lors de la mise à jour. Veuillez réessayer.';
+        errorMessage.style.display = 'block';
+    });
+}
 
     // Search and filter table
     document.getElementById('search').addEventListener('input', filterTable);
@@ -512,9 +551,10 @@ function filterTable() {
         const textMatch = Array.from(cells) // Vérifie si une cellule contient le texte recherché
             .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
         
-        const status = cells[6]?.textContent.toLowerCase().trim(); // 6ème colonne pour le statut
+        const status = cells[8]?.textContent.toLowerCase().trim(); // 8ème colonne pour le statut
         const statusMatch = statusFilter === "" || status === statusFilter;
 
+        // Affiche ou masque la ligne selon les critères de filtrage
         row.style.display = (textMatch && statusMatch) ? '' : 'none';
     });
 }

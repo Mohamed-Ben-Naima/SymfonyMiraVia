@@ -34,7 +34,7 @@ class AdminClientController extends AbstractController
         // Passer les données au template Twig
         return $this->render('admin_client/index.html.twig', [
             'clients' => $clients, // Données récupérées
-            'pageTitle' => 'Clients',
+            'pageTitle' => 'Client',
 
         ]);
     }
