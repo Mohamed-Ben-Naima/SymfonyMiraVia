@@ -6,7 +6,7 @@ security:
     providers:
         app_user_provider:
             entity:
-                class: App\Entity\User
+                class: App\Entity\Utilisateurs
                 property: email
     firewalls:
         dev:
@@ -16,8 +16,10 @@ security:
             lazy: true
             provider: app_user_provider
             form_login:
-                login_path: app_login
-                check_path: app_login
+                # login_path: app_login
+                # check_path: app_login
+                login_path: app_login_controller2
+                check_path: app_login_controller2
                 enable_csrf: true
             logout:
                 path: app_logout
@@ -34,7 +36,9 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/inscription, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/login2, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: PUBLIC_ACCESS }
 
 when@test:

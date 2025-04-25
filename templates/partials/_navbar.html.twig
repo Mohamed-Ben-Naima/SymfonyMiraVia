@@ -1,115 +1,321 @@
-<link rel="stylesheet" href="{{ asset('styles/partials/navbar.css') }}">
+<style>
+	/* Navbar Styling */
+	.navbar.custom-navbar {
+		background-color: rgba(255, 255, 255, 0.95);
+		border-bottom: 1px solid rgba(129, 168, 197, 0.3);
+		padding: 1rem 1.5rem;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		transition: all 0.3s ease-in-out;
+		position: sticky;
+		top: 0;
+		z-index: 1050;
+	}
+
+	.navbar.custom-navbar:hover {
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+	}
+
+	.navbar-brand.custom-logo {
+		font-size: 1.8rem;
+		font-weight: 700;
+		color: #013a71;
+		text-transform: uppercase;
+		letter-spacing: 0.05rem;
+		display: flex;
+		align-items: center;
+	}
+
+	.logo-img {
+		height: 45px;
+		margin-right: 0.7rem;
+	}
+
+	/* Navigation Links */
+	.navbar-nav.custom-nav-links .nav-link {
+		color: #013a71;
+		font-size: 1rem;
+		font-weight: 500;
+		text-transform: capitalize;
+		padding: 0.7rem 1rem;
+		margin: 0 0.5rem;
+		position: relative;
+		display: flex;
+		align-items: center;
+		border-radius: 8px;
+		transition: all 0.3s ease-in-out;
+	}
+
+	.navbar-nav.custom-nav-links .nav-link:hover,
+	.navbar-nav.custom-nav-links .nav-link:focus {
+		color: #ffffff;
+		background-color: #013a71;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+		transform: translateY(-2px);
+		outline: none;
+	}
+
+	.navbar-nav.custom-nav-links .nav-link.active {
+		color: #ffffff;
+		background-color: #81a8c5;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+		padding: 0.7rem 1.2rem;
+		border-radius: 8px;
+	}
+
+	/* Search Bar */
+	.search-bar {
+		position: relative;
+		width: 100%;
+		max-width: 300px;
+	}
+
+	.search-bar input {
+		width: 100%;
+		border-radius: 30px;
+		border: 1px solid rgba(129, 168, 197, 0.3);
+		padding: 0.5rem 2rem 0.5rem 1rem;
+		transition: all 0.3s ease-in-out;
+	}
+
+	.search-bar input:focus {
+		border-color: #013a71;
+		outline: none;
+		box-shadow: 0 0 5px rgba(1, 58, 113, 0.3);
+	}
+
+	.search-bar button {
+		position: absolute;
+		top: 50%;
+		right: 10px;
+		transform: translateY(-50%);
+		border: none;
+		background: none;
+		color: #013a71;
+		cursor: pointer;
+		font-size: 1.2rem;
+	}
+
+	/* Notification Icon */
+	.notification-icon {
+		position: relative;
+		color: #013a71;
+		font-size: 1.5rem;
+		cursor: pointer;
+		transition: all 0.3s ease-in-out;
+		margin-right: 1rem;
+	}
+
+	.notification-icon:hover {
+		color: #81a8c5;
+	}
+
+	.notification-icon .badge {
+		position: absolute;
+		top: -5px;
+		right: -5px;
+		background-color: #e63946;
+		color: #ffffff;
+		font-size: 0.75rem;
+		padding: 0.2rem 0.4rem;
+		border-radius: 50%;
+	}
+
+	/* Dark Mode Toggle */
+	.dark-mode-toggle {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+		margin-right: 1rem;
+	}
+
+	.dark-mode-toggle i {
+		margin-right: 0.5rem;
+		color: #013a71;
+		transition: all 0.3s ease-in-out;
+	}
+
+	.dark-mode-toggle:hover i {
+		color: #81a8c5;
+	}
+
+	/* Language Switcher */
+	.language-switcher {
+		color: #013a71;
+		cursor: pointer;
+		font-weight: 500;
+		transition: all 0.3s ease-in-out;
+	}
+
+	.language-switcher:hover {
+		color: #81a8c5;
+	}
+
+	/* Buttons */
+	.btn.custom-btn-primary {
+		background-color: #013a71;
+		border: none;
+		color: #ffffff;
+		padding: 0.6rem 1.2rem;
+		border-radius: 30px;
+		font-weight: 600;
+		transition: all 0.3s ease-in-out;
+		display: inline-flex;
+		align-items: center;
+		letter-spacing: 0.03em;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	.btn.custom-btn-primary:hover,
+	.btn.custom-btn-primary:focus {
+		background-color: #7d8c6d;
+		transform: scale(1.05);
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+		outline: none;
+	}
+
+	.btn.custom-btn-outline {
+		background-color: transparent;
+		border: 2px solid #013a71;
+		color: #013a71;
+		padding: 0.6rem 1.2rem;
+		border-radius: 30px;
+		font-weight: 600;
+		transition: all 0.3s ease-in-out;
+		display: inline-flex;
+		align-items: center;
+		letter-spacing: 0.03em;
+	}
+
+	.btn.custom-btn-outline:hover,
+	.btn.custom-btn-outline:focus {
+		background-color: #013a71;
+		color: #ffffff;
+		transform: scale(1.05);
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+		outline: none;
+	}
+
+	/* Responsive Adjustments */
+	@media(max-width: 992px) {
+		.navbar-nav.custom-nav-links .nav-link {
+			font-size: 0.95rem;
+			margin: 0.2rem 0.4rem;
+		}
+	}
+
+	@media(max-width: 768px) {
+		.navbar-brand.custom-logo {
+			font-size: 1.4rem;
+		}
+		.search-bar input {
+			width: 200px;
+		}
+	}
+
+	@media(max-width: 576px) {
+		.navbar-nav.custom-nav-links {
+			text-align: center;
+		}
+
+		.navbar-nav.custom-nav-links .nav-link {
+			display: block;
+			margin: 0.5rem 0;
+			font-size: 0.9rem;
+		}
+
+		.search-bar {
+			width: 100%;
+			margin-top: 1rem;
+		}
+
+		.btn.custom-btn-primary,
+		.btn.custom-btn-outline {
+			width: 100%;
+			text-align: center;
+			padding: 0.5rem;
+		}
+	}
+</style>
 
 <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
-    <div class="container-fluid">
-        <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center custom-logo" href="{{ path('app_home') }}">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="me-2 logo-img" style="height:50px;">
-        </a>
+	<div
+		class="container-fluid">
+		<!-- Logo -->
+		<a class="navbar-brand custom-logo" href="{{ path('app_home') }}">
+			<img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img">
+		</a>
 
-        <!-- Burger Menu for Mobile -->
-        <button 
-            class="navbar-toggler custom-toggler" 
-            type="button" 
-            data-bs-toggle="collapse" 
-            data-bs-target="#navbarNav" 
-            aria-controls="navbarNav" 
-            aria-expanded="false" 
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+		<!-- Burger Menu -->
+		<button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-        <!-- Navbar Links and Buttons -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 custom-nav-links">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">
-                        <i class="fas fa-home me-2"></i>Accueil
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_propos') }}">
-                        <i class="fas fa-info-circle me-2"></i>À propos de nous
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_benevolat') }}">
-                        <i class="fas fa-map-marker-alt me-2"></i>Bénévolat
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_don') }}">
-                        <i class="fas fa-tags me-2"></i>Dons
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_evenement') }}">
-                        <i class="fas fa-calendar-alt me-2"></i>Évènements
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_experience') }}">
-                        <i class="fas fa-lightbulb me-2"></i>Expériences
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_aide') }}">
-                        <i class="fas fa-question-circle me-2"></i>Aide
-                    </a>
-                </li>
-            </ul>
+		<!-- Navigation Links -->
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0 custom-nav-links">
+				<li class="nav-item">
+					<a class="nav-link {% if app.request.get('_route') == 'app_home' %}active{% endif %}" href="{{ path('app_home') }}">
+						<i class="fas fa-home me-2"></i>Accueil
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link " href="#">
+						<i class="fas fa-info-circle me-2"></i>Vols
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link {% if app.request.get('_route') == 'app_benevolat' %}active{% endif %}" href="{{ path('app_benevolat') }}">
+						<i class="fas fa-map-marker-alt me-2"></i>Bénévolat
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link " href="#">
+						<i class="fas fa-tags me-2"></i>Demande D'aide
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link {% if app.request.get('_route') == 'app_evenement' %}active{% endif %}" href="{{ path('app_evenement') }}">
+						<i class="fas fa-calendar-alt me-2"></i>Évènements
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link " href="#">
+						<i class="fas fa-lightbulb me-2"></i>Favoris
+					</a>
+				</li>
+			</ul>
 
-            <!-- Authentication Section -->
-            <div class="d-flex align-items-center">
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <!-- Avatar and Dropdown Menu -->
-                    <div class="dropdown">
-                        <a 
-                            href="#" 
-                            class="d-flex align-items-center text-decoration-none dropdown-toggle" 
-                            id="userDropdown" 
-                            data-bs-toggle="dropdown" 
-                            aria-expanded="false" 
-                            aria-label="User Menu">
-                            <img 
-                                src="{{ app.user.avatar ? asset('uploads/avatars/' ~ app.user.avatar) : 'https://i.pravatar.cc/120' }}" 
-                                alt="{{ app.user.prenom|e }}'s avatar" 
-                                class="rounded-circle me-2" 
-                                style="width: 40px; height: 40px;">
-                            <span>{{ app.user.prenom|e }}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li>
-                                <a class="dropdown-item" href="{{ path('app_profile') }}">
-                                    <i class="fas fa-user me-2"></i> Profile
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a 
-                                    class="dropdown-item" 
-                                    href="{{ path('app_logout') }}" 
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
-                                </a>
-                                <form id="logout-form" action="{{ path('app_logout') }}" method="post" style="display: none;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                {% else %}
-                    <!-- Register and Login Buttons -->
-                    <a href="{{ path('app_register') }}" class="btn btn-outline-primary custom-btn-outline me-2">
-                        <i class="fas fa-user-plus me-2"></i>S'inscrire
-                    </a>
-                    <a href="{{ path('app_login') }}" class="btn btn-primary custom-btn-primary">
-                        <i class="fas fa-sign-in-alt me-2"></i>Se connecter
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+			<!-- Authentication Section -->
+			<div class="d-flex align-items-center ms-3">
+				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+					<div class="dropdown">
+						<a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+							<img src="{{ app.user.avatar ? asset('uploads/avatars/' ~ app.user.avatar) : 'https://i.pravatar.cc/120' }}" alt="{{ app.user.prenom|e }}" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+							<span>{{ app.user.prenom|e }}</span>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+							<li>
+								<a class="dropdown-item" href="{{ path('app_profile') }}">
+									<i class="fas fa-user me-2"></i>Profile</a>
+							</li>
+							<li><hr class="dropdown-divider"></li>
+							<li>
+								<a class="dropdown-item" href="{{ path('app_logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+									<i class="fas fa-sign-out-alt me-2"></i>Logout
+								</a>
+								<form id="logout-form" action="{{ path('app_logout') }}" method="post" style="display: none;">
+									<input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
+								</form>
+							</li>
+						</ul>
+					</div>
+				{% else %}
+					<a href="{{ path('app_register') }}" class="btn btn-outline-primary custom-btn-outline me-2">
+						<i class="fas fa-user-plus me-2"></i>S'inscrire</a>
+					<a href="{{ path('app_login_controller2') }}" class="btn btn-primary custom-btn-primary">
+						<i class="fas fa-sign-in-alt me-2"></i>Se connecter</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
 </nav>

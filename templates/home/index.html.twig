@@ -1,14 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
     <style>
-        /* Style for the container to position elements */
+        /* General container styling */
         .container {
             position: relative;
             width: 100%;
         }
 
-        /* Style for the replaced iframe (header) */
+        /* Styling for the header area */
         .header-include {
             position: absolute;
             top: 0;
@@ -18,98 +20,83 @@
             z-index: 1;
         }
 
-        /* Style for the image */
+        /* Styling for the main image */
         .rectangle {
             display: block;
-            width: 100%; /* Force full width */
+            width: 100%;
             height: 740px; /* Fixed height */
-            object-fit: cover; /* Optional: Ensures the image fills the area without distortion */
+            object-fit: cover; /* Ensures the image fills without distortion */
             z-index: 0;
         }
 
-        /* Style for the text */
+        /* Styling for the text overlay */
         .text-overlay {
             position: absolute;
-            top: 213px; /* Adjusted to 213px from the top */
+            top: 213px;
             left: 50%;
             transform: translateX(-50%);
             color: #013A71;
             text-align: center;
-            text-shadow: 0px 5px 13px rgba(255, 255, 255, 0.40);
+            text-shadow: 0px 5px 13px rgba(255, 255, 255, 0.4);
             font-family: Volkhov, serif;
             font-size: 48px;
-            font-style: normal;
             font-weight: 700;
             line-height: normal;
-            width: 90%; /* Responsive width */
-            max-width: 744px; /* Limit maximum width */
+            width: 90%;
+            max-width: 744px; /* Keeps text responsive */
             z-index: 2;
         }
 
-        /* Style for the flex container */
+        /* Flex container for image and text alignment */
         .video-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 43px; /* Adjusted to 43px from the top */
+            margin-top: 43px;
         }
 
-        /* Style for the image */
+        /* Styling for the video play image */
         .load-image {
             display: block;
-            margin: 0; /* Remove margin to align with text */
+            margin: 0;
         }
 
-        /* Style for the additional text */
+        /* Styling for the video text */
         .video-text {
             color: var(--Main-Dark, #1C2B38);
             text-align: center;
             font-family: Mulish, sans-serif;
             font-size: 20px;
-            font-style: normal;
             font-weight: 700;
-            line-height: normal;
-            margin-left: 10px; /* Add spacing between the image and text */
+            margin-left: 10px;
         }
 
-        /* Style for the new block */
+        /* Styling for the additional styled block */
         .styled-block {
-            position: absolute; /* Position it absolutely */
-            top: 480px; /* Adjusted to 252px from the top */
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Ensure perfect centering */
-            width: 966.404px; /* Responsive width */
+            position: absolute;
+            top: 480px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 966.404px;
             height: 90px;
-            flex-shrink: 0;
             border-radius: 10px;
             background: #FFF;
-            box-shadow: 0px 10px 30px 0px rgba(123, 188, 176, 0.50);
+            box-shadow: 0px 10px 30px rgba(123, 188, 176, 0.5);
         }
     </style>
-</head>
-<body>
+
     <div class="container">
-        <!-- Add the text -->
+        <!-- Text overlay section -->
         <div class="text-overlay">
             Nous trouvons les meilleures excursions pour vous.
-            
-            <!-- Flex container for image and text -->
             <div class="video-container">
                 <img class="load-image" src="{{ asset('images/looad.png') }}" alt="Load Image" />
                 <div class="video-text">Regarder la vidéo</div>
             </div>
-            
-            <!-- Add the new styled block -->
             <div class="styled-block"></div>
         </div>
-        
-        <!-- Add the image -->
-        <img class="rectangle" src="https://c.animaapp.com/m9u73nw5frNzDy/img/rectangle-143.svg" />
-        
-        <!-- Replace iframe with header include -->
-        <div class="header-include">
-            {% include 'partials/_header.html.twig' %}
-        </div>
+
+        <!-- Main background image -->
+        <img class="rectangle" src="https://c.animaapp.com/m9u73nw5frNzDy/img/rectangle-143.svg" alt="Background Image" />
     </div>
-</body>
-</html>
+{% endblock %}
