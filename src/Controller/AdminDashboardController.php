@@ -2,58 +2,43 @@
 
 namespace App\Controller;
 
+use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 final class AdminDashboardController extends AbstractController
 {
     #[Route('/admin/dashboard', name: 'app_admin_dashboard')]
-    public function index(): Response
+    public function index(Connection $connection): Response
     {
-        // Exemple de données pour les cartes
-        $cards = [
-            [
-                'title' => 'Total Page Views',
-                'value' => '4,42,236',
-                'badge_class' => 'bg-light-primary border-primary',
-                'icon' => 'ti ti-trending-up',
-                'percentage' => '59.3%',
-                'description' => 'You made an extra 35,000 this year',
-            ],
-            [
-                'title' => 'Total Users',
-                'value' => '78,250',
-                'badge_class' => 'bg-light-success border-success',
-                'icon' => 'ti ti-trending-up',
-                'percentage' => '70.5%',
-                'description' => 'You made an extra 8,900 this year',
-            ],
-            [
-                'title' => 'Total Order',
-                'value' => '18,800',
-                'badge_class' => 'bg-light-warning border-warning',
-                'icon' => 'ti ti-trending-down',
-                'percentage' => '27.4%',
-                'description' => 'You made an extra 1,943 this year',
-            ],
-            [
-                'title' => 'Total Sales',
-                'value' => '$35,078',
-                'badge_class' => 'bg-light-danger border-danger',
-                'icon' => 'ti ti-trending-down',
-                'percentage' => '27.4%',
-                'description' => 'You made an extra $20,395 this year',
-            ],
-        ];
+        // Récupération des statistiques
+        $totalClients = $connection->fetchOne('SELECT COUNT(*) FROM clients');
+        $totalEvenements = $connection->fetchOne('SELECT COUNT(*) FROM evenements');
+        $totalPartenaires = $connection->fetchOne('SELECT COUNT(*) FROM partenaires');
+        $totalDons = $connection->fetchOne('SELECT COUNT(*) FROM dons');
+        $totalDemandesAide = $connection->fetchOne('SELECT COUNT(*) FROM demandes_aide');
 
-        // Passage des données au template
+        // Récupération des événements pour le calendrier
+        $events = $connection->fetchAllAssociative('
+            SELECT id_evenement AS id, titre AS title, date_evenement AS start, description, lieu
+            FROM evenements
+        ');
+
+        foreach ($events as &$event) {
+            $event['start'] = (new \DateTime($event['start']))->format('Y-m-d\TH:i:s'); // Format ISO 8601
+            $event['color'] = '#' . substr(md5(rand()), 0, 6); // Couleur aléatoire
+        }
+
+        // Envoi des données au template
         return $this->render('admin_dashboard/index.html.twig', [
-            'controller_name' => 'AdminDashboardController',
-            'cards' => $cards,
-            'pageTitle' => 'Dashboard', // Le titre dynamique
-
+            'totalClients' => $totalClients,
+            'totalEvenements' => $totalEvenements,
+            'totalPartenaires' => $totalPartenaires,
+            'totalDons' => $totalDons,
+            'totalDemandesAide' => $totalDemandesAide,
+           'events' => json_encode($events),            
+           'pageTitle' => 'Tableau de bord', // Le titre dynamique
         ]);
-        
     }
 }
