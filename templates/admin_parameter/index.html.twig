@@ -104,42 +104,58 @@
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeInBackdrop 0.3s ease-in-out;
+    }
+
+    @keyframes fadeInBackdrop {
+        from {
+            background-color: rgba(0, 0, 0, 0);
+        }
+        to {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
     }
 
     .modal-content {
-        background-color: #fff;
-        margin: 10% auto;
-        padding: 20px;
-        border-radius: 12px;
-        width: 50%;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        animation: fadeIn 0.3s ease-in-out;
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        margin: 5% auto;
+        padding: 2rem;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        animation: slideInModal 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
     }
 
-    @keyframes fadeIn {
+    @keyframes slideInModal {
         from {
+            transform: translateY(-50px) scale(0.95);
             opacity: 0;
         }
         to {
+            transform: translateY(0) scale(1);
             opacity: 1;
         }
     }
 
     .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        color: #6b7280;
+        font-size: 1.75rem;
         font-weight: bold;
         cursor: pointer;
+        transition: color 0.2s ease, transform 0.2s ease;
     }
 
     .close:hover,
     .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
+        color: #013A71;
+        transform: scale(1.1);
     }
 
     /* Toggle Switch */
@@ -164,7 +180,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #ccc;
+        background-color: #d1d5db;
         transition: 0.4s;
         border-radius: 34px;
     }
@@ -179,6 +195,7 @@
         background-color: white;
         transition: 0.4s;
         border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     input:checked + .slider {
@@ -190,79 +207,154 @@
     }
 
     .modal-header {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+        text-align: center;
     }
 
     .modal-body {
         font-size: 1rem;
-        color: #6b7280;
-        margin-bottom: 1rem;
+        color: #4b5563;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
     }
 
     .modal-footer {
         display: flex;
         justify-content: center;
         gap: 1rem;
+        margin-top: 1.5rem;
     }
 
-    .modal-footer button {
-        padding: 0.5rem 1.5rem;
+    .modal-footer button,
+    .modal-footer a button {
+        padding: 0.75rem 2rem;
         font-size: 1rem;
+        font-weight: 500;
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .modal-footer button.primary {
-        background-color: #013A71;
+    .modal-footer button.primary,
+    .modal-footer a button.primary {
+        background: linear-gradient(to right, #013A71, #00509e);
         color: white;
     }
 
-    .modal-footer button.primary:hover {
-        background-color: #00509e;
+    .modal-footer button.primary:hover,
+    .modal-footer a button.primary:hover {
+        background: linear-gradient(to right, #00509e, #013A71);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .modal-footer button.secondary {
-        background-color: #e5e7eb;
+        background: #e5e7eb;
         color: #374151;
     }
 
     .modal-footer button.secondary:hover {
-        background-color: #d1d5db;
+        background: #d1d5db;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .notification-settings {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 1rem;
-        margin-top: 1rem;
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 12px;
     }
 
     .notification-settings label {
+        display: flex;
+        align-items: center;
         font-size: 1rem;
         color: #374151;
-    }
-
-    .notification-settings select {
-        padding: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 1rem;
-        width: 100%;
+        cursor: pointer;
     }
 
     .notification-settings input[type="checkbox"] {
-        margin-right: 0.5rem;
+        appearance: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #d1d5db;
+        border-radius: 4px;
+        margin-right: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .notification-settings input[type="checkbox"]:checked {
+        background-color: #013A71;
+        border-color: #013A71;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
+        background-size: 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .notification-settings select {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        font-size: 1rem;
+        width: 100%;
+        background: #ffffff;
+        transition: border-color 0.2s ease;
+    }
+
+    .notification-settings select:focus {
+        outline: none;
+        border-color: #013A71;
+        box-shadow: 0 0 0 3px rgba(1, 58, 113, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .modal-content {
+            width: 95%;
+            margin: 10% auto;
+            padding: 1.5rem;
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+        }
+
+        .modal-footer button,
+        .modal-footer a button {
+            padding: 0.6rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .settings-card {
+            flex: 1 1 calc(50% - 2rem);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .settings-card {
+            flex: 1 1 100%;
+        }
+
+        .modal-content {
+            padding: 1rem;
+        }
     }
 </style>
+
 <div class="settings-wrapper">
     <div class="settings-header">
-        <h1>Paramètres </h1>
-        <p>Gérez vos paramètres </p>
+        <h1>Paramètres</h1>
+        <p>Gérez vos paramètres</p>
     </div>
 
     <div class="settings-container">
@@ -313,7 +405,7 @@
 <!-- Profile Modal -->
 <div id="user-settings-modal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal('user-settings-modal')">&times;</span>
+        <span class="close" onclick="closeModal('user-settings-modal')">×</span>
         <div class="modal-header">Modifier le Profil</div>
         <div class="modal-body">
             <p>Accédez à la page de modification de votre profil en cliquant sur le bouton ci-dessous.</p>
@@ -327,22 +419,10 @@
     </div>
 </div>
 
-<script>
-    function openModal(modalId) {
-        document.getElementById(modalId).style.display = "block";
-    }
-
-    function closeModal(modalId) {
-        document.getElementById(modalId).style.display = "none";
-    }
-</script>
-
-</div>
-
 <!-- Notifications Modal -->
 <div id="notifications-modal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal('notifications-modal')">&times;</span>
+        <span class="close" onclick="closeModal('notifications-modal')">×</span>
         <div class="modal-header">Notifications</div>
         <div class="modal-body">
             <p>Configurez vos préférences de notifications.</p>
@@ -370,6 +450,63 @@
         <div class="modal-footer">
             <button class="primary" onclick="saveNotificationSettings()">Enregistrer</button>
             <button class="secondary" onclick="closeModal('notifications-modal')">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<!-- Placeholder Modals (unchanged content, styled by new CSS) -->
+<div id="database-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('database-modal')">×</span>
+        <div class="modal-header">Base de Données</div>
+        <div class="modal-body">
+            <p>Effectuez des sauvegardes et restaurez vos données.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="primary">Sauvegarder</button>
+            <button class="secondary" onclick="closeModal('database-modal')">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<div id="customization-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('customization-modal')">×</span>
+        <div class="modal-header">Personnalisation</div>
+        <div class="modal-body">
+            <p>Changez le thème et les couleurs de l'interface.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="primary">Appliquer</button>
+            <button class="secondary" onclick="closeModal('customization-modal')">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<div id="security-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('security-modal')">×</span>
+        <div class="modal-header">Sécurité</div>
+        <div class="modal-body">
+            <p>Mettez à jour les mots de passe et les politiques de sécurité.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="primary">Mettre à jour</button>
+            <button class="secondary" onclick="closeModal('security-modal')">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<div id="statistics-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('statistics-modal')">×</span>
+        <div class="modal-header">Statistiques</div>
+        <div class="modal-body">
+            <p>Consultez les rapports et les performances.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="primary">Voir les rapports</button>
+            <button class="secondary" onclick="closeModal('statistics-modal')">Annuler</button>
         </div>
     </div>
 </div>

@@ -19,16 +19,40 @@ final class AdminDashboardController extends AbstractController
         $totalDons = $connection->fetchOne('SELECT COUNT(*) FROM dons');
         $totalDemandesAide = $connection->fetchOne('SELECT COUNT(*) FROM demandes_aide');
 
-        // Récupération des événements pour le calendrier
+        // Récupération des événements pour le calendrier (table evenements)
         $events = $connection->fetchAllAssociative('
             SELECT id_evenement AS id, titre AS title, date_evenement AS start, description, lieu
             FROM evenements
         ');
 
+        // Récupération des événements de bénévolat pour le calendrier (table benevolat)
+        $volunteerEvents = $connection->fetchAllAssociative('
+            SELECT id_benevolat AS id, titre AS title, date_benevolat AS start, description, status, imageName
+            FROM benevolat
+        ');
+
+        // Formatage des événements (evenements)
         foreach ($events as &$event) {
             $event['start'] = (new \DateTime($event['start']))->format('Y-m-d\TH:i:s');
-            $event['color'] = '#' . substr(md5(rand()), 0, 6);
+            $event['color'] = '#FFCDD2'; 
+            $event['className'] = 'event-classique'; // Classe CSS pour les événements classiques
+            $event['type'] = 'evenement';
+            $event['icon'] = 'fas fa-calendar-alt'; // Icône pour les événements classiques
         }
+
+        // Formatage des événements de bénévolat
+        foreach ($volunteerEvents as &$volunteerEvent) {
+            $volunteerEvent['start'] = (new \DateTime($volunteerEvent['start']))->format('Y-m-d\TH:i:s');
+            $volunteerEvent['color'] = '#C8E6C9'; // Couleur différente pour les bénévolats
+            $volunteerEvent['className'] = 'event-benevolat'; // Classe CSS pour les bénévolats
+            $volunteerEvent['type'] = 'benevolat';
+            $volunteerEvent['icon'] = 'fas fa-hands-helping'; // Icône FontAwesome pour les bénévolats
+            $volunteerEvent['status'] = $volunteerEvent['status'];
+            $volunteerEvent['imageName'] = $volunteerEvent['imageName'];
+        }
+
+        // Fusion des deux ensembles d'événements
+        $allEvents = array_merge($events, $volunteerEvents);
 
         // Récupération des données pour le Radar Chart (types d'activité)
         $activityTypes = $connection->fetchAllAssociative('
@@ -71,7 +95,7 @@ final class AdminDashboardController extends AbstractController
             'totalPartenaires' => $totalPartenaires,
             'totalDons' => $totalDons,
             'totalDemandesAide' => $totalDemandesAide,
-            'events' => json_encode($events),
+            'events' => json_encode($allEvents),
             'activityLabels' => json_encode($activityLabels),
             'activityCounts' => json_encode($activityCounts),
             'countryLabels' => json_encode($countryLabels),

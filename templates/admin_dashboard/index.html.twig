@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <link rel="preload" href="/assets/styles/app-o3KscP3.css" as="style" onload="this.rel='stylesheet'">
     <style>
         html, body {
             height: 100%;
@@ -48,11 +49,38 @@
             flex-wrap: wrap;
             text-align: center;
             word-wrap: break-word;
+            line-height: 1.5;
         }
 
         .card-title i {
             margin-right: 10px;
-            font-size: 1.5rem;
+            font-size: 1.75rem;
+            vertical-align: middle;
+        }
+
+        .card:hover .card-title i {
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card.bg-primary .card-title i {
+            color: #D32F2F;
+        }
+
+        .card.bg-success .card-title i {
+            color: #388E3C;
+        }
+
+        .card.bg-warning .card-title i {
+            color: #F57C00;
+        }
+
+        .card.bg-danger .card-title i {
+            color: #7B1FA2;
+        }
+
+        .card.bg-info .card-title i {
+            color: #0288D1;
         }
 
         .card-text {
@@ -191,7 +219,8 @@
             color: #333;
         }
 
-        .fc-event {
+        /* Style pour les événements classiques */
+        .fc-event.event-classique {
             background-color: #FFCDD2FF;
             color: #000;
             border: 1px solid #E57373FF;
@@ -200,9 +229,35 @@
             font-size: 0.9rem;
         }
 
-        /* Couleur permanente pour les cases avec des événements */
-        .fc-daygrid-day:has(.fc-daygrid-event) {
+        /* Style pour les événements de bénévolat */
+        .fc-event.event-benevolat {
+            background-color: #C8E6C9FF;
+            color: #000;
+            border: 1px solid #4CAF50FF;
+            border-radius: 5px;
+            padding: 2px 5px;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        /* Ajout d'une icône pour les événements de bénévolat */
+        .fc-event.event-benevolat .fc-event-title::before {
+            content: '\f4c4'; /* Code Unicode pour l'icône FontAwesome fa-hands-helping */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 5px;
+            color: #4CAF50FF;
+        }
+
+        /* Couleur permanente pour les cases avec des événements classiques */
+        .fc-daygrid-day:has(.event-classique) {
             background-color: #FFCDD2;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Couleur permanente pour les cases avec des événements de bénévolat */
+        .fc-daygrid-day:has(.event-benevolat) {
+            background-color: #C8E6C9;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
@@ -212,18 +267,9 @@
             box-shadow: none;
         }
 
-        /* Style pour les titres des graphiques */
-        .graph-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
         /* Style pour la date actuelle */
         .fc-daygrid-day.fc-day-today {
-            background-color: #C8E6C9 !important; /* Vert clair */
+            background-color: #BBDEFB !important; /* Bleu clair pour aujourd'hui */
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
@@ -233,6 +279,15 @@
             font-size: 0.8rem;
             text-align: center;
             padding: 5px;
+        }
+
+        /* Style pour les titres des graphiques */
+        .graph-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
         }
     </style>
 {% endblock %}
@@ -246,31 +301,31 @@
                 <div class="cards-container">
                     <div class="card bg-primary">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-user-friends"></i> Clients</h5>
+                            <h5 class="card-title"><i class="fas fa-users"></i> Clients</h5>
                             <p class="card-text" id="clientCount">{{ totalClients | number_format(0, '.', ',') }}</p>
                         </div>
                     </div>
                     <div class="card bg-success">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-handshake"></i> Partenaires</h5>
+                            <h5 class="card-title"><i class="fas fa-network-wired"></i> Partenaires</h5>
                             <p class="card-text" id="partnerCount">{{ totalPartenaires | number_format(0, '.', ',') }}</p>
                         </div>
                     </div>
                     <div class="card bg-warning">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-calendar-alt"></i> Evenements</h5>
+                            <h5 class="card-title"><i class="fas fa-calendar-check"></i> Événements</h5>
                             <p class="card-text" id="eventCount">{{ totalEvenements | number_format(0, '.', ',') }}</p>
                         </div>
                     </div>
                     <div class="card bg-danger">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-life-ring"></i> Demandes d'aide</h5>
+                            <h5 class="card-title"><i class="fas fa-hands-helping"></i> Demandes d'aide</h5>
                             <p class="card-text" id="helpRequests">{{ totalDemandesAide | number_format(0, '.', ',') }}</p>
                         </div>
                     </div>
                     <div class="card bg-info">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-donate"></i> Dons</h5>
+                            <h5 class="card-title"><i class="fas fa-hand-holding-usd"></i> Dons</h5>
                             <p class="card-text" id="donationsCount">{{ totalDons | number_format(0, '.', ',') }}</p>
                         </div>
                     </div>
@@ -287,9 +342,7 @@
                     <div id="donationsLineChart"></div>
                 </div>
                 <div class="graph-container">
-                    <h3 class="graph-title">Répartition des partenaires par secteur
-
-</h3>
+                    <h3 class="graph-title">Répartition des partenaires par secteur</h3>
                     <div id="radarChart"></div>
                 </div>
                 <div class="graph-container">
@@ -308,7 +361,7 @@
     <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #FFCDD2FF; color: #000;">
+                <div class="modal-header">
                     <h5 class="modal-title" id="eventModalLabel">Détails de l'événement</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -319,7 +372,7 @@
                     <p><strong>Description :</strong> <span id="eventDescription"></span></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn" style="background-color: #FFCDD2FF; color: #000;" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn close-btn" data-bs-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -345,13 +398,65 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 events: {{ events | raw }},
+                eventContent: function(arg) {
+                    // Personnalisation du rendu des événements
+                    let title = arg.event.title;
+                    if (arg.event.extendedProps.type === 'benevolat') {
+                        // Icône pour les événements de bénévolat
+                        return {
+                            html: `<div class="fc-event-title"><i class="${arg.event.extendedProps.icon} me-1"></i>${title}</div>`
+                        };
+                    } else if (arg.event.extendedProps.type === 'evenement') {
+                        // Icône pour les événements classiques
+                        return {
+                            html: `<div class="fc-event-title"><i class="${arg.event.extendedProps.icon} me-1"></i>${title}</div>`
+                        };
+                    }
+                    return { html: `<div class="fc-event-title">${title}</div>` };
+                },
                 eventClick: function(info) {
                     document.getElementById('eventTitle').textContent = info.event.title;
                     document.getElementById('eventDate').textContent = info.event.start.toISOString().split('T')[0];
                     document.getElementById('eventLocation').textContent = info.event.extendedProps.lieu || 'Non spécifié';
                     document.getElementById('eventDescription').textContent = info.event.extendedProps.description || 'Non spécifiée';
+
+                    // Gestion des champs spécifiques au bénévolat et couleur du modal
+                    var modalHeader = document.getElementById('eventModal').querySelector('.modal-header');
+                    var closeButton = document.getElementById('eventModal').querySelector('.close-btn');
+                    if (info.event.extendedProps.type === 'benevolat') {
+                        document.getElementById('eventModalLabel').textContent = 'Détails du Bénévolat';
+                        modalHeader.style.backgroundColor = '#C8E6C9'; // Couleur pour bénévolat
+                        modalHeader.style.color = '#000';
+                        closeButton.style.backgroundColor = '#C8E6C9'; // Couleur verte pour le bouton fermer
+                        closeButton.style.color = '#000';
+                        let statusElement = '<p><strong>Statut :</strong> <span>' + (info.event.extendedProps.status || 'Non spécifié') + '</span></p>';
+                        let imageElement = info.event.extendedProps.imageName ? 
+                            '<p><strong>Image :</strong> <img src="/Uploads/images/' + info.event.extendedProps.imageName + '" alt="Image" style="max-width: 100%; height: auto;"></p>' : 
+                            '<p><strong>Image :</strong> Aucune image</p>';
+                        document.getElementById('eventModal').querySelector('.modal-body').innerHTML += statusElement + imageElement;
+                    } else {
+                        document.getElementById('eventModalLabel').textContent = 'Détails de l\'événement';
+                        modalHeader.style.backgroundColor = '#FFCDD2'; // Couleur pour événement classique
+                        modalHeader.style.color = '#000';
+                        closeButton.style.backgroundColor = '#FFCDD2'; // Couleur rouge pour le bouton fermer
+                        closeButton.style.color = '#000';
+                    }
+
                     var eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
                     eventModal.show();
+
+                    // Réinitialiser le contenu de la modale après fermeture
+                    document.getElementById('eventModal').addEventListener('hidden.bs.modal', function () {
+                        document.getElementById('eventModal').querySelector('.modal-body').innerHTML = `
+                            <p><strong>Titre :</strong> <span id="eventTitle"></span></p>
+                            <p><strong>Date :</strong> <span id="eventDate"></span></p>
+                            <p><strong>Lieu :</strong> <span id="eventLocation"></span></p>
+                            <p><strong>Description :</strong> <span id="eventDescription"></span></p>
+                        `;
+                        modalHeader.style.backgroundColor = ''; // Réinitialiser la couleur
+                        closeButton.style.backgroundColor = ''; // Réinitialiser la couleur du bouton
+                        closeButton.style.color = '';
+                    }, { once: true });
                 },
                 dayCellDidMount: function(info) {
                     // Vérifier si la cellule est la date actuelle
@@ -409,7 +514,7 @@
                 tooltip: {
                     y: {
                         formatter: function(val) {
-                            return val + " €";
+                            return val + " dt";
                         }
                     }
                 }
@@ -437,7 +542,16 @@
                 chart: { type: 'pie', height: 350 },
                 series: {{ countryCounts | raw }},
                 labels: {{ countryLabels | raw }},
-                colors: ['#FFCDD2', '#C8E6C9', '#FFE0B2', '#E1BEE7', '#BBDEFB']
+                colors: ['#FFCDD2', '#C8E6C9', '#FFE0B2', '#E1BEE7', '#BBDEFB'],
+                dataLabels: {
+                    style: {
+                        colors: ['#000000'],
+                        fontSize: '14px',
+                    },
+                    dropShadow: {
+                        enabled: false
+                    }
+                }
             };
             new ApexCharts(document.querySelector("#pieChart"), pieChartOptions).render();
         });
