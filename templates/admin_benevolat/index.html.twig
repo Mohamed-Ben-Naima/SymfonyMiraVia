@@ -155,6 +155,7 @@ tr:hover {
     }
 
     .actions {
+
         flex-direction: column;
         align-items: flex-start;
     }
@@ -162,6 +163,7 @@ tr:hover {
     .actions button {
         width: 100%;
         margin-bottom: 4px;
+        
     }
 }
 
@@ -176,6 +178,8 @@ tr:hover {
 .actions button.consulter-btn {
     background-color: #7D8C6D;
     color: white;
+        font-size: 14px;
+
 }
 
 .actions button.consulter-btn:hover {
@@ -331,7 +335,7 @@ body.no-scroll {
             <tr>
                 <td>{{ benevolat.idBenevolat }}</td>
                 <td>{{ benevolat.titre }}</td>
-                <td>{{ benevolat.description }}</td>
+            <td>{{ benevolat.description|length > 30 ? benevolat.description|slice(0, 30) ~ '...' : benevolat.description }}</td>
                 <td>{{ benevolat.dateBenevolat ? benevolat.dateBenevolat|date('Y-m-d') : '' }}</td>
                 <td>{{ benevolat.status }}</td>
                 <td class="actions">

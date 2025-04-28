@@ -21,8 +21,17 @@ final class AdminEventController extends AbstractController
     #[Route('/admin/event', name: 'app_admin_events')]
     public function index(): Response
     {
-        // Use the injected EntityManager to fetch data
-        $evenements = $this->entityManager->getRepository(Evenements::class)->findAll();
+        // Custom DQL query to join Evenements, Partenaires, and Utilisateurs
+        $query = $this->entityManager->createQuery(
+            'SELECT e.idEvenement, e.titre, e.description, e.dateEvenement, e.lieu, 
+                    e.status, e.estBloque, e.imagename, 
+                    u.nom AS nomPartenaire, u.prenom AS prenomPartenaire
+             FROM App\Entity\Evenements e
+             LEFT JOIN App\Entity\Partenaires p WITH e.idPartenaire = p.idPartenaire
+             LEFT JOIN App\Entity\Utilisateurs u WITH p.idPartenaire = u.idUtilisateur'
+        );
+
+        $evenements = $query->getResult();
 
         return $this->render('admin_event/index.html.twig', [
             'controller_name' => 'AdminEventController',
