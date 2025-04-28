@@ -470,8 +470,16 @@
     vertical-align: middle;
   }
 
-  .table .btn-sm {
-    padding: 5px 10px;
+  .table th {
+    background-color: #86b7fe57 !important ;
+    color: #013a71;
+  }
+
+  .table td {
+    padding: 10px;
+    text-align: left;
+    word-wrap: break-word;
+    
   }
 
   .badge {

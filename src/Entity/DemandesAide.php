@@ -10,10 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: DemandesAideRepository::class)]
 class DemandesAide
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(name: "id_demande", nullable: true, options: ["default" => NULL])]
-    private ?int $idDemande = NULL;
+    #[ORM\Id] // Indique que c'est une clé primaire
+    #[ORM\GeneratedValue] // Indique que la valeur est générée automatiquement (auto-increment)
+    #[ORM\Column(name: "id_demande", type: "integer", nullable: false)]
+    private ?int $idDemande = null;
 
     #[ORM\Column(name: "id_client", nullable: true, options: ["default" => NULL])]
     private ?int $idClient = NULL;
@@ -142,7 +142,6 @@ class DemandesAide
     public function setPreuves(?string $preuves): static
     {
         $this->preuves = $preuves;
-
         return $this;
     }
 }
