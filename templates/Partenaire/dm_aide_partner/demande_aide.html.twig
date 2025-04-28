@@ -24,7 +24,7 @@
       <tbody>
         {% for aide in demandes_aide %}
         <tr>
-          <td>{{ aide.client_nom }} {{ aide.client_prenom }}</td>
+          <td>{{ aide.id_client }}</td>
           <td>{{ aide.type_aide }}</td>
           <td>{{ aide.description }}</td>
           <td>{{ aide.montant_demande }} €</td>
@@ -48,7 +48,7 @@
         <h5 class="modal-title" id="addDemandeModalLabel">Ajouter une demande</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="{{ path('add_demande') }}" method="post" enctype="multipart/form-data">
+      <form action="{{ path('add_demande', { id_partenaire: id_partenaire }) }}" method="post" enctype="multipart/form-data">
         <div class="modal-body">
           <div class="mb-3">
             <label for="id_client" class="form-label">ID Client</label>
@@ -86,3 +86,4 @@
     </div>
   </div>
 </div>
+{% endblock %}
