@@ -3,69 +3,51 @@
 namespace App\Controller\Partenaire;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class MessageriePartnerController extends AbstractController
 {
     #[Route('/messagerie/partner', name: 'app_messagerie_partner')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $members = [
-            [
-                'name' => 'John Doe',
-                'avatar' => 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp',
-                'message' => 'Hello, Are you there?',
-                'time' => 'Just now',
-                'unreadMessages' => 1,
-                'isHighlighted' => true,
-                'statusBadgeClass' => 'bg-success',
-            ],
-            [
-                'name' => 'Danny Smith',
-                'avatar' => 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-1.webp',
-                'message' => 'Lorem ipsum dolor sit.',
-                'time' => '5 mins ago',
-                'unreadMessages' => 0,
-                'isHighlighted' => false,
-                'statusBadgeClass' => 'bg-warning',
-            ],
-            [
-                'name' => 'Alex Steward',
-                'avatar' => 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-2.webp',
-                'message' => 'Lorem ipsum dolor sit.',
-                'time' => 'Yesterday',
-                'unreadMessages' => 0,
-                'isHighlighted' => false,
-                'statusBadgeClass' => 'bg-success',
-            ],
+        // Données statiques pour les contacts
+        $contacts = [
+            ['id' => 1, 'name' => 'John Doe', 'avatar' => 'https://via.placeholder.com/40', 'lastMessage' => 'Je vais bien, merci !'],
+            ['id' => 2, 'name' => 'Jane Smith', 'avatar' => 'https://via.placeholder.com/40', 'lastMessage' => 'À bientôt !'],
         ];
 
-        $chats = [
-            [
-                'align' => 'start',
-                'avatar' => 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp',
-                'message' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                'time' => '12:00 PM | Aug 13',
-                'bgClass' => 'bg-body-tertiary',
-            ],
-            [
-                'align' => 'end',
-                'avatar' => 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-1.webp',
-                'message' => 'Ut enim ad minim veniam, quis nostrud exercitation.',
-                'time' => '12:05 PM | Aug 13',
-                'bgClass' => 'bg-primary text-white',
-            ],
+        // Récupérer l'identifiant du destinataire depuis la requête
+        $receiverId = $request->query->get('receiver_id', 1); // Par défaut, le premier contact
+        $currentReceiver = array_filter($contacts, fn($contact) => $contact['id'] == $receiverId);
+        $currentReceiver = reset($currentReceiver);
+
+        // Données statiques pour les messages
+        $messages = [
+            ['sender' => 'me', 'text' => 'Bonjour, comment ça va ?', 'time' => '10:00 AM'],
+            ['sender' => 'John Doe', 'text' => 'Je vais bien, merci ! Et toi ?', 'time' => '10:05 AM'],
+            ['sender' => 'me', 'text' => 'Je vais bien aussi, merci.', 'time' => '10:10 AM'],
         ];
 
-        $currentUser = [
-            'avatar' => 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp',
-        ];
-
-        return $this->render('messagerie_partner/index.html.twig', [
-            'members' => $members,
-            'chats' => $chats,
-            'currentUser' => $currentUser,
+        return $this->render('Partenaire/messagerie_partner/index.html.twig', [
+            'contacts' => $contacts,
+            'messages' => $messages,
+            'currentUser' => ['id' => 0, 'name' => 'Me'], // Utilisateur actuel simulé
+            'currentReceiver' => $currentReceiver,
         ]);
+    }
+
+    #[Route('/messagerie/partner/send', name: 'app_messagerie_partner_send', methods: ['POST'])]
+    public function sendMessage(Request $request): Response
+    {
+        // Récupérer les données du formulaire
+        $receiverId = $request->request->get('receiver_id');
+        $messageText = $request->request->get('message');
+
+        // Simuler l'envoi d'un message
+        $this->addFlash('success', "Message envoyé à l'utilisateur avec l'ID $receiverId : $messageText");
+
+        return $this->redirectToRoute('app_messagerie_partner', ['receiver_id' => $receiverId]);
     }
 }

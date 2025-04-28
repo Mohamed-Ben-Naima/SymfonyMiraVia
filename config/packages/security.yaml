@@ -41,6 +41,9 @@ security:
 
     access_control:
         - { path: ^/dashboard/partenaire, roles: ROLE_PARTENAIRE }
+        - { path: ^/partner, roles: ROLE_PARTENAIRE }
+        - { path: ^/login/partner, roles: PUBLIC_ACCESS }
+        - { path: ^/sign-up/partner, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/inscription, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
