@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a306b9229b3ffa2cfa98f4d083bac044",
+    "content-hash": "c1be087cd2fb66ce77ac097b961a4f89",
     "packages": [
         {
             "name": "composer/semver",
@@ -9608,16 +9608,16 @@
         },
         {
             "name": "siburuxue/doctrine-helper",
-            "version": "v1.0.6",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/siburuxue/doctrine-helper.git",
-                "reference": "197f87eafa915b9810c332b1af52b1365d6b97d4"
+                "reference": "367682c3f6aa11942cbb40a7106669d0b5dc6c18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/siburuxue/doctrine-helper/zipball/197f87eafa915b9810c332b1af52b1365d6b97d4",
-                "reference": "197f87eafa915b9810c332b1af52b1365d6b97d4",
+                "url": "https://api.github.com/repos/siburuxue/doctrine-helper/zipball/367682c3f6aa11942cbb40a7106669d0b5dc6c18",
+                "reference": "367682c3f6aa11942cbb40a7106669d0b5dc6c18",
                 "shasum": ""
             },
             "require": {
@@ -9656,9 +9656,9 @@
             ],
             "support": {
                 "issues": "https://github.com/siburuxue/doctrine-helper/issues",
-                "source": "https://github.com/siburuxue/doctrine-helper/tree/v1.0.6"
+                "source": "https://github.com/siburuxue/doctrine-helper/tree/v1.0.7"
             },
-            "time": "2025-02-28T15:39:19+00:00"
+            "time": "2025-04-16T07:20:54+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -9936,21 +9936,21 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.62.1",
+            "version": "v1.63.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "468ff2708200c95ebc0d85d3174b6c6711b8a590"
+                "reference": "69478ab39bc303abfbe3293006a78b09a8512425"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/468ff2708200c95ebc0d85d3174b6c6711b8a590",
-                "reference": "468ff2708200c95ebc0d85d3174b6c6711b8a590",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/69478ab39bc303abfbe3293006a78b09a8512425",
+                "reference": "69478ab39bc303abfbe3293006a78b09a8512425",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "^2.0",
-                "nikic/php-parser": "^4.18|^5.0",
+                "nikic/php-parser": "^5.0",
                 "php": ">=8.1",
                 "symfony/config": "^6.4|^7.0",
                 "symfony/console": "^6.4|^7.0",
@@ -10008,7 +10008,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.62.1"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.63.0"
             },
             "funding": [
                 {
@@ -10024,7 +10024,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-15T00:21:40+00:00"
+            "time": "2025-04-26T01:41:37+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
