@@ -21,28 +21,12 @@ class DonsRepository extends ServiceEntityRepository
         parent::__construct($registry, Dons::class);
     }
 
-//    /**
-//     * @return Dons[] Returns an array of Dons objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Dons
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByPartenaire(int $idPartenaire): array
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.idPartenaire = :idPartenaire')
+            ->setParameter('idPartenaire', $idPartenaire)
+            ->getQuery()
+            ->getResult();
+    }
 }
