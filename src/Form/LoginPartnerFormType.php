@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -14,17 +13,21 @@ class LoginPartnerFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Adresse email',
                 'attr' => ['placeholder' => 'Entrez votre email'],
+                'label' => 'Email',
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Mot de passe',
                 'attr' => ['placeholder' => 'Entrez votre mot de passe'],
+                'label' => 'Mot de passe',
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'csrf_protection' => true, // Active la protection CSRF
+            'csrf_field_name' => '_token', // Nom du champ CSRF
+            'csrf_token_id' => 'login_partner', // Identifiant unique pour le token CSRF
+        ]);
     }
 }

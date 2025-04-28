@@ -14,15 +14,15 @@ security:
             security: false
 
         partner:
-            pattern: ^/dashboard/partenaire
+            pattern: ^/(dashboard/partenaire|login/partner)
             provider: app_user_provider
-            form_login:
-                login_path: app_login_controller_partner
-                check_path: app_login_controller_partner
-                enable_csrf: true
+            custom_authenticators:
+                - App\Security\Authenticator\PartnerAuthenticator
             logout:
-                path: app_logout
-            # Supprimez "anonymous: false" et configurez l'accès via access_control
+                path: app_home
+                target: app_login_controller_partner
+            stateless: false
+            lazy: true
 
         main:
             lazy: true
@@ -31,9 +31,11 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                default_target_path: /
             logout:
                 path: app_logout
-            # Supprimez "anonymous: true" et configurez l'accès via access_control
+                target: app_login
+            stateless: false
 
     access_control:
         - { path: ^/dashboard/partenaire, roles: ROLE_PARTENAIRE }

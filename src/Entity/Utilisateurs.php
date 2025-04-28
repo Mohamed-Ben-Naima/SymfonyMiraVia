@@ -189,6 +189,21 @@ class Utilisateurs implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->birthday;
     }
 
+
+    public function getRoles(): array
+    {
+        $roles = [];
+    
+        // Ajouter le rôle partenaire si l'utilisateur est de type partenaire
+        if ($this->typeUtilisateur === 'partenaire'or $this->typeUtilisateur === 'Partenaire') {
+            $roles[] = 'ROLE_PARTENAIRE';
+        }
+    
+        // Ajouter un rôle par défaut
+        $roles[] = 'ROLE_USER';
+    
+        return array_unique($roles); // Supprime les doublons
+    }
     public function setBirthday(?\DateTimeInterface $birthday): static
     {
         $this->birthday = $birthday;
@@ -209,19 +224,7 @@ class Utilisateurs implements UserInterface, PasswordAuthenticatedUserInterface
     }
      // Methods required by UserInterface
 
-     public function getRoles(): array
-     {
-         $roles = [];
-     
-         if ($this->typeUtilisateur === 'partenaire') {
-             $roles[] = 'ROLE_PARTENAIRE';
-         }
-     
-         // Ajoutez d'autres rôles si nécessaire
-         $roles[] = 'ROLE_USER';
-     
-         return array_unique($roles);
-     }
+    
  
      public function getSalt(): ?string
      {
