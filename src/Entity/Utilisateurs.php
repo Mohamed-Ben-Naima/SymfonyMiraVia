@@ -1,90 +1,56 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use App\Repository\UtilisateursRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'utilisateurs')]
 #[ORM\Entity(repositoryClass: UtilisateursRepository::class)]
-class Utilisateurs implements PasswordAuthenticatedUserInterface, UserInterface
+class Utilisateurs implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(name: "id_utilisateur", nullable: true, options: ["default" => NULL])]
-    private ?int $idUtilisateur = NULL;
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(name: "id_utilisateur", type: "integer")]
+    private ?int $idUtilisateur = null;
 
-    #[ORM\Column(name: "nom", length: 50, nullable: true, options: ["default" => 'NULL'])]
-    #[Assert\Length(
-        max: 50,
-        maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
-    )]
-    private ?string $nom = 'Ben Naima';
+    #[ORM\Column(name: "nom", length: 50, nullable: true)]
+    private ?string $nom = null;
 
-    #[ORM\Column(name: "prenom", length: 50, nullable: true, options: ["default" => '\'\''])]
-    #[Assert\Length(
-        max: 50,
-        maxMessage: 'Le prénom ne peut pas dépasser {{ limit }} caractères'
-    )]
-    private ?string $prenom = 'Mohamed';
+    #[ORM\Column(name: "prenom", length: 50, nullable: true)]
+    private ?string $prenom = null;
 
-    #[ORM\Column(name: "email", length: 100, nullable: true, options: ["default" => 'NULL'])]
-    #[Assert\Email(
-        message: 'L\'email {{ value }} n\'est pas valide.'
-    )]
-    #[Assert\Length(
-        max: 100,
-        maxMessage: 'L\'email ne peut pas dépasser {{ limit }} caractères'
-    )]
-    private ?string $email = 'example@gmail.com';
+    #[ORM\Column(name: "email", length: 100, nullable: true)]
+    private ?string $email = null;
 
-    #[ORM\Column(name: "mot_de_passe", length: 255, nullable: true, options: ["default" => 'NULL'])]
-    #[Assert\Length(
-        min: 8,
-        max: 255,
-        minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères',
-        maxMessage: 'Le mot de passe ne peut pas dépasser {{ limit }} caractères'
-    )]
-    private ?string $motDePasse = 'password';
+    #[ORM\Column(name: "mot_de_passe", length: 255, nullable: true)]
+    private ?string $motDePasse = null;
 
-    #[ORM\Column(name: "telephone", length: 50, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $telephone = '11 111 111';
+    #[ORM\Column(name: "telephone", length: 50, nullable: true)]
+    private ?string $telephone = null;
 
     #[ORM\Column(name: "date_inscription", type: Types::DATETIME_MUTABLE, nullable: true, options: ["default" => 'current_timestamp()'])]
     private ?\DateTimeInterface $dateInscription = null;
 
     #[ORM\Column(name: "type_utilisateur", length: 20, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $typeUtilisateur = 'client';
+    private ?string $typeUtilisateur =null;
 
     #[ORM\Column(name: "avatar", length: 255, nullable: true, options: ["default" => '\'https://example.com/default-avatar.png\''])]
     private ?string $avatar = '\'https://example.com/default-avatar.png\'';
 
     #[ORM\Column(name: "statut_verification", length: 20, nullable: true, options: ["default" => '\'en attente\''])]
-    private ?string $statutVerification = 'en attente';
+    private ?string $statutVerification = '\'en attente\'';
 
     #[ORM\Column(name: "status", length: 10, nullable: true, options: ["default" => '\'actif\''])]
-    private ?string $status = 'actif';
+    private ?string $status = '\'actif\'';
 
-    #[ORM\Column(name: "birthday", type: Types::DATE_MUTABLE, nullable: true, options: ["default" => 'NULL'])]
+    #[ORM\Column(name: "birthday", type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthday = null;
 
-    #[ORM\Column(name: "adresse_utilisateur", length: 255, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $adresseUtilisateur = 'adresse';
-
-    public function getPassword(): ?string
-    {
-        // Return the password property (replace 'motDePasse' with your actual password field name)
-        return $this->motDePasse;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->getIdUtilisateur();
-    }
+    #[ORM\Column(name: "adresse_utilisateur", length: 255, nullable: true)]
+    private ?string $adresseUtilisateur = null;
 
     public function getIdUtilisateur(): ?int
     {
@@ -142,13 +108,6 @@ class Utilisateurs implements PasswordAuthenticatedUserInterface, UserInterface
     public function setMotDePasse(?string $motDePasse): static
     {
         $this->motDePasse = $motDePasse;
-
-        return $this;
-    }
-
-    public function setPassword(?string $password): static
-    {
-        $this->motDePasse = $password;
 
         return $this;
     }
@@ -230,6 +189,21 @@ class Utilisateurs implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->birthday;
     }
 
+
+    public function getRoles(): array
+    {
+        $roles = [];
+    
+        // Ajouter le rôle partenaire si l'utilisateur est de type partenaire
+        if ($this->typeUtilisateur === 'partenaire'or $this->typeUtilisateur === 'Partenaire') {
+            $roles[] = 'ROLE_PARTENAIRE';
+        }
+    
+        // Ajouter un rôle par défaut
+        $roles[] = 'ROLE_USER';
+    
+        return array_unique($roles); // Supprime les doublons
+    }
     public function setBirthday(?\DateTimeInterface $birthday): static
     {
         $this->birthday = $birthday;
@@ -248,46 +222,29 @@ class Utilisateurs implements PasswordAuthenticatedUserInterface, UserInterface
 
         return $this;
     }
+     // Methods required by UserInterface
 
-    /**
-     * Required method from UserInterface
-     */
-    public function getRoles(): array
-    {
-        // Return an array of roles - at least ROLE_USER
-        // You can customize this based on your typeUtilisateur field
-        $roles = ['ROLE_USER'];
-
-        if ($this->typeUtilisateur) {
-            $roles[] = 'ROLE_' . strtoupper($this->typeUtilisateur);
-        }
-
-        return array_unique($roles);
-    }
-
-    /**
-     * Required method from UserInterface
-     */
-    public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
-
-    /**
-     * Required method from UserInterface
-     * Returns the identifier used for authentication (email)
-     */
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
-     * @deprecated since Symfony 5.3, use getUserIdentifier instead
-     */
-    public function getUsername(): string
-    {
-        return $this->getUserIdentifier();
-    }
+    
+ 
+     public function getSalt(): ?string
+     {
+         // Not needed when using modern hashers (e.g., bcrypt or Argon2i)
+         return null;
+     }
+ 
+     public function eraseCredentials(): void
+     {
+         // If you store any temporary, sensitive data, clear it here
+     }
+ 
+     public function getUserIdentifier(): string
+     {
+         // Return a unique identifier for the user (e.g., email or username)
+         return $this->email;
+     }
+ 
+     public function getPassword(): ?string
+     {
+         return $this->motDePasse;
+     }
 }

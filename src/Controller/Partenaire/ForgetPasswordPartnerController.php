@@ -2,51 +2,78 @@
 
 namespace App\Controller\Partenaire;
 
-
+use App\Form\ForgetPasswordPartnerFormType;
+use App\Entity\Utilisateurs;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Psr\Log\LoggerInterface;
 
 final class ForgetPasswordPartnerController extends AbstractController
 {
     #[Route('/forget/password/partner', name: 'app_forget_password_partner')]
-        public function forgotPassword(Request $request): Response
+    public function forgotPassword(Request $request, MailerInterface $mailer, LoggerInterface $logger, ManagerRegistry $doctrine): Response
     {
-        // Create the form
-        $form = $this->createFormBuilder()
-            ->add('email', EmailType::class, [
-                'label' => 'Adresse email',
-                'attr' => ['placeholder' => 'Entrez votre adresse email'],
-                'constraints' => [
-                    new NotBlank(['message' => 'L\'adresse email est obligatoire.']),
-                    new Email(['message' => 'Veuillez fournir une adresse email valide.']),
-                ],
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Envoyer le lien de réinitialisation',
-                'attr' => ['class' => 'btn btn-primary w-100'],
-            ])
-            ->getForm();
-
+        // Création du formulaire ForgetPasswordPartnerFormType
+        $form = $this->createForm(ForgetPasswordPartnerFormType::class);
         $form->handleRequest($request);
 
+        // Debug de la configuration MAILER_DSN
+        dump($_ENV['MAILER_DSN']);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $email = $data['email'];
+            $email = $form->get('email')->getData();
 
-            // Logic to handle password reset (e.g., sending email)
-            // This is just a placeholder and should be replaced with real logic
-            $this->addFlash('success', 'Si cette adresse email est associée à un compte, un lien de réinitialisation vous sera envoyé.');
+            // Vérifiez si l'utilisateur existe
+            $user = $doctrine->getRepository(Utilisateurs::class)
+                ->findOneBy(['email' => $email]);
 
-            return $this->redirectToRoute('app_forget_password_partner');
+            if (!$user) {
+                $this->addFlash('error', 'Aucun utilisateur trouvé avec cette adresse email.');
+                return $this->redirectToRoute('app_forget_password_partner');
+            }
+
+            // Générer un mot de passe aléatoire
+            $generatedPassword = bin2hex(random_bytes(4)); // Exemple : 8 caractères aléatoires
+
+            // Mettre à jour le mot de passe de l'utilisateur
+            $user->setMotDePasse(password_hash($generatedPassword, PASSWORD_BCRYPT));
+            $entityManager = $doctrine->getManager();
+            $entityManager->flush();
+
+            // Préparer le contenu HTML de l'email avec Twig
+            $htmlContent = $this->renderView('emails/forget_password.html.twig', [
+                'user' => $user,
+                'password' => $generatedPassword,
+            ]);
+
+            // Créer l'email
+            $emailMessage = (new Email())
+                ->from('mayssajrad2002@gmail.com') // Adresse email de l'expéditeur
+                ->to($email) // Adresse email du destinataire
+                ->subject('Réinitialisation de votre mot de passe')
+                ->html($htmlContent); // Contenu HTML
+
+            // Envoyer l'email
+            try {
+                $mailer->send($emailMessage);
+                $this->addFlash('success', 'Un email avec votre nouveau mot de passe a été envoyé.');
+            } catch (\Symfony\Component\Mailer\Exception\TransportExceptionInterface $e) {
+                // Logger l'erreur et afficher un message à l'utilisateur
+                $logger->error('Erreur lors de l\'envoi de l\'email : ' . $e->getMessage());
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de l\'email.');
+            }
+
+            // Rediriger vers la page de connexion
+            return $this->redirectToRoute('app_login_controller_partner');
         }
 
-        return $this->render('/forget_password_partner/index.html.twig', [
+        // Afficher le formulaire
+        return $this->render('Partenaire/forget_password_partner/index.html.twig', [
             'form' => $form->createView(),
         ]);
     }

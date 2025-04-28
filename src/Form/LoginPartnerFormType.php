@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -7,7 +6,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints as Assert;
 
 class LoginPartnerFormType extends AbstractType
 {
@@ -15,41 +13,21 @@ class LoginPartnerFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Adresse Email',
-                'attr' => [
-                    'placeholder' => 'email@example.com',
-                    'class' => 'form-control',
-                ],
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'L\'adresse email est obligatoire.',
-                    ]),
-                    new Assert\Email([
-                        'message' => 'Veuillez saisir une adresse email valide.',
-                    ]),
-                ],
+                'attr' => ['placeholder' => 'Entrez votre email'],
+                'label' => 'Email',
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Mot de Passe',
-                'attr' => [
-                    'placeholder' => '********',
-                    'class' => 'form-control',
-                ],
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Le mot de passe est obligatoire.',
-                    ]),
-                    new Assert\Length([
-                        'min' => 8,
-                        'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères.',
-                        'max' => 4096,
-                    ]),
-                ],
+                'attr' => ['placeholder' => 'Entrez votre mot de passe'],
+                'label' => 'Mot de passe',
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'csrf_protection' => true, // Active la protection CSRF
+            'csrf_field_name' => '_token', // Nom du champ CSRF
+            'csrf_token_id' => 'login_partner', // Identifiant unique pour le token CSRF
+        ]);
     }
 }
