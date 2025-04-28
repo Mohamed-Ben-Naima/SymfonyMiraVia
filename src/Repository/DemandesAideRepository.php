@@ -6,14 +6,6 @@ use App\Entity\DemandesAide;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<DemandesAide>
- *
- * @method DemandesAide|null find($id, $lockMode = null, $lockVersion = null)
- * @method DemandesAide|null findOneBy(array $criteria, array $orderBy = null)
- * @method DemandesAide[]    findAll()
- * @method DemandesAide[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class DemandesAideRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -21,28 +13,46 @@ class DemandesAideRepository extends ServiceEntityRepository
         parent::__construct($registry, DemandesAide::class);
     }
 
-//    /**
-//     * @return DemandesAide[] Returns an array of DemandesAide objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByPartenaire(int $idPartenaire): array
+{
+    $conn = $this->getEntityManager()->getConnection();
 
-//    public function findOneBySomeField($value): ?DemandesAide
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    $sql = '
+        SELECT 
+            da.*, 
+            u.nom AS client_nom,
+            u.id_utilisateur AS client_id
+        FROM demandes_aide da
+        JOIN utilisateurs u ON da.id_client = u.id_utilisateur
+        WHERE da.id_partenaire = :id_partenaire
+    ';
+    
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->executeQuery(['id_partenaire' => $idPartenaire]);
+
+    return $result->fetchAllAssociative();
+}
+
+    public function addDemande(DemandesAide $demande, bool $flush = true): void
+    {
+        $this->_em->persist($demande);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
+
+    public function updateDemande(DemandesAide $demande, bool $flush = true): void
+    {
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
+
+    public function deleteDemande(DemandesAide $demande, bool $flush = true): void
+    {
+        $this->_em->remove($demande);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
 }

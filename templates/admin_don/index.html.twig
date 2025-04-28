@@ -175,10 +175,122 @@ tr:hover {
 .actions button.consulter-btn {
     background-color: #7D8C6D;
     color: white;
+            font-size: 14px;
+
 }
 
 .actions button.consulter-btn:hover {
     background-color: #5c7352;
+}
+
+.modal {
+    display: none; /* Par défaut, caché */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Défilement interne uniquement */
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+
+.modal-content {
+    position: fixed; /* Permet de positionner l'élément par rapport à la fenêtre */
+    top: 50%; /* Centre verticalement */
+    left: 50%; /* Centre horizontalement */
+    transform: translate(-50%, -50%); /* Ajuste pour centrer parfaitement */
+    background-color: #fff;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 40%;
+    height: auto; /* Ajuste automatiquement la hauteur au contenu */
+    box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto; /* Ajoute un défilement interne si nécessaire */
+    text-align: left;
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: color 0.3s ease;
+}
+
+.modal-header .close-btn:hover {
+    color: #ff0000;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.modal-body p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-footer button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-footer .download-btn {
+    background-color: #013A71;
+    color: white;
+}
+
+.modal-footer .download-btn:hover {
+    background-color: rgb(24, 95, 162);
+}
+
+.modal-footer .cancel-btn {
+    background-color: #7D8C6D;
+    color: white;
+}
+
+.modal-footer .cancel-btn:hover {
+    background-color: #5c7352;
+}
+
+body.no-scroll {
+    overflow: hidden; /* Désactive le défilement global */
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        margin: 2% auto;
+    }
 }
 </style>
 
@@ -192,8 +304,9 @@ tr:hover {
 
         <select id="statusFilter">
             <option value="">Tous les statuts</option>
-            <option value="Actif">Refusé</option>
-            <option value="Inactif">Accepté</option>
+            <option value="En attente">En attente</option>
+            <option value="Accepté">Accepté</option>
+            <option value="Refusé">Refusé</option>
         </select>
     </div>
 
@@ -201,65 +314,114 @@ tr:hover {
         <thead>
             <tr>
                 <th>#</th>
-                <th>Nom de client</th>
-                <th>Nom de partenaire</th>
+                <th>Nom du client</th>
+                <th>Nom du partenaire</th>
                 <th>Montant</th>
                 <th>Date de don</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody id="userTable">
-            {% for i in 1..30 %}
-            <tr>
-                <td>{{ i }}</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>250DT</td>
-                <td>2025-12-31</td>
-                <td>{{ i is even ? 'Accepté' : 'Refusé' }}</td>
-                <td class="actions">
-                   <button class="consulter-btn" onclick="editUser({{ i }})">Consulter</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+<tbody id="userTable">
+    {% for don in dons %}
+    <tr>
+        <td>{{ don.idDon }}</td>
+        <td>{{ don.nomClient }} {{ don.prenomClient }}</td>
+        <td>{{ don.nomPartenaire }} {{ don.prenomPartenaire }}</td>
+        <td>{{ don.montant }}</td>
+        <td>{{ don.dateDon ? don.dateDon|date('Y-m-d H:i:s') : 'N/A' }}</td>
+        <td>{{ don.status }}</td>
+        <td class="actions">
+<!-- Updated button with data-* attributes -->
+<button 
+    class="consulter-btn" 
+    data-id="{{ don.idDon }}"
+    data-client-nom="{{ don.nomClient }}"
+    data-client-prenom="{{ don.prenomClient }}"
+    data-partenaire-nom="{{ don.nomPartenaire }}"
+    data-partenaire-prenom="{{ don.prenomPartenaire }}"
+    data-montant="{{ don.montant }}"
+    data-date-don="{{ don.dateDon ? don.dateDon|date('Y-m-d H:i:s') : 'N/A' }}"
+    data-status="{{ don.status }}"
+    onclick="viewDetails(this)"
+>
+    Consulter
+</button>        </td>
+    </tr>
+    {% endfor %}
+</tbody>
     </table>
 </div>
 
+<div id="detailsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Détail du don</span>
+            <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- Les détails seront chargés dynamiquement ici -->
+        </div>
+        <div class="modal-footer">
+            <button class="cancel-btn" onclick="closeModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    function addUser() {
-        alert('Ajouter un nouvel utilisateur');
+function viewDetails(button) {
+    const modalBody = document.getElementById('modalBody');
+
+    // Extract data from the button's dataset
+    const id = button.dataset.id;
+    const clientNom = button.dataset.clientNom;
+    const clientPrenom = button.dataset.clientPrenom;
+    const partenaireNom = button.dataset.partenaireNom;
+    const partenairePrenom = button.dataset.partenairePrenom;
+    const montant = button.dataset.montant;
+    const dateDon = button.dataset.dateDon;
+    const status = button.dataset.status;
+
+    // Populate the modal with the data
+    modalBody.innerHTML = `
+        <p><strong>ID Don :</strong> ${id}</p>
+        <p><strong>Nom du client :</strong> ${clientNom} ${clientPrenom}</p>
+        <p><strong>Nom du partenaire :</strong> ${partenaireNom} ${partenairePrenom}</p>
+        <p><strong>Montant :</strong> ${montant} DT</p>
+        <p><strong>Date de don :</strong> ${dateDon}</p>
+        <p><strong>Status :</strong> ${status}</p>
+    `;
+
+    // Show the modal
+    document.body.style.overflow = 'hidden'; // Disable scrolling
+    document.getElementById('detailsModal').style.display = 'block';
+}
+
+    function closeModal() {
+        document.body.style.overflow = ''; // Réactiver le défilement
+        document.getElementById('detailsModal').style.display = 'none';
     }
 
-    function editUser(id) {
-        alert('Modifier utilisateur #' + id);
-    }
-
-    function deleteUser(id) {
-        if (confirm('Voulez-vous vraiment supprimer l’utilisateur #' + id + ' ?')) {
-            alert('Utilisateur supprimé');
-        }
-    }
 
     document.getElementById('search').addEventListener('input', filterTable);
     document.getElementById('statusFilter').addEventListener('change', filterTable);
 
-    function filterTable() {
-        const searchFilter = document.getElementById('search').value.toLowerCase();
-        const statusFilter = document.getElementById('statusFilter').value;
-        const rows = document.querySelectorAll('#userTable tr');
+  function filterTable() {
+    const searchFilter = document.getElementById('search').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value.toLowerCase(); // Convertir en minuscules pour la comparaison
+    const rows = document.querySelectorAll('#userTable tr');
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const textMatch = Array.from(cells).slice(0, 9)
-                .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const textMatch = Array.from(cells).slice(0, 6) // Parcourir uniquement les colonnes pertinentes
+            .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
 
-            const status = cells[8].textContent.trim();
-            const statusMatch = statusFilter === "" || status === statusFilter;
+        const status = cells[5].textContent.trim().toLowerCase(); // Statut dans la 6e colonne (0-indexé)
+        const statusMatch = statusFilter === "" || status === statusFilter;
 
-            row.style.display = (textMatch && statusMatch) ? '' : 'none';
-        });
-    }
+        // Afficher la ligne si elle correspond au filtre texte et au filtre statut
+        row.style.display = (textMatch && statusMatch) ? '' : 'none';
+    });
+}
 </script>
 {% endblock %}

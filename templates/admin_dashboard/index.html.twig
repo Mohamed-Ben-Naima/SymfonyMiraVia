@@ -7,6 +7,8 @@
 {% block stylesheets %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <link rel="preload" href="/assets/styles/app-o3KscP3.css" as="style" onload="this.rel='stylesheet'">
     <style>
         html, body {
             height: 100%;
@@ -17,12 +19,12 @@
             display: flex;
             flex-direction: column;
             min-height: 50%;
-            overflow-y: auto; /* Active le scroll vertical pour toute la page */
+            overflow-y: auto;
         }
 
         main {
             flex: 1;
-            overflow-y: auto; /* Active le scroll pour le contenu principal */
+            overflow-y: auto;
             padding-bottom: 20px;
         }
 
@@ -43,33 +45,60 @@
             font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: center; /* Centre le contenu horizontalement */
-            flex-wrap: wrap; /* Permet à l'élément de s'adapter aux petites tailles */
+            justify-content: center;
+            flex-wrap: wrap;
             text-align: center;
-            word-wrap: break-word; /* Permet de couper les mots si nécessaire */
+            word-wrap: break-word;
+            line-height: 1.5;
         }
 
         .card-title i {
             margin-right: 10px;
-            font-size: 1.5rem;
+            font-size: 1.75rem;
+            vertical-align: middle;
+        }
+
+        .card:hover .card-title i {
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card.bg-primary .card-title i {
+            color: #D32F2F;
+        }
+
+        .card.bg-success .card-title i {
+            color: #388E3C;
+        }
+
+        .card.bg-warning .card-title i {
+            color: #F57C00;
+        }
+
+        .card.bg-danger .card-title i {
+            color: #7B1FA2;
+        }
+
+        .card.bg-info .card-title i {
+            color: #0288D1;
         }
 
         .card-text {
             font-size: 1rem;
             font-weight: 500;
-            text-align: center; /* Centre le texte dans la carte */
-            white-space: nowrap; /* Empêche de couper le texte en ligne */
-            overflow: hidden; /* Masque le texte qui dépasse */
-            text-overflow: ellipsis; /* Ajoute "..." si le texte est trop long */
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         @media (max-width: 768px) {
             .card-title {
-                font-size: rem; /* Réduit la taille de la police pour petits écrans */
+                font-size: 1rem;
             }
 
             .card-text {
-                font-size: 0.9rem; /* Réduit la taille de la police pour petits écrans */
+                font-size: 0.9rem;
             }
         }
 
@@ -101,14 +130,14 @@
         .cards-container {
             display: flex;
             gap: 20px;
-            justify-content: space-between; /* Sépare les cartes horizontalement */
-            flex-wrap: wrap; /* Permet aux cartes de passer sur plusieurs lignes si nécessaire */
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
 
         .card-body {
             display: flex;
             flex-direction: column;
-            align-items: center; /* Centre le contenu de la carte */
+            align-items: center;
             justify-content: center;
         }
 
@@ -125,7 +154,7 @@
             flex-wrap: wrap;
             gap: 20px;
             justify-content: space-between;
-            margin-top: 20px; /* Sépare les graphiques de la table */
+            margin-top: 20px;
         }
 
         .graph-container {
@@ -133,12 +162,132 @@
             border-radius: 15px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            width: 48%; /* Ajuste la largeur pour un affichage responsive */
-            min-height: 350px; /* Définit une hauteur minimale pour que les graphiques soient visibles */
+            width: 48%;
+            min-height: 350px;
         }
 
-        .recent-orders {
-            overflow-x: auto; /* Permet un défilement horizontal si nécessaire */
+        .calendar-container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            min-height: 350px;
+        }
+
+        /* Custom Calendar Styles */
+        #calendar {
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        .fc-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .fc-toolbar-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .fc-button {
+            background-color: #FFCDD2FF;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .fc-button:hover {
+            background-color: #E57373FF;
+            color: #fff;
+        }
+
+        .fc-daygrid-day {
+            border: 1px solid #ddd;
+        }
+
+        .fc-daygrid-day-number {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Style pour les événements classiques */
+        .fc-event.event-classique {
+            background-color: #FFCDD2FF;
+            color: #000;
+            border: 1px solid #E57373FF;
+            border-radius: 5px;
+            padding: 2px 5px;
+            font-size: 0.9rem;
+        }
+
+        /* Style pour les événements de bénévolat */
+        .fc-event.event-benevolat {
+            background-color: #C8E6C9FF;
+            color: #000;
+            border: 1px solid #4CAF50FF;
+            border-radius: 5px;
+            padding: 2px 5px;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        /* Ajout d'une icône pour les événements de bénévolat */
+        .fc-event.event-benevolat .fc-event-title::before {
+            content: '\f4c4'; /* Code Unicode pour l'icône FontAwesome fa-hands-helping */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 5px;
+            color: #4CAF50FF;
+        }
+
+        /* Couleur permanente pour les cases avec des événements classiques */
+        .fc-daygrid-day:has(.event-classique) {
+            background-color: #FFCDD2;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Couleur permanente pour les cases avec des événements de bénévolat */
+        .fc-daygrid-day:has(.event-benevolat) {
+            background-color: #C8E6C9;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Pas d'effet hover sur les cases */
+        .fc-daygrid-day:hover {
+            background-color: inherit;
+            box-shadow: none;
+        }
+
+        /* Style pour la date actuelle */
+        .fc-daygrid-day.fc-day-today {
+            background-color: #BBDEFB !important; /* Bleu clair pour aujourd'hui */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Style pour le texte indicatif si pas d'événements */
+        .no-event-text {
+            color: #333;
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 5px;
+        }
+
+        /* Style pour les titres des graphiques */
+        .graph-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
         }
     </style>
 {% endblock %}
@@ -152,134 +301,259 @@
                 <div class="cards-container">
                     <div class="card bg-primary">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-user-friends"></i> Clients</h5>
-                            <p class="card-text">78,250</p>
+                            <h5 class="card-title"><i class="fas fa-users"></i> Clients</h5>
+                            <p class="card-text" id="clientCount">{{ totalClients | number_format(0, '.', ',') }}</p>
                         </div>
                     </div>
                     <div class="card bg-success">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-handshake"></i> Partenaires</h5>
-                            <p class="card-text">250</p>
+                            <h5 class="card-title"><i class="fas fa-network-wired"></i> Partenaires</h5>
+                            <p class="card-text" id="partnerCount">{{ totalPartenaires | number_format(0, '.', ',') }}</p>
                         </div>
                     </div>
                     <div class="card bg-warning">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-calendar-alt"></i> Evenements</h5>
-                            <p class="card-text">180</p>
+                            <h5 class="card-title"><i class="fas fa-calendar-check"></i> Événements</h5>
+                            <p class="card-text" id="eventCount">{{ totalEvenements | number_format(0, '.', ',') }}</p>
                         </div>
                     </div>
                     <div class="card bg-danger">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-life-ring"></i> Demandes d'aide</h5>
-                            <p class="card-text">40</p>
+                            <h5 class="card-title"><i class="fas fa-hands-helping"></i> Demandes d'aide</h5>
+                            <p class="card-text" id="helpRequests">{{ totalDemandesAide | number_format(0, '.', ',') }}</p>
                         </div>
                     </div>
                     <div class="card bg-info">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-donate"></i> Dons</h5>
-                            <p class="card-text">12</p>
+                            <h5 class="card-title"><i class="fas fa-hand-holding-usd"></i> Dons</h5>
+                            <p class="card-text" id="donationsCount">{{ totalDons | number_format(0, '.', ',') }}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="recent-orders card mt-4">
-                <div class="card-header">
-                    Recent Orders
-                </div>
-                <div class="card-body">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Tracking No.</th>
-                                <th>Product Name</th>
-                                <th>Total Order</th>
-                                <th>Status</th>
-                                <th>Total Amount</th>
-                                <th>Image</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>84564564</td>
-                                <td>Camera Lens</td>
-                                <td>40</td>
-                                <td><span class="badge" style="background-color: #FFCDD2FF; color: #000;">Rejected</span></td>
-                                <td>$40,570</td>
-                                <td><img src="/images/camera-lens.jpg" alt="Camera Lens" class="img-thumbnail" width="50"></td>
-                            </tr>
-                            <tr>
-                                <td>84564565</td>
-                                <td>Laptop</td>
-                                <td>300</td>
-                                <td><span class="badge" style="background-color: #FFE0B2FF; color: #000;">Pending</span></td>
-                                <td>$180,139</td>
-                                <td><img src="/images/laptop.jpg" alt="Laptop" class="img-thumbnail" width="50"></td>
-                            </tr>
-                            <tr>
-                                <td>84564566</td>
-                                <td>Mobile</td>
-                                <td>355</td>
-                                <td><span class="badge" style="background-color: #C8E6C9FF; color: #000;">Approved</span></td>
-                                <td>$180,139</td>
-                                <td><img src="/images/mobile.jpg" alt="Mobile" class="img-thumbnail" width="50"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
             <div class="graphs-section">
-                <div class="graph-container" id="stackedBarChart"></div>
-                <div class="graph-container" id="radarChart"></div>
-                <div class="graph-container" id="lineChart"></div>
-                <div class="graph-container" id="pieChart"></div>
+                <div class="calendar-container">
+                    <h3 class="graph-title">Calendrier des Événements</h3>
+                    <div id="calendar"></div>
+                </div>
+                <div class="graph-container">
+                    <h3 class="graph-title">Évolution des Dons par Mois</h3>
+                    <div id="donationsLineChart"></div>
+                </div>
+                <div class="graph-container">
+                    <h3 class="graph-title">Répartition des partenaires par secteur</h3>
+                    <div id="radarChart"></div>
+                </div>
+                <div class="graph-container">
+                    <h3 class="graph-title">Revenus Mensuels</h3>
+                    <div id="lineChart"></div>
+                </div>
+                <div class="graph-container">
+                    <h3 class="graph-title">Répartition des Partenaires par Pays</h3>
+                    <div id="pieChart"></div>
+                </div>
             </div>
         </main>
+    </div>
+
+    <!-- Modal pour afficher les détails de l'événement -->
+    <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Détails de l'événement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Titre :</strong> <span id="eventTitle"></span></p>
+                    <p><strong>Date :</strong> <span id="eventDate"></span></p>
+                    <p><strong>Lieu :</strong> <span id="eventLocation"></span></p>
+                    <p><strong>Description :</strong> <span id="eventDescription"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn close-btn" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block javascripts %}
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Stacked Bar Chart
-        const stackedBarOptions = {
-            chart: { type: 'bar', height: 350, stacked: true },
-            series: [
-                { name: 'Product A', data: [60, 70, 80, 90, 100, 110] },
-                { name: 'Product B', data: [50, 60, 70, 80, 90, 100] },
-                { name: 'Product C', data: [40, 50, 60, 70, 80, 90] }
-            ],
-            xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'] }
-        };
-        new ApexCharts(document.querySelector("#stackedBarChart"), stackedBarOptions).render();
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/fr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialisation du calendrier
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'fr',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: {{ events | raw }},
+                eventContent: function(arg) {
+                    // Personnalisation du rendu des événements
+                    let title = arg.event.title;
+                    if (arg.event.extendedProps.type === 'benevolat') {
+                        // Icône pour les événements de bénévolat
+                        return {
+                            html: `<div class="fc-event-title"><i class="${arg.event.extendedProps.icon} me-1"></i>${title}</div>`
+                        };
+                    } else if (arg.event.extendedProps.type === 'evenement') {
+                        // Icône pour les événements classiques
+                        return {
+                            html: `<div class="fc-event-title"><i class="${arg.event.extendedProps.icon} me-1"></i>${title}</div>`
+                        };
+                    }
+                    return { html: `<div class="fc-event-title">${title}</div>` };
+                },
+                eventClick: function(info) {
+                    document.getElementById('eventTitle').textContent = info.event.title;
+                    document.getElementById('eventDate').textContent = info.event.start.toISOString().split('T')[0];
+                    document.getElementById('eventLocation').textContent = info.event.extendedProps.lieu || 'Non spécifié';
+                    document.getElementById('eventDescription').textContent = info.event.extendedProps.description || 'Non spécifiée';
 
-        // Radar Chart
-        const radarOptions = {
-            chart: { type: 'radar', height: 350 },
-            series: [{ name: 'Performance', data: [70, 60, 80, 90, 100, 50] }],
-            labels: ['Communication', 'Sales', 'Support', 'Development', 'Marketing', 'Design']
-        };
-        new ApexCharts(document.querySelector("#radarChart"), radarOptions).render();
+                    // Gestion des champs spécifiques au bénévolat et couleur du modal
+                    var modalHeader = document.getElementById('eventModal').querySelector('.modal-header');
+                    var closeButton = document.getElementById('eventModal').querySelector('.close-btn');
+                    if (info.event.extendedProps.type === 'benevolat') {
+                        document.getElementById('eventModalLabel').textContent = 'Détails du Bénévolat';
+                        modalHeader.style.backgroundColor = '#C8E6C9'; // Couleur pour bénévolat
+                        modalHeader.style.color = '#000';
+                        closeButton.style.backgroundColor = '#C8E6C9'; // Couleur verte pour le bouton fermer
+                        closeButton.style.color = '#000';
+                        let statusElement = '<p><strong>Statut :</strong> <span>' + (info.event.extendedProps.status || 'Non spécifié') + '</span></p>';
+                        let imageElement = info.event.extendedProps.imageName ? 
+                            '<p><strong>Image :</strong> <img src="/Uploads/images/' + info.event.extendedProps.imageName + '" alt="Image" style="max-width: 100%; height: auto;"></p>' : 
+                            '<p><strong>Image :</strong> Aucune image</p>';
+                        document.getElementById('eventModal').querySelector('.modal-body').innerHTML += statusElement + imageElement;
+                    } else {
+                        document.getElementById('eventModalLabel').textContent = 'Détails de l\'événement';
+                        modalHeader.style.backgroundColor = '#FFCDD2'; // Couleur pour événement classique
+                        modalHeader.style.color = '#000';
+                        closeButton.style.backgroundColor = '#FFCDD2'; // Couleur rouge pour le bouton fermer
+                        closeButton.style.color = '#000';
+                    }
 
-        // Line Chart
-        const lineChartOptions = {
-            chart: { type: 'line', height: 350 },
-            series: [{ name: 'Revenue', data: [1000, 2000, 3000, 4000, 5000, 6000] }],
-            xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'] }
-        };
-        new ApexCharts(document.querySelector("#lineChart"), lineChartOptions).render();
+                    var eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+                    eventModal.show();
 
-        // Pie Chart
-        const pieChartOptions = {
-            chart: { type: 'pie', height: 350 },
-            series: [12, 30, 25, 18, 15],
-            labels: ['France', 'Tunisia', 'Germany', 'USA', 'Others'],
-            colors: ['#FFCDD2', '#C8E6C9', '#FFE0B2', '#E1BEE7', '#BBDEFB']
-        };
-        new ApexCharts(document.querySelector("#pieChart"), pieChartOptions).render();
-    });
-</script>
+                    // Réinitialiser le contenu de la modale après fermeture
+                    document.getElementById('eventModal').addEventListener('hidden.bs.modal', function () {
+                        document.getElementById('eventModal').querySelector('.modal-body').innerHTML = `
+                            <p><strong>Titre :</strong> <span id="eventTitle"></span></p>
+                            <p><strong>Date :</strong> <span id="eventDate"></span></p>
+                            <p><strong>Lieu :</strong> <span id="eventLocation"></span></p>
+                            <p><strong>Description :</strong> <span id="eventDescription"></span></p>
+                        `;
+                        modalHeader.style.backgroundColor = ''; // Réinitialiser la couleur
+                        closeButton.style.backgroundColor = ''; // Réinitialiser la couleur du bouton
+                        closeButton.style.color = '';
+                    }, { once: true });
+                },
+                dayCellDidMount: function(info) {
+                    // Vérifier si la cellule est la date actuelle
+                    var today = new Date();
+                    var cellDate = info.date;
+                    if (
+                        cellDate.getDate() === today.getDate() &&
+                        cellDate.getMonth() === today.getMonth() &&
+                        cellDate.getFullYear() === today.getFullYear()
+                    ) {
+                        // Vérifier si la cellule contient des événements
+                        var events = calendar.getEvents().filter(function(event) {
+                            return event.start.toDateString() === cellDate.toDateString();
+                        });
+                        if (events.length === 0) {
+                            // Ajouter un texte indicatif si aucun événement
+                            var contentEl = info.el.querySelector('.fc-daygrid-day-events');
+                            if (contentEl) {
+                                contentEl.innerHTML = '<div class="no-event-text"> aujourd\'hui</div>';
+                            }
+                        }
+                    }
+                }
+            });
+            calendar.render();
+
+            // Line Chart (Évolution des dons par mois)
+            const donationsLineOptions = {
+                chart: {
+                    type: 'line',
+                    height: 350
+                },
+                series: [{
+                    name: 'Somme des dons',
+                    data: {{ monthAmounts | raw }}
+                }],
+                xaxis: {
+                    categories: {{ monthLabels | raw }},
+                    title: {
+                        text: 'Mois'
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Somme des dons (€)'
+                    }
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                colors: ['#FFCDD2'],
+                markers: {
+                    size: 5
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + " dt";
+                        }
+                    }
+                }
+            };
+            new ApexCharts(document.querySelector("#donationsLineChart"), donationsLineOptions).render();
+
+            // Radar Chart (Répartition des types d'activité)
+            const radarOptions = {
+                chart: { type: 'radar', height: 350 },
+                series: [{ name: 'Nombre de partenaires', data: {{ activityCounts | raw }} }],
+                labels: {{ activityLabels | raw }}
+            };
+            new ApexCharts(document.querySelector("#radarChart"), radarOptions).render();
+
+            // Line Chart (Revenue)
+            const lineChartOptions = {
+                chart: { type: 'line', height: 350 },
+                series: [{ name: 'Revenue', data: [1000, 2000, 3000, 4000, 5000, 6000] }],
+                xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'] }
+            };
+            new ApexCharts(document.querySelector("#lineChart"), lineChartOptions).render();
+
+            // Pie Chart (Répartition des pays)
+            const pieChartOptions = {
+                chart: { type: 'pie', height: 350 },
+                series: {{ countryCounts | raw }},
+                labels: {{ countryLabels | raw }},
+                colors: ['#FFCDD2', '#C8E6C9', '#FFE0B2', '#E1BEE7', '#BBDEFB'],
+                dataLabels: {
+                    style: {
+                        colors: ['#000000'],
+                        fontSize: '14px',
+                    },
+                    dropShadow: {
+                        enabled: false
+                    }
+                }
+            };
+            new ApexCharts(document.querySelector("#pieChart"), pieChartOptions).render();
+        });
+    </script>
 {% endblock %}

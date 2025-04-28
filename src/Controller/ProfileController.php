@@ -22,7 +22,7 @@ final class ProfileController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         SluggerInterface $slugger
     ): Response {
-        /** @var User $user */
+        /** @var Utilisateurs $user */
         $user = $this->getUser();
 
         $form = $this->createForm(UserType::class, $user);

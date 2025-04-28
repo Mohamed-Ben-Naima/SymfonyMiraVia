@@ -17,9 +17,9 @@ class DemandesAide
 
     #[ORM\Column(name: "id_client", nullable: true, options: ["default" => NULL])]
     private ?int $idClient = NULL;
-
-    #[ORM\Column(name: "id_partenaire", nullable: true, options: ["default" => NULL])]
-    private ?int $idPartenaire = NULL;
+    
+    #[ORM\Column(name: "id_partenaire", type: "integer", nullable: true)]
+    private ?int $idPartenaire = null;
 
     #[ORM\Column(name: "type_aide", length: 20, nullable: true, options: ["default" => 'NULL'])]
     private ?string $typeAide = 'NULL';
@@ -68,10 +68,9 @@ class DemandesAide
         return $this->idPartenaire;
     }
 
-    public function setIdPartenaire(?int $idPartenaire): static
+    public function setIdPartenaire(?int $idPartenaire): self
     {
         $this->idPartenaire = $idPartenaire;
-
         return $this;
     }
 

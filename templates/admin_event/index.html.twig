@@ -39,18 +39,25 @@ html, body {
 
 .search-box {
     position: relative;
-    width: 87%;
+    width: 75%;
 }
 
 .search-box input {
     width: 100%;
-    padding: 8px 30px 8px 12px;
+    padding: 8px 10px 8px 12px;
     border: 1px solid #7D8C6D;
     border-radius: 6px;
     font-size: 14px;
 }
 
 #statusFilter {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #7D8C6D;
+    font-size: 14px;
+    margin-left: -1%;
+}
+#etatFilter {
     padding: 8px;
     border-radius: 6px;
     border: 1px solid #7D8C6D;
@@ -78,14 +85,16 @@ table {
     border-collapse: collapse;
     font-size: 14px;
     background-color: white;
-    box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    table-layout: fixed; /* Limite la largeur des colonnes */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+    table-layout: auto; /* Allow columns to adjust dynamically */
+    word-wrap: break-word; /* Prevent text overflow */
 }
 
 th, td {
     padding: 10px;
     text-align: left;
-    word-wrap: break-word; /* Empêche le débordement du texte */
+    vertical-align: middle; /* Align content vertically in the middle */
+    word-wrap: break-word; /* Prevent text overflow */
 }
 
 th {
@@ -104,17 +113,22 @@ tr:hover {
 
 .actions {
     display: flex;
-    gap: 8px;
+    justify-content: center; /* Centre les boutons horizontalement */
+    align-items: center; /* Centre les boutons verticalement */
+    gap: 10px; /* Ajoute un espacement uniforme entre les boutons */
+    flex-wrap: nowrap; /* Empêche les boutons de se placer sur plusieurs lignes */
 }
 
 .actions button {
     background-color: #ccc;
     border: none;
-    padding: 5px 8px;
+    padding: 8px 16px; /* Taille cohérente pour les boutons */
     font-size: 12px;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background-color 0.2s ease-in-out;
+    white-space: nowrap; /* Empêche les boutons de passer à la ligne */
+    text-align: center; /* Centre le texte dans les boutons */
 }
 
 .actions button:hover {
@@ -180,91 +194,348 @@ tr:hover {
 .actions button.consulter-btn:hover {
     background-color: #5c7352;
 }
+.actions button.activer-btn {
+    background-color: #013A71; /* Green color for activate button */
+    color: white;
+}
+.actions button.activer-btn:hover {
+    background-color:rgb(24, 95, 162);
+}
+.actions button.bloquer-btn {
+    background-color:rgb(146, 151, 155); /* Red color for block button */
+    color: white;
+}
+
+.actions button.bloquer-btn:hover {
+    background-color:rgb(116, 118, 120);
+}
+
+.modal {
+    display: none; /* Par défaut, caché */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Défilement interne uniquement */
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+
+.modal-content {
+    position: fixed; /* Permet de positionner l'élément par rapport à la fenêtre */
+    top: 50%; /* Centre verticalement */
+    left: 50%; /* Centre horizontalement */
+    transform: translate(-50%, -50%); /* Ajuste pour centrer parfaitement */
+    background-color: #fff;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 40%;
+    height: auto; /* Ajuste automatiquement la hauteur au contenu */
+    box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto; /* Ajoute un défilement interne si nécessaire */
+    text-align: left;
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: color 0.3s ease;
+}
+
+.modal-header .close-btn:hover {
+    color: #ff0000;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    resize: vertical;
+}
+.modal-body p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-footer button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-footer .download-btn {
+    background-color: #013A71;
+    color: white;
+}
+
+.modal-footer .download-btn:hover {
+    background-color: rgb(24, 95, 162);
+}
+
+.modal-footer .cancel-btn {
+    background-color: #013A71;
+    color: white;
+}
+
+.modal-footer .cancel-btn:hover {
+    background-color:rgb(24, 95, 162);
+}
+.modal-footer .save-btn {
+    background-color: #7D8C6D;
+    color: white;
+}
+
+.modal-footer .save-btn:hover {
+    background-color: #5c7352;
+}
+
+body.no-scroll {
+    overflow: hidden; /* Désactive le défilement global */
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        margin: 2% auto;
+    }
+}
 </style>
 
 <div class="example-wrapper">
     <h1>Liste des évènements</h1>
 
-    <div class="header">
-        <div class="search-box">
-            <input type="text" id="search" placeholder="Rechercher ...">
-        </div>
-
-        <select id="statusFilter">
-            <option value="">Tous les status</option>
-            <option value="En cours">En cours</option>
-            <option value="Annulé">Annulé</option>
-            <option value="Terminé">Terminé</option>
-        </select>
+<div class="header">
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Rechercher ...">
     </div>
 
+    <select id="statusFilter">
+        <option value="">Tous les statuts</option>
+        <option value="En cours">En cours</option>
+        <option value="Annulé">Annulé</option>
+        <option value="Terminé">Terminé</option>
+    </select>
+
+    <select id="etatFilter">
+        <option value="">Tous les états</option>
+        <option value="Actif">Actif</option>
+        <option value="Bloqué">Bloqué</option>
+    </select>
+</div>
+
     <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Date d'évènement</th>
-                <th>Lieu</th>
-                <th>Partenaire</th>
-                <th>Etat</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="userTable">
-            {% for i in 1..30 %}
-            <tr>
-                <td>{{ i }}</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>Adresse {{ i }}</td>
-                <td>Adresse {{ i }}</td>
-                <td>2025-12-31</td>
-                <td>Commerce</td>
-                <td>{{ i is even ? 'Accepté' : 'Refusé' }}</td>
-                <td class="actions">
-                   <button class="consulter-btn" onclick="editUser({{ i }})">Bloquer</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+<thead>
+    <tr>
+        <th>#</th>
+        <th>Titre</th>
+        <th>Nom du Partenaire</th>
+        <th>Description</th>
+        <th>Date d'évènement</th>
+        <th>Lieu</th>
+        <th>Status</th>
+        <th>État</th>
+        <th>Image</th>
+        <th style="width: 180px;">Action</th> <!-- Adjust width for the actions column -->
+    </tr>
+</thead>
+<tbody id="userTable">
+    {% for evenement in evenements %}
+    <tr>
+        <td>{{ evenement.idEvenement }}</td>
+        <td>{{ evenement.titre }}</td>
+        <td>{{ evenement.nomPartenaire }} {{ evenement.prenomPartenaire }}</td>
+        <td>{{ evenement.description|length > 30 ? evenement.description|slice(0, 30) ~ '...' : evenement.description }}</td>
+        <td>{{ evenement.dateEvenement ? evenement.dateEvenement|date('Y-m-d H:i:s') : 'N/A' }}</td>
+        <td>{{ evenement.lieu }}</td>
+        <td>{{ evenement.status }}</td>
+        <td id="etat-{{ evenement.idEvenement }}">{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}</td>
+        <td>
+            {% if evenement.imagename %}
+                <img src="{{ asset('images/' ~ evenement.imagename) }}" alt="Image {{ evenement.titre }}" style="width: 50px; height: auto;">
+            {% else %}
+                N/A
+            {% endif %}
+        </td>
+        <td class="actions">
+            <!-- Consulter button -->
+            <button class="consulter-btn" onclick="viewEventDetails({{ evenement.idEvenement }})">
+                Consulter
+            </button>
+            
+            <!-- Activer button -->
+            <button class="activer-btn" onclick="activateEvent({{ evenement.idEvenement }}, {{ evenement.estBloque }})">
+                Activer
+            </button>
+            
+            <!-- Bloquer button -->
+            <button class="bloquer-btn" onclick="blockEvent({{ evenement.idEvenement }}, {{ evenement.estBloque }})">
+                Bloquer
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
     </table>
 </div>
 
+<div id="blockModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Modifier l'état de l'évènement</span>
+            <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p id="modalMessage" style="font-weight: bold; color: #013A71; text-align: center;">
+                Voulez-vous vraiment modifier l'état de cet évènement ?
+            </p>
+            <div class="form-group">
+                <label for="reason">Raison :</label>
+                <div id="reason">
+                    <label><input type="checkbox" name="reason[]" value="Contenu indésirable"> Contenu indésirable</label><br>
+                    <label><input type="checkbox" name="reason[]" value="Spam"> Spam</label><br>
+                    <label><input type="checkbox" name="reason[]" value="Violation des règles"> Violation des règles</label><br>
+                    <label><input type="checkbox" name="reason[]" value="Autres"> Autres</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="explanation">Explication :</label>
+                <textarea id="explanation" rows="4" placeholder="Ajoutez une explication..." required></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="save-btn" onclick="saveBlock()">Enregistrer</button>
+            <button class="cancel-btn" onclick="closeModal()">Annuler</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    function addUser() {
-        alert('Ajouter un nouvel utilisateur');
+let currentEventId;
+
+function blockEvent(id, estBloque) {
+    currentEventId = id;
+    document.body.classList.add('no-scroll');
+    document.getElementById('blockModal').style.display = 'block';
+
+    const modalMessage = document.getElementById('modalMessage');
+    const buttonText = estBloque == 1 ? 'Activer' : 'Bloquer';
+
+    modalMessage.innerText = `Voulez-vous vraiment ${buttonText.toLowerCase()} cet évènement ?`;
+    modalMessage.style.color = "#013A71"; // Default blue color
+    document.querySelectorAll('#reason input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+    document.getElementById('explanation').value = '';
+}
+
+function closeModal() {
+    document.body.classList.remove('no-scroll');
+    document.getElementById('blockModal').style.display = 'none';
+}
+
+function saveBlock() {
+    const reasons = Array.from(document.querySelectorAll('#reason input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.value);
+    const explanation = document.getElementById('explanation').value.trim();
+
+    if (reasons.length === 0 || explanation === "") {
+        const modalMessage = document.getElementById('modalMessage');
+        modalMessage.innerText = "Veuillez sélectionner une raison et fournir une explication.";
+        modalMessage.style.color = "red"; // Highlight error
+        return;
     }
 
-    function editUser(id) {
-        alert('Modifier utilisateur #' + id);
+    const etatCell = document.getElementById(`etat-${currentEventId}`);
+    const actionButton = document.querySelector(`.actions button[onclick*="${currentEventId}"]`);
+
+    if (etatCell.innerText === "Actif") {
+        etatCell.innerText = "Bloqué";
+        actionButton.innerText = "Activer";
+    } else {
+        etatCell.innerText = "Actif";
+        actionButton.innerText = "Bloquer";
     }
 
-    function deleteUser(id) {
-        if (confirm('Voulez-vous vraiment supprimer l’utilisateur #' + id + ' ?')) {
-            alert('Utilisateur supprimé');
+    const modalMessage = document.getElementById('modalMessage');
+    modalMessage.innerText = `L'état de l'évènement #${currentEventId} a été modifié avec succès.`;
+    modalMessage.style.color = "green"; // Success message
+
+    setTimeout(closeModal, 3000); // Close modal after 3 seconds
+}
+
+document.getElementById('search').addEventListener('input', filterTable);
+document.getElementById('statusFilter').addEventListener('change', filterTable);
+
+function filterTable() {
+    const searchFilter = document.getElementById('search').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+    const etatFilter = document.getElementById('etatFilter').value.toLowerCase();
+    const rows = document.querySelectorAll('#userTable tr');
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+
+        // Vérifiez que la ligne contient suffisamment de colonnes
+        if (cells.length < 8) {
+            return; // Ignorez les lignes avec un nombre insuffisant de colonnes
         }
-    }
 
-    document.getElementById('search').addEventListener('input', filterTable);
-    document.getElementById('statusFilter').addEventListener('change', filterTable);
+        const textMatch = Array.from(cells).slice(0, 6).some(cell => cell.textContent.toLowerCase().includes(searchFilter));
+        const status = cells[6].textContent.trim().toLowerCase(); // Status dans la 7e colonne (index 6)
+        const statusMatch = statusFilter === "" || status === statusFilter;
+        const etat = cells[7].textContent.trim().toLowerCase(); // État dans la 8e colonne (index 7)
+        const etatMatch = etatFilter === "" || etat === etatFilter;
 
-    function filterTable() {
-        const searchFilter = document.getElementById('search').value.toLowerCase();
-        const statusFilter = document.getElementById('statusFilter').value;
-        const rows = document.querySelectorAll('#userTable tr');
-
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const textMatch = Array.from(cells).slice(0, 9)
-                .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
-
-            const status = cells[8].textContent.trim();
-            const statusMatch = statusFilter === "" || status === statusFilter;
-
-            row.style.display = (textMatch && statusMatch) ? '' : 'none';
-        });
-    }
+        // Affichez la ligne si elle correspond à tous les filtres
+        row.style.display = (textMatch && statusMatch && etatMatch) ? '' : 'none';
+    });
+}
 </script>
 {% endblock %}

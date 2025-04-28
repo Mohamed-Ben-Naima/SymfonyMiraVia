@@ -1,0 +1,95 @@
+/* General Styles */
+body {
+    background: url("/assets/images/security/login-background.jpg") no-repeat center center fixed; /* Corrected Background image */
+    background-size: cover; /* Ensure the image covers the entire background */
+    font-family: 'Arial', sans-serif;
+    color: #495057; /* Neutral gray for text */
+}
+
+/* Overlay for contrast */
+.login-container {
+    background: rgba(232, 231, 222, 0.9); /* Light beige with transparency for better readability */
+    padding: 1rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Strong shadow for depth */
+}
+
+/* Card Styling */
+.card {
+    border-radius: 15px; /* Rounded corners for a modern look */
+    border: none;
+    background-color: #ffffff; /* White background for the card */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow for impact */
+    animation: fadeInUp 0.5s ease; /* Smooth entry animation */
+}
+
+.card h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #013a71; /* Dark blue for headings */
+}
+
+.card .form-label {
+    font-weight: 500;
+    color: #013a71; /* Dark blue for labels */
+}
+
+.card .form-control {
+    border-radius: 5px; /* Rounded input fields */
+    border: 1px solid #ced4da; /* Light gray border */
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    transition: all 0.3s ease; /* Smooth transitions for focus/hover */
+}
+
+.card .form-control:focus {
+    border-color: #81a8c5; /* Light blue border on focus */
+    box-shadow: 0 0 8px rgba(129, 168, 197, 0.8); /* Subtle glow effect */
+}
+
+.card .input-group-text {
+    background-color: #e8e7de; /* Light beige for icons */
+    border: 1px solid #ced4da; /* Border matching input fields */
+    border-right: none; /* No border on the right */
+    color: #013a71; /* Dark blue for icons */
+}
+
+.card .form-check-input:checked {
+    background-color: #013a71; /* Dark blue */
+    border-color: #013a71;
+}
+
+.card .btn-primary {
+    background-color: #013a71; /* Dark blue */
+    border-radius: 30px; /* Rounded button */
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.card .btn-primary:hover {
+    background-color: #7d8c6d; /* Olive green on hover */
+    transform: scale(1.02); /* Slight scaling effect */
+}
+
+.card a {
+    font-weight: 500;
+    color: #013a71; /* Dark blue */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.card a:hover {
+    color: #7d8c6d; /* Olive green on hover */
+    text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

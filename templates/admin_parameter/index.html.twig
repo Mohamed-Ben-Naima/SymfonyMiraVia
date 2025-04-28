@@ -7,8 +7,8 @@
     /* Wrapper for the settings page */
     .settings-wrapper {
         margin: 2rem auto;
-        max-width: calc(100% - 250px); /* Ajuste la largeur totale en tenant compte de la largeur de la sidebar */
-        margin-left: 250px; /* Correspond à la largeur de la sidebar */
+        max-width: calc(100% - 250px);
+        margin-left: 250px;
         font-family: 'Arial', sans-serif;
     }
 
@@ -94,12 +94,247 @@
         color: #6b7280;
     }
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .settings-wrapper {
-            margin-left: 0; /* Supprime le décalage sur les petits écrans */
-            max-width: 100%;
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeInBackdrop 0.3s ease-in-out;
+    }
+
+    @keyframes fadeInBackdrop {
+        from {
+            background-color: rgba(0, 0, 0, 0);
         }
+        to {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    .modal-content {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        margin: 5% auto;
+        padding: 2rem;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        animation: slideInModal 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes slideInModal {
+        from {
+            transform: translateY(-50px) scale(0.95);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+    }
+
+    .close {
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        color: #6b7280;
+        font-size: 1.75rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #013A71;
+        transform: scale(1.1);
+    }
+
+    /* Toggle Switch */
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+        margin-top: 15px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #d1d5db;
+        transition: 0.4s;
+        border-radius: 34px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    input:checked + .slider {
+        background-color: #013A71;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    .modal-header {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .modal-body {
+        font-size: 1rem;
+        color: #4b5563;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .modal-footer button,
+    .modal-footer a button {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        font-weight: 500;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-footer button.primary,
+    .modal-footer a button.primary {
+        background: linear-gradient(to right, #013A71, #00509e);
+        color: white;
+    }
+
+    .modal-footer button.primary:hover,
+    .modal-footer a button.primary:hover {
+        background: linear-gradient(to right, #00509e, #013A71);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-footer button.secondary {
+        background: #e5e7eb;
+        color: #374151;
+    }
+
+    .modal-footer button.secondary:hover {
+        background: #d1d5db;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .notification-settings {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 12px;
+    }
+
+    .notification-settings label {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        color: #374151;
+        cursor: pointer;
+    }
+
+    .notification-settings input[type="checkbox"] {
+        appearance: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #d1d5db;
+        border-radius: 4px;
+        margin-right: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .notification-settings input[type="checkbox"]:checked {
+        background-color: #013A71;
+        border-color: #013A71;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
+        background-size: 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .notification-settings select {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        font-size: 1rem;
+        width: 100%;
+        background: #ffffff;
+        transition: border-color 0.2s ease;
+    }
+
+    .notification-settings select:focus {
+        outline: none;
+        border-color: #013A71;
+        box-shadow: 0 0 0 3px rgba(1, 58, 113, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .modal-content {
+            width: 95%;
+            margin: 10% auto;
+            padding: 1.5rem;
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+        }
+
+        .modal-footer button,
+        .modal-footer a button {
+            padding: 0.6rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
         .settings-card {
             flex: 1 1 calc(50% - 2rem);
         }
@@ -109,53 +344,57 @@
         .settings-card {
             flex: 1 1 100%;
         }
+
+        .modal-content {
+            padding: 1rem;
+        }
     }
 </style>
 
 <div class="settings-wrapper">
     <div class="settings-header">
-        <h1>Paramètres Administrateur</h1>
-        <p>Gérez vos paramètres pour personnaliser et optimiser votre expérience.</p>
+        <h1>Paramètres</h1>
+        <p>Gérez vos paramètres</p>
     </div>
 
     <div class="settings-container">
         <!-- Card 1 -->
-        <div class="settings-card">
+        <div class="settings-card" onclick="openModal('user-settings-modal')">
             <i class="fas fa-user-cog"></i>
-            <h3>Paramètres Utilisateur</h3>
-            <p>Gérez les rôles et permissions des utilisateurs.</p>
+            <h3>Profile</h3>
+            <p>Gérez profile.</p>
         </div>
 
         <!-- Card 2 -->
-        <div class="settings-card">
+        <div class="settings-card" onclick="openModal('notifications-modal')">
             <i class="fas fa-bell"></i>
             <h3>Notifications</h3>
             <p>Configurez vos préférences de notifications.</p>
         </div>
 
         <!-- Card 3 -->
-        <div class="settings-card">
+        <div class="settings-card" onclick="openModal('database-modal')">
             <i class="fas fa-database"></i>
             <h3>Base de Données</h3>
-            <p>Effectuez des sauvegardes et gérez vos données.</p>
+            <p>Effectuez des sauvegardes et restaurez vos données.</p>
         </div>
 
         <!-- Card 4 -->
-        <div class="settings-card">
+        <div class="settings-card" onclick="openModal('customization-modal')">
             <i class="fas fa-paint-brush"></i>
             <h3>Personnalisation</h3>
             <p>Changez le thème et les couleurs de l'interface.</p>
         </div>
 
         <!-- Card 5 -->
-        <div class="settings-card">
+        <div class="settings-card" onclick="openModal('security-modal')">
             <i class="fas fa-lock"></i>
             <h3>Sécurité</h3>
             <p>Mettez à jour les mots de passe et les politiques de sécurité.</p>
         </div>
 
         <!-- Card 6 -->
-        <div class="settings-card">
+        <div class="settings-card" onclick="openModal('statistics-modal')">
             <i class="fas fa-chart-line"></i>
             <h3>Statistiques</h3>
             <p>Consultez les rapports et les performances.</p>
@@ -163,6 +402,138 @@
     </div>
 </div>
 
-<!-- Font Awesome Icons -->
+<!-- Profile Modal -->
+<div id="user-settings-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('user-settings-modal')">×</span>
+        <div class="modal-header">Modifier le Profil</div>
+        <div class="modal-body">
+            <p>Accédez à la page de modification de votre profil en cliquant sur le bouton ci-dessous.</p>
+        </div>
+        <div class="modal-footer">
+            <a href="{{ path('app_admin_profil') }}">
+                <button class="primary">Modifier le Profil</button>
+            </a>
+            <button class="secondary" onclick="closeModal('user-settings-modal')">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<!-- Notifications Modal -->
+<div id="notifications-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('notifications-modal')">×</span>
+        <div class="modal-header">Notifications</div>
+        <div class="modal-body">
+            <p>Configurez vos préférences de notifications.</p>
+            <div class="notification-settings">
+                <label>
+                    <input type="checkbox" id="email-notifications">
+                    Activer les notifications par e-mail
+                </label>
+                <label>
+                    <input type="checkbox" id="sms-notifications">
+                    Activer les notifications par SMS
+                </label>
+                <label>
+                    <input type="checkbox" id="push-notifications">
+                    Activer les notifications push
+                </label>
+                <label for="frequency">Fréquence des notifications :</label>
+                <select id="frequency">
+                    <option value="immediate">Immédiatement</option>
+                    <option value="daily">Quotidiennement</option>
+                    <option value="weekly">Hebdomadairement</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="primary" onclick="saveNotificationSettings()">Enregistrer</button>
+            <button class="secondary" onclick="closeModal('notifications-modal')">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<!-- Placeholder Modals (unchanged content, styled by new CSS) -->
+<div id="database-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('database-modal')">×</span>
+        <div class="modal-header">Base de Données</div>
+        <div class="modal-body">
+            <p>Effectuez des sauvegardes et restaurez vos données.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="primary">Sauvegarder</button>
+            <button class="secondary" onclick="closeModal('database-modal')">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<div id="customization-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('customization-modal')">×</span>
+        <div class="modal-header">Personnalisation</div>
+        <div class="modal-body">
+            <p>Changez le thème et les couleurs de l'interface.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="primary">Appliquer</button>
+            <button class="secondary" onclick="closeModal('customization-modal')">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<div id="security-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('security-modal')">×</span>
+        <div class="modal-header">Sécurité</div>
+        <div class="modal-body">
+            <p>Mettez à jour les mots de passe et les politiques de sécurité.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="primary">Mettre à jour</button>
+            <button class="secondary" onclick="closeModal('security-modal')">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<div id="statistics-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('statistics-modal')">×</span>
+        <div class="modal-header">Statistiques</div>
+        <div class="modal-body">
+            <p>Consultez les rapports et les performances.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="primary">Voir les rapports</button>
+            <button class="secondary" onclick="closeModal('statistics-modal')">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    function saveNotificationSettings() {
+        const emailEnabled = document.getElementById('email-notifications').checked;
+        const smsEnabled = document.getElementById('sms-notifications').checked;
+        const pushEnabled = document.getElementById('push-notifications').checked;
+        const frequency = document.getElementById('frequency').value;
+
+        alert(`Paramètres enregistrés :
+            E-mail : ${emailEnabled ? 'Activé' : 'Désactivé'}
+            SMS : ${smsEnabled ? 'Activé' : 'Désactivé'}
+            Push : ${pushEnabled ? 'Activé' : 'Désactivé'}
+            Fréquence : ${frequency}`);
+        closeModal('notifications-modal');
+    }
+</script>
+
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 {% endblock %}

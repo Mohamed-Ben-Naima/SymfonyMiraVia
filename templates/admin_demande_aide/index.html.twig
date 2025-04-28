@@ -175,97 +175,283 @@ tr:hover {
 .actions button.consulter-btn {
     background-color: #7D8C6D;
     color: white;
+            font-size: 14px;
+
 }
 
 .actions button.consulter-btn:hover {
     background-color: #5c7352;
+}
+
+.modal {
+    display: none; /* Par défaut, caché */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Défilement interne uniquement */
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+.modal-content {
+    position: fixed; /* Permet de positionner l'élément par rapport à la fenêtre */
+    top: 50%; /* Centre verticalement */
+    left: 50%; /* Centre horizontalement */
+    transform: translate(-50%, -50%); /* Ajuste pour centrer parfaitement */
+    background-color: #fff;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 40%;
+    height: auto; /* Ajuste automatiquement la hauteur au contenu */
+    box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto; /* Ajoute un défilement interne si nécessaire */
+    text-align: left;
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: color 0.3s ease;
+}
+
+.modal-header .close-btn:hover {
+    color: #ff0000;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.modal-body p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-footer button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-footer .download-btn {
+    background-color: #013A71;
+    color: white;
+}
+
+.modal-footer .download-btn:hover {
+    background-color: rgb(24, 95, 162);
+}
+
+.modal-footer .cancel-btn {
+    background-color: #7D8C6D;
+    color: white;
+}
+
+.modal-footer .cancel-btn:hover {
+    background-color: #5c7352;
+}
+
+body.no-scroll {
+    overflow: hidden; /* Désactive le défilement global */
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        margin: 2% auto;
+    }
 }
 </style>
 
 <div class="example-wrapper">
     <h1>Liste des demandes d'aides</h1>
 
-    <div class="header">
-        <div class="search-box">
-            <input type="text" id="search" placeholder="Rechercher ...">
-        </div>
-
-        <select id="statusFilter">
-            <option value="">Tous les statuts</option>
-            <option value="Actif">Refusé</option>
-            <option value="Inactif">Accepté</option>
-        </select>
+<div class="header">
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Rechercher ...">
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nom de client</th>
-                <th>Nom de partenaire</th>
-                <th>Type d'aide</th>
-                <th>Description</th>
-                <th>Montant</th>
-                <th>Date de demande</th>
-                <th>Preuve</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="userTable">
-            {% for i in 1..30 %}
-            <tr>
-                <td>{{ i }}</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>Adresse {{ i }}</td>
-                <td>Adresse {{ i }}</td>
-                <td>Adresse {{ i }}</td>
-                <td>2025-12-31</td>
-                <td>Commerce</td>
-                <td>{{ i is even ? 'Accepté' : 'Refusé' }}</td>
-                <td class="actions">
-                   <button class="consulter-btn" onclick="editUser({{ i }})">Consulter</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <select id="statusFilter">
+        <option value="">Tous les statuts</option>
+        <option value="En attente">En attente</option>
+        <option value="En traitement">En traitement</option>
+        <option value="Acceptée">Acceptée</option>
+        <option value="Refusée">Refusée</option>
+    </select>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nom de client</th>
+            <th>Nom de partenaire</th>
+            <th>Type d'aide</th>
+            <th>Description</th>
+            <th>Montant</th>
+            <th>Date de demande</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="userTable">
+        {% for demande in demandesAide %}
+        <tr>
+            <td>{{ demande.id_demande }}</td>
+            <td>{{ demande.client_nom }} {{ demande.client_prenom }}</td>
+            <td>{{ demande.partenaire_nom }} {{ demande.partenaire_prenom }}</td>
+            <td>{{ demande.type_aide }}</td>
+            <td>{{ demande.description|length > 30 ? demande.description|slice(0, 30) ~ '...' : demande.description }}</td>
+            <td>{{ demande.montant_demande }}</td>
+            <td>{{ demande.date_demande|date('Y-m-d') }}</td>
+            <td>{{ demande.status }}</td>
+            <td class="actions">
+     <button 
+                        class="consulter-btn" 
+                        data-id="{{ demande.id_demande }}"
+                        data-client-nom="{{ demande.client_nom }}"
+                        data-client-prenom="{{ demande.client_prenom }}"
+                        data-partenaire-nom="{{ demande.partenaire_nom }}"
+                        data-partenaire-prenom="{{ demande.partenaire_prenom }}"
+                        data-type-aide="{{ demande.type_aide }}"
+                        data-description="{{ demande.description }}"
+                        data-montant="{{ demande.montant_demande }}"
+                        data-date-demande="{{ demande.date_demande|date('Y-m-d') }}"
+                        data-status="{{ demande.status }}"
+                        data-preuves="{{ demande.preuves|default('') }}"
+                        onclick="viewDetails(this)"
+                    >
+                        Consulter
+                    </button>            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<!-- Modal -->
+<div id="detailsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Détail de la demande d'aide</span>
+            <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- Contenu dynamique -->
+        </div>
+        <div class="modal-footer">
+            <button class="download-btn" id="downloadButton">Télécharger la preuve</button>
+            <button class="cancel-btn" onclick="closeModal()">Fermer</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    function addUser() {
-        alert('Ajouter un nouvel utilisateur');
-    }
 
-    function editUser(id) {
-        alert('Modifier utilisateur #' + id);
-    }
 
-    function deleteUser(id) {
-        if (confirm('Voulez-vous vraiment supprimer l’utilisateur #' + id + ' ?')) {
-            alert('Utilisateur supprimé');
+    let currentId;
+
+    function viewDetails(button) {
+        // Récupérer les données depuis les attributs `data-*`
+        const clientNom = button.getAttribute('data-client-nom');
+        const clientPrenom = button.getAttribute('data-client-prenom');
+        const partenaireNom = button.getAttribute('data-partenaire-nom');
+        const partenairePrenom = button.getAttribute('data-partenaire-prenom');
+        const typeAide = button.getAttribute('data-type-aide');
+        const description = button.getAttribute('data-description');
+        const montant = button.getAttribute('data-montant');
+        const dateDemande = button.getAttribute('data-date-demande');
+        const status = button.getAttribute('data-status');
+        const preuves = button.getAttribute('data-preuves');
+
+        // Mettre à jour le contenu du modal
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = `
+            <p><strong>Nom de client :</strong> ${clientNom} ${clientPrenom}</p>
+            <p><strong>Nom de partenaire :</strong> ${partenaireNom} ${partenairePrenom}</p>
+            <p><strong>Type d'aide :</strong> ${typeAide}</p>
+            <p><strong>Description :</strong> ${description}</p>
+            <p><strong>Montant :</strong> ${montant}€</p>
+            <p><strong>Date de demande :</strong> ${dateDemande}</p>
+            <p><strong>Status :</strong> ${status}</p>
+            <p><strong>Preuves :</strong> ${
+                preuves 
+                ? `<a href="${preuves}" target="_blank">Télécharger la preuve</a>` 
+                : 'Aucune preuve disponible'
+            }</p>
+        `;
+
+        // Afficher ou masquer le bouton de téléchargement
+        const downloadButton = document.getElementById('downloadButton');
+        if (preuves) {
+            downloadButton.style.display = 'inline-block';
+            downloadButton.onclick = () => window.open(preuves, '_blank');
+        } else {
+            downloadButton.style.display = 'none';
         }
+
+        // Afficher le modal
+        const modal = document.getElementById('detailsModal');
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
     }
+
+    function closeModal() {
+        document.body.style.overflow = ''; // Réactiver le scroll
+        document.getElementById('detailsModal').style.display = 'none';
+    }
+
+
 
     document.getElementById('search').addEventListener('input', filterTable);
     document.getElementById('statusFilter').addEventListener('change', filterTable);
 
     function filterTable() {
         const searchFilter = document.getElementById('search').value.toLowerCase();
-        const statusFilter = document.getElementById('statusFilter').value;
+        const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
         const rows = document.querySelectorAll('#userTable tr');
 
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
-            const textMatch = Array.from(cells).slice(0, 9)
+            const textMatch = Array.from(cells).slice(0, 8)
                 .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
 
-            const status = cells[8].textContent.trim();
+            const status = cells[7]?.textContent.toLowerCase().trim();
             const statusMatch = statusFilter === "" || status === statusFilter;
 
             row.style.display = (textMatch && statusMatch) ? '' : 'none';
         });
     }
+
 </script>
 {% endblock %}

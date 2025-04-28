@@ -1,0 +1,40 @@
+{% extends 'Partenaire/basePartner.html.twig' %}
+
+{% block title %}Ajouter une demande{% endblock %}
+
+{% block body %}
+<div class="content">
+  <h1 class="mb-4" style="color: #013a71; font-size: 30px;">Ajouter une demande</h1>
+
+  <form action="{{ path('add_demande') }}" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="id_client" class="form-label">ID Client</label>
+      <input type="number" class="form-control" id="id_client" name="id_client" required>
+    </div>
+    <div class="mb-3">
+      <label for="type_aide" class="form-label">Type d'aide</label>
+      <select class="form-select" id="type_aide" name="type_aide" required>
+        <option value="financiere">Financière</option>
+        <option value="non_financiere">Non Financière</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="montant_demande" class="form-label">Montant</label>
+      <input type="number" class="form-control" id="montant_demande" name="montant_demande" required>
+    </div>
+    <div class="mb-3">
+      <label for="date_demande" class="form-label">Date</label>
+      <input type="date" class="form-control" id="date_demande" name="date_demande" required>
+    </div>
+    <div class="mb-3">
+      <label for="preuve" class="form-label">Preuve</label>
+      <input type="file" class="form-control" id="preuve" name="preuve">
+    </div>
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+  </form>
+</div>
+{% endblock %}
