@@ -13,7 +13,24 @@ class DemandesAideRepository extends ServiceEntityRepository
         parent::__construct($registry, DemandesAide::class);
     }
 
-    // Create (Add a new demande)
+    public function findByPartenaire(int $idPartenaire): array
+{
+    $conn = $this->getEntityManager()->getConnection();
+
+    $sql = '
+        SELECT 
+            da.*, 
+            u.nom AS client_nom, -- Récupère le nom du client
+            u.id_utilisateur AS client_id 
+        FROM demandes_aide da
+        JOIN utilisateurs u ON da.id_client = u.id_utilisateur
+        WHERE da.id_partenaire = :id_partenaire ' ;
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->executeQuery(['id_partenaire' => $idPartenaire]);
+
+    return $result->fetchAllAssociative();
+}
+
     public function addDemande(DemandesAide $demande, bool $flush = true): void
     {
         $this->_em->persist($demande);
@@ -22,17 +39,6 @@ class DemandesAideRepository extends ServiceEntityRepository
         }
     }
 
-    // Read (Find all demandes for a specific partenaire)
-    public function findByPartenaire(int $idPartenaire): array
-    {
-        return $this->createQueryBuilder('d')
-            ->where('d.idPartenaire = :id')
-            ->setParameter('id', $idPartenaire)
-            ->getQuery()
-            ->getResult();
-    }
-
-    // Update (Save changes to an existing demande)
     public function updateDemande(DemandesAide $demande, bool $flush = true): void
     {
         if ($flush) {
@@ -40,7 +46,6 @@ class DemandesAideRepository extends ServiceEntityRepository
         }
     }
 
-    // Delete (Remove a demande)
     public function deleteDemande(DemandesAide $demande, bool $flush = true): void
     {
         $this->_em->remove($demande);

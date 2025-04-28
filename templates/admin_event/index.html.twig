@@ -10,15 +10,25 @@ html, body {
     padding: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #fdfdfd;
-    overflow: hidden; /* Supprime le scroll global */
+    overflow: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+
+body.no-scroll {
+    overflow: hidden;
 }
 
 .example-wrapper {
     margin: 0 auto;
     padding: 20px;
     margin-left: 15%;
-    max-height: calc(100vh - 40px); /* Ajuste la hauteur au viewport */
-    overflow: visible; /* Supprime le scroll interne */
+    max-height: calc(100vh - 40px);
+    overflow: visible;
 }
 
 .example-wrapper h1 {
@@ -26,6 +36,10 @@ html, body {
     font-size: 30px;
     margin-bottom: 40px;
     color: rgb(0, 0, 0);
+}
+
+body.dark-mode .example-wrapper h1 {
+    color: #e2e8f0;
 }
 
 .header {
@@ -48,21 +62,30 @@ html, body {
     border: 1px solid #7D8C6D;
     border-radius: 6px;
     font-size: 14px;
+    background-color: #fff;
+    color: #000;
 }
 
-#statusFilter {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #7D8C6D;
-    font-size: 14px;
-    margin-left: -1%;
+body.dark-mode .search-box input {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
-#etatFilter {
+
+#statusFilter, #etatFilter {
     padding: 8px;
     border-radius: 6px;
     border: 1px solid #7D8C6D;
     font-size: 14px;
     margin-left: -1%;
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode #statusFilter, body.dark-mode #etatFilter {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .header button {
@@ -80,21 +103,34 @@ html, body {
     background-color: #5c7352;
 }
 
+body.dark-mode .header button {
+    background-color: #4a90e2;
+}
+
+body.dark-mode .header button:hover {
+    background-color: #357abd;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
     background-color: white;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-    table-layout: auto; /* Allow columns to adjust dynamically */
-    word-wrap: break-word; /* Prevent text overflow */
+    table-layout: auto;
+    word-wrap: break-word;
+}
+
+body.dark-mode table {
+    background-color: #2d3748;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 th, td {
     padding: 10px;
     text-align: left;
-    vertical-align: middle; /* Align content vertically in the middle */
-    word-wrap: break-word; /* Prevent text overflow */
+    vertical-align: middle;
+    word-wrap: break-word;
 }
 
 th {
@@ -102,8 +138,17 @@ th {
     color: black;
 }
 
+body.dark-mode th {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
 tr:nth-child(even) {
     background-color: #f5f5f5;
+}
+
+body.dark-mode tr:nth-child(even) {
+    background-color: #2d3748;
 }
 
 tr:hover {
@@ -111,29 +156,43 @@ tr:hover {
     color: white;
 }
 
+body.dark-mode tr:hover {
+    background-color: #4a90e2;
+    color: #e2e8f0;
+}
+
 .actions {
     display: flex;
-    justify-content: center; /* Centre les boutons horizontalement */
-    align-items: center; /* Centre les boutons verticalement */
-    gap: 10px; /* Ajoute un espacement uniforme entre les boutons */
-    flex-wrap: nowrap; /* Empêche les boutons de se placer sur plusieurs lignes */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
 }
 
 .actions button {
     background-color: #ccc;
     border: none;
-    padding: 8px 16px; /* Taille cohérente pour les boutons */
+    padding: 8px 16px;
     font-size: 12px;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    white-space: nowrap; /* Empêche les boutons de passer à la ligne */
-    text-align: center; /* Centre le texte dans les boutons */
+    white-space: nowrap;
+    text-align: center;
+}
+
+body.dark-mode .actions button {
+    background-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .actions button:hover {
     background-color: #999;
     color: white;
+}
+
+body.dark-mode .actions button:hover {
+    background-color: #718096;
 }
 
 @media (max-width: 992px) {
@@ -150,12 +209,13 @@ tr:hover {
 
     .search-box,
     #statusFilter,
+    #etatFilter,
     .header button {
         width: 100%;
         margin: 5px 0;
     }
 
-    #statusFilter {
+    #statusFilter, #etatFilter {
         margin-left: 0;
     }
 
@@ -181,7 +241,7 @@ tr:hover {
 @media (max-width: 768px) {
     table {
         display: block;
-        overflow-x: auto; /* Permet un défilement horizontal si nécessaire */
+        overflow-x: auto;
         white-space: nowrap;
     }
 }
@@ -191,54 +251,87 @@ tr:hover {
     color: white;
 }
 
+body.dark-mode .actions button.consulter-btn {
+    background-color: #4a90e2;
+}
+
 .actions button.consulter-btn:hover {
     background-color: #5c7352;
 }
+
+body.dark-mode .actions button.consulter-btn:hover {
+    background-color: #357abd;
+}
+
 .actions button.activer-btn {
-    background-color: #013A71; /* Green color for activate button */
+    background-color: #013A71;
     color: white;
 }
+
+body.dark-mode .actions button.activer-btn {
+    background-color: #4a90e2;
+}
+
 .actions button.activer-btn:hover {
-    background-color:rgb(24, 95, 162);
+    background-color: rgb(24, 95, 162);
 }
+
+body.dark-mode .actions button.activer-btn:hover {
+    background-color: #357abd;
+}
+
 .actions button.bloquer-btn {
-    background-color:rgb(146, 151, 155); /* Red color for block button */
+    background-color: rgb(146, 151, 155);
     color: white;
+}
+
+body.dark-mode .actions button.bloquer-btn {
+    background-color: #718096;
 }
 
 .actions button.bloquer-btn:hover {
-    background-color:rgb(116, 118, 120);
+    background-color: rgb(116, 118, 120);
+}
+
+body.dark-mode .actions button.bloquer-btn:hover {
+    background-color: #4a5568;
 }
 
 .modal {
-    display: none; /* Par défaut, caché */
+    display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Défilement interne uniquement */
-    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-    position: fixed; /* Permet de positionner l'élément par rapport à la fenêtre */
-    top: 50%; /* Centre verticalement */
-    left: 50%; /* Centre horizontalement */
-    transform: translate(-50%, -50%); /* Ajuste pour centrer parfaitement */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #fff;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     width: 40%;
-    height: auto; /* Ajuste automatiquement la hauteur au contenu */
+    height: auto;
     box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
     max-width: 600px;
     max-height: 80vh;
-    overflow-y: auto; /* Ajoute un défilement interne si nécessaire */
+    overflow-y: auto;
     text-align: left;
+}
+
+body.dark-mode .modal-content {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .modal-header {
@@ -249,6 +342,10 @@ tr:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+body.dark-mode .modal-header {
+    color: #e2e8f0;
 }
 
 .modal-header .close-btn {
@@ -262,6 +359,10 @@ tr:hover {
     transition: color 0.3s ease;
 }
 
+body.dark-mode .modal-header .close-btn {
+    color: #e2e8f0;
+}
+
 .modal-header .close-btn:hover {
     color: #ff0000;
 }
@@ -269,6 +370,10 @@ tr:hover {
 .modal-body {
     margin-bottom: 20px;
     font-size: 14px;
+}
+
+body.dark-mode .modal-body {
+    color: #e2e8f0;
 }
 
 .form-group {
@@ -282,6 +387,9 @@ label {
     color: #333;
 }
 
+body.dark-mode label {
+    color: #e2e8f0;
+}
 
 textarea {
     width: 100%;
@@ -292,6 +400,13 @@ textarea {
     background-color: #f9f9f9;
     resize: vertical;
 }
+
+body.dark-mode textarea {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+}
+
 .modal-body p {
     margin: 10px 0;
     line-height: 1.6;
@@ -317,8 +432,16 @@ textarea {
     color: white;
 }
 
+body.dark-mode .modal-footer .download-btn {
+    background-color: #4a90e2;
+}
+
 .modal-footer .download-btn:hover {
     background-color: rgb(24, 95, 162);
+}
+
+body.dark-mode .modal-footer .download-btn:hover {
+    background-color: #357abd;
 }
 
 .modal-footer .cancel-btn {
@@ -326,20 +449,33 @@ textarea {
     color: white;
 }
 
-.modal-footer .cancel-btn:hover {
-    background-color:rgb(24, 95, 162);
+body.dark-mode .modal-footer .cancel-btn {
+    background-color: #4a90e2;
 }
+
+.modal-footer .cancel-btn:hover {
+    background-color: rgb(24, 95, 162);
+}
+
+body.dark-mode .modal-footer .cancel-btn:hover {
+    background-color: #357abd;
+}
+
 .modal-footer .save-btn {
     background-color: #7D8C6D;
     color: white;
+}
+
+body.dark-mode .modal-footer .save-btn {
+    background-color: #4a90e2;
 }
 
 .modal-footer .save-btn:hover {
     background-color: #5c7352;
 }
 
-body.no-scroll {
-    overflow: hidden; /* Désactive le défilement global */
+body.dark-mode .modal-footer .save-btn:hover {
+    background-color: #357abd;
 }
 
 @media (max-width: 768px) {
@@ -348,82 +484,98 @@ body.no-scroll {
         margin: 2% auto;
     }
 }
+
+.toggle-dark-mode {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #7D8C6D;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-dark-mode:hover {
+    background-color: #5c7352;
+}
+
+body.dark-mode .toggle-dark-mode {
+    background-color: #4a90e2;
+}
+
+body.dark-mode .toggle-dark-mode:hover {
+    background-color: #357abd;
+}
 </style>
 
 <div class="example-wrapper">
     <h1>Liste des évènements</h1>
 
-<div class="header">
-    <div class="search-box">
-        <input type="text" id="search" placeholder="Rechercher ...">
+    <div class="header">
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Rechercher ...">
+        </div>
+        <select id="statusFilter">
+            <option value="">Tous les statuts</option>
+            <option value="En cours">En cours</option>
+            <option value="Annulé">Annulé</option>
+            <option value="Terminé">Terminé</option>
+        </select>
+        <select id="etatFilter">
+            <option value="">Tous les états</option>
+            <option value="Actif">Actif</option>
+            <option value="Bloqué">Bloqué</option>
+        </select>
     </div>
 
-    <select id="statusFilter">
-        <option value="">Tous les statuts</option>
-        <option value="En cours">En cours</option>
-        <option value="Annulé">Annulé</option>
-        <option value="Terminé">Terminé</option>
-    </select>
-
-    <select id="etatFilter">
-        <option value="">Tous les états</option>
-        <option value="Actif">Actif</option>
-        <option value="Bloqué">Bloqué</option>
-    </select>
-</div>
-
     <table>
-<thead>
-    <tr>
-        <th>#</th>
-        <th>Titre</th>
-        <th>Nom du Partenaire</th>
-        <th>Description</th>
-        <th>Date d'évènement</th>
-        <th>Lieu</th>
-        <th>Status</th>
-        <th>État</th>
-        <th>Image</th>
-        <th style="width: 180px;">Action</th> <!-- Adjust width for the actions column -->
-    </tr>
-</thead>
-<tbody id="userTable">
-    {% for evenement in evenements %}
-    <tr>
-        <td>{{ evenement.idEvenement }}</td>
-        <td>{{ evenement.titre }}</td>
-        <td>{{ evenement.nomPartenaire }} {{ evenement.prenomPartenaire }}</td>
-        <td>{{ evenement.description|length > 30 ? evenement.description|slice(0, 30) ~ '...' : evenement.description }}</td>
-        <td>{{ evenement.dateEvenement ? evenement.dateEvenement|date('Y-m-d H:i:s') : 'N/A' }}</td>
-        <td>{{ evenement.lieu }}</td>
-        <td>{{ evenement.status }}</td>
-        <td id="etat-{{ evenement.idEvenement }}">{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}</td>
-        <td>
-            {% if evenement.imagename %}
-                <img src="{{ asset('images/' ~ evenement.imagename) }}" alt="Image {{ evenement.titre }}" style="width: 50px; height: auto;">
-            {% else %}
-                N/A
-            {% endif %}
-        </td>
-        <td class="actions">
-            <!-- Consulter button -->
-            <button class="consulter-btn" onclick="viewEventDetails({{ evenement.idEvenement }})">
-                Consulter
-            </button>
-            
-            <!-- Activer button -->
-            <button class="activer-btn" onclick="activateEvent({{ evenement.idEvenement }}, {{ evenement.estBloque }})">
-                Activer
-            </button>
-            
-            <!-- Bloquer button -->
-            <button class="bloquer-btn" onclick="blockEvent({{ evenement.idEvenement }}, {{ evenement.estBloque }})">
-                Bloquer
-            </button>
-        </td>
-    </tr>
-    {% endfor %}
-</tbody>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Titre</th>
+                <th>Nom du Partenaire</th>
+                <th>Description</th>
+                <th>Date d'évènement</th>
+                <th>Lieu</th>
+                <th>Status</th>
+                <th>État</th>
+                <th>Image</th>
+                <th style="width: 180px;">Action</th>
+            </tr>
+        </thead>
+        <tbody id="userTable">
+            {% for evenement in evenements %}
+            <tr>
+                <td>{{ evenement.idEvenement }}</td>
+                <td>{{ evenement.titre }}</td>
+                <td>{{ evenement.nomPartenaire }} {{ evenement.prenomPartenaire }}</td>
+                <td>{{ evenement.description|length > 30 ? evenement.description|slice(0, 30) ~ '...' : evenement.description }}</td>
+                <td>{{ evenement.dateEvenement ? evenement.dateEvenement|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                <td>{{ evenement.lieu }}</td>
+                <td>{{ evenement.status }}</td>
+                <td id="etat-{{ evenement.idEvenement }}">{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}</td>
+                <td>
+                    {% if evenement.imagename %}
+                        <img src="{{ asset('images/' ~ evenement.imagename) }}" alt="Image {{ evenement.titre }}" style="width: 50px; height: auto;">
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td class="actions">
+                    <button class="consulter-btn" onclick="viewEventDetails({{ evenement.idEvenement }})">
+                        Consulter
+                    </button>
+                    <button class="activer-btn" style="display: {{ evenement.estBloque == 1 ? 'inline-block' : 'none' }}" onclick="toggleEventStatus({{ evenement.idEvenement }}, {{ evenement.estBloque }})">
+                        Activer
+                    </button>
+                    <button class="bloquer-btn" style="display: {{ evenement.estBloque == 0 ? 'inline-block' : 'none' }}" onclick="toggleEventStatus({{ evenement.idEvenement }}, {{ evenement.estBloque }})">
+                        Bloquer
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </div>
 
@@ -459,83 +611,100 @@ body.no-scroll {
 </div>
 
 <script>
-let currentEventId;
-
-function blockEvent(id, estBloque) {
-    currentEventId = id;
-    document.body.classList.add('no-scroll');
-    document.getElementById('blockModal').style.display = 'block';
-
-    const modalMessage = document.getElementById('modalMessage');
-    const buttonText = estBloque == 1 ? 'Activer' : 'Bloquer';
-
-    modalMessage.innerText = `Voulez-vous vraiment ${buttonText.toLowerCase()} cet évènement ?`;
-    modalMessage.style.color = "#013A71"; // Default blue color
-    document.querySelectorAll('#reason input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
-    document.getElementById('explanation').value = '';
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 }
 
-function closeModal() {
-    document.body.classList.remove('no-scroll');
-    document.getElementById('blockModal').style.display = 'none';
-}
+document.addEventListener('DOMContentLoaded', function() {
+    // Apply dark mode if previously selected
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
 
-function saveBlock() {
-    const reasons = Array.from(document.querySelectorAll('#reason input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.value);
-    const explanation = document.getElementById('explanation').value.trim();
+    let currentEventId;
 
-    if (reasons.length === 0 || explanation === "") {
+    function toggleEventStatus(id, estBloque) {
+        currentEventId = id;
+        document.body.classList.add('no-scroll');
+        document.getElementById('blockModal').style.display = 'block';
+
         const modalMessage = document.getElementById('modalMessage');
-        modalMessage.innerText = "Veuillez sélectionner une raison et fournir une explication.";
-        modalMessage.style.color = "red"; // Highlight error
-        return;
+        const action = estBloque == 1 ? 'Activer' : 'Bloquer';
+        modalMessage.innerText = `Voulez-vous vraiment ${action.toLowerCase()} cet évènement ?`;
+        modalMessage.style.color = "#013A71";
+        document.querySelectorAll('#reason input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+        document.getElementById('explanation').value = '';
     }
 
-    const etatCell = document.getElementById(`etat-${currentEventId}`);
-    const actionButton = document.querySelector(`.actions button[onclick*="${currentEventId}"]`);
-
-    if (etatCell.innerText === "Actif") {
-        etatCell.innerText = "Bloqué";
-        actionButton.innerText = "Activer";
-    } else {
-        etatCell.innerText = "Actif";
-        actionButton.innerText = "Bloquer";
+    function closeModal() {
+        document.body.classList.remove('no-scroll');
+        document.getElementById('blockModal').style.display = 'none';
     }
 
-    const modalMessage = document.getElementById('modalMessage');
-    modalMessage.innerText = `L'état de l'évènement #${currentEventId} a été modifié avec succès.`;
-    modalMessage.style.color = "green"; // Success message
+    function saveBlock() {
+        const reasons = Array.from(document.querySelectorAll('#reason input[type="checkbox"]:checked'))
+            .map(checkbox => checkbox.value);
+        const explanation = document.getElementById('explanation').value.trim();
 
-    setTimeout(closeModal, 3000); // Close modal after 3 seconds
-}
-
-document.getElementById('search').addEventListener('input', filterTable);
-document.getElementById('statusFilter').addEventListener('change', filterTable);
-
-function filterTable() {
-    const searchFilter = document.getElementById('search').value.toLowerCase();
-    const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-    const etatFilter = document.getElementById('etatFilter').value.toLowerCase();
-    const rows = document.querySelectorAll('#userTable tr');
-
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-
-        // Vérifiez que la ligne contient suffisamment de colonnes
-        if (cells.length < 8) {
-            return; // Ignorez les lignes avec un nombre insuffisant de colonnes
+        if (reasons.length === 0 || explanation === "") {
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.innerText = "Veuillez sélectionner une raison et fournir une explication.";
+            modalMessage.style.color = "red";
+            return;
         }
 
-        const textMatch = Array.from(cells).slice(0, 6).some(cell => cell.textContent.toLowerCase().includes(searchFilter));
-        const status = cells[6].textContent.trim().toLowerCase(); // Status dans la 7e colonne (index 6)
-        const statusMatch = statusFilter === "" || status === statusFilter;
-        const etat = cells[7].textContent.trim().toLowerCase(); // État dans la 8e colonne (index 7)
-        const etatMatch = etatFilter === "" || etat === etatFilter;
+        const etatCell = document.getElementById(`etat-${currentEventId}`);
+        const activerButton = document.querySelector(`.activer-btn[onclick*="toggleEventStatus(${currentEventId},"]`);
+        const bloquerButton = document.querySelector(`.bloquer-btn[onclick*="toggleEventStatus(${currentEventId},"]`);
 
-        // Affichez la ligne si elle correspond à tous les filtres
-        row.style.display = (textMatch && statusMatch && etatMatch) ? '' : 'none';
-    });
-}
+        if (etatCell.innerText === "Actif") {
+            etatCell.innerText = "Bloqué";
+            activerButton.style.display = 'inline-block';
+            bloquerButton.style.display = 'none';
+        } else {
+            etatCell.innerText = "Actif";
+            activerButton.style.display = 'none';
+            bloquerButton.style.display = 'inline-block';
+        }
+
+        const modalMessage = document.getElementById('modalMessage');
+        modalMessage.innerText = `L'état de l'évènement #${currentEventId} a été modifié avec succès.`;
+        modalMessage.style.color = "green";
+
+        setTimeout(closeModal, 3000);
+    }
+
+    document.getElementById('search').addEventListener('input', filterTable);
+    document.getElementById('statusFilter').addEventListener('change', filterTable);
+    document.getElementById('etatFilter').addEventListener('change', filterTable);
+
+    function filterTable() {
+        const searchFilter = document.getElementById('search').value.toLowerCase();
+        const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+        const etatFilter = document.getElementById('etatFilter').value.toLowerCase();
+        const rows = document.querySelectorAll('#userTable tr');
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length < 8) return;
+
+            const textMatch = Array.from(cells).slice(0, 6)
+                .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
+            const status = cells[6]?.textContent.trim().toLowerCase() || '';
+            const statusMatch = statusFilter === "" || status === statusFilter;
+            const etat = cells[7]?.textContent.trim().toLowerCase() || '';
+            const etatMatch = etatFilter === "" || etat === etatFilter;
+
+            row.style.display = (textMatch && statusMatch && etatMatch) ? '' : 'none';
+        });
+    }
+
+    // Expose functions globally for HTML onclick
+    window.toggleEventStatus = toggleEventStatus;
+    window.closeModal = closeModal;
+    window.saveBlock = saveBlock;
+    // viewEventDetails is assumed to be defined elsewhere
+});
 </script>
 {% endblock %}

@@ -86,10 +86,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         'today',
         message: 'La date de naissance ne peut pas être dans le futur.'
     )]
-    #[Assert\Type(
-        type: \DateTimeInterface::class,
-        message: 'La date doit être valide et au format attendu.'
-    )]
+    
     #[Assert\LessThanOrEqual(
         'today',
         message: 'La date de naissance ne peut pas être dans le futur.'
@@ -99,8 +96,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $adresse_utilisateur = null;
 
-    #[ORM\Column(type: 'json')]
-    private array $roles = ['ROLE_USER'];
+
 
     // Getters and Setters...
 

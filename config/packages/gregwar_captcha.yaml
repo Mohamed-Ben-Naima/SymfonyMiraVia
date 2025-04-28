@@ -1,0 +1,8 @@
+gregwar_captcha:
+    length: 5 # 
+    charset: 'abcdefghijklmnopqrstuvwxyz0123456789' # Caractères autorisés
+    width: 150
+    height: 50
+    quality: 90
+    distortion: true
+    interpolation: true

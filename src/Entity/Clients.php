@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'clients')]
 #[ORM\Entity(repositoryClass: ClientsRepository::class)]
-class Clients
+class Clients 
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

@@ -2,45 +2,162 @@
 
 {% block title %}Demandes d'aide{% endblock %}
 
+{% block styles %}
+<style>
+  .w-75 {
+      width: 84% !important;
+  }
+  .alert-success {
+      display: none;
+  }
+  /* Style personnalisé pour la barre de recherche */
+  .search-bar {
+      position: relative;
+      max-width: 300px;
+      width: 100%;
+  }
+
+  .search-bar input {
+      padding-left: 35px; /* Espace pour l'icône */
+      border: none; /* Pas de bordure */
+      border-radius: 5px; /* Coins arrondis */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre */
+      height: 38px; /* Hauteur de l'input */
+  }
+
+  .search-bar input:focus {
+      outline: none; /* Pas de contour bleu */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Ombre plus marquée au focus */
+  }
+
+  .search-bar .icon {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: #007bff; /* Couleur de l'icône */
+  }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="content">
-  <h1 class="mb-4" style="color: #013a71; font-size: 30px;">Liste des demandes d'aide</h1>
-  <div class="table-responsive">
-    <!-- Bouton pour afficher le formulaire dans une modale -->
-    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addDemandeModal">Ajouter une demande</button>
+  <!-- Titre centré -->
+  <h1 class="text-center mb-4" style="color: #013a71; font-size: 35px;">Liste des demandes d'aide</h1>
 
-    <table class="table table-bordered table-striped">
-      <thead class="thead-light">
-        <tr>
-          <th>Nom de client</th>
-          <th>Type d'aide</th>
-          <th>Description</th>
-          <th>Montant</th>
-          <th>Date de demande</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for aide in demandes_aide %}
-        <tr>
-          <td>{{ aide.client_nom }} {{ aide.client_prenom }}</td>
-          <td>{{ aide.type_aide }}</td>
-          <td>{{ aide.description }}</td>
-          <td>{{ aide.montant_demande }} €</td>
-          <td>{{ aide.date_demande|date('Y-m-d') }}</td>
-          <td>{{ aide.status }}</td>
-          <td>
-            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal" onclick="populateModal(this)">Consulter</button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <!-- Card blanche -->
+  <div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border: none;">
+    <div class="card-body">
+      
+      <!-- Barre de recherche, sélection de statut et bouton "Ajouter une demande" -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Barre de recherche -->
+        <input 
+          type="text" 
+          id="searchBar" 
+          class="form-control me-2" 
+          placeholder="Rechercher une demande..."
+          style="max-width: 300px;"
+        >
+
+        <!-- Sélection de statut et bouton "Ajouter une demande" -->
+        <div class="d-flex align-items-center">
+          <select id="statusFilter" class="form-select me-2" style="max-width: 200px;">
+            <option value="">Tous les statuts</option>
+            <option value="en_attente">En attente</option>
+            <option value="acceptee">Acceptée</option>
+            <option value="refusee">Refusée</option>
+            <option value="en_traitement">En traitement</option>
+          </select>
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDemandeModal">
+            Ajouter
+          </button>
+        </div>
+      </div>
+
+      <!-- Tableau -->
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Type d'aide</th>
+              <th>Description</th>
+              <th>Montant</th>
+              <th>Date de demande</th>
+              <th>Status</th>
+              <th>Preuves</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="demandesTable">
+            {% for aide in demandes_aide %}
+            <tr>
+              <!-- Client -->
+              <td><strong>{{ aide.client_nom }}</strong></td>
+
+              <!-- Type d'aide -->
+              <td><strong>{{ aide.type_aide }}</strong></td>
+
+              <!-- Description -->
+              <td>{{ aide.description }}</td>
+
+              <!-- Montant -->
+              <td>{{ aide.montant_demande }} €</td>
+
+              <!-- Date -->
+              <td>{{ aide.date_demande|date('d M Y') }}</td>
+
+              <!-- Status -->
+              <td>
+                {% if aide.status == 'en_attente' %}
+                  <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important; color:rgb(255, 191, 0) !important;">En attente</span>
+                {% elseif aide.status == 'acceptee' %}
+                  <span class="badge bg-success">Acceptée</span>
+                {% elseif aide.status == 'refusee' %}
+                  <span class="badge bg-danger">Refusée</span>
+                {% elseif aide.status == 'en_traitement' %}
+                  <span class="badge bg-info text-dark">En traitement</span>
+                {% endif %}
+              </td>
+
+              <!-- Preuves -->
+              <td>
+                {% if aide.preuves %}
+                  <img 
+                    src="{{ asset('uploads/preuves/' ~ aide.preuves) }}" 
+                    alt="Preuve" 
+                    style="max-width: 50px; max-height: 50px;"
+                  >
+                {% else %}
+                  <span class="text-muted">Aucune preuve</span>
+                {% endif %}
+              </td>
+
+              <!-- Actions -->
+              <td style="padding-left: 20px">
+                <!-- Icône pour ouvrir la fenêtre modale -->
+                <i 
+                  class="bi bi-eye" 
+                  style="cursor: pointer; font-size: 1.2rem;" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#viewDemandeModal{{ loop.index }}"
+                ></i>
+              </td>
+            </tr>
+
+            <!-- Inclure le fichier de consultation -->
+            {% include 'Partenaire/dm_aide_partner/consulter.html.twig' %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- Modal pour ajouter une demande -->
+<!-- Fenêtre modale pour ajouter une demande -->
 <div class="modal fade" id="addDemandeModal" tabindex="-1" aria-labelledby="addDemandeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -48,41 +165,91 @@
         <h5 class="modal-title" id="addDemandeModalLabel">Ajouter une demande</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="{{ path('add_demande') }}" method="post" enctype="multipart/form-data">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="id_client" class="form-label">ID Client</label>
-            <input type="number" class="form-control" id="id_client" name="id_client" required>
-          </div>
-          <div class="mb-3">
-            <label for="type_aide" class="form-label">Type d'aide</label>
-            <select class="form-select" id="type_aide" name="type_aide" required>
-              <option value="financiere">Financière</option>
-              <option value="non_financiere">Non Financière</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="montant_demande" class="form-label">Montant</label>
-            <input type="number" class="form-control" id="montant_demande" name="montant_demande" required>
-          </div>
-          <div class="mb-3">
-            <label for="date_demande" class="form-label">Date</label>
-            <input type="date" class="form-control" id="date_demande" name="date_demande" required>
-          </div>
-          <div class="mb-3">
-            <label for="preuve" class="form-label">Preuve</label>
-            <input type="file" class="form-control" id="preuve" name="preuve">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="submit" class="btn btn-primary">Ajouter</button>
-        </div>
-      </form>
+      <div class="modal-body">
+        {% include 'Partenaire/dm_aide_partner/add.html.twig' %}
+      </div>
     </div>
   </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+  function generatePDF(index) {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+
+    // URL du logo
+    const logoUrl = "{{ asset('images/logo.png') }}";
+
+    // Charger le logo
+    const logo = new Image();
+    logo.crossOrigin = 'anonymous'; // Gérer les problèmes liés à CORS
+    logo.onload = function () {
+      const pageWidth = pdf.internal.pageSize.getWidth(); // Largeur de la page PDF
+      const logoWidth = 60; // Largeur du logo
+      const logoHeight = 20; // Hauteur du logo
+      const xPosition = (pageWidth - logoWidth) / 2; // Calculer la position horizontale centrée
+
+      // Ajouter le logo centré au PDF
+      pdf.addImage(logo, 'PNG', xPosition, 10, logoWidth, logoHeight); // Position (x, y), Taille (largeur, hauteur)
+
+      // Ajouter un titre ou un espace sous le logo
+      pdf.setFontSize(16);
+
+      // Récupérer le contenu du modal
+      const modal = document.querySelector(`#viewDemandeModal${index} .modal-body`);
+      
+      // Ajouter le texte au PDF
+      let y = 50; // Position verticale initiale après le logo et le titre
+      pdf.text(`Client: ${modal.querySelector('p:nth-of-type(1)').innerText.split(': ')[1]}`, 10, y);
+      y += 10;
+      pdf.text(`Type d'aide: ${modal.querySelector('p:nth-of-type(2)').innerText.split(': ')[1]}`, 10, y);
+      y += 10;
+      pdf.text(`Description: ${modal.querySelector('p:nth-of-type(3)').innerText.split(': ')[1]}`, 10, y);
+      y += 10;
+      pdf.text(`Montant: ${modal.querySelector('p:nth-of-type(4)').innerText.split(': ')[1]}`, 10, y);
+      y += 10;
+      pdf.text(`Date de demande: ${modal.querySelector('p:nth-of-type(5)').innerText.split(': ')[1]}`, 10, y);
+      y += 10;
+      pdf.text(`Status: ${modal.querySelector('p:nth-of-type(6)').innerText.split(': ')[1]}`, 10, y);
+      y += 20;
+      pdf.text(`Preuve: ${modal.querySelector('p:nth-of-type(7)').innerText.split(': ')[1]}`, 10, y);
+      y += 10;
+
+      // Récupérer l'image (preuve)
+      const imgElement = modal.querySelector('img');
+      if (imgElement) {
+          const imgSrc = imgElement.src; // URL de l'image
+
+          // Charger l'image en Base64
+          const img = new Image();
+          img.crossOrigin = 'anonymous'; // Gérer les problèmes de politique CORS
+          img.onload = function () {
+              const canvas = document.createElement('canvas');
+              const ctx = canvas.getContext('2d');
+              canvas.width = img.width;
+              canvas.height = img.height;
+              ctx.drawImage(img, 0, 0);
+
+              // Convertir l'image en Base64
+              const imgData = canvas.toDataURL('image/png');
+
+              // Ajouter l'image au PDF
+              pdf.addImage(imgData, 'PNG', 10, y, 50, 50);
+
+              // Télécharger le fichier PDF
+              pdf.save(`demande_${index}.pdf`);
+          };
+          img.src = imgSrc;
+      } else {
+          // Si aucune image n'est disponible, générer le PDF sans image
+          pdf.save(`demande_${index}.pdf`);
+      }
+    };
+
+    // Définir la source du logo
+    logo.src = logoUrl;
+  }
+</script>
+
+{% endblock %}

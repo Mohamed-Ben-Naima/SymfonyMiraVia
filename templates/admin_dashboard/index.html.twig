@@ -20,6 +20,7 @@
             flex-direction: column;
             min-height: 50%;
             overflow-y: auto;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         main {
@@ -212,6 +213,7 @@
 
         .fc-daygrid-day {
             border: 1px solid #ddd;
+            overflow: hidden; /* Cache tout débordement */
         }
 
         .fc-daygrid-day-number {
@@ -226,7 +228,13 @@
             border: 1px solid #E57373FF;
             border-radius: 5px;
             padding: 2px 5px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            white-space: nowrap; /* Empêche le texte de passer à la ligne */
+            overflow: hidden; /* Cache le texte qui dépasse */
+            text-overflow: ellipsis; /* Ajoute des points de suspension */
+            line-height: 1.2; /* Ajuste la hauteur de ligne */
         }
 
         /* Style pour les événements de bénévolat */
@@ -236,8 +244,19 @@
             border: 1px solid #4CAF50FF;
             border-radius: 5px;
             padding: 2px 5px;
-            font-size: 0.9rem;
-            position: relative;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            white-space: nowrap; /* Empêche le texte de passer à la ligne */
+            overflow: hidden; /* Cache le texte qui dépasse */
+            text-overflow: ellipsis; /* Ajoute des points de suspension */
+            line-height: 1.2; /* Ajuste la hauteur de ligne */
+        }
+
+        /* Réduire la taille des icônes pour éviter le débordement */
+        .fc-event i {
+            font-size: 0.7rem; /* Taille réduite pour les icônes */
+            margin-right: 3px;
         }
 
         /* Ajout d'une icône pour les événements de bénévolat */
@@ -247,6 +266,7 @@
             font-weight: 900;
             margin-right: 5px;
             color: #4CAF50FF;
+            font-size: 0.7rem; /* Taille réduite pour l'icône */
         }
 
         /* Couleur permanente pour les cases avec des événements classiques */
@@ -261,6 +281,11 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+        /* Style pour les jours avec plusieurs événements */
+        .fc-daygrid-day.has-multiple-events {
+            border: 2px solid #E57373FF; /* Bordure pour indiquer plusieurs événements */
+        }
+
         /* Pas d'effet hover sur les cases */
         .fc-daygrid-day:hover {
             background-color: inherit;
@@ -269,7 +294,7 @@
 
         /* Style pour la date actuelle */
         .fc-daygrid-day.fc-day-today {
-            background-color: #BBDEFB !important; /* Bleu clair pour aujourd'hui */
+            background-color: #BBDEFB !important;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
@@ -281,6 +306,24 @@
             padding: 5px;
         }
 
+        /* Limiter le contenu des événements dans les cases du calendrier */
+        .fc-daygrid-day-events {
+            overflow: hidden; /* Cache le contenu qui dépasse */
+            max-height: 100%; /* S'assure que les événements ne dépassent pas la hauteur de la case */
+        }
+
+        /* Style pour l'indicateur de plus d'événements */
+        .fc-daygrid-more-link {
+            font-size: 0.7rem;
+            color: #E57373FF;
+            text-decoration: none;
+        }
+
+        .fc-daygrid-more-link:hover {
+            color: #D32F2F;
+            text-decoration: underline;
+        }
+
         /* Style pour les titres des graphiques */
         .graph-title {
             font-size: 1.25rem;
@@ -288,6 +331,200 @@
             color: #333;
             margin-bottom: 10px;
             text-align: center;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            background-color: #ffffff;
+            color: #333;
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .modal-footer .close-btn {
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .cards-background,
+        body.dark-mode .graph-container,
+        body.dark-mode .calendar-container {
+            background-color: #2d3748;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .card {
+            background-color: #2d3748 !important;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .card:hover {
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        body.dark-mode .card-title,
+        body.dark-mode .card-text,
+        body.dark-mode .graph-title,
+        body.dark-mode .fc-toolbar-title,
+        body.dark-mode .fc-daygrid-day-number,
+        body.dark-mode .no-event-text {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode #calendar {
+            background-color: #2d3748;
+        }
+
+        body.dark-mode .fc-button {
+            background-color: #4a90e2;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .fc-button:hover {
+            background-color: #357abd;
+            color: #ffffff;
+        }
+
+        body.dark-mode .fc-daygrid-day {
+            border: 1px solid #4a5568;
+            overflow: hidden; /* Cache tout débordement en mode sombre */
+        }
+
+        body.dark-mode .fc-event.event-classique {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: 1px solid #718096;
+            border-radius: 5px;
+            padding: 2px 5px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            white-space: nowrap; /* Empêche le texte de passer à la ligne */
+            overflow: hidden; /* Cache le texte qui dépasse */
+            text-overflow: ellipsis; /* Ajoute des points de suspension */
+            line-height: 1.2; /* Ajuste la hauteur de ligne */
+        }
+
+        body.dark-mode .fc-event.event-benevolat {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: 1px solid #718096;
+            border-radius: 5px;
+            padding: 2px 5px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            white-space: nowrap; /* Empêche le texte de passer à la ligne */
+            overflow: hidden; /* Cache le texte qui dépasse */
+            text-overflow: ellipsis; /* Ajoute des points de suspension */
+            line-height: 1.2; /* Ajuste la hauteur de ligne */
+        }
+
+        body.dark-mode .fc-event i {
+            font-size: 0.7rem; /* Taille réduite pour les icônes en mode sombre */
+            margin-right: 3px;
+        }
+
+        body.dark-mode .fc-event.event-benevolat .fc-event-title::before {
+            color: #4a90e2;
+            font-size: 0.7rem; /* Taille réduite pour l'icône */
+        }
+
+        body.dark-mode .fc-daygrid-day:has(.event-classique) {
+            background-color: #4a5568;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .fc-daygrid-day:has(.event-benevolat) {
+            background-color: #4a5568;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .fc-daygrid-day.has-multiple-events {
+            border: 2px solid #4a90e2; /* Bordure pour indiquer plusieurs événements en mode sombre */
+        }
+
+        body.dark-mode .fc-daygrid-day.fc-day-today {
+            background-color: #2b6cb0 !important;
+        }
+
+        body.dark-mode .fc-daygrid-more-link {
+            font-size: 0.7rem;
+            color: #4a90e2;
+            text-decoration: none;
+        }
+
+        body.dark-mode .fc-daygrid-more-link:hover {
+            color: #357abd;
+            text-decoration: underline;
+        }
+
+        body.dark-mode .modal-content {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-header {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-footer .close-btn {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-footer .close-btn:hover {
+            background-color: #718096;
+        }
+
+        /* ApexCharts Dark Mode Adjustments */
+        body.dark-mode .apexcharts-canvas {
+            background: #2d3748 !important;
+        }
+
+        body.dark-mode .apexcharts-text,
+        body.dark-mode .apexcharts-title-text,
+        body.dark-mode .apexcharts-xaxis-label,
+        body.dark-mode .apexcharts-yaxis-label {
+            fill: #e2e8f0 !important;
+        }
+
+        body.dark-mode .apexcharts-legend-text {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-mode .apexcharts-tooltip {
+            background: #1a202c !important;
+            color: #e2e8f0 !important;
+            border: 1px solid #4a5568 !important;
+        }
+
+        /* Ajustements pour petits écrans */
+        @media (max-width: 768px) {
+            .fc-event {
+                font-size: 0.7rem; /* Réduit la taille pour petits écrans */
+                padding: 1px 3px;
+            }
+
+            .fc-event i {
+                font-size: 0.6rem; /* Taille encore plus petite pour les icônes */
+            }
+
+            .fc-event.event-benevolat .fc-event-title::before {
+                font-size: 0.6rem; /* Taille réduite pour l'icône */
+            }
         }
     </style>
 {% endblock %}
@@ -387,7 +624,13 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Initialisation du calendrier
+            // Apply dark mode based on localStorage
+            const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (savedDarkMode) {
+                document.body.classList.add('dark-mode');
+            }
+
+            // Initialize FullCalendar
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -397,22 +640,19 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
+                eventLimit: 3, // Limite à 3 événements affichés par jour, avec un lien "+X autres"
+                eventLimitText: function(n) {
+                    return "+" + n + " autres";
+                },
                 events: {{ events | raw }},
                 eventContent: function(arg) {
-                    // Personnalisation du rendu des événements
-                    let title = arg.event.title;
-                    if (arg.event.extendedProps.type === 'benevolat') {
-                        // Icône pour les événements de bénévolat
-                        return {
-                            html: `<div class="fc-event-title"><i class="${arg.event.extendedProps.icon} me-1"></i>${title}</div>`
-                        };
-                    } else if (arg.event.extendedProps.type === 'evenement') {
-                        // Icône pour les événements classiques
-                        return {
-                            html: `<div class="fc-event-title"><i class="${arg.event.extendedProps.icon} me-1"></i>${title}</div>`
-                        };
-                    }
-                    return { html: `<div class="fc-event-title">${title}</div>` };
+                    // Tronquer le titre à 20 caractères
+                    let title = arg.event.title.length > 20 ? arg.event.title.substring(0, 17) + '...' : arg.event.title;
+                    let iconClass = arg.event.extendedProps.icon || 'fas fa-calendar-alt'; // Fallback icon
+                    let eventClass = arg.event.extendedProps.type === 'benevolat' ? 'event-benevolat' : 'event-classique';
+                    return {
+                        html: `<div class="fc-event ${eventClass}"><i class="${iconClass} me-1"></i><span class="fc-event-title">${title}</span></div>`
+                    };
                 },
                 eventClick: function(info) {
                     document.getElementById('eventTitle').textContent = info.event.title;
@@ -420,32 +660,83 @@
                     document.getElementById('eventLocation').textContent = info.event.extendedProps.lieu || 'Non spécifié';
                     document.getElementById('eventDescription').textContent = info.event.extendedProps.description || 'Non spécifiée';
 
-                    // Gestion des champs spécifiques au bénévolat et couleur du modal
                     var modalHeader = document.getElementById('eventModal').querySelector('.modal-header');
                     var closeButton = document.getElementById('eventModal').querySelector('.close-btn');
                     if (info.event.extendedProps.type === 'benevolat') {
                         document.getElementById('eventModalLabel').textContent = 'Détails du Bénévolat';
-                        modalHeader.style.backgroundColor = '#C8E6C9'; // Couleur pour bénévolat
-                        modalHeader.style.color = '#000';
-                        closeButton.style.backgroundColor = '#C8E6C9'; // Couleur verte pour le bouton fermer
-                        closeButton.style.color = '#000';
+                        modalHeader.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#1a202c' : '#C8E6C9';
+                        modalHeader.style.color = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#000';
+                        closeButton.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#4a5568' : '#C8E6C9';
+                        closeButton.style.color = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#000';
+                        let statusElement = '<p><strong>Statut :</strong> <span>' +线索
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/fr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Apply dark mode based on localStorage
+            const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (savedDarkMode) {
+                document.body.classList.add('dark-mode');
+            }
+
+            // Initialize FullCalendar
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'fr',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                eventLimit: 3, // Limite à 3 événements affichés par jour, avec un lien "+X autres"
+                eventLimitText: function(n) {
+                    return "+" + n + " autres";
+                },
+                events: {{ events | raw }},
+                eventContent: function(arg) {
+                    // Tronquer le titre à 20 caractères
+                    let title = arg.event.title.length > 20 ? arg.event.title.substring(0, 17) + '...' : arg.event.title;
+                    let iconClass = arg.event.extendedProps.icon || 'fas fa-calendar-alt'; // Fallback icon
+                    let eventClass = arg.event.extendedProps.type === 'benevolat' ? 'event-benevolat' : 'event-classique';
+                    return {
+                        html: `<div class="fc-event ${eventClass}"><i class="${iconClass} me-1"></i><span class="fc-event-title">${title}</span></div>`
+                    };
+                },
+                eventClick: function(info) {
+                    document.getElementById('eventTitle').textContent = info.event.title;
+                    document.getElementById('eventDate').textContent = info.event.start.toISOString().split('T')[0];
+                    document.getElementById('eventLocation').textContent = info.event.extendedProps.lieu || 'Non spécifié';
+                    document.getElementById('eventDescription').textContent = info.event.extendedProps.description || 'Non spécifiée';
+
+                    var modalHeader = document.getElementById('eventModal').querySelector('.modal-header');
+                    var closeButton = document.getElementById('eventModal').querySelector('.close-btn');
+                    if (info.event.extendedProps.type === 'benevolat') {
+                        document.getElementById('eventModalLabel').textContent = 'Détails du Bénévolat';
+                        modalHeader.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#1a202c' : '#C8E6C9';
+                        modalHeader.style.color = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#000';
+                        closeButton.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#4a5568' : '#C8E6C9';
+                        closeButton.style.color = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#000';
                         let statusElement = '<p><strong>Statut :</strong> <span>' + (info.event.extendedProps.status || 'Non spécifié') + '</span></p>';
-                        let imageElement = info.event.extendedProps.imageName ? 
-                            '<p><strong>Image :</strong> <img src="/Uploads/images/' + info.event.extendedProps.imageName + '" alt="Image" style="max-width: 100%; height: auto;"></p>' : 
+                        let imageElement = info.event.extendedProps.imageName ?
+                            '<p><strong>Image :</strong> <img src="/Uploads/images/' + info.event.extendedProps.imageName + '" alt="Image" style="max-width: 100%; height: auto;"></p>' :
                             '<p><strong>Image :</strong> Aucune image</p>';
                         document.getElementById('eventModal').querySelector('.modal-body').innerHTML += statusElement + imageElement;
                     } else {
                         document.getElementById('eventModalLabel').textContent = 'Détails de l\'événement';
-                        modalHeader.style.backgroundColor = '#FFCDD2'; // Couleur pour événement classique
-                        modalHeader.style.color = '#000';
-                        closeButton.style.backgroundColor = '#FFCDD2'; // Couleur rouge pour le bouton fermer
-                        closeButton.style.color = '#000';
+                        modalHeader.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#1a202c' : '#FFCDD2';
+                        modalHeader.style.color = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#000';
+                        closeButton.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#4a5568' : '#FFCDD2';
+                        closeButton.style.color = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#000';
                     }
 
                     var eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
                     eventModal.show();
 
-                    // Réinitialiser le contenu de la modale après fermeture
                     document.getElementById('eventModal').addEventListener('hidden.bs.modal', function () {
                         document.getElementById('eventModal').querySelector('.modal-body').innerHTML = `
                             <p><strong>Titre :</strong> <span id="eventTitle"></span></p>
@@ -453,13 +744,12 @@
                             <p><strong>Lieu :</strong> <span id="eventLocation"></span></p>
                             <p><strong>Description :</strong> <span id="eventDescription"></span></p>
                         `;
-                        modalHeader.style.backgroundColor = ''; // Réinitialiser la couleur
-                        closeButton.style.backgroundColor = ''; // Réinitialiser la couleur du bouton
+                        modalHeader.style.backgroundColor = '';
+                        closeButton.style.backgroundColor = '';
                         closeButton.style.color = '';
                     }, { once: true });
                 },
                 dayCellDidMount: function(info) {
-                    // Vérifier si la cellule est la date actuelle
                     var today = new Date();
                     var cellDate = info.date;
                     if (
@@ -467,27 +757,40 @@
                         cellDate.getMonth() === today.getMonth() &&
                         cellDate.getFullYear() === today.getFullYear()
                     ) {
-                        // Vérifier si la cellule contient des événements
                         var events = calendar.getEvents().filter(function(event) {
                             return event.start.toDateString() === cellDate.toDateString();
                         });
                         if (events.length === 0) {
-                            // Ajouter un texte indicatif si aucun événement
                             var contentEl = info.el.querySelector('.fc-daygrid-day-events');
                             if (contentEl) {
                                 contentEl.innerHTML = '<div class="no-event-text"> aujourd\'hui</div>';
                             }
                         }
                     }
+                    // Ajouter une classe pour les jours avec plusieurs événements
+                    var events = calendar.getEvents().filter(function(event) {
+                        return event.start.toDateString() === cellDate.toDateString();
+                    });
+                    if (events.length > 3) {
+                        info.el.classList.add('has-multiple-events');
+                    }
                 }
             });
             calendar.render();
+
+            // ApexCharts Options with Dark Mode Support
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const chartTextColor = isDarkMode ? '#e2e8f0' : '#333';
+            const chartBgColor = isDarkMode ? '#2d3748' : '#ffffff';
+            const tooltipBgColor = isDarkMode ? '#1a202c' : '#ffffff';
+            const tooltipTextColor = isDarkMode ? '#e2e8f0' : '#333';
 
             // Line Chart (Évolution des dons par mois)
             const donationsLineOptions = {
                 chart: {
                     type: 'line',
-                    height: 350
+                    height: 350,
+                    background: chartBgColor
                 },
                 series: [{
                     name: 'Somme des dons',
@@ -496,13 +799,17 @@
                 xaxis: {
                     categories: {{ monthLabels | raw }},
                     title: {
-                        text: 'Mois'
-                    }
+                        text: 'Mois',
+                        style: { color: chartTextColor }
+                    },
+                    labels: { style: { colors: chartTextColor } }
                 },
                 yaxis: {
                     title: {
-                        text: 'Somme des dons (€)'
-                    }
+                        text: 'Somme des dons (€)',
+                        style: { color: chartTextColor }
+                    },
+                    labels: { style: { colors: chartTextColor } }
                 },
                 stroke: {
                     curve: 'smooth'
@@ -512,44 +819,107 @@
                     size: 5
                 },
                 tooltip: {
+                    theme: isDarkMode ? 'dark' : 'light',
+                    style: {
+                        background: tooltipBgColor,
+                        color: tooltipTextColor
+                    },
                     y: {
                         formatter: function(val) {
                             return val + " dt";
                         }
                     }
+                },
+                grid: {
+                    borderColor: isDarkMode ? '#4a5568' : '#e5e7eb'
                 }
             };
             new ApexCharts(document.querySelector("#donationsLineChart"), donationsLineOptions).render();
 
             // Radar Chart (Répartition des types d'activité)
             const radarOptions = {
-                chart: { type: 'radar', height: 350 },
+                chart: {
+                    type: 'radar',
+                    height: 350,
+                    background: chartBgColor
+                },
                 series: [{ name: 'Nombre de partenaires', data: {{ activityCounts | raw }} }],
-                labels: {{ activityLabels | raw }}
+                labels: {{ activityLabels | raw }},
+                colors: ['#FFCDD2'],
+                tooltip: {
+                    theme: isDarkMode ? 'dark' : 'light',
+                    style: {
+                        background: tooltipBgColor,
+                        color: tooltipTextColor
+                    }
+                },
+                xaxis: {
+                    labels: { style: { colors: chartTextColor } }
+                },
+                yaxis: {
+                    labels: { style: { colors: chartTextColor } }
+                }
             };
             new ApexCharts(document.querySelector("#radarChart"), radarOptions).render();
 
             // Line Chart (Revenue)
             const lineChartOptions = {
-                chart: { type: 'line', height: 350 },
+                chart: {
+                    type: 'line',
+                    height: 350,
+                    background: chartBgColor
+                },
                 series: [{ name: 'Revenue', data: [1000, 2000, 3000, 4000, 5000, 6000] }],
-                xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'] }
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    labels: { style: { colors: chartTextColor } }
+                },
+                yaxis: {
+                    labels: { style: { colors: chartTextColor } }
+                },
+                colors: ['#FFCDD2'],
+                tooltip: {
+                    theme: isDarkMode ? 'dark' : 'light',
+                    style: {
+                        background: tooltipBgColor,
+                        color: tooltipTextColor
+                    }
+                },
+                grid: {
+                    borderColor: isDarkMode ? '#4a5568' : '#e5e7eb'
+                }
             };
             new ApexCharts(document.querySelector("#lineChart"), lineChartOptions).render();
 
             // Pie Chart (Répartition des pays)
             const pieChartOptions = {
-                chart: { type: 'pie', height: 350 },
+                chart: {
+                    type: 'pie',
+                    height: 350,
+                    background: chartBgColor
+                },
                 series: {{ countryCounts | raw }},
                 labels: {{ countryLabels | raw }},
                 colors: ['#FFCDD2', '#C8E6C9', '#FFE0B2', '#E1BEE7', '#BBDEFB'],
                 dataLabels: {
                     style: {
-                        colors: ['#000000'],
-                        fontSize: '14px',
+                        colors: [isDarkMode ? '#e2e8f0' : '#000000'],
+                        fontSize: '14px'
                     },
                     dropShadow: {
                         enabled: false
+                    }
+                },
+                legend: {
+                    labels: {
+                        colors: chartTextColor
+                    }
+                },
+                tooltip: {
+                    theme: isDarkMode ? 'dark' : 'light',
+                    style: {
+                        background: tooltipBgColor,
+                        color: tooltipTextColor
                     }
                 }
             };

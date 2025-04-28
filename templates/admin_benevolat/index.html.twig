@@ -10,7 +10,12 @@ html, body {
     padding: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #fdfdfd;
-    overflow: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode {
+    background-color: #1a202c;
+    color: #e2e8f0;
 }
 
 .example-wrapper {
@@ -18,15 +23,19 @@ html, body {
     padding: 20px;
     margin-right: 0%;
     margin-left: 15%;
-    max-height: calc(100vh - 40px); /* Réduit en tenant compte des marges */
-    overflow: visible; /* Enlever le scroll */
+    max-height: calc(100vh - 40px);
+    overflow: visible;
 }
 
 .example-wrapper h1 {
     text-align: center;
     font-size: 30px;
     margin-bottom: 40px;
-    color: rgb(0, 0, 0);
+    color: #000;
+}
+
+body.dark-mode .example-wrapper h1 {
+    color: #e2e8f0;
 }
 
 .header {
@@ -49,6 +58,14 @@ html, body {
     border: 1px solid #7D8C6D;
     border-radius: 6px;
     font-size: 14px;
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode .search-box input {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 #statusFilter {
@@ -57,6 +74,14 @@ html, body {
     border: 1px solid #7D8C6D;
     font-size: 14px;
     margin-left: -1%;
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode #statusFilter {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .header button {
@@ -74,19 +99,32 @@ html, body {
     background-color: #5c7352;
 }
 
+body.dark-mode .header button {
+    background-color: #4a90e2;
+}
+
+body.dark-mode .header button:hover {
+    background-color: #357abd;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
     background-color: white;
     box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    table-layout: fixed; /* Forcer le tableau à s'adapter à la largeur */
+    table-layout: fixed;
+}
+
+body.dark-mode table {
+    background-color: #2d3748;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
 th, td {
     padding: 10px;
     text-align: left;
-    word-wrap: break-word; /* Permettre le retour à la ligne dans les cellules */
+    word-wrap: break-word;
 }
 
 th {
@@ -94,13 +132,27 @@ th {
     color: black;
 }
 
+body.dark-mode th {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
 tr:nth-child(even) {
     background-color: #f5f5f5;
+}
+
+body.dark-mode tr:nth-child(even) {
+    background-color: #2d3748;
 }
 
 tr:hover {
     background-color: #81A8C5;
     color: white;
+}
+
+body.dark-mode tr:hover {
+    background-color: #4a90e2;
+    color: #e2e8f0;
 }
 
 .actions {
@@ -118,9 +170,18 @@ tr:hover {
     transition: background 0.2s;
 }
 
+body.dark-mode .actions button {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
 .actions button:hover {
     background-color: #999;
     color: white;
+}
+
+body.dark-mode .actions button:hover {
+    background-color: #718096;
 }
 
 @media (max-width: 992px) {
@@ -155,7 +216,6 @@ tr:hover {
     }
 
     .actions {
-
         flex-direction: column;
         align-items: flex-start;
     }
@@ -163,7 +223,6 @@ tr:hover {
     .actions button {
         width: 100%;
         margin-bottom: 4px;
-        
     }
 }
 
@@ -178,51 +237,56 @@ tr:hover {
 .actions button.consulter-btn {
     background-color: #7D8C6D;
     color: white;
-        font-size: 14px;
+    font-size: 14px;
+}
 
+body.dark-mode .actions button.consulter-btn {
+    background-color: #4a90e2;
 }
 
 .actions button.consulter-btn:hover {
     background-color: #5c7352;
 }
 
+body.dark-mode .actions button.consulter-btn:hover {
+    background-color: #357abd;
+}
+
 .modal {
-    display: none; /* Par défaut, caché */
+    display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Défilement interne uniquement */
-    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-    position: fixed; /* Permet de positionner l'élément par rapport à la fenêtre */
-    top: 50%; /* Centre verticalement */
-    left: 50%; /* Centre horizontalement */
-    transform: translate(-50%, -50%); /* Ajuste pour centrer parfaitement */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #fff;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     width: 40%;
-    height: auto; /* Ajuste automatiquement la hauteur au contenu */
+    height: auto;
     box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
     max-width: 600px;
     max-height: 80vh;
-    overflow-y: auto; /* Ajoute un défilement interne si nécessaire */
+    overflow-y: auto;
     text-align: left;
 }
-.modal-footer .cancel-btn {
-    background-color: #7D8C6D;
-    color: white;
-}
 
-.modal-footer .cancel-btn:hover {
-    background-color: #5c7352;
+body.dark-mode .modal-content {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .modal-header {
@@ -233,6 +297,10 @@ tr:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+body.dark-mode .modal-header {
+    color: #e2e8f0;
 }
 
 .modal-header .close-btn {
@@ -246,6 +314,10 @@ tr:hover {
     transition: color 0.3s ease;
 }
 
+body.dark-mode .modal-header .close-btn {
+    color: #e2e8f0;
+}
+
 .modal-header .close-btn:hover {
     color: #ff0000;
 }
@@ -253,6 +325,10 @@ tr:hover {
 .modal-body {
     margin-bottom: 20px;
     font-size: 14px;
+}
+
+body.dark-mode .modal-body {
+    color: #e2e8f0;
 }
 
 .modal-body p {
@@ -280,8 +356,16 @@ tr:hover {
     color: white;
 }
 
+body.dark-mode .modal-footer .download-btn {
+    background-color: #4a90e2;
+}
+
 .modal-footer .download-btn:hover {
     background-color: rgb(24, 95, 162);
+}
+
+body.dark-mode .modal-footer .download-btn:hover {
+    background-color: #357abd;
 }
 
 .modal-footer .cancel-btn {
@@ -289,12 +373,20 @@ tr:hover {
     color: white;
 }
 
+body.dark-mode .modal-footer .cancel-btn {
+    background-color: #4a90e2;
+}
+
 .modal-footer .cancel-btn:hover {
     background-color: #5c7352;
 }
 
+body.dark-mode .modal-footer .cancel-btn:hover {
+    background-color: #357abd;
+}
+
 body.no-scroll {
-    overflow: hidden; /* Désactive le défilement global */
+    overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -302,6 +394,29 @@ body.no-scroll {
         width: 90%;
         margin: 2% auto;
     }
+}
+
+.toggle-dark-mode {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #7D8C6D;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-dark-mode:hover {
+    background-color: #5c7352;
+}
+
+body.dark-mode .toggle-dark-mode {
+    background-color: #4a90e2;
+}
+
+body.dark-mode .toggle-dark-mode:hover {
+    background-color: #357abd;
 }
 </style>
 
@@ -335,7 +450,7 @@ body.no-scroll {
             <tr>
                 <td>{{ benevolat.idBenevolat }}</td>
                 <td>{{ benevolat.titre }}</td>
-            <td>{{ benevolat.description|length > 30 ? benevolat.description|slice(0, 30) ~ '...' : benevolat.description }}</td>
+                <td>{{ benevolat.description|length > 30 ? benevolat.description|slice(0, 30) ~ '...' : benevolat.description }}</td>
                 <td>{{ benevolat.dateBenevolat ? benevolat.dateBenevolat|date('Y-m-d') : '' }}</td>
                 <td>{{ benevolat.status }}</td>
                 <td class="actions">
@@ -374,51 +489,54 @@ body.no-scroll {
     </div>
 </div>
 
-
 <script>
-
-
-function viewDetails(button) {
-    // Récupérer les données depuis les attributs `data-*`
-    const titre = button.getAttribute('data-titre');
-    const description = button.getAttribute('data-description');
-    const dateBenevolat = button.getAttribute('data-date-benevolat');
-    const status = button.getAttribute('data-status');
-    const image = button.getAttribute('data-image');
-
-    // Mettre à jour le contenu du modal
-    const modalBody = document.getElementById('modalBody');
-    modalBody.innerHTML = `
-        <p><strong>Titre :</strong> ${titre}</p>
-        <p><strong>Description :</strong> ${description}</p>
-        <p><strong>Date de bénévolat :</strong> ${dateBenevolat}</p>
-        <p><strong>Status :</strong> ${status}</p>
-        <p><strong>Image :</strong> ${
-            image 
-            ? `<a href="${image}" target="_blank">${image}</a>` 
-            : 'Aucune image disponible'
-        }</p>
-    `;
-
-    // Afficher ou masquer le bouton de téléchargement
-    const downloadButton = document.getElementById('downloadButton');
-    if (image) {
-        downloadButton.style.display = 'inline-block';
-        downloadButton.onclick = () => window.location.href = image;
-    } else {
-        downloadButton.style.display = 'none';
-    }
-
-    // Afficher le modal
-    const modal = document.getElementById('detailsModal');
-    modal.style.display = 'block';
-    document.body.classList.add('no-scroll');
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Appliquer le mode sombre si précédemment sélectionné
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+
+    function viewDetails(button) {
+        const titre = button.getAttribute('data-titre');
+        const description = button.getAttribute('data-description');
+        const dateBenevolat = button.getAttribute('data-date-benevolat');
+        const status = button.getAttribute('data-status');
+        const image = button.getAttribute('data-image');
+
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = `
+            <p><strong>Titre :</strong> ${titre}</p>
+            <p><strong>Description :</strong> ${description}</p>
+            <p><strong>Date de bénévolat :</strong> ${dateBenevolat}</p>
+            <p><strong>Status :</strong> ${status}</p>
+            <p><strong>Image :</strong> ${
+                image 
+                ? `<a href="${image}" target="_blank">${image}</a>` 
+                : 'Aucune image disponible'
+            }</p>
+        `;
+
+        const downloadButton = document.getElementById('downloadButton');
+        if (image) {
+            downloadButton.style.display = 'inline-block';
+            downloadButton.onclick = () => window.location.href = image;
+        } else {
+            downloadButton.style.display = 'none';
+        }
+
+        const modal = document.getElementById('detailsModal');
+        modal.style.display = 'block';
+        document.body.classList.add('no-scroll');
+    }
 
     function closeModal() {
         document.getElementById('detailsModal').style.display = 'none';
-        document.body.style.overflow = ''; // Réactiver le scroll de la page
+        document.body.classList.remove('no-scroll');
     }
 
     document.getElementById('search').addEventListener('input', filterTable);
@@ -440,5 +558,10 @@ function viewDetails(button) {
             row.style.display = (textMatch && statusMatch) ? '' : 'none';
         });
     }
+
+    // Exposer les fonctions globalement pour les appels depuis HTML
+    window.viewDetails = viewDetails;
+    window.closeModal = closeModal;
+});
 </script>
 {% endblock %}

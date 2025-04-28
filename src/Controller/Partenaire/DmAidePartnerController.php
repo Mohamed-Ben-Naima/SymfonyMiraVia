@@ -3,47 +3,81 @@
 namespace App\Controller\Partenaire;
 
 use App\Entity\DemandesAide;
+use App\Repository\DemandesAideRepository;
+use App\Repository\UtilisateursRepository; // Ajoutez ce namespace
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class DmAidePartnerController extends AbstractController
+class DmAidePartnerController extends AbstractController
 {
     #[Route('/dashboard/partenaire/demande_aide/{id_partenaire}', name: 'demande_aide')]
-    public function addDemande(Request $request, EntityManagerInterface $entityManager): Response
-{
-    $data = $request->request->all();
-    $file = $request->files->get('preuve');
+    public function demandeAide(
+        int $id_partenaire,
+        DemandesAideRepository $repository,
+        UtilisateursRepository $utilisateursRepository // Injection du repository des utilisateurs
+    ): Response {
+        // Forcer l'ID partenaire à 1 si nécessaire
+        $id_partenaire = 1;
 
-    // Check if 'id_client' exists in the request data
-    if (!isset($data['id_client'])) {
-        $this->addFlash('error', 'Le champ id_client est manquant.');
-        return $this->redirectToRoute('demande_aide', ['id_partenaire' => 1]);
+        // Récupérer les demandes et les utilisateurs
+        $demandesAide = $repository->findByPartenaire($id_partenaire);
+        $utilisateurs = $utilisateursRepository->findAllUsers(); // Récupère tous les utilisateurs
+
+        // Exemple : récupération d'un id_client (vous pouvez ajuster cette logique)
+        $id_client = 4; // ID client par défaut ou récupéré dynamiquement
+
+        return $this->render('Partenaire/dm_aide_partner/demande_aide.html.twig', [
+            'demandes_aide' => $demandesAide,
+            'id_partenaire' => $id_partenaire,
+            'utilisateurs' => $utilisateurs, // Passez la liste des utilisateurs à Twig
+            'id_client' => $id_client, // Passez également l'ID client
+        ]);
     }
 
-    $demande = new DemandesAide();
-    $demande->setIdClient($data['id_client']);
-    $demande->setIdPartenaire(1); // Always set id_partenaire to 1
-    $demande->setTypeAide($data['type_aide'] ?? ''); // Provide a default value if type_aide is missing
-    $demande->setDescription($data['description'] ?? '');
-    $demande->setMontantDemande($data['montant_demande'] ?? 0);
-    $demande->setDateDemande(new \DateTime($data['date_demande'] ?? 'now'));
-    $demande->setStatus('en_attente');
+    #[Route('/dashboard/partenaire/demande_aide_add/{id_partenaire}', name: 'add_demande', methods: ['POST'])]
+    public function addDemande(
+        int $id_partenaire,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $data = $request->request->all();
+        $file = $request->files->get('preuve');
 
-    // Handle file upload
+        $demande = new DemandesAide();
+        $demande->setIdClient($data['id_client']);
+        $demande->setIdPartenaire($id_partenaire); // Important!
+        $demande->setTypeAide($data['type_aide']);
+        $demande->setDescription($data['description'] ?? '');
+        $demande->setMontantDemande($data['montant_demande'] ?? 0);
+        $demande->setDateDemande(new \DateTime($data['date_demande'] ?? 'now'));
+        $demande->setStatus('en_attente');
+
+       // Gestion du fichier
     if ($file) {
-        $uploadsDir = $this->getParameter('uploads_directory');
-        $fileName = uniqid() . '.' . $file->guessExtension();
+        $uploadsDir = $this->getParameter('kernel.project_dir').'/public/uploads/preuves';
+        
+        // Créer le dossier s'il n'existe pas
+        if (!file_exists($uploadsDir)) {
+            mkdir($uploadsDir, 0777, true);
+        }
+
+        // Générer un nom de fichier unique
+        $fileName = uniqid().'.'.$file->guessExtension();
+        
+        // Déplacer le fichier
         $file->move($uploadsDir, $fileName);
+        
+        // Enregistrer uniquement le nom du fichier dans la base
         $demande->setPreuves($fileName);
     }
 
-    $entityManager->persist($demande);
-    $entityManager->flush();
+        $entityManager->persist($demande);
+        $entityManager->flush();
 
-    $this->addFlash('success', 'Demande ajoutée avec succès!');
-    return $this->redirectToRoute('demande_aide', ['id_partenaire' => 1]);
-}
+        $this->addFlash('success', 'Demande ajoutée avec succès!');
+        return $this->redirectToRoute('demande_aide', ['id_partenaire' => $id_partenaire]);
+    }
 }
