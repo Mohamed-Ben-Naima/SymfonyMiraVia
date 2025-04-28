@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Partenaire;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +11,7 @@ final class DonPartnerController extends AbstractController
     #[Route('/don/partner', name: 'app_don_partner')]
     public function index(): Response
     {
-        return $this->render('don_partner/index.html.twig', [
+        return $this->render('Partenaire/don_partner/index.html.twig', [
             'controller_name' => 'DonPartnerController',
         ]);
     }

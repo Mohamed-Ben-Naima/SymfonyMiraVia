@@ -81,6 +81,11 @@ class Utilisateurs implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->motDePasse;
     }
 
+    public function getId(): ?int
+    {
+        return $this->getIdUtilisateur();
+    }
+
     public function getIdUtilisateur(): ?int
     {
         return $this->idUtilisateur;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Partenaire;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +11,7 @@ final class ChatBootPartnerController extends AbstractController
     #[Route('/chat/boot/partner', name: 'app_chat_boot_partner')]
     public function index(): Response
     {
-        return $this->render('chat_boot_partner/index.html.twig', [
+        return $this->render('Partenaire/chat_boot_partner/index.html.twig', [
             'controller_name' => 'ChatBootPartnerController',
         ]);
     }

@@ -6,14 +6,6 @@ use App\Entity\DemandesAide;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<DemandesAide>
- *
- * @method DemandesAide|null find($id, $lockMode = null, $lockVersion = null)
- * @method DemandesAide|null findOneBy(array $criteria, array $orderBy = null)
- * @method DemandesAide[]    findAll()
- * @method DemandesAide[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class DemandesAideRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -21,28 +13,39 @@ class DemandesAideRepository extends ServiceEntityRepository
         parent::__construct($registry, DemandesAide::class);
     }
 
-//    /**
-//     * @return DemandesAide[] Returns an array of DemandesAide objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    // Create (Add a new demande)
+    public function addDemande(DemandesAide $demande, bool $flush = true): void
+    {
+        $this->_em->persist($demande);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
 
-//    public function findOneBySomeField($value): ?DemandesAide
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    // Read (Find all demandes for a specific partenaire)
+    public function findByPartenaire(int $idPartenaire): array
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.idPartenaire = :id')
+            ->setParameter('id', $idPartenaire)
+            ->getQuery()
+            ->getResult();
+    }
+
+    // Update (Save changes to an existing demande)
+    public function updateDemande(DemandesAide $demande, bool $flush = true): void
+    {
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
+
+    // Delete (Remove a demande)
+    public function deleteDemande(DemandesAide $demande, bool $flush = true): void
+    {
+        $this->_em->remove($demande);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Partenaire;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +11,7 @@ final class EventPartnerController extends AbstractController
     #[Route('/event/partner', name: 'app_event_partner')]
     public function index(): Response
     {
-        return $this->render('event_partner/index.html.twig', [
+        return $this->render('Partenaire/event_partner/index.html.twig', [
             'controller_name' => 'EventPartnerController',
         ]);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Partenaire;
 
 use App\Form\SignUpFormType;
 use App\Entity\Utilisateur;

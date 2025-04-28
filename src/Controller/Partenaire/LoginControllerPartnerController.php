@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Partenaire;
+
 use App\Form\LoginPartnerFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,7 @@ final class LoginControllerPartnerController extends AbstractController
             // Process the form data here
         }
 
-        return $this->render('login_controller_partner/index.html.twig', [
+        return $this->render('Partenaire/login_controller_partner/index.html.twig', [
             'loginPartnerForm' => $form->createView(),
         ]);
     }

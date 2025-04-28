@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Partenaire;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +11,7 @@ final class NotificationsPartnerController extends AbstractController
     #[Route('/notifications/partner', name: 'app_notifications_partner')]
     public function index(): Response
     {
-        return $this->render('notifications_partner/index.html.twig', [
+        return $this->render('Partenaire/notifications_partner/index.html.twig', [
             'controller_name' => 'NotificationsPartnerController',
         ]);
     }

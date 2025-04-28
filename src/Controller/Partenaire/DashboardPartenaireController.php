@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Partenaire;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,7 +10,7 @@ final class DashboardPartenaireController extends AbstractController{
     #[Route('/dashboard/partenaire', name: 'app_dashboard_partenaire')]
     public function index(): Response
     {
-        return $this->render('dashboard_partenaire/dashboard.html.twig', [
+        return $this->render('Partenaire/dashboard_partenaire/dashboard.html.twig', [
             'controller_name' => 'DashboardPartenaireController',
         ]);
     }
