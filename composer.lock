@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a306b9229b3ffa2cfa98f4d083bac044",
+    "content-hash": "17d72b960d140b0234523ddb7db9a069",
     "packages": [
         {
             "name": "composer/semver",
@@ -1585,6 +1585,73 @@
             "time": "2023-09-26T13:45:37+00:00"
         },
         {
+            "name": "gregwar/captcha-bundle",
+            "version": "v2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Gregwar/CaptchaBundle.git",
+                "reference": "8eb95c0911a1db9e3b2f368f6319e0945b959a6c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Gregwar/CaptchaBundle/zipball/8eb95c0911a1db9e3b2f368f6319e0945b959a6c",
+                "reference": "8eb95c0911a1db9e3b2f368f6319e0945b959a6c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "gregwar/captcha": "^1.2.1",
+                "php": ">=8.0.2",
+                "symfony/form": "~6.0|~7.0",
+                "symfony/framework-bundle": "~6.0|~7.0",
+                "symfony/translation": "~6.0|^7.0",
+                "twig/twig": "^3.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.45",
+                "phpstan/phpstan": "^1.10",
+                "symplify/easy-coding-standard": "^12"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Gregwar\\CaptchaBundle\\": "/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégoire Passault",
+                    "email": "g.passault@gmail.com",
+                    "homepage": "https://www.gregwar.com/"
+                },
+                {
+                    "name": "Jeremy Livingston",
+                    "email": "jeremy.j.livingston@gmail.com"
+                }
+            ],
+            "description": "Captcha bundle",
+            "homepage": "https://github.com/Gregwar/CaptchaBundle",
+            "keywords": [
+                "Symfony2",
+                "bot",
+                "captcha",
+                "code",
+                "security",
+                "spam",
+                "symfony",
+                "visual"
+            ],
+            "support": {
+                "issues": "https://github.com/Gregwar/CaptchaBundle/issues",
+                "source": "https://github.com/Gregwar/CaptchaBundle/tree/v2.3.0"
+            },
+            "time": "2024-06-06T13:14:57+00:00"
+        },
+        {
             "name": "masterminds/html5",
             "version": "2.9.0",
             "source": {
@@ -2346,6 +2413,32 @@
                 "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v8.8.0"
             },
             "time": "2025-03-23T17:59:05+00:00"
+        },
+        {
+            "name": "symfony/apache-pack",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/apache-pack.git",
+                "reference": "3aa5818d73ad2551281fc58a75afd9ca82622e6c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/apache-pack/zipball/3aa5818d73ad2551281fc58a75afd9ca82622e6c",
+                "reference": "3aa5818d73ad2551281fc58a75afd9ca82622e6c",
+                "shasum": ""
+            },
+            "type": "symfony-pack",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A pack for Apache support in Symfony",
+            "support": {
+                "issues": "https://github.com/symfony/apache-pack/issues",
+                "source": "https://github.com/symfony/apache-pack/tree/master"
+            },
+            "time": "2017-12-12T01:46:35+00:00"
         },
         {
             "name": "symfony/asset",
@@ -9673,16 +9766,16 @@
         },
         {
             "name": "siburuxue/doctrine-helper",
-            "version": "v1.0.6",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/siburuxue/doctrine-helper.git",
-                "reference": "197f87eafa915b9810c332b1af52b1365d6b97d4"
+                "reference": "367682c3f6aa11942cbb40a7106669d0b5dc6c18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/siburuxue/doctrine-helper/zipball/197f87eafa915b9810c332b1af52b1365d6b97d4",
-                "reference": "197f87eafa915b9810c332b1af52b1365d6b97d4",
+                "url": "https://api.github.com/repos/siburuxue/doctrine-helper/zipball/367682c3f6aa11942cbb40a7106669d0b5dc6c18",
+                "reference": "367682c3f6aa11942cbb40a7106669d0b5dc6c18",
                 "shasum": ""
             },
             "require": {
@@ -9721,9 +9814,9 @@
             ],
             "support": {
                 "issues": "https://github.com/siburuxue/doctrine-helper/issues",
-                "source": "https://github.com/siburuxue/doctrine-helper/tree/v1.0.6"
+                "source": "https://github.com/siburuxue/doctrine-helper/tree/v1.0.7"
             },
-            "time": "2025-02-28T15:39:19+00:00"
+            "time": "2025-04-16T07:20:54+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -10001,21 +10094,21 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.62.1",
+            "version": "v1.63.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "468ff2708200c95ebc0d85d3174b6c6711b8a590"
+                "reference": "69478ab39bc303abfbe3293006a78b09a8512425"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/468ff2708200c95ebc0d85d3174b6c6711b8a590",
-                "reference": "468ff2708200c95ebc0d85d3174b6c6711b8a590",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/69478ab39bc303abfbe3293006a78b09a8512425",
+                "reference": "69478ab39bc303abfbe3293006a78b09a8512425",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "^2.0",
-                "nikic/php-parser": "^4.18|^5.0",
+                "nikic/php-parser": "^5.0",
                 "php": ">=8.1",
                 "symfony/config": "^6.4|^7.0",
                 "symfony/console": "^6.4|^7.0",
@@ -10073,7 +10166,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.62.1"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.63.0"
             },
             "funding": [
                 {
@@ -10089,7 +10182,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-15T00:21:40+00:00"
+            "time": "2025-04-26T01:41:37+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",

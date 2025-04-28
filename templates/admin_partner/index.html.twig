@@ -10,15 +10,21 @@ html, body {
     padding: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #fdfdfd;
-    overflow: hidden; /* Remove vertical scroll */
+    overflow: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode {
+    background-color: #1a202c;
+    color: #e2e8f0;
 }
 
 .example-wrapper {
     margin: 0 auto;
     padding: 20px;
     margin-left: 15%;
-    max-height: calc(100vh - 40px); /* Dynamically adjust height */
-    overflow: visible; /* No internal scroll */
+    max-height: calc(100vh - 40px);
+    overflow: visible;
 }
 
 .example-wrapper h1 {
@@ -26,6 +32,10 @@ html, body {
     font-size: 30px;
     margin-bottom: 40px;
     color: rgb(0, 0, 0);
+}
+
+body.dark-mode .example-wrapper h1 {
+    color: #e2e8f0;
 }
 
 .header {
@@ -48,6 +58,14 @@ html, body {
     border: 1px solid #7D8C6D;
     border-radius: 6px;
     font-size: 14px;
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode .search-box input {
+    background-color: #4a5568;
+    border-color: #718096;
+    color: #e2e8f0;
 }
 
 #statusFilter {
@@ -56,6 +74,14 @@ html, body {
     border: 1px solid #7D8C6D;
     font-size: 14px;
     margin-left: -1%;
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode #statusFilter {
+    background-color: #4a5568;
+    border-color: #718096;
+    color: #e2e8f0;
 }
 
 .header button {
@@ -68,42 +94,73 @@ html, body {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-.button-unblock {
-    background-color: #013A71; /* Couleur bleue */
-    color: white; /* Texte blanc */
-}
 
-.button-unblock:hover {
-    background-color:rgb(38, 86, 131); /* Couleur bleue foncée au survol */
-}
-.button-block {
-    background-color:rgb(146, 151, 155); /* Couleur bleue */
-    color: white; /* Texte blanc */
-}
-
-.button-block:hover {
-    background-color:rgb(116, 118, 120); /* Couleur bleue foncée au survol */
+body.dark-mode .header button {
+    background-color: #4a90e2;
 }
 
 .header button:hover {
     background-color: #5c7352;
 }
 
+body.dark-mode .header button:hover {
+    background-color: #357abd;
+}
+
+.button-unblock {
+    background-color: #013A71;
+    color: white;
+}
+
+body.dark-mode .button-unblock {
+    background-color: #4a90e2;
+}
+
+.button-unblock:hover {
+    background-color: rgb(38, 86, 131);
+}
+
+body.dark-mode .button-unblock:hover {
+    background-color: #357abd;
+}
+
+.button-block {
+    background-color: rgb(146, 151, 155);
+    color: white;
+}
+
+body.dark-mode .button-block {
+    background-color: #718096;
+}
+
+.button-block:hover {
+    background-color: rgb(116, 118, 120);
+}
+
+body.dark-mode .button-block:hover {
+    background-color: #4a5568;
+}
+
 table {
     width: 100%;
-    max-width: 100%; /* Prevent overflow */
+    max-width: 100%;
     border-collapse: collapse;
     font-size: 14px;
     background-color: white;
     box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    table-layout: auto; /* Allow columns to adjust */
-    overflow-x: auto; /* Enable horizontal scroll if needed */
+    table-layout: auto;
+    overflow-x: auto;
+}
+
+body.dark-mode table {
+    background-color: #2d3748;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
 th, td {
     padding: 10px;
     text-align: left;
-    word-wrap: break-word; /* Ensure text wraps within cells */
+    word-wrap: break-word;
 }
 
 th {
@@ -111,13 +168,27 @@ th {
     color: black;
 }
 
+body.dark-mode th {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
 tr:nth-child(even) {
     background-color: #f5f5f5;
+}
+
+body.dark-mode tr:nth-child(even) {
+    background-color: #2d3748;
 }
 
 tr:hover {
     background-color: #81A8C5;
     color: white;
+}
+
+body.dark-mode tr:hover {
+    background-color: #4a90e2;
+    color: #e2e8f0;
 }
 
 .actions {
@@ -133,8 +204,6 @@ tr:hover {
     cursor: pointer;
     transition: background 0.2s;
 }
-
-
 
 @media (max-width: 992px) {
     .example-wrapper {
@@ -181,13 +250,13 @@ tr:hover {
 @media (max-width: 768px) {
     table {
         display: block;
-        overflow-x: auto; /* Enable horizontal scroll for small screens */
-        white-space: nowrap; /* Prevent columns from wrapping */
+        overflow-x: auto;
+        white-space: nowrap;
     }
 }
-/* Styles pour le modal */
+
 .modal {
-    display: none; /* Par défaut, le modal est caché */
+    display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -195,7 +264,7 @@ tr:hover {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* Couleur de fond semi-transparente */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
@@ -204,10 +273,16 @@ tr:hover {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    width: 30%; /* Largeur du modal */
+    width: 30%;
     box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
-    max-width: 500px; /* Largeur maximale */
+    max-width: 500px;
     text-align: center;
+}
+
+body.dark-mode .modal-content {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .modal-header {
@@ -215,6 +290,32 @@ tr:hover {
     font-weight: bold;
     margin-bottom: 20px;
     color: #333;
+}
+
+body.dark-mode .modal-header {
+    color: #e2e8f0;
+}
+
+.modal-header .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    outline: none;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .modal-header .close-btn {
+    color: #e2e8f0;
+}
+
+.modal-header .close-btn:hover {
+    color: #ff0000;
 }
 
 .modal-body {
@@ -226,7 +327,12 @@ tr:hover {
     margin-bottom: 5px;
     font-size: 14px;
     text-align: left;
-    font-weight: bold; /* Rend le texte en gras */
+    font-weight: bold;
+    color: #333;
+}
+
+body.dark-mode .modal-body label {
+    color: #e2e8f0;
 }
 
 .modal-body input,
@@ -237,12 +343,21 @@ tr:hover {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode .modal-body input,
+body.dark-mode .modal-body select {
+    background-color: #4a5568;
+    border-color: #718096;
+    color: #e2e8f0;
 }
 
 .modal-footer {
     display: flex;
-    justify-content: center; /* Centre les éléments horizontalement */
-    gap: 10px; /* Ajoute un espace entre les boutons */
+    justify-content: center;
+    gap: 10px;
 }
 
 .modal-footer button {
@@ -259,39 +374,36 @@ tr:hover {
     color: white;
 }
 
+body.dark-mode .modal-footer .confirm-btn {
+    background-color: #4a90e2;
+}
+
 .modal-footer .confirm-btn:hover {
     background-color: #5c7352;
 }
 
+body.dark-mode .modal-footer .confirm-btn:hover {
+    background-color: #357abd;
+}
+
 .modal-footer .cancel-btn {
-    background-color:  #013A71;;
+    background-color: #013A71;
     color: white;
 }
 
+body.dark-mode .modal-footer .cancel-btn {
+    background-color: #4a90e2;
+}
+
 .modal-footer .cancel-btn:hover {
-    background-color:rgb(24, 95, 162);
+    background-color: rgb(24, 95, 162);
 }
 
-/* Style for the close button */
-.modal-header .close-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    outline: none;
-    transition: color 0.3s ease;
+body.dark-mode .modal-footer .cancel-btn:hover {
+    background-color: #357abd;
 }
-
-.modal-header .close-btn:hover {
-    color: #ff0000; /* Red color on hover */
-}
-
 </style>
+
 <div class="example-wrapper">
     <h1>Liste des partenaires</h1>
 
@@ -299,50 +411,49 @@ tr:hover {
         <div class="search-box">
             <input type="text" id="search" placeholder="Rechercher un partenaire...">
         </div>
-
         <select id="statusFilter">
             <option value="">Tous les statuts</option>
             <option value="Actif">Actif</option>
             <option value="Inactif">Inactif</option>
         </select>
-
         <button onclick="openModal()">Modifier date d'expiration</button>
     </div>
-<table>
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Nom de partenaire</th>
-            <th>Téléphone Partenaire</th>
-            <th>Email</th>
-            <th>Adresse</th>
-            <th>Nom d'entreprise</th>
-            <th>Date d'expiration</th>
-            <th>Type d'activité</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="userTable">
-        {% for partenaire in partenaires %}
-        <tr>
-            <td>{{ partenaire.id_partenaire }}</td>
-            <td>{{ partenaire.nom }} {{ partenaire.prenom }}</td>
-            <td>{{ partenaire.partenaire_telephone }}</td>
-            <td>{{ partenaire.email }}</td>
-            <td>{{ partenaire.adresse }}</td>
-            <td>{{ partenaire.nom_entreprise }}</td>
-            <td>{{ partenaire.date_expiration ? partenaire.date_expiration|date('Y-m-d') : 'N/A' }}</td>
-            <td>{{ partenaire.type_activite }}</td>
-        <td>{{ partenaire.utilisateur_status }}</td>
-            <td class="actions">
-                <button class="button-block" onclick="blockUser({{ partenaire.id_partenaire }})">Bloquer</button>
-                <button class="button-unblock" onclick="unblockUser({{ partenaire.id_partenaire }})">Débloquer</button>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom de partenaire</th>
+                <th>Téléphone Partenaire</th>
+                <th>Email</th>
+                <th>Adresse</th>
+                <th>Nom d'entreprise</th>
+                <th>Date d'expiration</th>
+                <th>Type d'activité</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="userTable">
+            {% for partenaire in partenaires %}
+            <tr>
+                <td>{{ partenaire.id_partenaire }}</td>
+                <td>{{ partenaire.nom }} {{ partenaire.prenom }}</td>
+                <td>{{ partenaire.partenaire_telephone }}</td>
+                <td>{{ partenaire.email }}</td>
+                <td>{{ partenaire.adresse }}</td>
+                <td>{{ partenaire.nom_entreprise }}</td>
+                <td>{{ partenaire.date_expiration ? partenaire.date_expiration|date('Y-m-d') : 'N/A' }}</td>
+                <td>{{ partenaire.type_activite }}</td>
+                <td>{{ partenaire.utilisateur_status }}</td>
+                <td class="actions">
+                    <button class="button-block" style="display: {{ partenaire.utilisateur_status == 'Actif' ? 'inline-block' : 'none' }}" onclick="blockUser({{ partenaire.id_partenaire }})">Bloquer</button>
+                    <button class="button-unblock" style="display: {{ partenaire.utilisateur_status == 'Inactif' ? 'inline-block' : 'none' }}" onclick="unblockUser({{ partenaire.id_partenaire }})">Débloquer</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 <!-- Modal for updating expiration date -->
@@ -357,12 +468,12 @@ tr:hover {
                 La date d'expiration a été modifiée avec succès.
             </p>
             <label for="partnerSelect">Partenaire :</label>
-<select id="partnerSelect" required>
-    <option value="">-- Sélectionnez un partenaire --</option>
-    {% for partenaire in partenaires %}
-    <option value="{{ partenaire.id_partenaire }}">{{ partenaire.nom }} {{ partenaire.prenom }}</option>
-    {% endfor %}
-</select>
+            <select id="partnerSelect" required>
+                <option value="">-- Sélectionnez un partenaire --</option>
+                {% for partenaire in partenaires %}
+                <option value="{{ partenaire.id_partenaire }}">{{ partenaire.nom }} {{ partenaire.prenom }}</option>
+                {% endfor %}
+            </select>
             <label for="expirationDate">Date d'expiration :</label>
             <input type="date" id="expirationDate" required>
             <p id="errorMessage" style="color: red; font-size: 13px; display: none; margin-top: 10px;">
@@ -375,7 +486,6 @@ tr:hover {
         </div>
     </div>
 </div>
-
 
 <!-- Confirmation Modal -->
 <div id="actionModal" class="modal">
@@ -397,173 +507,175 @@ tr:hover {
     </div>
 </div>
 
-
-
 <script>
-    let actionCallback; // Variable to store the callback function
-
-function openConfirmationModal(message, callback) {
-    const modal = document.getElementById('actionModal'); // Sélectionner le modal
-    const actionMessage = document.getElementById('actionMessage'); // Sélectionner l'élément de message
-    actionMessage.textContent = message; // Mettre à jour le message dans le modal
-    modal.style.display = 'block'; // Afficher le modal
-    actionCallback = callback; // Stocker le callback pour l'action de confirmation
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 }
 
-    // Confirm blocking/unblocking action
-function confirmAction() {
-    if (typeof actionCallback === 'function') {
-        actionCallback(); // Exécuter le callback passé
-        const successMessage = document.getElementById('successMessageAction');
-        successMessage.style.display = 'block'; // Afficher un message de succès
-        setTimeout(() => {
-            successMessage.style.display = 'none'; // Masquer le message après 3 secondes
-            closeModal(); // Fermer le modal
-        }, 3000);
+document.addEventListener('DOMContentLoaded', () => {
+    // Apply dark mode if previously selected
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
     }
-}
 
-function updateStatus(id, status) {
-    console.log('Sending data:', { id, status }); // Log les données envoyées
+    let actionCallback;
 
-    fetch('/admin/partner/change-status', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: JSON.stringify({ id: id, status: status }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+    function openConfirmationModal(message, callback) {
+        const modal = document.getElementById('actionModal');
+        const actionMessage = document.getElementById('actionMessage');
+        actionMessage.textContent = message;
+        modal.style.display = 'block';
+        actionCallback = callback;
+    }
+
+    function confirmAction() {
+        if (typeof actionCallback === 'function') {
+            actionCallback();
+            const successMessage = document.getElementById('successMessageAction');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+                closeModal();
+            }, 3000);
         }
-        // Pas besoin de traitement de réponse car le serveur retourne 204 No Content
-    })
-    .then(() => {
-        location.reload(); // Recharger la page entière pour voir les changements
-    })
-    .catch(error => {
-        console.error('Error:', error); // Affiche les erreurs dans la console
-    });
-}
+    }
 
+    function updateStatus(id, status) {
+        console.log('Sending data:', { id, status });
 
-// Fonction pour bloquer un utilisateur
-function blockUser(id) {
-    openConfirmationModal(`Êtes-vous sûr de vouloir bloquer l'utilisateur #${id} ?`, function () {
-        updateStatus(id, 'Inactif');
-    });
-}
+        fetch('/admin/partner/change-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify({ id: id, status: status }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(() => {
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
 
-// Fonction pour débloquer un utilisateur
-function unblockUser(id) {
-    openConfirmationModal(`Êtes-vous sûr de vouloir débloquer l'utilisateur #${id} ?`, function () {
-        updateStatus(id, 'Actif');
-    });
-}
+    function blockUser(id) {
+        openConfirmationModal(`Êtes-vous sûr de vouloir bloquer l'utilisateur #${id} ?`, function () {
+            updateStatus(id, 'Inactif');
+        });
+    }
 
+    function unblockUser(id) {
+        openConfirmationModal(`Êtes-vous sûr de vouloir débloquer l'utilisateur #${id} ?`, function () {
+            updateStatus(id, 'Actif');
+        });
+    }
 
-    // Open date update modal
     function openModal() {
         document.getElementById('modal').style.display = 'block';
-        document.getElementById('successMessageDate').style.display = 'none'; // Hide success message
+        document.getElementById('successMessageDate').style.display = 'none';
     }
 
-    // Close all modals
     function closeModal() {
         document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
     }
 
-    // Confirm expiration date update
-function confirmExpiration() {
-    const partnerSelect = document.getElementById('partnerSelect');
-    const expirationDate = document.getElementById('expirationDate');
-    const errorMessage = document.getElementById('errorMessage');
-    const successMessage = document.getElementById('successMessageDate');
-    
-    const today = new Date().toISOString().split('T')[0]; // Obtenir la date actuelle au format YYYY-MM-DD
+    function confirmExpiration() {
+        const partnerSelect = document.getElementById('partnerSelect');
+        const expirationDate = document.getElementById('expirationDate');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessageDate');
+        
+        const today = new Date().toISOString().split('T')[0];
 
-    if (partnerSelect.value === "" || expirationDate.value === "") {
-        errorMessage.textContent = "Veuillez remplir tous les champs correctement.";
-        errorMessage.style.display = 'block';
-        successMessage.style.display = 'none'; // Cacher le message de succès
-        return;
-    }
-
-    if (expirationDate.value < today) {
-        errorMessage.textContent = "Veuillez sélectionner une date valide (postérieure ou égale à la date d'aujourd'hui).";
-        errorMessage.style.display = 'block';
-        successMessage.style.display = 'none'; // Cacher le message de succès
-        return;
-    }
-
-    // Préparer les données pour l'API
-    const data = {
-        id: partnerSelect.value,
-        expirationDate: expirationDate.value
-    };
-
-    // Envoyer les données au serveur
-    fetch('/admin/partner/update-expiration', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: JSON.stringify(data),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+        if (partnerSelect.value === "" || expirationDate.value === "") {
+            errorMessage.textContent = "Veuillez remplir tous les champs correctement.";
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+            return;
         }
-        return response.json();
-    })
-    .then(responseData => {
-        successMessage.innerText = responseData.message;
-        successMessage.style.display = 'block';
-        errorMessage.style.display = 'none'; // Cacher le message d'erreur
 
-        setTimeout(() => {
-            successMessage.style.display = 'none'; // Cacher le message après 3 secondes
-            closeModal(); // Fermer le modal
-            location.reload(); // Recharger la page pour voir les changements
-        }, 3000);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        errorMessage.textContent = 'Erreur lors de la mise à jour. Veuillez réessayer.';
-        errorMessage.style.display = 'block';
-    });
-}
+        if (expirationDate.value < today) {
+            errorMessage.textContent = "Veuillez sélectionner une date valide (postérieure ou égale à la date d'aujourd'hui).";
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+            return;
+        }
 
-    // Search and filter table
+        const data = {
+            id: partnerSelect.value,
+            expirationDate: expirationDate.value
+        };
+
+        fetch('/admin/partner/update-expiration', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(responseData => {
+            successMessage.textContent = responseData.message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+                closeModal();
+                location.reload();
+            }, 3000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            errorMessage.textContent = 'Erreur lors de la mise à jour. Veuillez réessayer.';
+            errorMessage.style.display = 'block';
+        });
+    }
+
     document.getElementById('search').addEventListener('input', filterTable);
     document.getElementById('statusFilter').addEventListener('change', filterTable);
 
-function filterTable() {
-    const searchFilter = document.getElementById('search').value.toLowerCase();
-    const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-    const rows = document.querySelectorAll('#userTable tr');
+    function filterTable() {
+        const searchFilter = document.getElementById('search').value.toLowerCase();
+        const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+        const rows = document.querySelectorAll('#userTable tr');
 
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        const textMatch = Array.from(cells) // Vérifie si une cellule contient le texte recherché
-            .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
-        
-        const status = cells[8]?.textContent.toLowerCase().trim(); // 8ème colonne pour le statut
-        const statusMatch = statusFilter === "" || status === statusFilter;
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            const textMatch = Array.from(cells)
+                .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
+            const status = cells[8]?.textContent.toLowerCase().trim();
+            const statusMatch = statusFilter === "" || status === statusFilter;
 
-        // Affiche ou masque la ligne selon les critères de filtrage
-        row.style.display = (textMatch && statusMatch) ? '' : 'none';
-    });
-}
-
-    // Close modal on Escape key press
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeModal();
+            row.style.display = (textMatch && statusMatch) ? '' : 'none';
+        });
     }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    // Expose functions globally for HTML onclick
+    window.blockUser = blockUser;
+    window.unblockUser = unblockUser;
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.confirmExpiration = confirmExpiration;
+    window.confirmAction = confirmAction;
 });
 </script>
 {% endblock %}

@@ -172,11 +172,6 @@
   </div>
 </div>
 
-<!-- Alerte de succès -->
-<div class="alert alert-success" role="alert" id="successAlert">
-  Fichier PDF téléchargé avec succès !
-</div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script>
   function generatePDF(index) {
@@ -244,25 +239,11 @@
 
               // Télécharger le fichier PDF
               pdf.save(`demande_${index}.pdf`);
-
-              // Afficher l'alerte de succès
-              const alert = document.getElementById('successAlert');
-              alert.style.display = 'block';
-              setTimeout(() => {
-                  alert.style.display = 'none';
-              }, 3000);
           };
           img.src = imgSrc;
       } else {
           // Si aucune image n'est disponible, générer le PDF sans image
           pdf.save(`demande_${index}.pdf`);
-
-          // Afficher l'alerte de succès
-          const alert = document.getElementById('successAlert');
-          alert.style.display = 'block';
-          setTimeout(() => {
-              alert.style.display = 'none';
-          }, 3000);
       }
     };
 
