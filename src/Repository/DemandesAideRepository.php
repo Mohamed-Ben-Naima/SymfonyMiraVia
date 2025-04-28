@@ -20,13 +20,11 @@ class DemandesAideRepository extends ServiceEntityRepository
     $sql = '
         SELECT 
             da.*, 
-            u.nom AS client_nom,
-            u.id_utilisateur AS client_id
+            u.nom AS client_nom, -- Récupère le nom du client
+            u.id_utilisateur AS client_id 
         FROM demandes_aide da
         JOIN utilisateurs u ON da.id_client = u.id_utilisateur
-        WHERE da.id_partenaire = :id_partenaire
-    ';
-    
+        WHERE da.id_partenaire = :id_partenaire ' ;
     $stmt = $conn->prepare($sql);
     $result = $stmt->executeQuery(['id_partenaire' => $idPartenaire]);
 
