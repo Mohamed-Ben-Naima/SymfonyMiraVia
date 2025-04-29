@@ -13,6 +13,8 @@
  <link href="{{ asset('style-partner/dashboard.css') }}" rel="stylesheet">
 </head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
   >
   /* Conteneur du chatbot */
@@ -170,7 +172,20 @@
 <body>
  <!-- Inclure la barre latérale -->
 {% include 'Partenaire/basePartner.html.twig' %}
-
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <script>
+            Swal.fire({
+                icon: '{{ label == "success" ? "success" : "error" }}',
+                title: '{{ message|e("js") }}',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        </script>
+    {% endfor %}
+{% endfor %}
   <div class="content">
     <div class="dashboard-header">
       <h3 style="color: #013a71;">Statistiques</h3>

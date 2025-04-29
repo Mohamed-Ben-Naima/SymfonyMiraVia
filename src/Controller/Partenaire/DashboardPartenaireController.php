@@ -16,6 +16,13 @@ final class DashboardPartenaireController extends AbstractController
     {
         $user = $this->getUser();
 
+        if ($user) {
+            $this->addFlash('success', 'Bienvenue, ' . $user->getNom(). ' '. $user->getPrenom());
+        } else {
+            $this->addFlash('error', 'Utilisateur non connecté.');
+        }
+        
+
         // Vérifiez si l'utilisateur est connecté et a le rôle partenaire
         if (!$user || !in_array('ROLE_PARTENAIRE', $user->getRoles())) {
             throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette section.');
@@ -49,7 +56,7 @@ final class DashboardPartenaireController extends AbstractController
         }
 
         try {
-            $response = $this->askOpenAI($message);
+            $response = $this->askDeepSeek($message);
             return new JsonResponse(['response' => $response]);
         } catch (\Exception $e) {
             // Log additional details about the error
@@ -58,57 +65,43 @@ final class DashboardPartenaireController extends AbstractController
         }
     }
 
-    private function askOpenAI(string $userMessage): string
-    {
-        $apiKey = $_ENV['OPENAI_API_KEY'] ?? null;
-        if (!$apiKey) {
-            throw new \RuntimeException('Clé API OpenAI non définie.');
-        }
-    
-        $url = 'https://api.openai.com/v1/chat/completions';
-        $payload = [
-            'model' => 'gpt-3.5-turbo',
-            'messages' => [
-                ['role' => 'user', 'content' => $userMessage]
+    private function askDeepSeek(string $userMessage): string
+{
+    $apiKey = 'sk-91a20114695c4d1496e0884f4f295d2b'; // Remplace ceci par une variable d'environnement dans un projet sérieux
+
+    $url = 'https://api.deepseek.com/chat/completions';
+
+    $payload = [
+        'model' => 'deepseek-chat',
+        'messages' => [
+            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+            ['role' => 'user', 'content' => $userMessage]
+        ],
+        'stream' => false
+    ];
+
+    try {
+        $response = $this->httpClient->request('POST', $url, [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $apiKey,
+                'Content-Type' => 'application/json',
             ],
-            'max_tokens' => 150
-        ];
-    
-        $retries = 3;
-        $delay = 1;
-    
-        for ($attempt = 1; $attempt <= $retries; $attempt++) {
-            try {
-                $response = $this->httpClient->request('POST', $url, [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $apiKey,
-                        'Content-Type' => 'application/json',
-                    ],
-                    'json' => $payload,
-                ]);
-    
-                $statusCode = $response->getStatusCode();
-                $data = $response->toArray(false); // évite l'exception automatique
-    
-                if ($statusCode === 429) {
-                    // Log l'erreur et indique à l'utilisateur d'attendre
-                    $this->logger->warning("Taux limite dépassé (429) - tentative $attempt");
-                    sleep($delay); // Attente avant de réessayer
-                    $delay *= 2; // Délai exponentiel
-                    continue;
-                }
-    
-                if ($statusCode !== 200 || !isset($data['choices'][0]['message']['content'])) {
-                    throw new \RuntimeException('Réponse inattendue ou erreur de serveur. Code HTTP: ' . $statusCode);
-                }
-    
-                return trim($data['choices'][0]['message']['content']);
-            } catch (\Exception $e) {
-                $this->logger->error("Erreur lors de l'appel à OpenAI: " . $e->getMessage());
-                throw new \RuntimeException('Erreur de communication avec OpenAI : ' . $e->getMessage());
-            }
+            'json' => $payload,
+        ]);
+
+        $statusCode = $response->getStatusCode();
+        $data = $response->toArray(false); // pour éviter les exceptions
+
+        if ($statusCode !== 200 || !isset($data['choices'][0]['message']['content'])) {
+            throw new \RuntimeException('Réponse inattendue ou erreur de serveur. Code HTTP: ' . $statusCode);
         }
-    
-        throw new \RuntimeException('Trop de tentatives échouées (429).');
+
+        return trim($data['choices'][0]['message']['content']);
+
+    } catch (\Exception $e) {
+        $this->logger->error("Erreur lors de l'appel à DeepSeek: " . $e->getMessage());
+        throw new \RuntimeException('Erreur de communication avec DeepSeek : ' . $e->getMessage());
     }
+}
+
 }

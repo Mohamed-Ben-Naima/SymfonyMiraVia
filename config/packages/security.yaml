@@ -14,7 +14,7 @@ security:
             security: false
 
         partner:
-            pattern: ^/(dashboard/partenaire|login/partner|partner)
+            pattern: ^/(dashboard/partenaire|login/partner|api/notifications)
             provider: app_user_provider
             custom_authenticators:
                 - App\Security\Authenticator\PartnerAuthenticator
