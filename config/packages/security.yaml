@@ -24,7 +24,6 @@ security:
                  invalidate_session: true
             stateless: false
             lazy: true
-
         main:
             lazy: true
             provider: app_user_provider
