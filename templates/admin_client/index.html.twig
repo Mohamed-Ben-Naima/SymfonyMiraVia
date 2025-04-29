@@ -465,7 +465,7 @@ body.dark-mode .toggle-dark-mode:hover {
                 <td>{{ client.utilisateur_email }}</td>
                 <td>{{ client.client_adresse }}</td>
                 <td>{{ client.date_inscription|date('Y-m-d') }}</td>
-                <td>{{ client.utilisateur_status }}</td>
+<td>{{ client.utilisateur_statut_verification }}</td>
                 <td class="actions">
                     <button class="button-block" onclick="blockUser({{ client.id_client }})">Bloquer</button>
                     <button class="button-unblock" onclick="unblockUser({{ client.id_client }})">Débloquer</button>
@@ -530,29 +530,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function updateStatus(id, status) {
-        fetch('/admin/partner/change-status', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-            body: JSON.stringify({ id: id, status: status }),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.text(); // Handle empty response (204 No Content)
-        })
-        .then(() => {
-            location.reload(); // Reload page to reflect changes
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Une erreur est survenue lors de la mise à jour du statut.');
-        });
-    }
+
+
+
+function updateStatus(id, statut_verification) {
+    console.log('Sending data:', { id, statut_verification });
+
+    fetch('/admin/client/change-status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({ id: id, statut_verification: statut_verification }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    })
+    .then(() => {
+        location.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
     function blockUser(id) {
         openConfirmationModal(`Êtes-vous sûr de vouloir bloquer l'utilisateur #${id} ?`, function() {
