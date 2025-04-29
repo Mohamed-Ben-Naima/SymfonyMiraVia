@@ -14,6 +14,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class PartnerAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -110,4 +111,4 @@ public function authenticate(Request $request): Passport
     {
         return $this->urlGenerator->generate('app_login_controller_partner');
     }
-} 
+}

@@ -31,6 +31,15 @@ class DemandesAideRepository extends ServiceEntityRepository
     return $result->fetchAllAssociative();
 }
 
+    public function countDemandesByPartenaire(int $idPartenaire): int
+    {
+        return $this->createQueryBuilder('d')
+            ->select('COUNT(d.id)')
+            ->andWhere('d.idPartenaire = :idPartenaire')
+            ->setParameter('idPartenaire', $idPartenaire)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     public function addDemande(DemandesAide $demande, bool $flush = true): void
     {
         $this->_em->persist($demande);

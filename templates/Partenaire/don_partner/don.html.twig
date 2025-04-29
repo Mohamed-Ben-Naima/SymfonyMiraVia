@@ -50,27 +50,26 @@
   <div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border: none;">
     <div class="card-body">
       
-      <!-- Barre de recherche, sélection de statut et bouton "Ajouter une demande" -->
+      <!-- Barre de recherche, sélection de statut et bouton "Ajouter un don" -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <!-- Barre de recherche -->
         <input 
           type="text" 
           id="searchBar" 
           class="form-control me-2" 
-          placeholder="Rechercher une demande..."
+          placeholder="Rechercher un don..."
           style="max-width: 300px;"
         >
 
-        <!-- Sélection de statut et bouton "Ajouter une demande" -->
+        <!-- Sélection de statut et bouton "Ajouter un don" -->
         <div class="d-flex align-items-center">
           <select id="statusFilter" class="form-select me-2" style="max-width: 200px;">
             <option value="">Tous les statuts</option>
             <option value="en_attente">En attente</option>
             <option value="acceptee">Acceptée</option>
             <option value="refusee">Refusée</option>
-            <option value="en_traitement">En traitement</option>
           </select>
-          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDemandeModal">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDonModal">
             Ajouter
           </button>
         </div>
@@ -84,50 +83,72 @@
               <th>Client</th>
               <th>Montant</th>
               <th>Date</th>
-              <th>Status</th>
+              <th>Statut</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="donsTable">
-            {% for don in dons %}
-              {% if don.idPartenaire == 1 %}
-                <tr>
-                  <!-- ID Client -->
-                  <td>{{ don.idClient }}</td>
+          {% for don in dons %}
+              {% if don.id_partenaire == 1 %}
+                  <tr>
+                      <!-- Nom Client -->
+                      <td>{{ don.client_nom }}</td>
 
-                  <!-- Montant -->
-                  <td>{{ don.montant }} €</td>
+                      <!-- Montant -->
+                      <td>{{ don.montant }} €</td>
 
-                  <!-- Date -->
-                  <td>{{ don.dateDon|date('d M Y H:i') }}</td>
+                      <!-- Date -->
+                      <td>{{ don.date_don|date('d M Y H:i') }}</td>
 
-                  <!-- Status -->
-                  <td>
-                    {% if don.status == 'En attente' %}
-                      <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important; color:rgb(255, 191, 0) !important;">En attente</span>
-                    {% elseif don.status == 'Accepté' %}
-                      <span class="badge bg-success" style="color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
-                      background-color: #78e3784a !important">Accepté</span>
-                    {% elseif don.status == 'Refusé' %}
-                      <span class="badge bg-danger">Refusé</span>
-                    {% endif %}
-                  </td>
+                      <!-- Statut -->
+                      <td>
+                          {% if don.status == 'En attente' %}
+                              <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important; color:rgb(255, 191, 0) !important;">En attente</span>
+                          {% elseif don.status == 'Accepté' %}
+                              <span class="badge bg-success" style="color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+                              background-color: #78e3784a !important">Accepté</span>
+                          {% elseif don.status == 'Refusé' %}
+                              <span class="badge bg-danger">Refusé</span>
+                          {% endif %}
+                      </td>
 
-                  <!-- Actions -->
-                  <td style="padding-left: 20px">
-                    <!-- Éditer -->
-                    <i class="bi bi-pencil-fill text-primary" style="cursor: pointer; margin-right: 10px;"></i>
+                      <!-- Actions -->
+              <td style="padding-left: 20px">
+                  <!-- Éditer -->
+                  <i 
+                      class="bi bi-pencil-fill text-primary" 
+                      style="cursor: pointer; margin-right: 10px; {% if don.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
+                      data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
+                      data-bs-target="#editDonModal{{ don.id_don }}"
+                      title="{% if don.status == 'Accepté' %}Modification désactivée pour les dons acceptés{% else %}Modifier{% endif %}">
+                  </i>
 
-                    <!-- Supprimer -->
-                    <i class="bi bi-trash-fill text-danger" style="cursor: pointer;"></i>
-                  </td>
-                </tr>
+                  <!-- Supprimer -->
+                  <i 
+                      class="bi bi-trash-fill text-danger" 
+                      style="cursor: pointer; {% if don.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
+                      data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
+                      data-bs-target="#deleteDonModal{{ don.id_don }}"
+                      title="{% if don.status == 'Accepté' %}Suppression désactivée pour les dons acceptés{% else %}Supprimer{% endif %}">
+                  </i>
+              </td>
+                  </tr>
               {% endif %}
-            {% endfor %}
+          {% endfor %}
           </tbody>
         </table>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Modal for Adding a Donation -->
+{% include 'Partenaire/don_partner/add.html.twig' %}
+
+<!-- Modals for Editing and Deleting Donations -->
+{% for don in dons %}
+    {% include 'Partenaire/don_partner/edit.html.twig' with { 'don': don } %}
+    {% include 'Partenaire/don_partner/delete.html.twig' with { 'don': don } %}
+{% endfor %}
+
 {% endblock %}
