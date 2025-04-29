@@ -91,4 +91,20 @@ class Notifications
 
         return $this;
     }
+ #[ORM\Column(name: "is_read", type: "boolean", options: ["default" => false])]
+#[Groups(['notif:read'])]
+private bool $isRead = false;
+
+public function isRead(): bool
+{
+    return $this->isRead;
+}
+
+public function setIsRead(bool $isRead): static
+{
+    $this->isRead = $isRead;
+
+    return $this;
+}
+
 }

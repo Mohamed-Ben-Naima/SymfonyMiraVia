@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Controller\Partenaire;
-
+use DateTime;
+use App\Entity\Notifications;
 use App\Entity\DemandesAide;
 use App\Repository\DemandesAideRepository;
 use App\Repository\UtilisateursRepository; // Ajoutez ce namespace
@@ -45,6 +46,8 @@ class DmAidePartnerController extends AbstractController
     ): Response {
         $data = $request->request->all();
         $file = $request->files->get('preuve');
+        //Récupérer l'utilisateur connecté via la session
+        $user = $this->getUser();
 
         $demande = new DemandesAide();
         $demande->setIdClient($data['id_client']);
@@ -73,11 +76,20 @@ class DmAidePartnerController extends AbstractController
         // Enregistrer uniquement le nom du fichier dans la base
         $demande->setPreuves($fileName);
     }
+//  Ajouter une notification automatiquement
+$notification = new Notifications();
+$notification->setMessage("Nouvelle demande d’aide ajoutée.");
+$notification->setDateEnvoi(new DateTime());
+$notification->setTypeNotification('success'); // ou 'success'
+$notification->setIsRead(false);
+        $notification->setIdUtilisateur($user->getIdUtilisateur()); // ID de l'utilisateur connecté
 
+        $entityManager->persist($notification);
         $entityManager->persist($demande);
         $entityManager->flush();
 
         $this->addFlash('success', 'Demande ajoutée avec succès!');
         return $this->redirectToRoute('demande_aide', ['id_partenaire' => $id_partenaire]);
     }
+    
 }
