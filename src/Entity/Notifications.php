@@ -95,7 +95,7 @@ class Notifications
 #[Groups(['notif:read'])]
 private bool $isRead = false;
 
-public function isRead(): bool
+public function getisRead(): bool
 {
     return $this->isRead;
 }

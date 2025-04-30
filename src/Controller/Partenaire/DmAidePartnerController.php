@@ -42,7 +42,7 @@ class DmAidePartnerController extends AbstractController
     public function addDemande(
         int $id_partenaire,
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
         $data = $request->request->all();
         $file = $request->files->get('preuve');
@@ -76,18 +76,17 @@ class DmAidePartnerController extends AbstractController
         // Enregistrer uniquement le nom du fichier dans la base
         $demande->setPreuves($fileName);
     }
-//  Ajouter une notification automatiquement
-$notification = new Notifications();
-$notification->setMessage("Nouvelle demande d’aide ajoutée.");
-$notification->setDateEnvoi(new DateTime());
-$notification->setTypeNotification('success'); // ou 'success'
-$notification->setIsRead(false);
-        $notification->setIdUtilisateur($user->getIdUtilisateur()); // ID de l'utilisateur connecté
+    //  Ajouter une notification automatiquement
+    $notification = new Notifications();
+    $notification->setMessage("Nouvelle demande d’aide ajoutée.");
+    $notification->setDateEnvoi(new DateTime());
+    $notification->setTypeNotification('success'); // ou 'success'
+    $notification->setIsRead(false);
+    $notification->setIdUtilisateur($user->getIdUtilisateur()); // ID de l'utilisateur connecté
 
         $entityManager->persist($notification);
         $entityManager->persist($demande);
         $entityManager->flush();
-
         $this->addFlash('success', 'Demande ajoutée avec succès!');
         return $this->redirectToRoute('demande_aide', ['id_partenaire' => $id_partenaire]);
     }

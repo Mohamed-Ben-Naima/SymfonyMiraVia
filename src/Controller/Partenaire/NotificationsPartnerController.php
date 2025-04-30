@@ -38,6 +38,7 @@ class NotificationsPartnerController extends AbstractController
                 'message' => $notif->getMessage(),
                 'type' => $notif->getTypeNotification(),
                 'dateEnvoi' => $notif->getDateEnvoi()?->format('Y-m-d H:i:s'),
+                'isRead' => $notif->getisRead() ? true : false,
                 'auteur' => $user ? $user->getNom() : 'Système',  // Utilisation correcte de $user
             ];
         }, $notifications);
@@ -114,10 +115,25 @@ class NotificationsPartnerController extends AbstractController
         $notification->setTypeNotification($data['type']);
         $notification->setIdUtilisateur($user); // L'utilisateur qui crée la notification
         $notification->setDateEnvoi(new \DateTime());
+        $notification->setIsRead(false); 
 
         // Ajouter la notification via le repository
         $notificationsRepository->addNotification($notification);
 
         return new JsonResponse(['success' => 'Notification ajoutée avec succès.'], JsonResponse::HTTP_OK);
     }
+#[Route('/api/notifications/mark-read', name: 'mark_all_as_read', methods: ['POST'])]
+public function markAllAsRead(NotificationsRepository $notificationRepository, EntityManagerInterface $em): JsonResponse
+{
+    $user = $this->getUser();
+
+    if (!$user) {
+        return new JsonResponse(['error' => 'Utilisateur non connecté'], JsonResponse::HTTP_UNAUTHORIZED);
+    }
+
+    $count = $notificationRepository->markAllAsRead($user->getIdUtilisateur());
+
+    return new JsonResponse(['success' => "$count notifications marquées comme lues"], JsonResponse::HTTP_OK);
+}
+
 }

@@ -61,4 +61,17 @@ class NotificationsRepository extends ServiceEntityRepository
         $this->_em->persist($notification);
         $this->_em->flush();
     }
+    
+    public function markAllAsRead(int $userId): int
+{
+    return $this->createQueryBuilder('n')
+        ->update()
+        ->set('n.isRead', ':read')
+        ->where('n.idUtilisateur = :userId')
+        ->setParameter('read', true)
+        ->setParameter('userId', $userId)
+        ->getQuery()
+        ->execute();
+}
+
 }

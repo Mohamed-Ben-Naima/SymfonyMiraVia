@@ -20,6 +20,10 @@
     background-color: #0d6efd;
     color: white;
 }
+.notification-item.read {
+    opacity: 0.6;
+}
+
 
 .btn-mark-read:hover {
     background-color: #0b5ed7;
@@ -150,9 +154,6 @@
         </div>
     </div>
 </div>
-
-
-
 <script>
     // Fonction pour déterminer l'icône selon le type de notification
     function getIcon(type) {
@@ -201,12 +202,26 @@
 
     // Fonction pour marquer toutes les notifications comme lues
     function markAllAsRead() {
-        const items = document.querySelectorAll(".notification-item");
-        items.forEach(item => {
-            item.classList.add("read");  // Ajoute une classe "read" pour changer le style des notifications lues
-        });
-        updateNotificationCount();  // Met à jour le compteur de notifications
-    }
+    fetch('/api/notifications/mark-read', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Marquer toutes les notifications visuellement comme lues
+            const items = document.querySelectorAll(".notification-item");
+            items.forEach(item => {
+                item.classList.add("read");
+            });
+            updateNotificationCount();
+        } else {
+            alert(data.error || "Une erreur s'est produite.");
+        }
+    })
+    .catch(error => {
+        console.error("Erreur lors du marquage des notifications comme lues:", error);
+    });
+}
 
     // Fonction pour supprimer toutes les notifications
     function clearAllNotifications() {
