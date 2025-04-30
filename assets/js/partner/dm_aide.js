@@ -140,3 +140,57 @@ function generatePDF(index) {
       });
       
     }
+    document.addEventListener('DOMContentLoaded', () => {
+      const statusFilter = document.getElementById('statusFilter');
+      const demandesTable = document.getElementById('demandesTable');
+      const rows = Array.from(demandesTable.querySelectorAll('tr'));
+    
+      statusFilter.addEventListener('change', () => {
+        const selectedStatus = statusFilter.value; // Statut sélectionné
+    
+        rows.forEach(row => {
+          // Vérifiez si la ligne correspond au statut sélectionné
+          const rowStatus = row.getAttribute('data-status');
+          if (selectedStatus === '' || rowStatus === selectedStatus) {
+            row.style.display = ''; // Affiche la ligne
+          } else {
+            row.style.display = 'none'; // Masque la ligne
+          }
+        });
+      });
+    });
+    
+    // Gestion du header flottant
+  window.addEventListener('scroll', function() {
+    const header = document.querySelector('.floating-header');
+    if (window.scrollY > 50) {
+        
+        header.style.backgroundColor = '#f5f5f9';
+    } else {
+        
+        header.style.backgroundColor = '#f5f5f9';
+    }
+
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Écouteur pour le clic sur les icônes œil
+  document.querySelectorAll('[data-bs-target^="#viewDemandeModal"]').forEach(icon => {
+      icon.addEventListener('click', function() {
+          const modalId = this.getAttribute('data-bs-target');
+          const modal = new bootstrap.Modal(document.querySelector(modalId));
+          modal.show();
+      });
+  });
+});
+
+document.addEventListener('hidden.bs.modal', function (event) {
+  // Forcer la suppression de l'overlay de Bootstrap
+  if (document.querySelector('.modal-backdrop')) {
+      document.querySelector('.modal-backdrop').remove();
+  }
+
+  // Supprimer la classe "modal-open" de <body>, si elle est toujours présente
+  document.body.classList.remove('modal-open');
+  document.body.style.overflow = ''; // Réinitialiser le défilement
+});

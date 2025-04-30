@@ -1,36 +1,74 @@
 <form method="post" action="{{ path('update_demande', {'id': aide.id_demande}) }}" enctype="multipart/form-data">
-  <div class="mb-3">
-    <label for="client_nom" class="form-label">Client</label>
-    <input type="text" class="form-control" id="client_nom" name="client_nom" value="{{ aide.client_nom }}" readonly>
+  <!-- Ligne 1 : Client et Type d'aide -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="client_nom" class="form-label">Client :</label>
+        <input type="text" class="form-control" id="client_nom" name="client_nom" value="{{ aide.client_nom }}" readonly>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="type_aide" class="form-label">Type d'aide :</label>
+        <select class="form-select" id="type_aide" name="type_aide">
+          <option value="non_financiere" {% if aide.type_aide == 'non financiere' %}selected{% endif %}>Non financière</option>
+          <option value="financiere" {% if aide.type_aide == 'financiere' %}selected{% endif %}>Financière</option>
+        </select>
+      </div>
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="type_aide" class="form-label">Type d'aide</label>
-    <select class="form-select" id="type_aide" name="type_aide">
-      <option value="non_financiere" {% if aide.type_aide == 'non financiere' %}selected{% endif %}>non financiere</option>
-      <option value="financiere" {% if aide.type_aide == 'financiere' %}selected{% endif %}>financiere</option>
-    </select>
+
+  <!-- Ligne 2 : Description -->
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="description" class="form-label">Description :</label>
+        <textarea class="form-control" id="description" name="description" rows="3">{{ aide.description }}</textarea>
+      </div>
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="description" class="form-label">Description</label>
-    <textarea class="form-control" id="description" name="description">{{ aide.description }}</textarea>
+
+  <!-- Ligne 3 : Montant et Date -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="montant_demande" class="form-label">Montant :</label>
+        <input type="number" step="0.01" class="form-control" id="montant_demande" name="montant_demande" 
+        value="{{ aide.montant_demande }}">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="date_demande" class="form-label">Date et Heure :</label>
+        <input type="datetime-local" class="form-control" id="date_demande" name="date_demande" 
+        value="{{ aide.date_demande ? aide.date_demande|date('Y-m-d\\TH:i') : '' }}">
+      </div>
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="montant_demande" class="form-label">Montant</label>
-    <input type="number" step="0.01" class="form-control" id="montant_demande" name="montant_demande" 
-    value="{{ aide.montant_demande }}">
+
+  <!-- Ligne 4 : Preuves -->
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="preuves" class="form-label">Preuves :</label>
+        <input type="file" class="form-control" id="preuves" name="preuves">
+      </div>
+      <label for="preuves" class="form-label mt-3">Preuve actuelle :</label>
+      <!-- Afficher l'image centrée si elle est disponible -->
+      {% if aide.preuves %}
+        <div class="d-flex justify-content-center mt-3">
+          <div style="max-width: 70px; max-height: 70px; overflow: hidden;">
+            <img src="{{ asset('uploads/preuves/' ~ aide.preuves) }}" alt="Preuve actuelle" class="img-fluid" style="max-width: 100%; max-height: 100%; border: 1px solid #ccc; border-radius: 4px;">
+          </div>
+        </div>
+      {% endif %}
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="date_demande" class="form-label">Date et Heure</label>
-    <input type="datetime-local" class="form-control" id="date_demande" name="date_demande" 
-    value="{{ aide.date_demande ? aide.date_demande|date('Y-m-d\\TH:i') : '' }}">
+
+  <!-- Boutons Modifier et Annuler -->
+  <div class="text-center mt-4">
+  <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+  <i class="bi bi-x-circle me-1"></i>Annuler</button>
+    <button type="submit" class="btn btn-edit me-2">Modifier</button>
   </div>
-  <div class="mb-3">
-    <label for="preuves" class="form-label">Preuves</label>
-    <input type="file" class="form-control" id="preuves" name="preuves">
-    {% if aide.preuves %}
-      <p class="mt-2">Preuve actuelle : <a href="{{ asset('uploads/preuves/' ~ aide.preuves) }}" 
-      target="_blank">Voir la preuve</a></p>
-    {% endif %}
-  </div>
-  <button type="submit" class="btn btn-primary">Enregistrer</button>
 </form>

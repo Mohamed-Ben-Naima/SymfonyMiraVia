@@ -14,9 +14,10 @@
           <p><strong>Montant:</strong> {{ aide.montant_demande }} €</p>
           <p><strong>Date:</strong> {{ aide.date_demande|date('d M Y H:i') }}</p>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="submit" class="btn btn-danger">Supprimer</button>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-annuler" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>Annuler</button>
+          <button type="submit" class="btn btn-cancel">Supprimer</button>
         </div>
       </form>
     </div>
