@@ -313,9 +313,9 @@ body.dark-mode .toggle-dark-mode:hover {
         <a class="navbar-brand d-flex align-items-center custom-logo" onclick="toggleSidebar()">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="me-2 logo-img">
         </a>
-        <div class="navbar-text ms-auto me-auto">
-            <h4 class="mb-0" id="navbar-title" data-translate="default_title">Titre par défaut</h4>
-        </div>
+<div class="navbar-text ms-auto me-auto">
+            <h4 class="mb-0">{{ pageTitle|default('Titre par défaut') }}</h4> <!-- Valeur par défaut -->
+        </div>
 
         <!-- Burger Menu for Mobile -->
         <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

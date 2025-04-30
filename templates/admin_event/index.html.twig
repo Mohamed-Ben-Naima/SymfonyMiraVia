@@ -563,15 +563,21 @@ body.dark-mode .toggle-dark-mode:hover {
                     {% endif %}
                 </td>
                 <td class="actions">
-                    <button class="consulter-btn" onclick="viewEventDetails({{ evenement.idEvenement }})">
+                    <button class="consulter-btn" onclick="viewEventDetails(this)"
+                        data-id="{{ evenement.idEvenement }}"
+                        data-titre="{{ evenement.titre }}"
+                        data-nom-partenaire="{{ evenement.nomPartenaire }}"
+                        data-prenom-partenaire="{{ evenement.prenomPartenaire }}"
+                        data-description="{{ evenement.description }}"
+                        data-date-evenement="{{ evenement.dateEvenement ? evenement.dateEvenement|date('Y-m-d H:i:s') : '' }}"
+                        data-lieu="{{ evenement.lieu }}"
+                        data-status="{{ evenement.status }}"
+                        data-etat="{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}"
+                        data-image="{{ evenement.imagename ? asset('images/' ~ evenement.imagename) : '' }}">
                         Consulter
                     </button>
-                    <button class="activer-btn" style="display: {{ evenement.estBloque == 1 ? 'inline-block' : 'none' }}" onclick="toggleEventStatus({{ evenement.idEvenement }}, {{ evenement.estBloque }})">
-                        Activer
-                    </button>
-                    <button class="bloquer-btn" style="display: {{ evenement.estBloque == 0 ? 'inline-block' : 'none' }}" onclick="toggleEventStatus({{ evenement.idEvenement }}, {{ evenement.estBloque }})">
-                        Bloquer
-                    </button>
+                    <button class="activer-btn" onclick="showUnblockModal({{ evenement.idEvenement }})">Activer</button>
+                    <button class="bloquer-btn" onclick="blockEvent({{ evenement.idEvenement }}, {{ evenement.estBloque }})">Bloquer</button>
                 </td>
             </tr>
             {% endfor %}
@@ -579,7 +585,7 @@ body.dark-mode .toggle-dark-mode:hover {
     </table>
 </div>
 
-<!-- Modal for Unblocking Confirmation -->
+<!-- Modals -->
 <div id="unblockModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -590,10 +596,6 @@ body.dark-mode .toggle-dark-mode:hover {
             <p style="font-weight: bold; color: #013A71; text-align: center;">
                 Voulez-vous vraiment activer cet évènement ?
             </p>
-            <!-- Ajouter un conteneur pour le message de validation -->
-            <div id="unblockValidationMessage" style="display: none; color: green; text-align: center; margin-top: 10px;">
-                <!-- Le message de validation sera affiché ici -->
-            </div>
         </div>
         <div class="modal-footer">
             <button class="save-btn" onclick="confirmUnblock()">Oui, Activer</button>
@@ -601,7 +603,6 @@ body.dark-mode .toggle-dark-mode:hover {
         </div>
     </div>
 </div>
-
 
 <!-- Modal for Event Details -->
 <div id="eventDetailsModal" class="modal">
@@ -621,9 +622,6 @@ body.dark-mode .toggle-dark-mode:hover {
     </div>
 </div>
 
-
-
-<!-- Modal for Blocking Confirmation -->
 <div id="blockModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -631,9 +629,7 @@ body.dark-mode .toggle-dark-mode:hover {
             <button class="close-btn" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
-            <p id="modalMessage" style="font-weight: bold; color: #013A71; text-align: center;">
-                Voulez-vous vraiment modifier l'état de cet évènement ?
-            </p>
+            <p id="modalMessage" style="font-weight: bold; color: #013A71; text-align: center;">Voulez-vous vraiment modifier l'état de cet évènement ?</p>
             <div class="form-group">
                 <label for="reason">Raison :</label>
                 <div id="reason">
@@ -646,10 +642,6 @@ body.dark-mode .toggle-dark-mode:hover {
             <div class="form-group">
                 <label for="explanation">Explication :</label>
                 <textarea id="explanation" rows="4" placeholder="Ajoutez une explication..." required></textarea>
-            </div>
-            <!-- Ajouter un conteneur pour le message de validation -->
-            <div id="blockValidationMessage" style="display: none; color: green; text-align: center; margin-top: 10px;">
-                <!-- Le message de validation sera affiché ici -->
             </div>
         </div>
         <div class="modal-footer">
@@ -665,95 +657,187 @@ function toggleDarkMode() {
     localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Apply dark mode if previously selected
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
+let currentEventId;
 
-    let currentEventId;
+function blockEvent(id, estBloque) {
+    currentEventId = id;
+    document.body.classList.add('no-scroll');
+    document.getElementById('blockModal').style.display = 'block';
 
-    function toggleEventStatus(id, estBloque) {
-        currentEventId = id;
-        document.body.classList.add('no-scroll');
-        document.getElementById('blockModal').style.display = 'block';
+    const modalMessage = document.getElementById('modalMessage');
+    const buttonText = estBloque == 1 ? 'Activer' : 'Bloquer';
 
-        const modalMessage = document.getElementById('modalMessage');
-        const action = estBloque == 1 ? 'Activer' : 'Bloquer';
-        modalMessage.innerText = `Voulez-vous vraiment ${action.toLowerCase()} cet évènement ?`;
-        modalMessage.style.color = "#013A71";
-        document.querySelectorAll('#reason input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
-        document.getElementById('explanation').value = '';
-    }
+    modalMessage.innerText = `Voulez-vous vraiment ${buttonText.toLowerCase()} cet évènement ?`;
+    modalMessage.style.color = "#013A71"; // Default blue color
+    document.querySelectorAll('#reason input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+    document.getElementById('explanation').value = '';
+}
 
-    function closeModal() {
-        document.body.classList.remove('no-scroll');
-        document.getElementById('blockModal').style.display = 'none';
-    }
+function showUnblockModal(id) {
+    currentEventId = id;
+    document.body.classList.add('no-scroll');
+    document.getElementById('unblockModal').style.display = 'block';
+}
 
-    function saveBlock() {
-        const reasons = Array.from(document.querySelectorAll('#reason input[type="checkbox"]:checked'))
-            .map(checkbox => checkbox.value);
-        const explanation = document.getElementById('explanation').value.trim();
+function closeUnblockModal() {
+    document.body.classList.remove('no-scroll');
+    document.getElementById('unblockModal').style.display = 'none';
+}
 
-        if (reasons.length === 0 || explanation === "") {
-            const modalMessage = document.getElementById('modalMessage');
-            modalMessage.innerText = "Veuillez sélectionner une raison et fournir une explication.";
-            modalMessage.style.color = "red";
-            return;
-        }
+function confirmUnblock() {
+    const unblockData = { id: currentEventId };
 
-        const etatCell = document.getElementById(`etat-${currentEventId}`);
-        const activerButton = document.querySelector(`.activer-btn[onclick*="toggleEventStatus(${currentEventId},"]`);
-        const bloquerButton = document.querySelector(`.bloquer-btn[onclick*="toggleEventStatus(${currentEventId},"]`);
-
-        if (etatCell.innerText === "Actif") {
-            etatCell.innerText = "Bloqué";
-            activerButton.style.display = 'inline-block';
-            bloquerButton.style.display = 'none';
-        } else {
-            etatCell.innerText = "Actif";
-            activerButton.style.display = 'none';
-            bloquerButton.style.display = 'inline-block';
-        }
-
-        const modalMessage = document.getElementById('modalMessage');
-        modalMessage.innerText = `L'état de l'évènement #${currentEventId} a été modifié avec succès.`;
-        modalMessage.style.color = "green";
-
-        setTimeout(closeModal, 3000);
-    }
-
-    document.getElementById('search').addEventListener('input', filterTable);
-    document.getElementById('statusFilter').addEventListener('change', filterTable);
-    document.getElementById('etatFilter').addEventListener('change', filterTable);
-
-    function filterTable() {
-        const searchFilter = document.getElementById('search').value.toLowerCase();
-        const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-        const etatFilter = document.getElementById('etatFilter').value.toLowerCase();
-        const rows = document.querySelectorAll('#userTable tr');
-
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            if (cells.length < 8) return;
-
-            const textMatch = Array.from(cells).slice(0, 6)
-                .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
-            const status = cells[6]?.textContent.trim().toLowerCase() || '';
-            const statusMatch = statusFilter === "" || status === statusFilter;
-            const etat = cells[7]?.textContent.trim().toLowerCase() || '';
-            const etatMatch = etatFilter === "" || etat === etatFilter;
-
-            row.style.display = (textMatch && statusMatch && etatMatch) ? '' : 'none';
+    fetch('/admin/event/unblock', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(unblockData),
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erreur lors de l'activation de l'évènement.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log("Success:", data.message);
+            } else {
+                console.error("Error:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Fetch Error:", error);
+        })
+        .finally(() => {
+            // Toujours fermer le modal et rafraîchir la page
+            closeUnblockModal();
+            window.location.reload();
         });
+}
+
+function closeModal() {
+    document.body.classList.remove('no-scroll');
+    document.getElementById('blockModal').style.display = 'none';
+}
+
+function saveBlock() {
+    const reasons = Array.from(document.querySelectorAll('#reason input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.value);
+    const explanation = document.getElementById('explanation').value.trim();
+
+    if (reasons.length === 0 || explanation === "") {
+        const modalMessage = document.getElementById('modalMessage');
+        modalMessage.innerText = "Veuillez sélectionner une raison et fournir une explication.";
+        modalMessage.style.color = "red";
+        return;
     }
 
-    // Expose functions globally for HTML onclick
-    window.toggleEventStatus = toggleEventStatus;
-    window.closeModal = closeModal;
-    window.saveBlock = saveBlock;
-    // viewEventDetails is assumed to be defined elsewhere
-});
+    const blockData = {
+        id: currentEventId,
+        reasons: reasons,
+        explanation: explanation
+    };
+
+    fetch('/admin/event/block', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(blockData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erreur lors du blocage de l'évènement.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log("Success:", data.message);
+            } else {
+                console.error("Error:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Fetch Error:", error);
+        })
+        .finally(() => {
+            // Toujours fermer le modal et rafraîchir la page
+            closeModal();
+            window.location.reload();
+        });
+}
+
+function viewEventDetails(button) {
+    // Extract data from the button's data-* attributes
+    const id = button.getAttribute('data-id');
+    const titre = button.getAttribute('data-titre');
+    const nomPartenaire = button.getAttribute('data-nom-partenaire');
+    const prenomPartenaire = button.getAttribute('data-prenom-partenaire');
+    const description = button.getAttribute('data-description');
+    const dateEvenement = button.getAttribute('data-date-evenement');
+    const lieu = button.getAttribute('data-lieu');
+    const status = button.getAttribute('data-status');
+    const etat = button.getAttribute('data-etat');
+    const image = button.getAttribute('data-image');
+
+    // Populate the modal with the extracted data
+    const eventDetailsContainer = document.getElementById('eventDetailsContainer');
+eventDetailsContainer.innerHTML = `
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="font-size: 20px; font-weight: bold; color: #013A71; margin-bottom: 10px; letter-spacing: 1.2px;">
+            ${titre}
+        </h2>
+        <img src="${image || 'https://via.placeholder.com/300'}" alt="Image de l'évènement" style="width: 100%; max-width: 300px; height: auto; border-radius: 10px;">
+    </div>
+    <p><strong>Nom du Partenaire:</strong> ${nomPartenaire} ${prenomPartenaire}</p>
+    <p><strong>Description:</strong> ${description}</p>
+    <p><strong>Date:</strong> ${dateEvenement}</p>
+    <p><strong>Lieu:</strong> ${lieu}</p>
+    <p><strong>Status:</strong> ${status}</p>
+    <p><strong>État:</strong> ${etat}</p>
+`;
+
+    // Show the modal
+    document.body.classList.add('no-scroll');
+    document.getElementById('eventDetailsModal').style.display = 'block';
+}
+
+function closeEventDetailsModal() {
+    document.getElementById('eventDetailsModal').style.display = 'none';
+}
+
+
+
+
+document.getElementById('search').addEventListener('input', filterTable);
+document.getElementById('statusFilter').addEventListener('change', filterTable);
+function filterTable() {
+    const searchFilter = document.getElementById('search').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+    const etatFilter = document.getElementById('etatFilter').value.toLowerCase();
+    const rows = document.querySelectorAll('#userTable tr');
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+
+        // Vérifiez que la ligne contient suffisamment de colonnes
+        if (cells.length < 8) {
+            return; // Ignorez les lignes avec un nombre insuffisant de colonnes
+        }
+
+        const textMatch = Array.from(cells).slice(0, 6).some(cell => cell.textContent.toLowerCase().includes(searchFilter));
+        const status = cells[6].textContent.trim().toLowerCase(); // Status dans la 7e colonne (index 6)
+        const statusMatch = statusFilter === "" || status === statusFilter;
+        const etat = cells[7].textContent.trim().toLowerCase(); // État dans la 8e colonne (index 7)
+        const etatMatch = etatFilter === "" || etat === etatFilter;
+
+        // Affichez la ligne si elle correspond à tous les filtres
+        row.style.display = (textMatch && statusMatch && etatMatch) ? '' : 'none';
+    });
+}
 </script>
+
 {% endblock %}
