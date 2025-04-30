@@ -11,21 +11,21 @@ use Doctrine\ORM\Mapping as ORM;
 class DemandePartenaire
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(name: "id", nullable: true, options: ["default" => NULL])]
-    private ?int $id = NULL;
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(name: "id",type: "integer")]
+    private ?int $id = null;
 
     #[ORM\Column(name: "demandeur", length: 100, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $demandeur = 'NULL';
+    private ?string $demandeur = null;
 
     #[ORM\Column(name: "telephone", length: 15, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $telephone = 'NULL';
+    private ?string $telephone = null;
 
     #[ORM\Column(name: "email", length: 100, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $email = 'NULL';
+    private ?string $email = null;
 
     #[ORM\Column(name: "adresse", length: 255, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $adresse = 'NULL';
+    private ?string $adresse = null;
 
     #[ORM\Column(name: "date_demande", type: Types::DATETIME_MUTABLE, nullable: true, options: ["default" => 'current_timestamp()'])]
     private ?\DateTimeInterface $dateDemande = null;
@@ -37,10 +37,10 @@ class DemandePartenaire
     private ?string $description = null;
 
     #[ORM\Column(name: "preuve", length: 255, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $preuve = 'NULL';
+    private ?string $preuve = null;
 
     #[ORM\Column(name: "type_activite", length: 100, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $typeActivite = 'NULL';
+    private ?string $typeActivite = null;
 
     public function getId(): ?int
     {
