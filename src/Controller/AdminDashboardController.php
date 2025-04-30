@@ -19,16 +19,18 @@ final class AdminDashboardController extends AbstractController
         $totalDons = $connection->fetchOne('SELECT COUNT(*) FROM dons');
         $totalDemandesAide = $connection->fetchOne('SELECT COUNT(*) FROM demandes_aide');
 
-        // Récupération des événements pour le calendrier (table evenements)
+        // Récupération des événements pour le calendrier (table evenements) uniquement avec status "En cours"
         $events = $connection->fetchAllAssociative('
             SELECT id_evenement AS id, titre AS title, date_evenement AS start, description, lieu
             FROM evenements
+            WHERE status = "En cours"
         ');
 
-        // Récupération des événements de bénévolat pour le calendrier (table benevolat)
+        // Récupération des événements de bénévolat pour le calendrier (table benevolat) uniquement avec status "Ouvert"
         $volunteerEvents = $connection->fetchAllAssociative('
             SELECT id_benevolat AS id, titre AS title, date_benevolat AS start, description, status, imageName
             FROM benevolat
+            WHERE status = "Ouvert"
         ');
 
         // Formatage des événements (evenements)
@@ -84,9 +86,31 @@ final class AdminDashboardController extends AbstractController
             ORDER BY MONTH(date_don)
         ');
 
-        // Préparer les données pour le graphique
+        // Préparer les données pour le graphique des dons
         $monthLabels = array_column($donationsByMonth, 'month');
         $monthAmounts = array_column($donationsByMonth, 'total_amount');
+
+        // Récupération des données pour le graphique des favoris par semaine (dernières 4 semaines)
+        $favoritesByWeek = $connection->fetchAllAssociative('
+            SELECT 
+                CONCAT("Semaine ", WEEK(date_favori, 1) - WEEK(DATE_SUB(CURDATE(), INTERVAL 4 WEEK), 1) + 1) AS week,
+                COUNT(*) AS total_favorites
+            FROM favoris
+            WHERE date_favori >= DATE_SUB(CURDATE(), INTERVAL 4 WEEK)
+            GROUP BY WEEK(date_favori, 1)
+            ORDER BY WEEK(date_favori, 1)
+        ');
+
+        // Préparer les données pour le graphique des favoris
+        $weekLabels = ['Semaine 1', 'Semaine 2', 'Semaine 3', 'Semaine 4'];
+        $weekFavorites = [0, 0, 0, 0]; // Initialiser à 0 pour les 4 semaines
+
+        foreach ($favoritesByWeek as $weekData) {
+            $weekNumber = (int) str_replace('Semaine ', '', $weekData['week']) - 1; // Convertir "Semaine X" en index (0-3)
+            if ($weekNumber >= 0 && $weekNumber < 4) {
+                $weekFavorites[$weekNumber] = (int) $weekData['total_favorites'];
+            }
+        }
 
         // Envoi des données au template
         return $this->render('admin_dashboard/index.html.twig', [
@@ -102,6 +126,8 @@ final class AdminDashboardController extends AbstractController
             'countryCounts' => json_encode($countryCounts),
             'monthLabels' => json_encode($monthLabels),
             'monthAmounts' => json_encode($monthAmounts),
+            'weekLabels' => json_encode($weekLabels),
+            'weekFavorites' => json_encode($weekFavorites),
             'pageTitle' => 'Tableau de bord',
         ]);
     }
