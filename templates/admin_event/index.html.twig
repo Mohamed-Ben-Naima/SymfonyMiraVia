@@ -579,6 +579,51 @@ body.dark-mode .toggle-dark-mode:hover {
     </table>
 </div>
 
+<!-- Modal for Unblocking Confirmation -->
+<div id="unblockModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Confirmation d'activation</span>
+            <button class="close-btn" onclick="closeUnblockModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p style="font-weight: bold; color: #013A71; text-align: center;">
+                Voulez-vous vraiment activer cet évènement ?
+            </p>
+            <!-- Ajouter un conteneur pour le message de validation -->
+            <div id="unblockValidationMessage" style="display: none; color: green; text-align: center; margin-top: 10px;">
+                <!-- Le message de validation sera affiché ici -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="save-btn" onclick="confirmUnblock()">Oui, Activer</button>
+            <button class="cancel-btn" onclick="closeUnblockModal()">Annuler</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for Event Details -->
+<div id="eventDetailsModal" class="modal">
+    <div class="modal-content card-style">
+        <div class="modal-header">
+            <span>Détails de l'Évènement</span>
+            <button class="close-btn" onclick="closeEventDetailsModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div id="eventDetailsContainer">
+                <!-- Event details will be dynamically populated here -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="cancel-btn" onclick="closeEventDetailsModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal for Blocking Confirmation -->
 <div id="blockModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -601,6 +646,10 @@ body.dark-mode .toggle-dark-mode:hover {
             <div class="form-group">
                 <label for="explanation">Explication :</label>
                 <textarea id="explanation" rows="4" placeholder="Ajoutez une explication..." required></textarea>
+            </div>
+            <!-- Ajouter un conteneur pour le message de validation -->
+            <div id="blockValidationMessage" style="display: none; color: green; text-align: center; margin-top: 10px;">
+                <!-- Le message de validation sera affiché ici -->
             </div>
         </div>
         <div class="modal-footer">

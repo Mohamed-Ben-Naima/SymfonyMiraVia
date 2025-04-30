@@ -445,10 +445,10 @@ body.dark-mode .modal-footer .cancel-btn:hover {
                 <td>{{ partenaire.nom_entreprise }}</td>
                 <td>{{ partenaire.date_expiration ? partenaire.date_expiration|date('Y-m-d') : 'N/A' }}</td>
                 <td>{{ partenaire.type_activite }}</td>
-                <td>{{ partenaire.utilisateur_status }}</td>
+                <td>{{ partenaire.utilisateur_statut_verification }}</td>
                 <td class="actions">
-                    <button class="button-block" style="display: {{ partenaire.utilisateur_status == 'Actif' ? 'inline-block' : 'none' }}" onclick="blockUser({{ partenaire.id_partenaire }})">Bloquer</button>
-                    <button class="button-unblock" style="display: {{ partenaire.utilisateur_status == 'Inactif' ? 'inline-block' : 'none' }}" onclick="unblockUser({{ partenaire.id_partenaire }})">Débloquer</button>
+                    <button class="button-block" onclick="blockUser({{ partenaire.id_partenaire }})">Bloquer</button>
+                    <button class="button-unblock"  onclick="unblockUser({{ partenaire.id_partenaire }})">Débloquer</button>
                 </td>
             </tr>
             {% endfor %}
@@ -541,29 +541,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateStatus(id, status) {
-        console.log('Sending data:', { id, status });
+function updateStatus(id, statut_verification) {
+    console.log('Sending data:', { id, statut_verification });
 
-        fetch('/admin/partner/change-status', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-            body: JSON.stringify({ id: id, status: status }),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-        })
-        .then(() => {
-            location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
+    fetch('/admin/partner/change-status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({ id: id, statut_verification: statut_verification }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    })
+    .then(() => {
+        location.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
     function blockUser(id) {
         openConfirmationModal(`Êtes-vous sûr de vouloir bloquer l'utilisateur #${id} ?`, function () {

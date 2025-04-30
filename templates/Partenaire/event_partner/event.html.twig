@@ -1,0 +1,206 @@
+{% extends 'Partenaire/basePartner.html.twig' %}
+
+{% block title %}Gestion des Événements{% endblock %}
+
+{% block body %}
+<div class="content">
+    <!-- Titre centré -->
+    <div class="text-center mb-4">
+        <h1 style="color: #013a71; font-size: 35px;">Liste des Événements</h1>
+    </div>
+
+    <!-- Barres de recherche -->
+    <div class="filter-bar d-flex justify-content-center gap-4 mb-4">
+        <select id="itemsPerPage" class="form-select" style="max-width: 300px;">
+            <option value="10">10 Par Page</option>
+            <option value="20">20 Par Page</option>
+            <option value="50">50 Par Page</option>
+        </select>
+
+        <select id="sortByDate" class="form-select" style="max-width: 300px;">
+            <option value="recent">Trier Par Date Récente</option>
+            <option value="oldest">Trier Par Date Ancienne</option>
+        </select>
+    </div>
+
+    <!-- Bouton Ajouter et Cards -->
+    <div class="d-flex justify-content-between align-items-start">
+        <!-- Cards Section -->
+        <div class="flex-grow-1 me-4">
+            <div class="row g-4">
+                {% for event in evenements %}
+                    {% if event.idPartenaire == 1 %}
+                        <div class="col-12">
+                            <div class="event-card d-flex align-items-start">
+                                
+                                <!-- Image Section -->
+                                <div class="event-image-container me-3">
+                                    <img src="{{ event.imageName }}" class="event-image" alt="{{ event.titre }}" loading="lazy">
+                                </div>
+                                
+                                <!-- Details Section -->
+                                <div class="flex-grow-1 d-flex flex-column">
+                                    <!-- Date -->
+                                    <div class="event-date text-center mb-3">
+                                        <h4 style="color: #013a71;">{{ event.dateEvenement|date('d') }}</h4>
+                                        <span style="color: #198754;">{{ event.dateEvenement|date('M Y') }}</span>
+                                        <!-- Location (below the date) -->
+                                        <p class="event-location mt-2" style="font-size: 14px; 
+                                        color: #013a71; font-style: italic;">
+                                            <i class="bi bi-geo-alt-fill"></i> {{ event.lieu }}
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Event Details -->
+                                    <div>
+                                        <!-- Title and Dropdown -->
+                                        <div class="d-flex justify-content-between">
+                                            <!-- Event Title -->
+                                            <h5 class="event-title mb-1" style="color: #013a71; font-size: 18px; font-weight: bold;">
+                                                <i class="bi bi-calendar2-check"></i> {{ event.titre }}
+                                            </h5>
+                                            <!-- Dropdown Button (3 dots) -->
+                                            <div class="dropdown">
+                                                <button class="btn btn-link p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item text-warning" href="{{ path('edit_event', { id: event.idEvenement }) }}">
+                                                            <i class="bi bi-pencil-fill"></i> Modifier
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <button class="dropdown-item text-danger" onclick="confirmDelete({{ event.idEvenement }})">
+                                                            <i class="bi bi-trash-fill"></i> Supprimer
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- Event Description -->
+                                        <p class="event-summary text-muted" style="font-size: 14px;">
+                                            {{ event.description|length > 120 ? event.description|slice(0, 120) ~ '...' : event.description }}
+                                        </p>
+                                    </div>
+
+                                    <!-- Attend Button -->
+                                    <div class="mt-auto d-flex justify-content-end" style="margin-bottom: 10px; margin-right: 10px;">
+                                        <button class="btn btn-custom-attend btn-sm">
+                                            <i class="bi bi-clock"></i> Attend
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="empty-state text-center">
+                        <i class="fas fa-calendar-times fa-3x text-muted"></i>
+                        <h3 class="text-muted mt-3">Aucun événement trouvé</h3>
+                        <p class="text-muted">Ajoutez votre premier événement pour commencer</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Bouton Ajouter -->
+        <div>
+            <button class="add-event-btn">Ajouter</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .event-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        background: white;
+        padding: 15px;
+        display: flex;
+    }
+
+    .event-image-container {
+        flex-shrink: 0;
+        width: 120px;
+        height: 120px;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .event-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .event-date {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .event-location {
+        margin-top: 5px;
+        font-style: italic;
+        color: #6c757d;
+    }
+
+    .btn-custom-attend {
+        background-color: #fff3cd;
+        border-color: #ffc107;
+        color: #ffc107;
+    }
+
+    .btn-custom-attend:hover {
+        background-color: #ffe8a1;
+        border-color: #e0a800;
+        color: #e0a800;
+    }
+
+    .add-event-btn {
+        background-color: #013a71;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-weight: bold;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .add-event-btn:hover {
+        background-color: #0056b3;
+        box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown {
+        margin-left: auto;
+    }
+
+    .btn-outline-primary {
+        width: auto;
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function confirmDelete(eventId) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet événement ?")) {
+            window.location.href = `/delete-event/${eventId}`;
+        }
+    }
+
+    document.getElementById('itemsPerPage').addEventListener('change', function() {
+        console.log('Items per page changed to:', this.value);
+    });
+
+    document.getElementById('sortByDate').addEventListener('change', function() {
+        console.log('Sort by date changed to:', this.value);
+    });
+</script>
+{% endblock %}
