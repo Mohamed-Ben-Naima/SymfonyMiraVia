@@ -14,16 +14,16 @@ security:
             security: false
 
         partner:
-            pattern: ^/(dashboard/partenaire|login/partner)
+            pattern: ^/(dashboard/partenaire|login/partner|api/notifications)
             provider: app_user_provider
             custom_authenticators:
                 - App\Security\Authenticator\PartnerAuthenticator
             logout:
-                path: app_home
-                target: app_login_controller_partner
+                 path: app_logout_partner
+                 target: app_home
+                 invalidate_session: true
             stateless: false
             lazy: true
-
         main:
             lazy: true
             provider: app_user_provider
@@ -41,6 +41,9 @@ security:
 
     access_control:
         - { path: ^/dashboard/partenaire, roles: ROLE_PARTENAIRE }
+        - { path: ^/partner, roles: ROLE_PARTENAIRE }        
+        - { path: ^/login/partner, roles: PUBLIC_ACCESS }
+        - { path: ^/sign-up/partner, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/inscription, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }

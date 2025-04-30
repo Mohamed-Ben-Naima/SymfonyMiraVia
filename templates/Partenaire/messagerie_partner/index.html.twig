@@ -1,95 +1,302 @@
 {% extends 'Partenaire/basePartner.html.twig' %}
 
+{% block stylesheets %}
+    <link href="{{ asset('style-partner/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}
+
+{% block title %}Messagerie{% endblock %}
+
 {% block body %}
-<div class="d-flex">
-  <!-- Sidebar -->
-  <div class="sidebar">
-    {% include 'partialsPartner/sidebarPartner.html.twig' %}
-  </div>
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 0;
+    }
 
-  <!-- Main Content -->
-  <div class="flex-grow-1" style="background-color: #CDC4F9;">
-    <section>
-      <div class="container py-5">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card" id="chat3" style="border-radius: 15px;">
-              <div class="card-body">
-                <div class="row">
-                  <!-- Member List Section -->
-                  <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">
-                    <div class="p-3">
-                      <div class="input-group rounded mb-3">
-                        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                        <span class="input-group-text border-0" id="search-addon">
-                          <i class="fas fa-search"></i>
-                        </span>
-                      </div>
+    .messagerie-wrapper {
+        display: flex;
+        flex-direction: row;
+        padding: 1.5rem;
+        margin-top: 70px;
+        margin-left: 250px;
+        gap: 1.5rem;
+        transition: all 0.3s ease;
+    }
 
-                      <div data-mdb-perfect-scrollbar-init style="position: relative; height: 400px; overflow-y: auto;">
-                        <ul class="list-unstyled mb-0">
-                          {% for member in members %}
-                          <li class="p-2 border-bottom">
-                            <a href="#!" class="d-flex justify-content-between">
-                              <div class="d-flex flex-row">
-                                <div>
-                                  <img src="{{ member.avatar }}" alt="{{ member.name }}" class="d-flex align-self-center me-3" width="60">
-                                  <span class="badge {{ member.statusBadgeClass }} badge-dot"></span>
-                                </div>
-                                <div class="pt-1">
-                                  <p class="fw-bold mb-0">{{ member.name }}</p>
-                                  <p class="small text-muted">{{ member.message }}</p>
-                                </div>
-                              </div>
-                              <div class="pt-1">
-                                <p class="small text-muted mb-1">{{ member.time }}</p>
-                                {% if member.unreadMessages > 0 %}
-                                <span class="badge bg-danger rounded-pill float-end">{{ member.unreadMessages }}</span>
-                                {% endif %}
-                              </div>
-                            </a>
-                          </li>
-                          {% endfor %}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+    /* Sections de contacts et chat */
+    .contacts-container, .chat-container {
+        background: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
 
-                  <!-- Chat Section -->
-                  <div class="col-md-6 col-lg-7 col-xl-8">
-                    <div class="pt-3 pe-3" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px; overflow-y: auto;">
-                      {% for chat in chats %}
-                      <div class="d-flex flex-row justify-content-{{ chat.align }}">
-                        {% if chat.align == 'start' %}
-                        <img src="{{ chat.avatar }}" alt="avatar" style="width: 45px; height: 100%;">
-                        {% endif %}
-                        <div>
-                          <p class="small p-2 {{ chat.align == 'start' ? 'ms-3' : 'me-3' }} mb-1 rounded-3 {{ chat.bgClass }}">{{ chat.message }}</p>
-                          <p class="small {{ chat.align == 'start' ? 'ms-3' : 'me-3' }} mb-3 rounded-3 text-muted {{ chat.align == 'start' ? 'float-end' : '' }}">{{ chat.time }}</p>
-                        </div>
-                        {% if chat.align == 'end' %}
-                        <img src="{{ chat.avatar }}" alt="avatar" style="width: 45px; height: 100%;">
-                        {% endif %}
-                      </div>
-                      {% endfor %}
-                    </div>
+    .contacts-container {
+        flex: 0 0 320px;
+        max-width: 320px;
+        min-width: 270px;
+    }
 
-                    <!-- Input Section -->
-                    <div class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
-                      <img src="{{ currentUser.avatar }}" alt="avatar" style="width: 40px; height: 100%;">
-                      <input type="text" class="form-control form-control-lg" id="exampleFormControlInput2" placeholder="Type message">
-                      <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
-                      <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
-                      <a class="ms-3" href="#!"><i class="fas fa-paper-plane"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    .contacts-container .search-bar {
+        padding: 1rem;
+        background-color: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .contacts-container .search-bar input {
+        flex: 1;
+        padding: 0.6rem 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #eef2f7;
+        font-size: 1rem;
+        outline: none;
+    }
+
+    .contacts-container .search-bar i {
+        font-size: 1.3rem;
+        color: #6b7280;
+    }
+
+    .contacts-container .people-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+    }
+
+    .person {
+        display: flex;
+        align-items: center;
+        padding: 0.8rem;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .person:hover {
+        background: #f9fafb;
+    }
+
+    .person img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .person-info {
+        margin-left: 0.8rem;
+        flex: 1;
+    }
+
+    .person-info .name {
+        font-weight: bold;
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .person-info .status,
+    .person-info .message-preview {
+        font-size: 0.85rem;
+        color: #6b7280;
+    }
+
+    .chat-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: #f1f5f9;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .chat-header img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        margin-right: 1rem;
+    }
+
+    .chat-header .name {
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .chat-header .status {
+        font-size: 0.9rem;
+        color: #6b7280;
+    }
+
+    .chat-area {
+        flex: 1;
+        padding: 1.5rem;
+        overflow-y: auto;
+        background: #f4f6f9;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .chat-bubble {
+        max-width: 70%;
+        padding: 0.75rem 1.25rem;
+        border-radius: 1.5rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        word-break: break-word;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: background 0.3s ease;
+    }
+
+    .chat-bubble.left {
+        background: #e2e8f0;
+        align-self: flex-start;
+    }
+
+    .chat-bubble.right {
+        background: #3b82f6;
+        color: white;
+        align-self: flex-end;
+    }
+
+    .chat-footer {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: #f1f5f9;
+        border-top: 1px solid #e0e0e0;
+        gap: 0.8rem;
+    }
+
+    .chat-footer input {
+        flex: 1;
+        padding: 0.8rem 1.2rem;
+        border: none;
+        border-radius: 2rem;
+        background: #e2e8f0;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .chat-footer input:focus {
+        background: #cbd5e0;
+        outline: none;
+    }
+
+    .chat-footer button {
+        background: #3b82f6;
+        color: #fff;
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .chat-footer button:hover {
+        background: #2563eb;
+    }
+
+    /* Responsive Adaptation */
+    @media (max-width: 992px) {
+        .messagerie-wrapper {
+            flex-direction: column;
+            margin-left: 0;
+        }
+
+        .contacts-container {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .chat-container {
+            width: 100%;
+            margin-top: 1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .contacts-container .search-bar input,
+        .chat-footer input {
+            font-size: 0.85rem;
+        }
+
+        .chat-footer button {
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+        }
+
+        .chat-header .name {
+            font-size: 1rem;
+        }
+
+        .person-info .name {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<div class="messagerie">
+    <div class="messagerie-wrapper">
+        <!-- Contacts Section -->
+        <div class="contacts-container">
+            <div class="search-bar">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Rechercher un contact...">
             </div>
-          </div>
+            <div class="people-list">
+                <div class="person">
+                    <img src="{{ asset('images-partner/icons/user-solid.svg') }}" alt="Profile picture">
+                    <div class="person-info">
+                        <p class="name">Utilisateur 1</p>
+                        <p class="status">Actif il y a 1 minute</p>
+                        <p class="message-preview">Salut, comment ça va ?</p>
+                    </div>
+                </div>
+                <!-- Other persons here -->
+            </div>
         </div>
-      </div>
-    </section>
-  </div>
+
+        <!-- Chat Section -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <img src="{{ asset('images-partner/icons/user-solid.svg') }}" alt="Profile picture">
+                <div>
+                    <p class="name">Utilisateur 1</p>
+                    <p class="status">En ligne</p>
+                </div>
+            </div>
+
+            <div class="chat-area">
+                <div class="chat-bubble left">Bonjour !</div>
+                <div class="chat-bubble right">Salut !</div>
+            </div>
+
+            <form class="chat-footer">
+                <input type="text" placeholder="Écrivez votre message ici...">
+                <button type="submit">
+                    Envoyer <i class="bi bi-send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
