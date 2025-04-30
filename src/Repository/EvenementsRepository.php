@@ -6,14 +6,6 @@ use App\Entity\Evenements;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Evenements>
- *
- * @method Evenements|null find($id, $lockMode = null, $lockVersion = null)
- * @method Evenements|null findOneBy(array $criteria, array $orderBy = null)
- * @method Evenements[]    findAll()
- * @method Evenements[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class EvenementsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -21,28 +13,12 @@ class EvenementsRepository extends ServiceEntityRepository
         parent::__construct($registry, Evenements::class);
     }
 
-//    /**
-//     * @return Evenements[] Returns an array of Evenements objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Evenements
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByPartnerId(int $idPartenaire)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.idPartenaire = :idPartenaire')
+            ->setParameter('idPartenaire', $idPartenaire)
+            ->getQuery()
+            ->getResult();
+    }
 }

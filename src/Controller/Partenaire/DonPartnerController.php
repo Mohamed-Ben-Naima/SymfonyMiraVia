@@ -60,7 +60,8 @@ final class DonPartnerController extends AbstractController
         $don->setMontant($montant);
         $don->setDateDon(new \DateTime($dateDon));
         $don->setIdPartenaire(1); // Set the current partner ID (hardcoded or dynamic)
-
+        $don->setStatus('En attente');
+        
         $entityManager->persist($don);
         $entityManager->flush();
 

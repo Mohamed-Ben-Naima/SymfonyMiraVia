@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DmAidePartnerController extends AbstractController
@@ -36,6 +38,34 @@ class DmAidePartnerController extends AbstractController
             'id_client' => $id_client, // Passez également l'ID client
         ]);
     }
+    #[Route('/dashboard/partenaire/demande_aide/update/{id}', name: 'update_demande', methods: ['POST'])]
+    public function updateDemande(int $id, Request $request, EntityManagerInterface $entityManager, DemandesAideRepository $repository): Response
+    {
+    $demande = $repository->find($id);
+    if (!$demande) {
+        throw $this->createNotFoundException('Demande non trouvée');
+    }
+
+    // Mettre à jour les champs
+    $data = $request->request->all();
+    $file = $request->files->get('preuves');
+
+    $demande->setTypeAide($data['type_aide']);
+    $demande->setDescription($data['description']);
+    $demande->setMontantDemande($data['montant_demande']);
+
+    if ($file) {
+        $uploadsDir = $this->getParameter('kernel.project_dir').'/public/uploads/preuves';
+        $fileName = uniqid().'.'.$file->guessExtension();
+        $file->move($uploadsDir, $fileName);
+        $demande->setPreuves($fileName);
+    }
+
+    $entityManager->flush();
+
+    $this->addFlash('success', 'Demande mise à jour avec succès !');
+    return $this->redirectToRoute('demande_aide', ['id_partenaire' => $demande->getIdPartenaire()]);    
+    }
 
     #[Route('/dashboard/partenaire/demande_aide_add/{id_partenaire}', name: 'add_demande', methods: ['POST'])]
     public function addDemande(
@@ -48,12 +78,12 @@ class DmAidePartnerController extends AbstractController
 
         $demande = new DemandesAide();
         $demande->setIdClient($data['id_client']);
-        $demande->setIdPartenaire($id_partenaire); // Important!
+        $demande->setIdPartenaire($id_partenaire);
         $demande->setTypeAide($data['type_aide']);
         $demande->setDescription($data['description'] ?? '');
         $demande->setMontantDemande($data['montant_demande'] ?? 0);
         $demande->setDateDemande(new \DateTime($data['date_demande'] ?? 'now'));
-        $demande->setStatus('en_attente');
+        $demande->setStatus('En attente');
 
        // Gestion du fichier
     if ($file) {
@@ -80,4 +110,27 @@ class DmAidePartnerController extends AbstractController
         $this->addFlash('success', 'Demande ajoutée avec succès!');
         return $this->redirectToRoute('demande_aide', ['id_partenaire' => $id_partenaire]);
     }
+
+    #[Route('/dashboard/partenaire/demande_aide/delete/{id}', name: 'delete_demande', methods: ['POST'])]
+        public function deleteDemande(int $id, EntityManagerInterface $entityManager, DemandesAideRepository $repository): RedirectResponse
+        {
+            $demande = $repository->find($id);
+
+            if (!$demande) {
+                $this->addFlash('error', 'Demande non trouvée.');
+                return $this->redirectToRoute('demande_aide');
+            }
+
+            // Vérifier que la demande est en attente
+            if ($demande->getStatus() !== 'En attente') {
+                $this->addFlash('error', 'Vous ne pouvez supprimer que les demandes en attente.');
+                return $this->redirectToRoute('demande_aide');
+            }
+
+            $entityManager->remove($demande);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Demande supprimée avec succès.');
+            return $this->redirectToRoute('demande_aide');
+        }
 }

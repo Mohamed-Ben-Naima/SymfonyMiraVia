@@ -2,49 +2,25 @@
 
 {% block title %}Liste des Dons{% endblock %}
 
-{% block styles %}
-<style>
-  .w-75 {
-      width: 84% !important;
-  }
-  .alert-success {
-      display: none;
-  }
-  /* Style personnalisé pour la barre de recherche */
-  .search-bar {
-      position: relative;
-      max-width: 300px;
-      width: 100%;
-  }
-
-  .search-bar input {
-      padding-left: 35px; /* Espace pour l'icône */
-      border: none; /* Pas de bordure */
-      border-radius: 5px; /* Coins arrondis */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre */
-      height: 38px; /* Hauteur de l'input */
-  }
-
-  .search-bar input:focus {
-      outline: none; /* Pas de contour bleu */
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Ombre plus marquée au focus */
-  }
-
-  .search-bar .icon {
-      position: absolute;
-      top: 50%;
-      left: 10px;
-      transform: translateY(-50%);
-      font-size: 1.2rem;
-      color: #007bff; /* Couleur de l'icône */
-  }
-</style>
-{% endblock %}
 
 {% block body %}
 <div class="content">
   <!-- Titre centré -->
   <h1 class="text-center mb-4" style="color: #013a71; font-size: 35px;">Liste des Dons</h1>
+
+  <!-- Barres de recherche -->
+  <div class="filter-bar">
+      <select id="itemsPerPage" class="form-select">
+          <option value="10">10 Par Page</option>
+          <option value="20">20 Par Page</option>
+          <option value="50">50 Par Page</option>
+      </select>
+
+      <select id="sortByDate" class="form-select">
+          <option value="recent">Trier Par Date Récente</option>
+          <option value="oldest">Trier Par Date Ancienne</option>
+      </select>
+  </div>
 
   <!-- Card blanche -->
   <div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border: none;">
@@ -117,7 +93,8 @@
                   <!-- Éditer -->
                   <i 
                       class="bi bi-pencil-fill text-primary" 
-                      style="cursor: pointer; margin-right: 10px; {% if don.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
+                      style="cursor: pointer; margin-right: 10px; 
+                      {% if don.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
                       data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
                       data-bs-target="#editDonModal{{ don.id_don }}"
                       title="{% if don.status == 'Accepté' %}Modification désactivée pour les dons acceptés{% else %}Modifier{% endif %}">
@@ -126,10 +103,14 @@
                   <!-- Supprimer -->
                   <i 
                       class="bi bi-trash-fill text-danger" 
-                      style="cursor: pointer; {% if don.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
+                      style="cursor: pointer; {% if don.status == 'Accepté' %}
+                      opacity: 0.5; pointer-events: none;{% endif %}" 
                       data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
                       data-bs-target="#deleteDonModal{{ don.id_don }}"
-                      title="{% if don.status == 'Accepté' %}Suppression désactivée pour les dons acceptés{% else %}Supprimer{% endif %}">
+                      title="{% if don.status == 'Accepté' %}
+                      Suppression désactivée pour les dons acceptés
+                      {% else %}Supprimer
+                      {% endif %}">
                   </i>
               </td>
                   </tr>
