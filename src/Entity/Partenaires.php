@@ -11,24 +11,26 @@ use Doctrine\ORM\Mapping as ORM;
 class Partenaires
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(name: "id_partenaire", nullable: true, options: ["default" => NULL])]
+#[ORM\OneToOne(targetEntity: Utilisateurs::class)]
+#[ORM\JoinColumn(name: "id_partenaire", referencedColumnName: "id_utilisateur", nullable: false)]
+private ?Utilisateurs $utilisateur = null;
+
     private ?int $idPartenaire = NULL;
 
-    #[ORM\Column(name: "nom_entreprise", length: 100, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $nomEntreprise = 'NULL';
+    #[ORM\Column(name: "nom_entreprise", length: 100, nullable: true)]
+    private ?string $nomEntreprise = null;
 
-    #[ORM\Column(name: "type_activite", length: 50, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $typeActivite = 'NULL';
+    #[ORM\Column(name: "type_activite", length: 50, nullable: true)]
+    private ?string $typeActivite = null;
 
-    #[ORM\Column(name: "site_web", length: 255, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $siteWeb = 'NULL';
+    #[ORM\Column(name: "site_web", length: 255, nullable: true)]
+    private ?string $siteWeb = null;
 
-    #[ORM\Column(name: "adresse", length: 255, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $adresse = 'NULL';
+    #[ORM\Column(name: "adresse", length: 255, nullable: true)]
+    private ?string $adresse = null;
 
-    #[ORM\Column(name: "telephone", length: 20, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $telephone = 'NULL';
+    #[ORM\Column(name: "telephone", length: 20, nullable: true)]
+    private ?string $telephone = null;
 
     #[ORM\Column(name: "autres_documents", type: Types::TEXT, nullable: true)]
     private ?string $autresDocuments = null;
@@ -36,12 +38,26 @@ class Partenaires
     #[ORM\Column(name: "etat", nullable: true, options: ["default" => 0])]
     private ?int $etat = 0;
 
-    #[ORM\Column(name: "date_expiration", type: Types::DATE_MUTABLE, nullable: true, options: ["default" => 'NULL'])]
+    #[ORM\Column(name: "date_expiration", type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateExpiration = null;
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $logo = null;
 
+    // Getter et Setter pour $logo
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): self
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
     public function getIdPartenaire(): ?int
     {
-        return $this->idPartenaire;
+        return $this->utilisateur?->getIdUtilisateur();
     }
 
     public function setIdPartenaire(?int $idPartenaire): static
@@ -146,4 +162,15 @@ class Partenaires
 
         return $this;
     }
+    public function getUtilisateur(): ?Utilisateurs
+{
+    return $this->utilisateur;
+}
+
+public function setUtilisateur(Utilisateurs $utilisateur): self
+{
+    $this->utilisateur = $utilisateur;
+    return $this;
+}
+
 }

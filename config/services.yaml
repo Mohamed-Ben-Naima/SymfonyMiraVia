@@ -6,6 +6,8 @@
 parameters:
     avatars_directory: '%kernel.project_dir%/public/uploads/avatars'
     uploads_directory: '%kernel.project_dir%/public/uploads/preuves'
+    autres_documents_directory: '%kernel.project_dir%/public/uploads/autres_documents'
+    partners_logos_directory: '%kernel.project_dir%/public/uploads/logos'
 
 services:
     App\Security\Authenticator\PartnerAuthenticator:
