@@ -53,7 +53,7 @@ public function findAllClients(): array
     $sql = '
         SELECT u.* 
         FROM utilisateurs u
-        JOIN clients c ON u.id = c.id_utilisateur
+        JOIN clients c ON u.id_utilisateur = id_client ;
     ';
     
     $stmt = $conn->prepare($sql);

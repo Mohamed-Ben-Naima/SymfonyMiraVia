@@ -19,6 +19,24 @@ class DemandesAideRepository extends ServiceEntityRepository
      * @param int $idPartenaire
      * @return array
      */
+
+    public function findAllClients(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT u.id_utilisateur, u.nom
+            FROM utilisateurs u
+            WHERE u.type_utilisateur = :role_client
+        ';
+
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery(['role_client' => 'client']); 
+        // Remplacez 'client' par la valeur réelle du rôle client dans votre base de données
+
+        return $result->fetchAllAssociative();
+    }
+
     public function findByPartenaire(int $idPartenaire): array
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -26,7 +44,7 @@ class DemandesAideRepository extends ServiceEntityRepository
         $sql = '
             SELECT 
                 da.*, 
-                u.nom AS client_nom, -- Récupère le nom du client
+                u.nom AS client_nom,
                 u.id_utilisateur AS client_id 
             FROM demandes_aide da
             JOIN utilisateurs u ON da.id_client = u.id_utilisateur
@@ -43,15 +61,7 @@ class DemandesAideRepository extends ServiceEntityRepository
      * @param int $idPartenaire
      * @return int
      */
-    public function countDemandesByPartenaire(int $idPartenaire): int
-    {
-        return $this->createQueryBuilder('d')
-            ->select('COUNT(d.id)')
-            ->andWhere('d.idPartenaire = :idPartenaire')
-            ->setParameter('idPartenaire', $idPartenaire)
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
+
 
     /**
      * Add a new demande to the database.

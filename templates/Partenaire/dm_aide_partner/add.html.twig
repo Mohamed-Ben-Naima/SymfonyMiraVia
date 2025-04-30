@@ -3,9 +3,9 @@
   <div class="mb-3">
     <label for="id_client" class="form-label">Utilisateur</label>
     <select class="form-select" id="id_client" name="id_client" required>
-      <option value="" disabled selected>Choisissez un utilisateur</option>
-      {% for utilisateur in utilisateurs %}
-        <option value="{{ utilisateur.idUtilisateur }}">{{ utilisateur.nom }}</option>
+      <option value="" disabled selected>Choisissez un Client</option>
+      {% for client in utilisateurs %}
+        <option value="{{ client.id_utilisateur }}">{{ client.nom }}</option>
       {% endfor %}
     </select>
   </div>
