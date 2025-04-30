@@ -112,7 +112,7 @@ class DmAidePartnerController extends AbstractController
         return $this->redirectToRoute('demande_aide', ['id_partenaire' => $demande->getIdPartenaire()]);
     }
 
-    #[Route('/dashboard/partenaire/demande_aide_add', name: 'add_demande', methods: ['POST'])]
+    #[Route('/dashboard/partenaire/demande_aide_add/{id_partenaire}', name: 'add_demande', methods: ['POST'])]
     public function addDemande(
         int $id_partenaire,
         Request $request,
