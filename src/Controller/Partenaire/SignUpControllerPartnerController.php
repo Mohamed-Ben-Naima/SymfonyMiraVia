@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Controller\Partenaire;
+use App\Entity\Partenaires;
+use App\Form\PartenaireFormType;
 use App\Form\SignUpFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,4 +58,29 @@ final class SignUpControllerPartnerController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-}
+    #[Route('/partenaire/ajouter', name: 'partenaire_ajouter')]
+    public function ajouter(Request $request): Response
+    {
+        $partenaire = new Partenaires();
+
+        // Définir les valeurs par défaut pour 'etat' et 'dateExpiration'
+        $partenaire->setEtat(false); // ou 0
+        $partenaire->setDateExpiration(new \DateTime()); // Date actuelle, ou une autre valeur si tu préfères
+
+        $form = $this->createForm(PartenairesType::class, $partenaire);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Sauvegarder l'entité partenaire en base de données
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($partenaire);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('partenaire_liste');
+        }
+
+        return $this->render('partenaire/ajouter.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    }

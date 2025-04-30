@@ -21,16 +21,13 @@
 method="post" enctype="multipart/form-data">
   <div class="mb-3">
     <label for="id_client" class="form-label">Utilisateur</label>
-    <select class="form-select" id="id_client" name="id_client" required>
-      <option value="" disabled selected>Choisissez un utilisateur</option>
-      {% for utilisateur in utilisateurs %}
-        {% if utilisateur.id_utilisateur == id_client %}
-          <option value="{{ utilisateur.id_utilisateur }}" selected>{{ utilisateur.nom }}</option>
-        {% else %}
-          <option value="{{ utilisateur.id_utilisateur }}">{{ utilisateur.nom }}</option>
-        {% endif %}
-      {% endfor %}
-    </select>
+   <select class="form-select" id="id_client" name="id_client" required>
+  <option value="" disabled selected>Choisissez un utilisateur</option>
+  {% for utilisateur in utilisateurs %}
+    <option value="{{ utilisateur.id_utilisateur }}">{{ utilisateur.nom }}</option>
+  {% endfor %}
+</select>
+
   </div>
   <div class="mb-3">
     <label for="type_aide" class="form-label">Type d'aide</label>
