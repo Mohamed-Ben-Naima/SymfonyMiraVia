@@ -88,9 +88,10 @@
               <td>{{ aide.type_aide }}</td>
               <td>{{ aide.description }}</td>
               <td>{{ aide.montant_demande }} €</td>
-              <td>{{ aide.date_demande|date('d M Y') }}</td>
+              <!-- Updated date display -->
+              <td>{{ aide.date_demande|date('d M Y H:i') }}</td>
               <td>
-                {% if aide.status == 'en_attente' %}
+                {% if aide.status == 'En attente' %}
                   <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important; color:rgb(255, 191, 0) !important;">En attente</span>
                 {% elseif aide.status == 'acceptee' %}
                   <span class="badge bg-success">Acceptée</span>
@@ -113,7 +114,7 @@
                 <!-- Éditer -->
         <i 
             class="bi bi-pencil-fill text-primary" 
-            style="cursor: pointer; margin-right: 10px; 
+            style="cursor: pointer;
             {% if aide.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
             data-bs-toggle="{% if aide.status != 'Accepté' %}modal{% endif %}" 
             data-bs-target="#editDemandeModal{{ aide.id_demande }}"

@@ -902,3 +902,20 @@
     border-color: #e0a800;
     color: #e0a800;
 }
+
+.btn.btn-add {
+  background-color: #28a745; /* Couleur verte par défaut */
+  color: #ffffff; /* Couleur du texte */
+  border: none; /* Pas de bordure */
+  padding: 10px 20px; /* Espacement interne */
+  font-size: 16px; /* Taille de la police */
+  border-radius: 5px; /* Coins arrondis */
+  transition: all 0.3s ease-in-out; /* Transition fluide */
+}
+
+.btn.btn-add:hover {
+  background-color: #218838; /* Couleur verte plus foncée au survol */
+  color: #ffffff; /* Couleur du texte au survol */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre au survol */
+  transform: scale(1.05); /* Zoom léger au survol */
+}

@@ -1,33 +1,13 @@
-<style>
-  .btn-add {
-      background-color: #28a745; /* Couleur verte par défaut */
-      color: #ffffff; /* Couleur du texte */
-      border: none; /* Pas de bordure */
-      padding: 10px 20px; /* Espacement interne */
-      font-size: 16px; /* Taille de la police */
-      border-radius: 5px; /* Coins arrondis */
-      transition: all 0.3s ease-in-out; /* Transition fluide */
-  }
-
-  .btn-add:hover {
-      background-color: #218838; /* Couleur verte plus foncée au survol */
-      color: #ffffff; /* Couleur du texte au survol */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre au survol */
-      transform: scale(1.05); /* Zoom léger au survol */
-  }
-</style>
-
 <form action="{{ path('add_demande', { id_partenaire: id_partenaire }) }}" 
-method="post" enctype="multipart/form-data">
+      method="post" enctype="multipart/form-data">
   <div class="mb-3">
     <label for="id_client" class="form-label">Utilisateur</label>
-   <select class="form-select" id="id_client" name="id_client" required>
-  <option value="" disabled selected>Choisissez un utilisateur</option>
-  {% for utilisateur in utilisateurs %}
-    <option value="{{ utilisateur.id_utilisateur }}">{{ utilisateur.nom }}</option>
-  {% endfor %}
-</select>
-
+    <select class="form-select" id="id_client" name="id_client" required>
+      <option value="" disabled selected>Choisissez un utilisateur</option>
+      {% for utilisateur in utilisateurs %}
+        <option value="{{ utilisateur.idUtilisateur }}">{{ utilisateur.nom }}</option>
+      {% endfor %}
+    </select>
   </div>
   <div class="mb-3">
     <label for="type_aide" class="form-label">Type d'aide</label>
@@ -45,14 +25,14 @@ method="post" enctype="multipart/form-data">
     <input type="number" class="form-control" id="montant_demande" name="montant_demande" required>
   </div>
   <div class="mb-3">
-    <label for="date_demande" class="form-label">Date</label>
-    <input type="date" class="form-control" id="date_demande" name="date_demande" required>
+    <label for="date_demande" class="form-label">Date et Heure de demande</label>
+    <input type="datetime-local" class="form-control" id="date_demande" name="date_demande" required>
   </div>
   <div class="mb-3">
     <label for="preuve" class="form-label">Preuve</label>
     <input type="file" class="form-control" id="preuve" name="preuve">
   </div>
   <div class="modal-footer justify-content-center">
-  <button type="submit" class="btn btn-add">Ajouter</button>
+    <button type="submit" class="btn btn-add">Ajouter</button>
   </div>
 </form>
