@@ -2,33 +2,6 @@
 
 {% block title %}Demandes d'aide{% endblock %}
 
-{% block styles %}
-<style>
-  .w-75 {
-      width: 84% !important;
-  }
-  .alert-success {
-      display: none;
-  }
-  .table-hover td {
-      vertical-align: middle;
-  }
-  .action-icons i {
-      margin-right: 10px;
-      cursor: pointer;
-      font-size: 1.2rem;
-  }
-  .action-icons .bi-pencil-square {
-      color: blue;
-  }
-  .action-icons .bi-eye {
-      color: gray;
-  }
-  .action-icons .bi-trash {
-      color: red;
-  }
-</style>
-{% endblock %}
 
 {% block body %}
 <div class="content">
@@ -41,24 +14,26 @@
       
       <!-- Barre de recherche, sélection de statut et bouton "Ajouter une demande" -->
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <!-- Barre de recherche -->
-        <input 
-          type="text" 
-          id="searchBar" 
-          class="form-control me-2" 
-          placeholder="Rechercher une demande..."
-          style="max-width: 300px;"
-        >
+        <div class="search-container" style="position: relative; width: 900px;">
+          <i class="bi bi-search search-icon" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: gray;"></i>
+          <input 
+            type="text" 
+            id="searchBar" 
+            class="form-control" 
+            placeholder="Rechercher une demande..."
+            style="padding-left: 35px;"
+          >
+        </div>
 
         <!-- Sélection de statut et bouton "Ajouter une demande" -->
         <div class="d-flex align-items-center">
           <select id="statusFilter" class="form-select me-2" style="max-width: 200px;">
-            <option value="">Tous les statuts</option>
-            <option value="en_attente">En attente</option>
-            <option value="acceptee">Acceptée</option>
-            <option value="refusee">Refusée</option>
-            <option value="en_traitement">En traitement</option>
-          </select>
+          <option value="">Tous les statuts</option>
+          <option value="En attente">En attente</option>
+          <option value="Acceptée">Acceptée</option>
+          <option value="Refusée">Refusée</option>
+          <option value="En traitement">En traitement</option>
+        </select>
           <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDemandeModal">
             Ajouter
           </button>
@@ -82,7 +57,7 @@
           </thead>
           <tbody id="demandesTable">
           {% for aide in demandes_aide %}
-            <tr>
+            <tr data-status="{{ aide.status }}">
               <!-- Table content -->
               <td>{{ aide.client_nom }}</td>
               <td>{{ aide.type_aide }}</td>
@@ -92,10 +67,11 @@
               <td>{{ aide.date_demande|date('d M Y H:i') }}</td>
               <td>
                 {% if aide.status == 'En attente' %}
-                  <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important; color:rgb(255, 191, 0) !important;">En attente</span>
-                {% elseif aide.status == 'acceptee' %}
+                  <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important;
+                   color:rgb(255, 191, 0) !important;">En attente</span>
+                {% elseif aide.status == 'Acceptée' %}
                   <span class="badge bg-success">Acceptée</span>
-                {% elseif aide.status == 'refusee' %}
+                {% elseif aide.status == 'Refusée' %}
                   <span class="badge bg-danger">Refusée</span>
                 {% elseif aide.status == 'en_traitement' %}
                   <span class="badge bg-info text-dark">En traitement</span>
@@ -139,14 +115,16 @@
             {% endif %}">
         </i>
 
+              <!-- Icône œil -->
               <i class="bi bi-eye" 
-                style="cursor: pointer;color: gray;" 
-                data-bs-target="#viewDemandeModal{{ aide.id_demande }}"></i>
-
-              </td>
-            </tr>
+              style="cursor: pointer; color: gray;" 
+              data-bs-toggle="modal" 
+              data-bs-target="#viewDemandeModal{{ aide.id_demande }}"
+              title="Voir les détails">
+            </i>
 
             <!-- Inclure la modale -->
+
             {% include 'Partenaire/dm_aide_partner/delete.html.twig' with {
               id: aide.id_demande,
               client_nom: aide.client_nom,
@@ -158,6 +136,7 @@
             } %}
 
             <!-- Modal for editing -->
+
             <div class="modal fade" id="editDemandeModal{{ aide.id_demande }}" 
             tabindex="-1" aria-labelledby="editDemandeModalLabel{{ aide.id_demande }}" aria-hidden="true">
               <div class="modal-dialog">
@@ -176,19 +155,7 @@
             </div>
 
             <!-- Modal for viewing -->
-            <div class="modal fade" id="viewDemandeModal{{ aide.id_demande }}" tabindex="-1" aria-labelledby="viewDemandeModalLabel{{ aide.id_demande }}" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="viewDemandeModalLabel{{ aide.id_demande }}">Consulter une demande</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    {% include 'Partenaire/dm_aide_partner/consulter.html.twig' with { 'aide': aide } %}
-                  </div>
-                </div>
-              </div>
-            </div>
+            {% include 'Partenaire/dm_aide_partner/consulter.html.twig' with { 'aide': aide } %}
           {% endfor %}
         </tbody>
         </table>
@@ -216,10 +183,8 @@
 
 </div>
 
-<script src="{{ asset('js/partner/dm_aide_partner.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/partner/dm_aide.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-<script>
-
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 {% endblock %}

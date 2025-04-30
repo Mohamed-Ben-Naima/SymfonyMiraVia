@@ -8,20 +8,6 @@
   <!-- Titre centré -->
   <h1 class="text-center mb-4" style="color: #013a71; font-size: 35px;">Liste des Dons</h1>
 
-  <!-- Barres de recherche -->
-  <div class="filter-bar">
-      <select id="itemsPerPage" class="form-select">
-          <option value="10">10 Par Page</option>
-          <option value="20">20 Par Page</option>
-          <option value="50">50 Par Page</option>
-      </select>
-
-      <select id="sortByDate" class="form-select">
-          <option value="recent">Trier Par Date Récente</option>
-          <option value="oldest">Trier Par Date Ancienne</option>
-      </select>
-  </div>
-
   <!-- Card blanche -->
   <div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border: none;">
     <div class="card-body">
@@ -131,5 +117,5 @@
     {% include 'Partenaire/don_partner/edit.html.twig' with { 'don': don } %}
     {% include 'Partenaire/don_partner/delete.html.twig' with { 'don': don } %}
 {% endfor %}
-
+<script src="{{ asset('js/partner/don.js') }}"></script>
 {% endblock %}

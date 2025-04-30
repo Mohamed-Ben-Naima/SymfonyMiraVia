@@ -33,7 +33,6 @@ class DmAidePartnerController extends AbstractController
 
         $id_partenaire = $user->getIdUtilisateur();
         $demandesAide = $repository->findByPartenaire($id_partenaire);
-        $utilisateurs = $utilisateursRepository->findAll();
         $clients = $utilisateursRepository->findAllClients();
 
         return $this->render('Partenaire/dm_aide_partner/demande_aide.html.twig', [

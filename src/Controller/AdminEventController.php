@@ -21,7 +21,10 @@ final class AdminEventController extends AbstractController
     #[Route('/admin/event', name: 'app_admin_events')]
     public function index(): Response
     {
-        // Custom DQL query to join Evenements, Partenaires, and Utilisateurs
+        // Mettre à jour les statuts des événements
+        $this->updateEventStatus();
+    
+        // Requête DQL pour récupérer les événements avec leurs relations
         $query = $this->entityManager->createQuery(
             'SELECT e.idEvenement, e.titre, e.description, e.dateEvenement, e.lieu, 
                     e.status, e.estBloque, e.imagename, 
@@ -30,52 +33,73 @@ final class AdminEventController extends AbstractController
              LEFT JOIN App\Entity\Partenaires p WITH e.idPartenaire = p.idPartenaire
              LEFT JOIN App\Entity\Utilisateurs u WITH p.idPartenaire = u.idUtilisateur'
         );
-
+    
         $evenements = $query->getResult();
-
+    
         return $this->render('admin_event/index.html.twig', [
             'controller_name' => 'AdminEventController',
             'pageTitle' => 'Evénement',
-            'evenements' => $evenements, // Pass the events data to the template
+            'evenements' => $evenements, // Passer les événements au template
         ]);
     }
-    #[Route('/admin/event/block', name: 'block_event', methods: ['POST'])]
-    public function blockEvent(Request $request): JsonResponse
+    
+    /**
+     * Met à jour les statuts des événements selon leur date.
+     */
+    private function updateEventStatus()
     {
-        $data = json_decode($request->getContent(), true);
+        $events = $this->entityManager->getRepository(Evenements::class)->findAll();
+        $currentDate = new \DateTime(); // Date et heure actuelle
     
-        $eventId = $data['id'] ?? null;
-        $reasons = $data['reasons'] ?? [];
-        $explanation = $data['explanation'] ?? '';
-    
-        if (!$eventId || empty($reasons) || empty($explanation)) {
-            return new JsonResponse(['success' => false, 'message' => 'Données invalides.'], 400);
-        }
-    
-        try {
-            $reasonsString = implode(', ', $reasons);
-    
-            // Fetch the event from the database
-            $event = $this->entityManager->getRepository(Evenements::class)->find($eventId);
-            if (!$event) {
-                return new JsonResponse(['success' => false, 'message' => 'Évènement non trouvé.'], 404);
+        foreach ($events as $event) {
+            // Vérifier si l'événement est passé et mettre à jour son statut
+            if ($event->getDateEvenement() < $currentDate && $event->getStatus() !== 'Terminé') {
+                $event->setStatus('Terminé');
+                $this->entityManager->persist($event);
             }
-    
-            // Update the event fields
-            $event->setEstBloque(true);
-            $event->setRaisonsBlocage($reasonsString);
-            $event->setExplicationBlocage($explanation);
-    
-            $this->entityManager->persist($event);
-            $this->entityManager->flush();
-    
-            return new JsonResponse(['success' => true, 'message' => 'Évènement bloqué avec succès.']);
-        } catch (\Exception $e) {
-            return new JsonResponse(['success' => false, 'message' => 'Erreur lors du blocage de l\'évènement.'], 500);
         }
+    
+        $this->entityManager->flush(); // Sauvegarder les changements
     }
 
-    #[Route('/admin/event/unblock', name: 'unblock_event', methods: ['POST'])]
+    #[Route('/admin/event/block', name: 'block_event', methods: ['POST'])]
+public function blockEvent(Request $request): JsonResponse
+{
+    $data = json_decode($request->getContent(), true);
+
+    $eventId = $data['id'] ?? null;
+    $reasons = $data['reasons'] ?? [];
+    $explanation = $data['explanation'] ?? '';
+
+    if (!$eventId || empty($reasons) || empty($explanation)) {
+        return new JsonResponse(['success' => false, 'message' => 'Données invalides.'], 400);
+    }
+
+    try {
+        $reasonsString = implode(', ', $reasons);
+
+        // Fetch the event from the database
+        $event = $this->entityManager->getRepository(Evenements::class)->find($eventId);
+        if (!$event) {
+            return new JsonResponse(['success' => false, 'message' => 'Évènement non trouvé.'], 404);
+        }
+
+        // Update the event fields
+        $event->setEstBloque(true);
+        $event->setRaisonsBlocage($reasonsString);
+        $event->setExplicationBlocage($explanation);
+        $event->setStatus('Annulé'); // Modifier le statut en Annulé
+
+        $this->entityManager->persist($event);
+        $this->entityManager->flush();
+
+        return new JsonResponse(['success' => true, 'message' => 'Évènement bloqué avec succès.']);
+    } catch (\Exception $e) {
+        return new JsonResponse(['success' => false, 'message' => 'Erreur lors du blocage de l\'évènement.'], 500);
+    }
+}
+
+#[Route('/admin/event/unblock', name: 'unblock_event', methods: ['POST'])]
 public function unblockEvent(Request $request): JsonResponse
 {
     $data = json_decode($request->getContent(), true);
@@ -96,6 +120,7 @@ public function unblockEvent(Request $request): JsonResponse
         $event->setEstBloque(false); // Désactiver le blocage
         $event->setRaisonsBlocage(null); // Réinitialiser les raisons
         $event->setExplicationBlocage(null); // Réinitialiser l'explication
+        $event->setStatus('En cours'); // Modifier le statut en En cours
 
         $this->entityManager->persist($event);
         $this->entityManager->flush();

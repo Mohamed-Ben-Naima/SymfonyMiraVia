@@ -1,62 +1,84 @@
-
-<style>
-  .btn-download {
-      background-color: #86b7fe; /* Couleur de fond par défaut */
-      color: #013a71; /* Couleur du texte */
-      border: none; /* Pas de bordure */
-      padding: 10px 20px; /* Espacement interne */
-      font-size: 16px; /* Taille de la police */
-      border-radius: 5px; /* Coins arrondis */
-      transition: all 0.3s ease-in-out; /* Transition fluide */
-  }
-
-  .btn-download:hover {
-      background-color: #0056b3; /* Couleur de fond au survol */
-      color: #ffffff; /* Couleur du texte au survol */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre au survol */
-      transform: scale(1.05); /* Zoom léger au survol */
-  }
-</style>
-<!-- Fenêtre modale pour afficher les détails -->
-<div class="modal fade" id="viewDemandeModal{{ loop.index }}" tabindex="-1" aria-labelledby="viewDemandeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+{% block body %}
+<div class="modal fade" id="viewDemandeModal{{ aide.id_demande }}" tabindex="-1" 
+  aria-labelledby="viewDemandeModalLabel{{ aide.id_demande }}" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="viewDemandeModalLabel">Détails de la demande</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header ">
+        <h5 class="modal-title" id="viewDemandeModalLabel{{ aide.id_demande }}">
+          Détails de la Demande : {{ aide.client_nom }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p><strong>Client :</strong> {{ aide.client_nom }}</p>
-        <p><strong>Type d'aide :</strong> {{ aide.type_aide }}</p>
-        <p><strong>Description :</strong> {{ aide.description }}</p>
-        <p><strong>Montant :</strong> {{ aide.montant_demande }} €</p>
-        <p><strong>Date de demande :</strong> {{ aide.date_demande|date('d M Y') }}</p>
-        <p><strong>Status :</strong> 
-          {% if aide.status == 'en_attente' %}
-            En attente
-          {% elseif aide.status == 'acceptee' %}
-            Acceptée
-          {% elseif aide.status == 'refusee' %}
-            Refusée
-          {% elseif aide.status == 'en_traitement' %}
-            En traitement
-          {% endif %}
-        </p>
-        <p><strong>Preuves :</strong> 
-          {% if aide.preuves %}
-            <img 
-              src="{{ asset('uploads/preuves/' ~ aide.preuves) }}" 
-              alt="Preuve" 
-              style="max-width: 100%; height: auto;"
-            >
-          {% else %}
-            <span class="text-muted">Aucune preuve</span>
-          {% endif %}
-        </p>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <h6 class="text-muted">Informations client</h6>
+              <p><strong>Nom du client :</strong> {{ aide.client_nom }}</p>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="text-muted">Détails de la demande</h6>
+              <p><strong>Type d'aide :</strong> {{ aide.type_aide }}</p>
+              <p><strong>Description :</strong></p>
+              <div class="border p-2 rounded bg-light">{{ aide.description }}</div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="mb-3">
+              <h6 class="text-muted">Informations financières</h6>
+              <p><strong>Montant demandé :</strong> {{ aide.montant_demande }} €</p>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="text-muted">Statut et dates</h6>
+              <p><strong>Date de demande :</strong> {{ aide.date_demande|date('d M Y H:i') }}</p>
+              <p>
+                <strong>Status :</strong>
+                {% if aide.status == 'En attente' %}
+                  <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important; color:rgb(255, 191, 0) !important;">
+                    En attente
+                  </span>
+                {% elseif aide.status == 'Acceptée' %}
+                  <span class="badge bg-success">Acceptée</span>
+                {% elseif aide.status == 'Refusée' %}
+                  <span class="badge bg-danger">Refusée</span>
+                {% elseif aide.status == 'en_traitement' %}
+                  <span class="badge bg-info text-dark">En traitement</span>
+                {% endif %}
+              </p>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="text-muted">Preuves fournies</h6>
+              {% if aide.preuves %}
+                <img src="{{ asset('uploads/preuves/' ~ aide.preuves) }}" 
+                     alt="Preuve" class="img-fluid rounded border" 
+                     style="max-height: 100px;">
+                <div class="mt-2">
+                  <a href="{{ asset('uploads/preuves/' ~ aide.preuves) }}" 
+                     target="_blank" class="btn btn-sm btn-outline-primary">
+                    Voir en grand
+                  </a>
+                </div>
+              {% else %}
+                <div class="alert alert-warning">Aucune preuve fournie</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer justify-content-center">
-        <button class="btn btn-download" onclick="generatePDF({{ loop.index }})">Télécharger</button>
+      <div class="modal-footer d-flex justify-content-center">
+      <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+        <i class="bi bi-x-circle me-1"></i> Fermer
+      </button>
+      {% if aide.status != 'Acceptée' %}
+        <button type="button" class="btn btn-annuler" data-bs-dismiss="modal"
+        onclick="generatePDF({{ aide.id_demande }})"><i class="bi bi-download"></i> Télècharger</button>
+      {% endif %}
       </div>
     </div>
   </div>
 </div>
+{% endblock %}
