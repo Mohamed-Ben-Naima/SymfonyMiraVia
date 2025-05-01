@@ -2,7 +2,6 @@
 
 {% block title %}Liste des Dons{% endblock %}
 
-
 {% block body %}
 <div class="content">
   <!-- Titre centré -->
@@ -51,58 +50,55 @@
           </thead>
           <tbody id="donsTable">
           {% for don in dons %}
-              {% if don.id_partenaire == 1 %}
-                  <tr>
-                      <!-- Nom Client -->
-                      <td>{{ don.client_nom }}</td>
+            <tr>
+              <!-- Nom Client -->
+              <td >{{ don.client_nom }}</td>
 
-                      <!-- Montant -->
-                      <td>{{ don.montant }} €</td>
+              <!-- Montant -->
+              <td>{{ don.montant }} €</td>
 
-                      <!-- Date -->
-                      <td>{{ don.date_don|date('d M Y H:i') }}</td>
+              <!-- Date -->
+              <td>{{ don.date_don|date('d M Y H:i') }}</td>
 
-                      <!-- Statut -->
-                      <td>
-                          {% if don.status == 'En attente' %}
-                              <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important; color:rgb(255, 191, 0) !important;">En attente</span>
-                          {% elseif don.status == 'Accepté' %}
-                              <span class="badge bg-success" style="color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
-                              background-color: #78e3784a !important">Accepté</span>
-                          {% elseif don.status == 'Refusé' %}
-                              <span class="badge bg-danger">Refusé</span>
-                          {% endif %}
-                      </td>
-
-                      <!-- Actions -->
-              <td style="padding-left: 20px">
-                  <!-- Éditer -->
-                  <i 
-                      class="bi bi-pencil-fill text-primary" 
-                      style="cursor: pointer; margin-right: 10px; 
-                      {% if don.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
-                      data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
-                      data-bs-target="#editDonModal{{ don.id_don }}"
-                      title="{% if don.status == 'Accepté' %}Modification désactivée pour les dons acceptés{% else %}Modifier{% endif %}">
-                  </i>
-
-                  <!-- Supprimer -->
-                  <i 
-                      class="bi bi-trash-fill text-danger" 
-                      style="cursor: pointer; {% if don.status == 'Accepté' %}
-                      opacity: 0.5; pointer-events: none;{% endif %}" 
-                      data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
-                      data-bs-target="#deleteDonModal{{ don.id_don }}"
-                      title="{% if don.status == 'Accepté' %}
-                      Suppression désactivée pour les dons acceptés
-                      {% else %}Supprimer
-                      {% endif %}">
-                  </i>
+              <!-- Statut -->
+              <td>
+                {% if don.status == 'En attente' %}
+                  <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important; color:rgb(255, 191, 0) !important;">En attente</span>
+                {% elseif don.status == 'Accepté' %}
+                  <span class="badge bg-success" style="color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important; background-color: #78e3784a !important">Accepté</span>
+                {% elseif don.status == 'Refusé' %}
+                  <span class="badge bg-danger">Refusé</span>
+                {% endif %}
               </td>
-                  </tr>
-              {% endif %}
+
+              <!-- Actions -->
+              <td style="padding-left: 20px">
+                <!-- Éditer -->
+                <i 
+                  class="bi bi-pencil-fill text-primary" 
+                  style="cursor: pointer; margin-right: 10px; 
+                  {% if don.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
+                  data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
+                  data-bs-target="#editDonModal{{ don.id_don }}"
+                  title="{% if don.status == 'Accepté' %}Modification désactivée pour les dons acceptés{% else %}Modifier{% endif %}">
+                </i>
+
+                <!-- Supprimer -->
+                <i 
+                  class="bi bi-trash-fill text-danger" 
+                  style="cursor: pointer; {% if don.status == 'Accepté' %}
+                  opacity: 0.5; pointer-events: none;{% endif %}" 
+                  data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
+                  data-bs-target="#deleteDonModal{{ don.id_don }}"
+                  title="{% if don.status == 'Accepté' %}
+                  Suppression désactivée pour les dons acceptés
+                  {% else %}Supprimer
+                  {% endif %}">
+                </i>
+              </td>
+            </tr>
           {% endfor %}
-          </tbody>
+        </tbody>
         </table>
       </div>
     </div>

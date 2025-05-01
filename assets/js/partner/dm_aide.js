@@ -209,3 +209,53 @@ document.addEventListener('hidden.bs.modal', function (event) {
   document.body.classList.remove('modal-open');
   document.body.style.overflow = ''; // Réinitialiser le défilement
 });
+function openPdfPopup(pdfUrl) {
+  // Ouvre une nouvelle fenêtre pour afficher le PDF
+  const pdfWindow = window.open("", "_blank", "width=800,height=600");
+  pdfWindow.document.write(`
+      <html>
+          <head>
+              <title>Preuve PDF</title>
+              <style>
+                  body {
+                      margin: 0;
+                      padding: 0;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      height: 100vh;
+                      }
+              </style>
+          </head>
+          <body>
+              <embed src="${pdfUrl}" type="application/pdf" style="width:90%; height:90%;" />
+          </body>
+      </html>
+  `);
+}
+function filterTable() {
+  const searchInput = document.getElementById('searchBar').value.toLowerCase();
+  const tableRows = document.querySelectorAll('#demandesTable tr');
+
+  tableRows.forEach(row => {
+      // Extract text content from the relevant columns
+      const clientName = row.querySelector('td:nth-child(1)')?.textContent.toLowerCase() || '';
+      const typeAide = row.querySelector('td:nth-child(2)')?.textContent.toLowerCase() || '';
+      const description = row.querySelector('td:nth-child(3)')?.textContent.toLowerCase() || '';
+      const montant = row.querySelector('td:nth-child(4)')?.textContent.toLowerCase() || '';
+      const dateDemande = row.querySelector('td:nth-child(5)')?.textContent.toLowerCase() || '';
+
+      // Check if the search input matches any column
+      if (
+          clientName.includes(searchInput) ||
+          typeAide.includes(searchInput) ||
+          description.includes(searchInput) ||
+          montant.includes(searchInput) || // Include numeric values in 'Montant'
+          dateDemande.includes(searchInput) // Include numeric values in 'Date de demande'
+      ) {
+          row.style.display = ''; // Show row
+      } else {
+          row.style.display = 'none'; // Hide row
+      }
+  });
+}

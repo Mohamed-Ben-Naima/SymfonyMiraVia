@@ -482,6 +482,7 @@
     text-align: left;
     word-wrap: break-word;
     
+    
   }
 
   .badge {
@@ -998,4 +999,11 @@
 .modal-header{
   background-color: #86b7fe57;
   color: #013a71;
+}
+
+.center-pdf {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }

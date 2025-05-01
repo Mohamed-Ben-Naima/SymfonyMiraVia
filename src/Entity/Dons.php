@@ -18,8 +18,8 @@ class Dons
     #[ORM\Column(name: "id_client", nullable: true, options: ["default" => NULL])]
     private ?int $idClient = NULL;
 
-    #[ORM\Column(name: "id_partenaire", nullable: true, options: ["default" => NULL])]
-    private ?int $idPartenaire = NULL;
+    #[ORM\Column(name: "id_partenaire", type: "integer", nullable: true)]
+    private ?int $idPartenaire = null;
 
     #[ORM\Column(name: "montant", type: Types::DECIMAL, precision: 10, scale: 2, nullable: true, options: ["default" => NULL])]
     private ?string $montant = 'NULL';
@@ -55,16 +55,16 @@ class Dons
     }
 
     public function getIdPartenaire(): ?int
-    {
-        return $this->idPartenaire;
-    }
+        {
+            return $this->idPartenaire;
+        }
 
-    public function setIdPartenaire(?int $idPartenaire): static
-    {
-        $this->idPartenaire = $idPartenaire;
+        public function setIdPartenaire(?int $idPartenaire): self
+        {
+            $this->idPartenaire = $idPartenaire;
 
-        return $this;
-    }
+            return $this;
+        }
 
     public function getMontant(): ?string
     {
