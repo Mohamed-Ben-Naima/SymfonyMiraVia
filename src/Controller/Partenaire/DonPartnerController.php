@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DonPartnerController extends AbstractController
 {
-    #[Route('/dashboard/don/partner', name: 'app_don_partner')]
+    #[Route('/dashboard/partenaire/don_partner', name: 'app_don_partner')]
     public function don(
         DonsRepository $repository,
         UtilisateursRepository $utilisateursRepository
@@ -36,7 +36,7 @@ class DonPartnerController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard/add-don', name: 'add_don', methods: ['POST'])]
+    #[Route('/dashboard/partenaire/add-don', name: 'add_don', methods: ['POST'])]
 
     public function addDon(
             Request $request,
@@ -91,7 +91,7 @@ class DonPartnerController extends AbstractController
     return $this->redirectToRoute('app_don_partner');
 }
 
-    #[Route('/dashboard/edit-don/{id}', name: 'edit_don', methods: ['POST'])]
+    #[Route('/dashboard/partenaire/edit-don/{id}', name: 'edit_don', methods: ['POST'])]
     public function editDon(Request $request, Dons $don, EntityManagerInterface $entityManager): Response
     {
         $montant = $request->request->get('montant');
@@ -114,7 +114,7 @@ class DonPartnerController extends AbstractController
         return $this->redirectToRoute('app_don_partner');
     }
 
-    #[Route('/dashboard/delete-don/{id}', name: 'delete_don', methods: ['POST'])]
+    #[Route('/dashboard/partenaire/delete-don/{id}', name: 'delete_don', methods: ['POST'])]
     public function deleteDon(Dons $don, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($don);

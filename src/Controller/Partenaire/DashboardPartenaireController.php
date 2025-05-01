@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Partenaire;
 
+use App\Entity\Utilisateurs;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,6 +16,10 @@ final class DashboardPartenaireController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
+
+        if (!$user instanceof Utilisateurs) {
+            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+        }
 
         if ($user) {
             $this->addFlash('success', 'Bienvenue, ' . $user->getNom(). ' '. $user->getPrenom());
