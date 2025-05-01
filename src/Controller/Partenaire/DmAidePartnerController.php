@@ -112,67 +112,79 @@ class DmAidePartnerController extends AbstractController
         return $this->redirectToRoute('demande_aide', ['id_partenaire' => $demande->getIdPartenaire()]);
     }
 
-    #[Route('/dashboard/partenaire/demande_aide_add/{id_partenaire}', name: 'add_demande', methods: ['POST'])]
-    public function addDemande(
-        int $id_partenaire,
-        Request $request,
-        EntityManagerInterface $entityManager,
-        UtilisateursRepository $utilisateursRepository
-    ): Response {
-        $data = $request->request->all();
-        $file = $request->files->get('preuve');
-        $user = $this->getUser();
+            #[Route('/dashboard/partenaire/demande_aide_add', name: 'add_demande', methods: ['POST'])]
+        public function addDemande(
+            Request $request,
+            EntityManagerInterface $entityManager,
+            UtilisateursRepository $utilisateursRepository
+        ): Response {
+            $user = $this->getUser();
 
-        $demande = new DemandesAide();
-        $demande->setIdClient($data['id_client']);
-        $demande->setIdPartenaire($id_partenaire);
-        $demande->setTypeAide($data['type_aide']);
-        $demande->setDescription($data['description'] ?? '');
-        $demande->setMontantDemande($data['montant_demande'] ?? 0);
-        $demande->setDateDemande(new DateTime($data['date_demande'] ?? 'now'));
-        $demande->setStatus('En attente');
-
-        if ($file) {
-            $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/preuves';
-            if (!file_exists($uploadsDir)) {
-                mkdir($uploadsDir, 0777, true);
+            if (!$user instanceof Utilisateurs) {
+                throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
             }
-            $fileName = uniqid() . '.' . $file->guessExtension();
-            $file->move($uploadsDir, $fileName);
-            $demande->setPreuves($fileName);
+
+            $id_partenaire = $user->getIdUtilisateur();
+
+            $data = $request->request->all();
+            $file = $request->files->get('preuve');
+
+            $demande = new DemandesAide();
+            $demande->setIdClient($data['id_client']);
+            $demande->setIdPartenaire($id_partenaire);
+            $demande->setTypeAide($data['type_aide']);
+            $demande->setDescription($data['description'] ?? '');
+            $demande->setMontantDemande($data['montant_demande'] ?? 0);
+            $demande->setDateDemande(new DateTime($data['date_demande'] ?? 'now'));
+            $demande->setStatus('En attente');
+
+            if ($file) {
+                // Vérifiez si le fichier est bien un PDF
+                if ($file->getMimeType() !== 'application/pdf') {
+                    $this->addFlash('error', 'Seuls les fichiers PDF sont acceptés.');
+                    return $this->redirectToRoute('demande_aide');
+                }
+            
+                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/preuves';
+                if (!file_exists($uploadsDir)) {
+                    mkdir($uploadsDir, 0777, true);
+                }
+                $fileName = uniqid() . '.' . $file->guessExtension();
+                $file->move($uploadsDir, $fileName);
+                $demande->setPreuves($fileName);
+            } else {
+                $this->addFlash('error', 'Veuillez ajouter une preuve au format PDF.');
+                return $this->redirectToRoute('demande_aide');
+            }
+
+            $entityManager->persist($demande);
+
+            // Notifications
+            $notification = new Notifications();
+            $notification->setMessage("Nouvelle demande d’aide ajoutée.");
+            $notification->setDateEnvoi(new DateTime());
+            $notification->setTypeNotification('success');
+            $notification->setIsRead(false);
+            $notification->setIdUtilisateur($user->getIdUtilisateur());
+            $entityManager->persist($notification);
+
+            $admins = $utilisateursRepository->findAllAdmins();
+            foreach ($admins as $admin) {
+                $adminNotif = new Notifications();
+                $adminNotif->setMessage("Nouvelle demande d’aide ajoutée.");
+                $adminNotif->setDateEnvoi(new DateTime());
+                $adminNotif->setTypeNotification('success');
+                $adminNotif->setIsRead(false);
+                $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
+                $entityManager->persist($adminNotif);
+            }
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Demande ajoutée avec succès !');
+
+            return $this->redirectToRoute('demande_aide');
         }
-
-        $entityManager->persist($demande);
-        if (!$user instanceof Utilisateurs) {
-            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
-        }
-
-        // Notifications
-        $notification = new Notifications();
-        $notification->setMessage("Nouvelle demande d’aide ajoutée.");
-        $notification->setDateEnvoi(new DateTime());
-        $notification->setTypeNotification('success');
-        $notification->setIsRead(false);
-        $notification->setIdUtilisateur($user->getIdUtilisateur());
-        $entityManager->persist($notification);
-
-        $admins = $utilisateursRepository->findAllAdmins();
-        foreach ($admins as $admin) {
-            $adminNotif = new Notifications();
-            $adminNotif->setMessage("Nouvelle demande d’aide ajoutée.");
-            $adminNotif->setDateEnvoi(new DateTime());
-            $adminNotif->setTypeNotification('success');
-            $adminNotif->setIsRead(false);
-            $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
-            $entityManager->persist($adminNotif);
-        }
-
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Demande ajoutée avec succès !');
-
-        return $this->redirectToRoute('demande_aide', ['id_partenaire' => $id_partenaire]);
-    }
 
     #[Route('/dashboard/partenaire/demande_aide/delete/{id}', name: 'delete_demande', methods: ['POST'])]
     public function deleteDemande(
