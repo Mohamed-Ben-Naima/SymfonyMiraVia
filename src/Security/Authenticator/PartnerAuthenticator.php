@@ -73,7 +73,7 @@ public function authenticate(Request $request): Passport
             }
     
             // Vérifier que l'utilisateur est validé
-            if (method_exists($user, 'getStatus') && strtolower($user->getStatus()) === 'en attente') {
+            if (method_exists($user, 'getStatutVerification') && strtolower($user->getStatutVerification()) === 'en attente') {
                 throw new AuthenticationException('Votre compte est en attente de vérification. Veuillez patienter.');
             }
             
