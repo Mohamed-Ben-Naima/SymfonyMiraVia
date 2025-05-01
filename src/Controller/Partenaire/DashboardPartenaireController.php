@@ -12,6 +12,41 @@ use Psr\Log\LoggerInterface;
 
 final class DashboardPartenaireController extends AbstractController
 {
+    private HttpClientInterface $httpClient;
+    private LoggerInterface $logger;
+
+    public function __construct(HttpClientInterface $httpClient, LoggerInterface $logger)
+    {
+        $this->httpClient = $httpClient;
+        $this->logger = $logger;
+    }
+
+
+#[Route('/api/user/avatar', name: 'api_user_avatar', methods: ['GET'])]
+public function getUserAvatar(): JsonResponse
+{
+    $user = $this->getUser();  // Récupérer l'utilisateur connecté
+
+    if (!$user) {
+        return new JsonResponse(['error' => 'Utilisateur non connecté.'], 400);
+    }
+
+    // Vérifie si l'utilisateur a un avatar
+    $avatarUrl = $user->getAvatar(); // Méthode à définir dans l'entité Utilisateurs pour récupérer l'avatar
+
+    // Chemin où les avatars sont stockés
+    $avatarsDirectory = $this->getParameter('avatars_directory'); // Assurez-vous que cette variable est définie dans config/services.yaml
+
+    // Vérifie si l'avatar existe dans le dossier
+    if (!$avatarUrl || !file_exists($avatarsDirectory . '/' . $avatarUrl)) {
+        // Si l'avatar n'existe pas, renvoyer l'avatar par défaut
+        return new JsonResponse(['avatarUrl' => '/images-partner/user.png']);
+    }
+
+    // Si l'avatar existe, renvoyer l'URL de l'avatar
+    return new JsonResponse(['avatarUrl' => '/uploads/avatars/' . $avatarUrl]);
+}
+
     #[Route('/dashboard/partenaire', name: 'app_dashboard_partenaire')]
     public function index(): Response
     {
@@ -37,14 +72,7 @@ final class DashboardPartenaireController extends AbstractController
             'controller_name' => 'DashboardPartenaireController',
         ]);
     }
-    private HttpClientInterface $httpClient;
-    private LoggerInterface $logger;
-
-    public function __construct(HttpClientInterface $httpClient, LoggerInterface $logger)
-    {
-        $this->httpClient = $httpClient;
-        $this->logger = $logger;
-    }
+   
 
     #[Route('/chatbot', name: 'chatbot_index', methods: ['GET'])]
     public function chatbotPage(): \Symfony\Component\HttpFoundation\Response
