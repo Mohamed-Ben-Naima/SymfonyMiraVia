@@ -76,6 +76,10 @@ public function authenticate(Request $request): Passport
             if (method_exists($user, 'getStatutVerification') && strtolower($user->getStatutVerification()) === 'en attente') {
                 throw new AuthenticationException('Votre compte est en attente de vérification. Veuillez patienter.');
             }
+            // Vérifier que l'utilisateur est validé
+            if (method_exists($user, 'getStatutVerification') && strtolower($user->getStatutVerification()) === 'inactif') {
+                throw new AuthenticationException('Votre compte est fermé. Veuillez nous contacter .');
+            }
             
             return $user;
         }),
