@@ -413,6 +413,27 @@
         box-shadow: 0 0 0 3px rgba(1, 58, 113, 0.1);
     }
 
+    /* Updated metrics container to align items in a single row */
+    .metrics-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .metric-card {
+        flex: 1;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        text-align: center;
+        animation: fadeInMetric 0.5s ease-in;
+        min-width: 120px;
+    }
+
     /* Dark Mode Styles */
     body.dark-mode {
         background-color: #1a202c;
@@ -534,6 +555,11 @@
         .settings-card {
             flex: 1 1 calc(50% - 2rem);
         }
+
+        .metrics-container {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
     }
 
     @media (max-width: 480px) {
@@ -543,6 +569,11 @@
 
         .modal-content {
             padding: 1rem;
+        }
+
+        .metrics-container {
+            flex-direction: column;
+            align-items: stretch;
         }
     }
 </style>
@@ -703,8 +734,7 @@
                     Type de rapport :
                 </label>
                 <select id="report-type">
-                    <option value="users" data-translate="users_report">Rapport des utilisateurs</option>
-                    <option value="activity" data-translate="activity_report">Rapport d'activité</option>
+                    <option value="users" data-translate="partners_report">Rapport de mes partenaires</option>
                     <option value="system" data-translate="system_report">Rapport de performance système</option>
                 </select>
 
@@ -723,24 +753,28 @@
                 <!-- Aperçu des métriques clés -->
                 <div class="metrics-preview" style="margin-top: 1.5rem;">
                     <h4 data-translate="key_metrics">Métriques clés</h4>
-                    <div class="metrics-container" style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem;">
-                        <div class="metric-card" style="flex: 1 1 150px; padding: 1rem; background: #f8fafc; border-radius: 8px; text-align: center; animation: fadeInMetric 0.5s ease-in;">
+                    <div class="metrics-container">
+                        <div class="metric-card">
                             <i class="fas fa-users" style="font-size: 1.5rem; color: #013A71;"></i>
                             <p data-translate="active_users">Utilisateurs actifs</p>
-                            <span class="metric-value" style="font-size: 1.5rem; font-weight: bold; color: #013A71;">1,245</span>
+                            <span class="metric-value" style="font-size: 1.5rem; font-weight: bold; color: #013A71;">{{ active_users | default('1,245') }}</span>
                         </div>
-                        <div class="metric-card" style="flex: 1 1 150px; padding: 1rem; background: #f8fafc; border-radius: 8px; text-align: center; animation: fadeInMetric 0.7s ease-in;">
+                        <div class="metric-card">
                             <i class="fas fa-clock" style="font-size: 1.5rem; color: #013A71;"></i>
                             <p data-translate="average_time">Temps moyen</p>
-                            <span class="metric-value" style="font-size: 1.5rem; font-weight: bold; color: #013A71;">12 min</span>
+                            <span class="metric-value" style="font-size: 1.5rem; font-weight: bold; color: #013A71;">{{ average_time | default('12 min') }}</span>
+                        </div>
+                        <div class="metric-card">
+                            <i class="fas fa-hourglass-half" style="font-size: 1.5rem; color: #013A71;"></i>
+                            <p data-translate="time_spent">Temps passé</p>
+                            <span class="metric-value" style="font-size: 1.5rem; font-weight: bold; color: #013A71;">{{ time_spent | default('0 min') }}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="primary" onclick="generateReport()" data-translate="generate_report">Générer le rapport</button>
-            <button class="primary" onclick="downloadReport()" data-translate="download_report">Télécharger (PDF/CSV)</button>
+            <button class="primary" onclick="downloadReport()" data-translate="download_report">Générer rapport  (PDF)</button>
             <button class="secondary" onclick="closeModal('statistics-modal')" data-translate="cancel">Annuler</button>
         </div>
     </div>
@@ -803,8 +837,9 @@
             key_metrics: "Métriques clés",
             active_users: "Utilisateurs actifs",
             average_time: "Temps moyen",
+            time_spent: "Temps passé",
             generate_report: "Générer le rapport",
-            download_report: "Télécharger (PDF/CSV)",
+            download_report: "Télécharger (PDF)",
             language: "Langue",
             change_language: "Changez la langue de l'interface",
             french: "Français",
@@ -813,7 +848,8 @@
             cancel: "Annuler",
             update: "Mettre à jour",
             enabled: "Activé",
-            disabled: "Désactivé"
+            disabled: "Désactivé",
+            download_error: "Erreur : Impossible de télécharger le rapport. Veuillez réessayer plus tard."
         },
         en: {
             settings: "Settings",
@@ -848,8 +884,9 @@
             key_metrics: "Key metrics",
             active_users: "Active users",
             average_time: "Average time",
+            time_spent: "Time spent",
             generate_report: "Generate report",
-            download_report: "Download (PDF/CSV)",
+            download_report: "Download (PDF)",
             language: "Language",
             change_language: "Change the interface language",
             french: "French",
@@ -858,7 +895,8 @@
             cancel: "Cancel",
             update: "Update",
             enabled: "Enabled",
-            disabled: "Disabled"
+            disabled: "Disabled",
+            download_error: "Error: Unable to download the report. Please try again later."
         }
     };
 
@@ -898,7 +936,6 @@
         applyLanguage();
         alert(`Paramètres enregistrés : Langue : ${language === 'fr' ? translations.fr.french : translations.en.english}`);
         closeModal('language-modal');
-        // Trigger a custom event to notify other parts of the platform
         const languageChangeEvent = new Event('languageChange');
         document.dispatchEvent(languageChangeEvent);
     }
@@ -921,10 +958,28 @@
         const reportPeriod = document.getElementById('report-period').value;
         const language = localStorage.getItem('language') || 'fr';
 
-        alert(`Rapport généré :
-            Type : ${translations[language][reportType] || reportType}
-            Période : ${translations[language][reportPeriod] || reportPeriod}`);
-        closeModal('statistics-modal');
+        fetch('{{ path('app_admin_generate_report') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `reportType=${reportType}&reportPeriod=${reportPeriod}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(`Rapport généré :
+                    Type : ${translations[language][reportType] || reportType}
+                    Période : ${translations[language][reportPeriod] || reportPeriod}`);
+                closeModal('statistics-modal');
+            } else {
+                alert('Erreur lors de la génération du rapport.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Une erreur est survenue.');
+        });
     }
 
     function downloadReport() {
@@ -932,11 +987,18 @@
         const reportPeriod = document.getElementById('report-period').value;
         const language = localStorage.getItem('language') || 'fr';
 
-        alert(`Téléchargement du rapport :
-            Type : ${translations[language][reportType] || reportType}
-            Période : ${translations[language][reportPeriod] || reportPeriod}
-            Format : PDF/CSV`);
-        closeModal('statistics-modal');
+        try {
+            const downloadUrl = `{{ path('app_admin_download_report') }}?reportType=${reportType}&reportPeriod=${reportPeriod}`;
+            window.location.href = downloadUrl;
+            alert(`Téléchargement du rapport :
+                Type : ${translations[language][reportType] || reportType}
+                Période : ${translations[language][reportPeriod] || reportPeriod}
+                Format : PDF`);
+            closeModal('statistics-modal');
+        } catch (error) {
+            console.error('Error initiating download:', error);
+            alert(translations[language].download_error);
+        }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -948,7 +1010,6 @@
         document.getElementById('dark-mode-toggle').checked = savedDarkMode;
         document.body.classList.toggle('dark-mode', savedDarkMode);
 
-        // Ensure language is applied to all modals
         document.addEventListener('languageChange', () => {
             applyLanguage();
         });

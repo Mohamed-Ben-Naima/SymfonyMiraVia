@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport des Partenaires</title>
+    <style>
+        body {
+            font-family: 'Helvetica', 'Arial', 'Times New Roman', sans-serif;
+            margin: 40px;
+            color: #333333;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        /* Page layout for printing */
+        @page {
+            margin: 40px;
+            footer: html_pageFooter;
+        }
+
+        /* Header Section */
+        .report-header {
+            text-align: center;
+            border-bottom: 3px solid #013A71;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .report-header img.logo {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+
+        .report-header h1 {
+            color: #013A71;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .report-header .company-details {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 10px;
+        }
+
+        /* Report Details */
+        .report-details {
+            margin: 20px 0;
+            font-size: 14px;
+            background: linear-gradient(to right, #f8fafc, #ffffff);
+            padding: 15px;
+            border-left: 4px solid #013A71;
+            border-radius: 4px;
+        }
+
+        .report-details p {
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
+        .report-details p strong {
+            color: #013A71;
+        }
+
+        /* Section Headings */
+        h2 {
+            color: #374151;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 30px;
+            border-bottom: 2px solid #d1d5db;
+            padding-bottom: 8px;
+        }
+
+        /* Partners Table */
+        .partners-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .partners-table th, .partners-table td {
+            border: 1px solid #d1d5db;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .partners-table th {
+            background: linear-gradient(to right, #013A71, #00509e);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .partners-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        .partners-table tr:hover {
+            background-color: #e6f0fa;
+        }
+
+        /* Status Styling */
+        .status-actif, .status-active {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .status-inactif, .status-inactive {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .status-en-attente {
+            color: #ff9800;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 11px;
+            color: #6b7280;
+            border-top: 1px solid #d1d5db;
+            padding-top: 10px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        /* Page Footer (for page numbers) */
+        html, body {
+            margin-bottom: 30px;
+        }
+
+        .page-footer {
+            position: running(pageFooter);
+            font-size: 10px;
+            color: #6b7280;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Ensure table doesn't break awkwardly */
+        .partners-table {
+            page-break-inside: avoid;
+        }
+
+        .partners-table tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Logo and Company Details -->
+    <div class="report-header">
+        <img src="https://via.placeholder.com/150x50?text=Logo" alt="Company Logo" class="logo">
+        <h1>Rapport des Partenaires</h1>
+        <div class="company-details">
+            <p>Votre Entreprise</p>
+            <p>123 Rue Principale, Tunis, Tunisie</p>
+            <p>Contact: contact@votreentreprise.com | +216 71 234 567</p>
+        </div>
+    </div>
+
+    <!-- Report Details -->
+    <div class="report-details">
+        <p><strong>Type de Rapport:</strong> {{ report.type|trans({
+            'users': 'Rapport des partenaires',
+            'system': 'Rapport de performance système'
+        }) }}</p>
+        <p><strong>Période:</strong> {{ report.period|trans({
+            'today': 'Aujourd\'hui',
+            'week': 'Dernière semaine',
+            'month': 'Dernier mois',
+            'custom': 'Personnalisé'
+        }) }}</p>
+        <p><strong>Généré le:</strong> {{ report.generated_at }}</p>
+    </div>
+
+    <!-- Partners List -->
+    <h2>Liste des Partenaires</h2>
+    <table class="partners-table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Statut Vérification</th>
+                <th>Statut</th>
+                <th>Adresse</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for partner in report.partners %}
+                <tr>
+                    <td>{{ partner.nom|upper }}</td>
+                    <td>{{ partner.prenom|capitalize }}</td>
+                    <td>{{ partner.email }}</td>
+                    <td>{{ partner.telephone ?: 'N/A' }}</td>
+                    <td class="status-{{ partner.statut_verification|lower }}">{{ partner.statut_verification|trans({
+                        'actif': 'Actif',
+                        'en attente': 'En attente'
+                    }) }}</td>
+                    <td class="status-{{ partner.status|lower }}">{{ partner.status|trans({
+                        'actif': 'Actif',
+                        'inactif': 'Inactif'
+                    }) }}</td>
+                    <td>{{ partner.adresse_utilisateur ?: 'N/A' }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" style="text-align: center; font-style: italic;">Aucun partenaire trouvé pour cette période.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Généré par le système d'administration</p>
+        <p>© {{ "now"|date("Y") }} Votre Entreprise. Tous droits réservés.</p>
+        <p>Pour toute question, contactez notre service administratif à contact@votreentreprise.com</p>
+    </div>
+
+    <!-- Page Footer for Page Numbers -->
+    <htmlpagefooter name="pageFooter">
+        <div class="page-footer">
+            Page {PAGENO} de {nbpg}
+        </div>
+    </htmlpagefooter>
+</body>
+</html>

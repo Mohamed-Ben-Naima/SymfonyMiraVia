@@ -295,7 +295,7 @@
         scrollbar-color: #d1d5db #f9fafb;
     }
 
-    body.dark-mode .chat-container .chat-area {
+       body.dark-mode .chat-container .chat-area {
         background-color: #1a202c;
         scrollbar-color: #718096 #1a202c;
     }
@@ -473,6 +473,7 @@
 </style>
 
 <div class="messagerie">
+    <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
     <div class="messagerie-wrapper">
         <!-- Contacts container -->
         <div class="contacts-container">
@@ -481,41 +482,50 @@
                 <i class="fas fa-search search-icon"></i>
             </div>
             <div class="people-list">
-                <!-- User 1 -->
-                <div class="person selected">
-                    <div class="flex items-center">
-                        <img alt="Profile picture of User 1" src="{{ asset('images/payment/paypal.jpeg') }}">
-                        <div class="person-info">
-                            <p class="name">User 1</p>
-                            <p class="status">Active 1 min ago</p>
-                            <p class="message-preview">Hello, how are you?</p>
+                {% for partenaire in partenaires %}
+                    <div class="person {{ loop.first ? 'selected' : '' }}" data-id="{{ partenaire.idUtilisateur }}">
+                        <div class="flex items-center">
+                            <img alt="Profile picture of {{ partenaire.prenom }} {{ partenaire.nom }}" 
+                                 src="{{ partenaire.avatar ?: 'https://example.com/default-avatar.png' }}">
+                            <div class="person-info">
+                                <p class="name">{{ partenaire.prenom }} {{ partenaire.nom }}</p>
+                                <p class="status">
+                                    {% if partenaire.status == 'actif' %}
+                                        Active {{ partenaire.dateInscription|time_diff }}
+                                    {% else %}
+                                        Inactif
+                                    {% endif %}
+                                </p>
+                                <p class="message-preview">Dernier message...</p> <!-- À adapter avec les messages réels -->
+                            </div>
                         </div>
+                        <span class="message-count">+0</span> <!-- À adapter avec un compteur de messages -->
                     </div>
-                    <span class="message-count">+17</span>
-                </div>
-                <!-- User 2 -->
-                <div class="person">
-                    <div class="flex items-center">
-                        <img alt="Profile picture of User 2" src="{{ asset('images/payment/paypal.jpeg') }}">
-                        <div class="person-info">
-                            <p class="name">User 2</p>
-                            <p class="status">Active 3 mins ago</p>
-                            <p class="message-preview">See you tomorrow!</p>
-                        </div>
-                    </div>
-                    <span class="message-count">+9</span>
-                </div>
+                {% else %}
+                    <p>Aucun partenaire trouvé.</p>
+                {% endfor %}
             </div>
         </div>
 
         <!-- Chat container -->
         <div class="chat-container">
             <div class="chat-header">
-                <img alt="Profile picture of User 1" src="{{ asset('images/payment/paypal.jpeg') }}">
-                <div>
-                    <p class="name">User 1</p>
-                    <p class="status">Online · Last seen, 2:06pm</p>
-                </div>
+                {% if partenaires|length > 0 %}
+                    <img alt="Profile picture of {{ partenaires[0].prenom }} {{ partenaires[0].nom }}" 
+                         src="{{ partenaires[0].avatar ?: 'https://example.com/default-avatar.png' }}">
+                    <div>
+                        <p class="name">{{ partenaires[0].prenom }} {{ partenaires[0].nom }}</p>
+                        <p class="status">
+                            {% if partenaires[0].status == 'actif' %}
+                                Online · Last seen, {{ partenaires[0].dateInscription|date('H:i') }}
+                            {% else %}
+                                Offline
+                            {% endif %}
+                        </p>
+                    </div>
+                {% else %}
+                    <p>Aucun partenaire sélectionné</p>
+                {% endif %}
             </div>
             <div class="chat-area">
                 <div class="chat-bubble left">Hey There!</div>
@@ -598,6 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             updateChatHeader(contact);
 
+            // À adapter pour charger les messages réels via une requête AJAX
             chatArea.innerHTML = `
                 <div class="chat-bubble left">Hey There!</div>
                 <div class="chat-bubble right">Hello!</div>

@@ -1,5 +1,5 @@
 <?php
-// src/Form/PartenairesType.php
+// src/Form/PartenairesTypeForm.php
 
 namespace App\Form;
 
@@ -8,9 +8,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File as FileConstraint;
 
-class PartenairesType extends AbstractType
+class PartenairesTypeForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -35,9 +36,25 @@ class PartenairesType extends AbstractType
                 'label' => 'Numéro de téléphone',
                 'required' => false,
             ])
-            ->add('autresDocuments', TextareaType::class, [
+            ->add('autres_documents', FileType::class, [
                 'label' => 'Autres documents',
+                'mapped' => false,
                 'required' => false,
+                'multiple' => true,
+                'attr' => ['class' => 'form-control-file']
+            ])
+            ->add('logo', FileType::class, [
+                'label' => 'Logo de l\'entreprise',
+                'mapped' => false, 
+                'required' => false,
+                'constraints' => [
+                    new FileConstraint([
+                        'maxSize' => '2M',
+                        'mimeTypes' => ['image/jpeg', 'image/png'],
+                        'mimeTypesMessage' => 'Veuillez télécharger un fichier valide (JPEG ou PNG)',
+                    ]),
+                ],
+                'attr' => ['class' => 'form-control-file', 'accept' => 'image/*']
             ]);
     }
 
@@ -48,3 +65,4 @@ class PartenairesType extends AbstractType
         ]);
     }
 }
+

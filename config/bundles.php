@@ -15,4 +15,5 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Doctrine\Helper\Bundle\DoctrineHelperBundle::class => ['all' => true],
     Gregwar\CaptchaBundle\GregwarCaptchaBundle::class => ['all' => true],
+    Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
 ];
