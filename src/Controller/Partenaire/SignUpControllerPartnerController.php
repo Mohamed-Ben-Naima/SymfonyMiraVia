@@ -129,9 +129,9 @@ final class SignUpControllerPartnerController extends AbstractController
             }
     
             // Gestion de l'upload des autres documents
-            $files = $request->files->get('partenaire')['autres_documents'] ?? [];
+            $files = $form->get('autres_documents')->getData();
             $fileNames = [];
-    
+        dump($files);
             foreach ($files as $file) {
                 if ($file && $file->isValid()) {
                     if ($file->getSize() > 5000000) { // 5MB maximum
@@ -150,6 +150,8 @@ final class SignUpControllerPartnerController extends AbstractController
                     $fileNames[] = $newFilename;
                 }
             }
+            
+
     
             // Enregistrer les fichiers sous forme de JSON
             $partenaire->setAutresDocuments(json_encode($fileNames));
@@ -169,6 +171,7 @@ final class SignUpControllerPartnerController extends AbstractController
             $demande->setEmail($utilisateur->getEmail());
             $demande->setAdresse($utilisateur->getAdresseUtilisateur());
             $demande->setDateDemande(new \DateTime());
+            $demande->setPreuve($partenaire->getAutresDocuments());
             $demande->setEtat('en attente');
             $demande->setDescription('Demande de partenariat pour ' . $partenaire->getNomEntreprise());
             $demande->setTypeActivite('partenaire');

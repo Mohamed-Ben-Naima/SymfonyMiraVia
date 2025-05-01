@@ -106,7 +106,7 @@
 }
 
 .custom-file-list li {
-    background: rgba(255, 255, 255, 0.1);
+    background:  #013a71;
     padding: 10px 14px;
     margin-bottom: 8px;
     border-radius: 12px;
@@ -118,7 +118,7 @@
     color: #ccc;
 }
 
-.edit-icon {
+.edit-icon .logo {
     position: absolute;
     top: 15px;
     right: 20px;
@@ -411,13 +411,10 @@ transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
 
        <ul id="fileList-autres" class="custom-file-list">
     <li class="placeholder">Aucun fichier sélectionné</li>
-</ul>
-
+     </ul>
     </div>
-
     {{ form_errors(form.autres_documents) }}
 </div>
-
 <button type="submit" class="btn btn-primary w-100 mt-4">Enregistrer</button>
 
 {{ form_end(form) }}
@@ -441,19 +438,22 @@ transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
         }
     }
 function displaySelectedFiles(event, listId) {
-        const input = event.target;
-        const fileList = document.getElementById(listId);
-        fileList.innerHTML = '';
-        if (input.files.length === 0) {
-            fileList.innerHTML = '<li class="placeholder">Aucun fichier sélectionné</li>';
-            return;
-        }
-        for (const file of input.files) {
+    const input = event.target;
+    const fileList = document.getElementById(listId);
+
+    // Clear old list
+    fileList.innerHTML = '';
+
+    if (input.files.length === 0) {
+        fileList.innerHTML = '<li class="placeholder">Aucun fichier sélectionné</li>';
+    } else {
+        Array.from(input.files).forEach(file => {
             const li = document.createElement('li');
             li.textContent = file.name;
             fileList.appendChild(li);
-        }
+        });
     }
+}
 
 document.querySelector('form').addEventListener('submit', function(event) {
     // Récupérer tous les champs de formulaire

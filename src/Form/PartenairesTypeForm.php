@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\File as FileConstraint;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\All;
 
 class PartenairesTypeForm extends AbstractType
 {
@@ -112,20 +114,29 @@ class PartenairesTypeForm extends AbstractType
             ])
             ->add('autres_documents', FileType::class, [
                 'label' => 'Autres documents',
-                'multiple' => true,
                 'mapped' => false,
                 'required' => false,
+                'multiple' => true,
                 'constraints' => [
-                    new FileConstraint([
-                        'maxSize' => '5M',
-                        'mimeTypes' => ['application/pdf', 'image/jpeg', 'image/png'],
-                        'mimeTypesMessage' => 'Veuillez télécharger des fichiers valides (pdf, jpeg, png)',
+                    new All([
+                        'constraints' => [
+                            new File([
+                                'maxSize' => '5M',
+                                'mimeTypes' => [
+                                    'application/pdf',
+                                    'image/jpeg',
+                                    'image/png',
+                                ],
+                                'mimeTypesMessage' => 'Merci de choisir un fichier PDF, JPG ou PNG.',
+                            ])
+                        ]
                     ])
                 ],
-            ])
-            
-            
-            ;
+                'attr' => [
+                    'class' => 'form-control-file',
+                    'accept' => '.pdf,.jpg,.jpeg,.png'
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
