@@ -27,10 +27,7 @@ class DmAidePartnerController extends AbstractController
         if (!$user instanceof Utilisateurs) {
             throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
         }
-        if (!$user instanceof Utilisateurs) {
-            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
-        }
-
+        
         $id_partenaire = $user->getIdUtilisateur();
         $demandesAide = $repository->findByPartenaire($id_partenaire);
         $clients = $utilisateursRepository->findAllClients();
@@ -112,7 +109,7 @@ class DmAidePartnerController extends AbstractController
         return $this->redirectToRoute('demande_aide', ['id_partenaire' => $demande->getIdPartenaire()]);
     }
 
-            #[Route('/dashboard/partenaire/demande_aide_add', name: 'add_demande', methods: ['POST'])]
+        #[Route('/dashboard/partenaire/demande_aide_add', name: 'add_demande', methods: ['POST'])]
         public function addDemande(
             Request $request,
             EntityManagerInterface $entityManager,
