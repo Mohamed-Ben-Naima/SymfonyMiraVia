@@ -27,8 +27,8 @@ class Dons
     #[ORM\Column(name: "date_don", type: Types::DATETIME_MUTABLE, nullable: true, options: ["default" => 'current_timestamp()'])]
     private ?\DateTimeInterface $dateDon = null;
 
-    #[ORM\Column(name: "status", length: 20, nullable: true, options: ["default" => '\'en attente\''])]
-    private ?string $status = '\'en attente\'';
+    #[ORM\Column(name: "status", length: 20, nullable: true, options: ["default" => '\'En attente\''])]
+    private ?string $status = '\'En attente\'';
 
     public function getIdDon(): ?int
     {
