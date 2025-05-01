@@ -3,97 +3,118 @@
 namespace App\Controller\Partenaire;
 
 use App\Entity\Dons;
+use App\Entity\Utilisateurs;
 use App\Repository\DonsRepository;
+use App\Repository\UtilisateursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class DonPartnerController extends AbstractController
+class DonPartnerController extends AbstractController
 {
-    #[Route('/don/partner', name: 'app_don_partner')]
-    public function index(DonsRepository $donsRepository): Response
-    {
-        // Fetch donations and client names for the current partner
-        $dons = $donsRepository->findDonsWithClientNames(1); // Replace "1" with dynamic partner ID if needed
+    #[Route('/dashboard/partenaire/don_partner', name: 'app_don_partner')]
+    public function don(
+        DonsRepository $repository,
+        UtilisateursRepository $utilisateursRepository
+    ): Response {
+        $user = $this->getUser();
+
+        if (!$user instanceof Utilisateurs) {
+            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+        }
+        
+        $id_partenaire = $user->getIdUtilisateur();
+        $don = $repository->findByPartenaire($id_partenaire);
+        $clients = $utilisateursRepository->findAllClients();
 
         return $this->render('Partenaire/don_partner/don.html.twig', [
-            'dons' => $dons,
+            'dons' => $don,
+            'id_partenaire' => $id_partenaire,
+            'utilisateurs' => $clients
         ]);
     }
 
-    #[Route('/add-don', name: 'add_don', methods: ['POST'])]
-    public function addDon(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $clientName = $request->request->get('clientName'); // Retrieve client name from the form
-        $montant = $request->request->get('montant');
-        $dateDon = $request->request->get('dateDon');
+    #[Route('/dashboard/partenaire/add-don', name: 'add_don', methods: ['POST'])]
 
-        // Validate inputs
-        if (!$clientName || !$montant || !$dateDon) {
-            $this->addFlash('error', 'Tous les champs sont requis pour ajouter un don.');
-            return $this->redirectToRoute('app_don_partner');
-        }
+    public function addDon(
+            Request $request,
+            EntityManagerInterface $entityManager,
+            UtilisateursRepository $utilisateursRepository
+    ): Response {
 
-        // Fetch client ID based on the provided client name
-        $conn = $entityManager->getConnection();
-        $sql = '
-            SELECT c.id_client
-            FROM clients c
-            JOIN utilisateurs u ON c.id_client = u.id_utilisateur
-            WHERE u.nom = :clientName
-        ';
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery(['clientName' => $clientName])->fetchAssociative();
 
-        if (!$result) {
-            $this->addFlash('error', 'Client introuvable avec ce nom.');
-            return $this->redirectToRoute('app_don_partner');
-        }
+    // Récupérer l'utilisateur connecté
+    $user = $this->getUser();
 
-        $idClient = $result['id_client']; // Get the client ID
+    if (!$user instanceof Utilisateurs) {
+        throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+    }
 
-        // Create a new donation
+    // Récupérer les données du formulaire
+    $data = $request->request->all();
+
+    // Validation des données
+    if (empty($data['id_client']) || empty($data['montant']) || empty($data['date_don'])) {
+        $this->addFlash('error', 'Tous les champs sont requis pour ajouter un don.');
+        return $this->redirectToRoute('app_don_partner');
+    }
+
+    // Vérifier si le client existe dans la base de données
+    $client = $utilisateursRepository->find($data['id_client']);
+    if (!$client) {
+        $this->addFlash('error', 'Client introuvable.');
+        return $this->redirectToRoute('app_don_partner');
+    }
+
+    $id_partenaire = $user->getIdUtilisateur();
+
+    try {
+        // Créer un nouvel objet Don
         $don = new Dons();
-        $don->setIdClient($idClient);
-        $don->setMontant($montant);
-        $don->setDateDon(new \DateTime($dateDon));
-        $don->setIdPartenaire(1); // Set the current partner ID (hardcoded or dynamic)
-        $don->setStatus('En attente');
-        
+        $don->setIdClient($data['id_client']);
+        $don->setIdPartenaire($id_partenaire); // ID du partenaire connecté
+        $don->setMontant((float) $data['montant']);
+        $don->setDateDon(new \DateTime($data['date_don'])); // Date du don
+        $don->setStatus($data['status'] ?? 'En attente'); // Statut par défaut
+
+        // Persister et enregistrer le don
         $entityManager->persist($don);
         $entityManager->flush();
 
         $this->addFlash('success', 'Don ajouté avec succès !');
+    } catch (\Exception $e) {
+        $this->addFlash('error', 'Une erreur s\'est produite lors de l\'ajout du don.');
+    }
+
+    return $this->redirectToRoute('app_don_partner');
+}
+
+    #[Route('/dashboard/partenaire/edit-don/{id}', name: 'edit_don', methods: ['POST'])]
+    public function editDon(Request $request, Dons $don, EntityManagerInterface $entityManager): Response
+    {
+        $montant = $request->request->get('montant');
+        $dateDon = $request->request->get('dateDon');
+
+        // Validate inputs
+        if (!$montant || !$dateDon) {
+            $this->addFlash('error', 'Tous les champs sont requis pour modifier un don.');
+            return $this->redirectToRoute('app_don_partner'); // Redirect to the list page
+        }
+
+        // Update the donation entity
+        $don->setMontant((float) $montant);
+        $don->setDateDon(new \DateTime($dateDon));
+
+        // Save changes to the database
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Don modifié avec succès !');
         return $this->redirectToRoute('app_don_partner');
     }
 
-    #[Route('/edit-don/{id}', name: 'edit_don', methods: ['POST'])]
-        public function editDon(Request $request, Dons $don, EntityManagerInterface $entityManager): Response
-        {
-            $montant = $request->request->get('montant');
-            $dateDon = $request->request->get('dateDon');
-
-            // Validate inputs
-            if (!$montant || !$dateDon) {
-                $this->addFlash('error', 'Tous les champs sont requis pour modifier un don.');
-                return $this->redirectToRoute('app_don_partner'); // Redirect to the list page
-            }
-
-            // Update the donation entity
-            $don->setMontant((float) $montant);
-            $don->setDateDon(new \DateTime($dateDon));
-
-            // Save changes to the database
-            $entityManager->flush();
-
-            // Provide feedback to the user
-            $this->addFlash('success', 'Don modifié avec succès !');
-            return $this->redirectToRoute('app_don_partner');
-        }
-
-    #[Route('/delete-don/{id}', name: 'delete_don', methods: ['POST'])]
+    #[Route('/dashboard/partenaire/delete-don/{id}', name: 'delete_don', methods: ['POST'])]
     public function deleteDon(Dons $don, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($don);
