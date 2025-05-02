@@ -25,54 +25,35 @@ final class DashboardPartenaireController extends AbstractController
 #[Route('/api/user/avatar', name: 'api_user_avatar', methods: ['GET'])]
 public function getUserAvatar(): JsonResponse
 {
-    $user = $this->getUser();  // Récupérer l'utilisateur connecté
+   // Récupérer l'utilisateur connecté via la session
+   $user = $this->getUser();
 
-    if (!$user) {
-        return new JsonResponse(['error' => 'Utilisateur non connecté.'], 400);
-    }
+   // Vérification si l'utilisateur est authentifié
+   if (!$user) {
+       return new JsonResponse(['error' => 'Utilisateur non connecté.'], JsonResponse::HTTP_UNAUTHORIZED);
+   }
+    // Récupère le nom de l'avatar
+    $avatarName = $user->getAvatar(); // Nom du fichier avatar (ex: avatar123.png)
 
-    // Vérifie si l'utilisateur a un avatar
-    $avatarUrl = $user->getAvatar(); // Méthode à définir dans l'entité Utilisateurs pour récupérer l'avatar
-
-    // Chemin où les avatars sont stockés
-    $avatarsDirectory = $this->getParameter('avatars_directory'); // Assurez-vous que cette variable est définie dans config/services.yaml
-
-    // Vérifie si l'avatar existe dans le dossier
-    if (!$avatarUrl || !file_exists($avatarsDirectory . '/' . $avatarUrl)) {
-        // Si l'avatar n'existe pas, renvoyer l'avatar par défaut
+    // Si aucun avatar n'est défini, utiliser l'avatar par défaut
+    if (!$avatarName) {
         return new JsonResponse(['avatarUrl' => '/images-partner/user.png']);
     }
 
-    // Si l'avatar existe, renvoyer l'URL de l'avatar
-    return new JsonResponse(['avatarUrl' => '/uploads/avatars/' . $avatarUrl]);
-}
+    // Chemin où les avatars sont stockés (dossier public/uploads/avatars)
+    $avatarsDirectory = $this->getParameter('avatars_directory');
+    $avatarPath = $avatarsDirectory . '/' . $avatarName;
 
-    #[Route('/dashboard/partenaire', name: 'app_dashboard_partenaire')]
-    public function index(): Response
-    {
-        $user = $this->getUser();
-
-        if (!$user instanceof Utilisateurs) {
-            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
-        }
-
-        if ($user) {
-            $this->addFlash('success', 'Bienvenue, ' . $user->getNom(). ' '. $user->getPrenom());
-        } else {
-            $this->addFlash('error', 'Utilisateur non connecté.');
-        }
-        
-
-        // Vérifiez si l'utilisateur est connecté et a le rôle partenaire
-        if (!$user || !in_array('ROLE_PARTENAIRE', $user->getRoles())) {
-            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette section.');
-        }
-
-        return $this->render('Partenaire/dashboard_partenaire/dashboard.html.twig', [
-            'controller_name' => 'DashboardPartenaireController',
-        ]);
+    // Vérifie si le fichier existe
+    if (!file_exists($avatarPath)) {
+        return new JsonResponse(['avatarUrl' => '/images-partner/user.png']);
     }
-   
+
+    // Génère l'URL complète de l'avatar accessible publiquement
+    $avatarUrl = '/uploads/avatars/' . $avatarName;
+
+    return new JsonResponse(['avatarUrl' => $avatarUrl]);
+}
 
     #[Route('/chatbot', name: 'chatbot_index', methods: ['GET'])]
     public function chatbotPage(): \Symfony\Component\HttpFoundation\Response
