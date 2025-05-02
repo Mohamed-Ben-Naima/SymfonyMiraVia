@@ -26,13 +26,13 @@ final class AdminEventController extends AbstractController
     
         // Requête DQL pour récupérer les événements avec leurs relations
         $query = $this->entityManager->createQuery(
-            'SELECT e.idEvenement, e.titre, e.description, e.dateEvenement, e.lieu, 
-                    e.status, e.estBloque, e.imagename, 
-                    u.nom AS nomPartenaire, u.prenom AS prenomPartenaire
-             FROM App\Entity\Evenements e
-             LEFT JOIN App\Entity\Partenaires p WITH e.idPartenaire = p.idPartenaire
-             LEFT JOIN App\Entity\Utilisateurs u WITH p.idPartenaire = u.idUtilisateur'
-        );
+          'SELECT e.idEvenement, e.titre, e.description, e.dateEvenement, e.lieu, 
+                  e.status, e.estBloque, e.imagename, 
+                  u.nom AS nomPartenaire, u.prenom AS prenomPartenaire
+           FROM App\Entity\Evenements e
+           LEFT JOIN App\Entity\Partenaires p WITH e.idPartenaire = p.utilisateur
+           LEFT JOIN App\Entity\Utilisateurs u WITH p.utilisateur = u.idUtilisateur'
+      );
     
         $evenements = $query->getResult();
     
