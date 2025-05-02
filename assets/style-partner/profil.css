@@ -1,0 +1,171 @@
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .user-profile {
+        text-align: center;
+    }
+
+    .user-avatar img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 12px;
+    }
+
+    .user-email {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    .about {
+        margin-top: 20px;
+        text-align: left;        /* tout le contenu à gauche */
+    }
+    
+    .about h5,
+    .about p {
+        text-align: left;        /* titre et paragraphe à gauche */
+        margin-bottom: 10px;
+    }
+    
+    /* Bloc logo + nom d’entreprise également à gauche */
+    .company-info {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;  /* alignement à gauche */
+        gap: 12px;
+        margin-top: 16px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        background: #f9fafb;
+        transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #007ae1;
+        background: #fff;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .col-6 {
+        width: 48%;
+    }
+
+    .col-12 {
+        width: 100%;
+    }
+
+    .text-primary {
+        color: #007ae1;
+        margin-bottom: 16px;
+        font-weight: 600;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary {
+        background-color: #007ae1;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #005fa3;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+        width: 48%;
+    }
+    .company-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;               /* Espace entre logo et texte */
+        margin-top: 16px;        /* Séparation par rapport au paragraphe */
+    }
+    
+    .company-info img {
+        width: 48px;             /* Taille du logo */
+        height: 48px;
+        border-radius: 8px;      /* Coins arrondis */
+        object-fit: cover;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    
+    .company-info strong {
+        font-size: 1rem;
+        color: #013A71;          /* Même couleur principale */
+    }
+    
+
+    @media (max-width: 768px) {
+        .profil-wrapper {
+            position: static;
+            width: 100%;
+            margin-top: 120px;
+        }
+
+        .form-row .form-group {
+            width: 100%;
+        }
+    }

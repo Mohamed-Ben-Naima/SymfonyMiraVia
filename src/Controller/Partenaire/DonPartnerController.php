@@ -81,7 +81,7 @@ class DonPartnerController extends AbstractController
         $don->setStatus($data['status'] ?? 'En attente'); // Statut par défaut
  // Notifications
  $notification = new Notifications();
- $notification->setMessage("Nouvelle demande d’aide ajoutée.");
+ $notification->setMessage("Nouveau don ajouté.");
  $notification->setDateEnvoi(new DateTime());
  $notification->setTypeNotification('success');
  $notification->setIsRead(false);
@@ -91,7 +91,7 @@ class DonPartnerController extends AbstractController
  $admins = $utilisateursRepository->findAllAdmins();
  foreach ($admins as $admin) {
      $adminNotif = new Notifications();
-     $adminNotif->setMessage("Nouvelle demande d’aide ajoutée.");
+     $adminNotif->setMessage("Nouveau don ajouté.");
      $adminNotif->setDateEnvoi(new DateTime());
      $adminNotif->setTypeNotification('success');
      $adminNotif->setIsRead(false);
@@ -127,7 +127,7 @@ class DonPartnerController extends AbstractController
         $don->setDateDon(new \DateTime($dateDon));
  // Notifications
  $notification = new Notifications();
- $notification->setMessage("Demande d’aide modifiée.");
+ $notification->setMessage("Don modifié.");
  $notification->setDateEnvoi(new DateTime());
  $notification->setTypeNotification('warning');
  $notification->setIsRead(false);
@@ -137,7 +137,7 @@ class DonPartnerController extends AbstractController
  $admins = $utilisateursRepository->findAllAdmins();
  foreach ($admins as $admin) {
      $adminNotif = new Notifications();
-     $adminNotif->setMessage("Demande d’aide modifiée.");
+     $adminNotif->setMessage("Don modifié.");
      $adminNotif->setDateEnvoi(new DateTime());
      $adminNotif->setTypeNotification('warning');
      $adminNotif->setIsRead(false);
@@ -156,7 +156,7 @@ class DonPartnerController extends AbstractController
     public function deleteDon(Dons $don, EntityManagerInterface $entityManager): Response
     {   // Notifications
         $notification = new Notifications();
-        $notification->setMessage("Demande d’aide supprimée.");
+        $notification->setMessage("Don supprimé.");
         $notification->setDateEnvoi(new DateTime());
         $notification->setTypeNotification('danger');
         $notification->setIsRead(false);
@@ -166,7 +166,7 @@ class DonPartnerController extends AbstractController
         $admins = $utilisateursRepository->findAllAdmins();
         foreach ($admins as $admin) {
             $adminNotif = new Notifications();
-            $adminNotif->setMessage("Demande d’aide supprimée.");
+            $adminNotif->setMessage("Don supprimé.");
             $adminNotif->setDateEnvoi(new DateTime());
             $adminNotif->setTypeNotification('danger');
             $adminNotif->setIsRead(false);
