@@ -11,7 +11,7 @@ final class BenevolatPartnerController extends AbstractController
     #[Route('/benevolat/partner', name: 'app_benevolat_partner')]
     public function index(): Response
     {
-        return $this->render('Partenaire/benevolat_partner/index.html.twig', [
+        return $this->render('Partenaire/benevolat_partner/benevolat.html.twig', [
             'controller_name' => 'BenevolatPartnerController',
         ]);
     }
