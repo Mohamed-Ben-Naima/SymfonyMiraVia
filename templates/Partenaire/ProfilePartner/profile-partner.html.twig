@@ -1,0 +1,86 @@
+{% extends 'Partenaire/basePartner.html.twig' %}
+{% block body %}
+<div class="content">
+    <form method="post" action="#">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card user-profile">
+                        <div class="user-avatar">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Avatar">
+                        </div>
+                        <div class="user-name">Nom Prénom</div>
+                        <div class="user-email">email@exemple.com</div>
+                        <div class="about">
+                            <h5>À propos</h5>
+                            <p>Je suis Nom et Prenom. Je suis votre partenaire au nom de notre entreprise </p>
+                           <div class="company-info">
+        <img src="https://thafd.bing.com/th/id/OIP.nburQyj1SHjExRBzaHJUWwHaEc?rs=1&pid=ImgDetMain" alt="logo">
+        <strong>Nom entreprise</strong>
+       </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <h6 class="text-primary">Informations personnelles</h6>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nom">Nom</label>
+                                <input type="text" class="form-control-profil" id="nom" name="nom" value="Dupont">
+                            </div>
+                            <div class="form-group">
+                                <label for="prenom">Prénom</label>
+                                <input type="text" class="form-control-profil" id="prenom" name="prenom" value="Jean">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                        <div class="form-group">
+                            <label for="telephone">Téléphone</label>
+                            <input type="text" class="form-control-profil" id="telephone" name="telephone" value="+21612345678">
+                        </div>
+                         <div class="form-group">
+                            <label for="adresse">Adresse</label>
+                            <input type="text" class="form-control-profil" id="adresse" name="adresse" value="adresse">
+                        </div>
+                        </div>
+
+                        <h6 class="text-primary">Informations professionnelles</h6>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="entreprise">Nom de l'entreprise</label>
+                                <input type="text" class="form-control-profil" id="entreprise" name="entreprise" value="InnoSynergy">
+                            </div>
+                            <div class="form-group">
+                                <label for="activite">Type d’activité</label>
+                                <input type="text" class="form-control-profil" id="activite" name="activite" value="Développement logiciel">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="siteweb">Site Web</label>
+                                <input type="url" class="form-control-profil" id="siteweb" name="siteweb" value="https://innosynergy.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="adresse">Adresse</label>
+                                <input type="text" class="form-control-profil" id="adresse" name="adresse" value="Paris, France">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tel_entreprise">Téléphone entreprise</label>
+                            <input type="text" class="form-control-profil" id="tel_entreprise" name="tel_entreprise" value="+33123456789">
+                        </div>
+
+                        <div class="text-right">
+                            <button type="reset" class="btn btn-secondary">Annuler</button>
+                            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="{{ asset('js/partner/profil.js') }}"></script>
+<link href="{{ asset('style-partner/profil.css') }}" rel="stylesheet">
+{% endblock %}
