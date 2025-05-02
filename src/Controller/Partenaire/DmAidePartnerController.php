@@ -27,10 +27,7 @@ class DmAidePartnerController extends AbstractController
         if (!$user instanceof Utilisateurs) {
             throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
         }
-        if (!$user instanceof Utilisateurs) {
-            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
-        }
-
+        
         $id_partenaire = $user->getIdUtilisateur();
         $demandesAide = $repository->findByPartenaire($id_partenaire);
         $clients = $utilisateursRepository->findAllClients();
@@ -112,7 +109,7 @@ class DmAidePartnerController extends AbstractController
         return $this->redirectToRoute('demande_aide', ['id_partenaire' => $demande->getIdPartenaire()]);
     }
 
-            #[Route('/dashboard/partenaire/demande_aide_add', name: 'add_demande', methods: ['POST'])]
+        #[Route('/dashboard/partenaire/demande_aide_add', name: 'add_demande', methods: ['POST'])]
         public function addDemande(
             Request $request,
             EntityManagerInterface $entityManager,
@@ -215,7 +212,7 @@ class DmAidePartnerController extends AbstractController
         $notification = new Notifications();
         $notification->setMessage("Demande d’aide supprimée.");
         $notification->setDateEnvoi(new DateTime());
-        $notification->setTypeNotification('success');
+        $notification->setTypeNotification('danger');
         $notification->setIsRead(false);
         $notification->setIdUtilisateur($user->getIdUtilisateur());
         $entityManager->persist($notification);
@@ -225,7 +222,7 @@ class DmAidePartnerController extends AbstractController
             $adminNotif = new Notifications();
             $adminNotif->setMessage("Demande d’aide supprimée.");
             $adminNotif->setDateEnvoi(new DateTime());
-            $adminNotif->setTypeNotification('warning');
+            $adminNotif->setTypeNotification('danger');
             $adminNotif->setIsRead(false);
             $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
             $entityManager->persist($adminNotif);

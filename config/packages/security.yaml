@@ -40,6 +40,7 @@ security:
             stateless: false
 
     access_control:
+        
         - { path: ^/dashboard/partenaire, roles: ROLE_PARTENAIRE }
         - { path: ^/partner, roles: ROLE_PARTENAIRE }        
         - { path: ^/login/partner, roles: PUBLIC_ACCESS }
@@ -49,3 +50,4 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/login2, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: PUBLIC_ACCESS }
+        

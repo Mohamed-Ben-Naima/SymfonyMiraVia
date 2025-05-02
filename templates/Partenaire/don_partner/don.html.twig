@@ -2,7 +2,6 @@
 
 {% block title %}Liste des Dons{% endblock %}
 
-
 {% block body %}
 <div class="content">
   <!-- Titre centré -->
@@ -18,18 +17,18 @@
         <input 
           type="text" 
           id="searchBar" 
-          class="form-control me-2" 
+          class="form-control" 
           placeholder="Rechercher un don..."
-          style="max-width: 300px;"
+          style="max-width: 900px;"
         >
 
         <!-- Sélection de statut et bouton "Ajouter un don" -->
         <div class="d-flex align-items-center">
           <select id="statusFilter" class="form-select me-2" style="max-width: 200px;">
             <option value="">Tous les statuts</option>
-            <option value="en_attente">En attente</option>
-            <option value="acceptee">Acceptée</option>
-            <option value="refusee">Refusée</option>
+            <option value="En attente">En attente</option>
+            <option value="Acceptee">Acceptée</option>
+            <option value="Refusee">Refusée</option>
           </select>
           <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDonModal">
             Ajouter
@@ -50,59 +49,37 @@
             </tr>
           </thead>
           <tbody id="donsTable">
-          {% for don in dons %}
-              {% if don.id_partenaire == 1 %}
-                  <tr>
-                      <!-- Nom Client -->
-                      <td>{{ don.client_nom }}</td>
+        {% for don in dons %}
+          <tr data-status="{{ don.status }}">
+            <!-- Nom Client -->
+            <td>{{ don.client_nom }}</td>
 
-                      <!-- Montant -->
-                      <td>{{ don.montant }} €</td>
+            <!-- Montant -->
+            <td>{{ don.montant }} €</td>
 
-                      <!-- Date -->
-                      <td>{{ don.date_don|date('d M Y H:i') }}</td>
+            <!-- Date -->
+            <td>{{ don.date_don|date('d M Y H:i') }}</td>
 
-                      <!-- Statut -->
-                      <td>
-                          {% if don.status == 'En attente' %}
-                              <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important; color:rgb(255, 191, 0) !important;">En attente</span>
-                          {% elseif don.status == 'Accepté' %}
-                              <span class="badge bg-success" style="color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
-                              background-color: #78e3784a !important">Accepté</span>
-                          {% elseif don.status == 'Refusé' %}
-                              <span class="badge bg-danger">Refusé</span>
-                          {% endif %}
-                      </td>
+            <!-- Statut -->
+            <td>
+            {% if don.status == 'En attente' %}
+              <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important; color:rgb(255, 191, 0) !important;">En attente</span>
+            {% elseif don.status == 'Acceptée' %}
+              <span class="badge bg-success" style="color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important; background-color: #78e3784a !important">Acceptée</span>
+            {% elseif don.status == 'Refusée' %}
+              <span class="badge bg-danger">Refusée</span>
+            {% endif %}
+          </td>
 
-                      <!-- Actions -->
-              <td style="padding-left: 20px">
-                  <!-- Éditer -->
-                  <i 
-                      class="bi bi-pencil-fill text-primary" 
-                      style="cursor: pointer; margin-right: 10px; 
-                      {% if don.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
-                      data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
-                      data-bs-target="#editDonModal{{ don.id_don }}"
-                      title="{% if don.status == 'Accepté' %}Modification désactivée pour les dons acceptés{% else %}Modifier{% endif %}">
-                  </i>
-
-                  <!-- Supprimer -->
-                  <i 
-                      class="bi bi-trash-fill text-danger" 
-                      style="cursor: pointer; {% if don.status == 'Accepté' %}
-                      opacity: 0.5; pointer-events: none;{% endif %}" 
-                      data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
-                      data-bs-target="#deleteDonModal{{ don.id_don }}"
-                      title="{% if don.status == 'Accepté' %}
-                      Suppression désactivée pour les dons acceptés
-                      {% else %}Supprimer
-                      {% endif %}">
-                  </i>
-              </td>
-                  </tr>
-              {% endif %}
-          {% endfor %}
-          </tbody>
+            <!-- Actions -->
+            <td>
+              <!-- Example actions -->
+              <i class="bi bi-pencil-fill text-primary" style="cursor: pointer; margin-right: 10px;"></i>
+              <i class="bi bi-trash-fill text-danger" style="cursor: pointer;"></i>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
         </table>
       </div>
     </div>

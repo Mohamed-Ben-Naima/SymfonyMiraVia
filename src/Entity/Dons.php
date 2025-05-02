@@ -18,8 +18,8 @@ class Dons
     #[ORM\Column(name: "id_client", nullable: true, options: ["default" => NULL])]
     private ?int $idClient = NULL;
 
-    #[ORM\Column(name: "id_partenaire", nullable: true, options: ["default" => NULL])]
-    private ?int $idPartenaire = NULL;
+    #[ORM\Column(name: "id_partenaire", type: "integer", nullable: true)]
+    private ?int $idPartenaire = null;
 
     #[ORM\Column(name: "montant", type: Types::DECIMAL, precision: 10, scale: 2, nullable: true, options: ["default" => NULL])]
     private ?string $montant = 'NULL';
@@ -27,8 +27,8 @@ class Dons
     #[ORM\Column(name: "date_don", type: Types::DATETIME_MUTABLE, nullable: true, options: ["default" => 'current_timestamp()'])]
     private ?\DateTimeInterface $dateDon = null;
 
-    #[ORM\Column(name: "status", length: 20, nullable: true, options: ["default" => '\'en attente\''])]
-    private ?string $status = '\'en attente\'';
+    #[ORM\Column(name: "status", length: 20, nullable: true, options: ["default" => '\'En attente\''])]
+    private ?string $status = '\'En attente\'';
 
     public function getIdDon(): ?int
     {
@@ -55,16 +55,16 @@ class Dons
     }
 
     public function getIdPartenaire(): ?int
-    {
-        return $this->idPartenaire;
-    }
+        {
+            return $this->idPartenaire;
+        }
 
-    public function setIdPartenaire(?int $idPartenaire): static
-    {
-        $this->idPartenaire = $idPartenaire;
+        public function setIdPartenaire(?int $idPartenaire): self
+        {
+            $this->idPartenaire = $idPartenaire;
 
-        return $this;
-    }
+            return $this;
+        }
 
     public function getMontant(): ?string
     {

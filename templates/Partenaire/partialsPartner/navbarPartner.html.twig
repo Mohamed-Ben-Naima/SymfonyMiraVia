@@ -1,4 +1,18 @@
 <style>
+.notification-items {
+    max-height: 300px; /* ou une autre valeur selon ton design */
+    overflow-y: auto;
+}
+
+.notification-items::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notification-items::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
 .notification-actions {
     display: flex;
     justify-content: space-between;
@@ -6,7 +20,9 @@
     border-top: 1px solid #ddd;
     padding-top: 0.75rem;
 }
-
+.notification-item.danger i {
+    color: #dc3545;
+}
 .notification-actions button {
     font-size: 0.85rem;
     padding: 6px 12px;
@@ -148,22 +164,36 @@
             </div>
         </div>
         <!-- Profile Icon -->
-        <div class="profile-wrapper">
-            <img src="https://via.placeholder.com/40" alt="Profile" class="profile-icon">
-            <span class="status-indicator"></span>
-        </div>
+<div class="profile-wrapper">
+  <img src="{{ asset('/images-partner/user.png') }}" alt="Profile" class="profile-icon" onerror="this.src='/images-partner/user.png'">
+
+    <span class="status-indicator"></span>
+</div>
+
+
     </div>
 </div>
 <script>
     // Fonction pour déterminer l'icône selon le type de notification
     function getIcon(type) {
-        switch (type) {
-            case 'info': return 'bi-info-circle';
-            case 'success': return 'bi-check-circle';
-            case 'warning': return 'bi-exclamation-circle';
-            default: return 'bi-bell';
-        }
+    switch (type) {
+        case 'info': return 'bi-info-circle';
+        case 'success': return 'bi-check-circle';
+        case 'warning': return 'bi-exclamation-circle';
+        case 'danger': return 'bi-x-circle'; // ← ajouté
+        default: return 'bi-bell';
     }
+}
+fetch('/api/user/avatar')
+    .then(response => response.json())
+    .then(data => {
+        if (data.avatarUrl && data.avatarUrl.trim() !== "") {
+            document.querySelector('.profile-icon').src = data.avatarUrl;
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de la récupération de l\'avatar:', error);
+    });
 
     // Fonction pour formater l'heure de la notification
     function formatTime(datetimeStr) {
@@ -194,11 +224,19 @@
     }
 
     // Fonction pour mettre à jour le compteur de notifications
-    function updateNotificationCount() {
-        const notificationCount = document.getElementById("notificationCount");
-        const items = document.querySelectorAll(".notification-item");
-        notificationCount.textContent = items.length > 0 ? items.length : "0";
-    }
+   function updateNotificationCount() {
+    const notificationCount = document.getElementById("notificationCount");
+    const items = document.querySelectorAll(".notification-item");
+
+    const count = items.length;
+    notificationCount.textContent = count > 0 ? count : "";
+    notificationCount.style.display = count > 0 ? "inline-block" : "none";
+
+    // Optionnel : mettre à jour dynamiquement le titre
+    const notificationTitle = document.getElementById('notificationTitle');
+    notificationTitle.textContent = count > 0 ? `${count} Notifications` : "Aucune notification";
+}
+
 
     // Fonction pour marquer toutes les notifications comme lues
     function markAllAsRead() {
@@ -246,7 +284,8 @@
 
                 // Update the notification count
                 const notificationCount = document.getElementById("notificationCount");
-                notificationCount.textContent = "0";  
+                updateNotificationCount();
+  
             } else {
                 alert(data.error);
             }

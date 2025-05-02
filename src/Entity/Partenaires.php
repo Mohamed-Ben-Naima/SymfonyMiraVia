@@ -43,6 +43,19 @@ private ?Utilisateurs $utilisateur = null;
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $logo = null;
 
+private $autresDocumentsJson;
+
+public function setAutresDocumentsJson(array $documents): self
+{
+    $this->autresDocumentsJson = json_encode($documents); // Convertir l'array en JSON
+    return $this;
+}
+
+public function getAutresDocumentsJson(): array
+{
+    return json_decode($this->autresDocumentsJson, true) ?: []; // Convertir JSON en array
+}
+
     // Getter et Setter pour $logo
     public function getLogo(): ?string
     {
