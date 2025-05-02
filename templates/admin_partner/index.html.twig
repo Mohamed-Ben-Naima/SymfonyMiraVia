@@ -1,6 +1,6 @@
 {% extends 'baseAdmin.html.twig' %}
 
-{% block title %}Liste des Partenaires{% endblock %}
+{% block title %}Liste des demandes partenaires{% endblock %}
 
 {% block body %}
 <style>
@@ -17,6 +17,10 @@ html, body {
 body.dark-mode {
     background-color: #1a202c;
     color: #e2e8f0;
+}
+
+.no-scroll {
+    overflow: hidden;
 }
 
 .example-wrapper {
@@ -49,7 +53,7 @@ body.dark-mode .example-wrapper h1 {
 
 .search-box {
     position: relative;
-    width: 66%;
+    width: 87%;
 }
 
 .search-box input {
@@ -63,8 +67,8 @@ body.dark-mode .example-wrapper h1 {
 }
 
 body.dark-mode .search-box input {
-    background-color: #4a5568;
-    border-color: #718096;
+    background-color: #2d3748;
+    border-color: #4a5568;
     color: #e2e8f0;
 }
 
@@ -79,13 +83,13 @@ body.dark-mode .search-box input {
 }
 
 body.dark-mode #statusFilter {
-    background-color: #4a5568;
-    border-color: #718096;
+    background-color: #2d3748;
+    border-color: #4a5568;
     color: #e2e8f0;
 }
 
 .header button {
-    padding: 8px 10px;
+    padding: 8px 31px;
     font-size: 14px;
     background-color: #7D8C6D;
     color: #fff;
@@ -95,61 +99,25 @@ body.dark-mode #statusFilter {
     transition: background-color 0.3s ease;
 }
 
-body.dark-mode .header button {
-    background-color: #4a90e2;
-}
-
 .header button:hover {
     background-color: #5c7352;
+}
+
+body.dark-mode .header button {
+    background-color: #4a90e2;
 }
 
 body.dark-mode .header button:hover {
     background-color: #357abd;
 }
 
-.button-unblock {
-    background-color: #013A71;
-    color: white;
-}
-
-body.dark-mode .button-unblock {
-    background-color: #4a90e2;
-}
-
-.button-unblock:hover {
-    background-color: rgb(38, 86, 131);
-}
-
-body.dark-mode .button-unblock:hover {
-    background-color: #357abd;
-}
-
-.button-block {
-    background-color: rgb(146, 151, 155);
-    color: white;
-}
-
-body.dark-mode .button-block {
-    background-color: #718096;
-}
-
-.button-block:hover {
-    background-color: rgb(116, 118, 120);
-}
-
-body.dark-mode .button-block:hover {
-    background-color: #4a5568;
-}
-
 table {
     width: 100%;
-    max-width: 100%;
     border-collapse: collapse;
     font-size: 14px;
     background-color: white;
     box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    table-layout: auto;
-    overflow-x: auto;
+    table-layout: fixed;
 }
 
 body.dark-mode table {
@@ -197,12 +165,27 @@ body.dark-mode tr:hover {
 }
 
 .actions button {
+    background-color: #ccc;
     border: none;
     padding: 5px 8px;
     font-size: 12px;
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.2s;
+}
+
+body.dark-mode .actions button {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
+.actions button:hover {
+    background-color: #999;
+    color: white;
+}
+
+body.dark-mode .actions button:hover {
+    background-color: #718096;
 }
 
 @media (max-width: 992px) {
@@ -255,6 +238,24 @@ body.dark-mode tr:hover {
     }
 }
 
+.actions button.consulter-btn {
+    background-color: #7D8C6D;
+    color: white;
+    font-size: 14px;
+}
+
+body.dark-mode .actions button.consulter-btn {
+    background-color: #4a90e2;
+}
+
+.actions button.consulter-btn:hover {
+    background-color: #5c7352;
+}
+
+body.dark-mode .actions button.consulter-btn:hover {
+    background-color: #357abd;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -268,15 +269,22 @@ body.dark-mode tr:hover {
 }
 
 .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #fff;
-    margin: 10% auto;
+    margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    width: 30%;
+    width: 40%;
+    height: auto;
     box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
-    max-width: 500px;
-    text-align: center;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    text-align: left;
 }
 
 body.dark-mode .modal-content {
@@ -290,6 +298,9 @@ body.dark-mode .modal-content {
     font-weight: bold;
     margin-bottom: 20px;
     color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 body.dark-mode .modal-header {
@@ -303,9 +314,6 @@ body.dark-mode .modal-header {
     font-weight: bold;
     color: #333;
     cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 10px;
     outline: none;
     transition: color 0.3s ease;
 }
@@ -320,38 +328,16 @@ body.dark-mode .modal-header .close-btn {
 
 .modal-body {
     margin-bottom: 20px;
-}
-
-.modal-body label {
-    display: block;
-    margin-bottom: 5px;
     font-size: 14px;
-    text-align: left;
-    font-weight: bold;
-    color: #333;
 }
 
-body.dark-mode .modal-body label {
+body.dark-mode .modal-body {
     color: #e2e8f0;
 }
 
-.modal-body input,
-.modal-body select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    background-color: #fff;
-    color: #000;
-}
-
-body.dark-mode .modal-body input,
-body.dark-mode .modal-body select {
-    background-color: #4a5568;
-    border-color: #718096;
-    color: #e2e8f0;
+.modal-body p {
+    margin: 10px 0;
+    line-height: 1.6;
 }
 
 .modal-footer {
@@ -369,25 +355,25 @@ body.dark-mode .modal-body select {
     transition: background-color 0.3s;
 }
 
-.modal-footer .confirm-btn {
-    background-color: #7D8C6D;
+.modal-footer .download-btn {
+    background-color: #013A71;
     color: white;
 }
 
-body.dark-mode .modal-footer .confirm-btn {
+body.dark-mode .modal-footer .download-btn {
     background-color: #4a90e2;
 }
 
-.modal-footer .confirm-btn:hover {
-    background-color: #5c7352;
+.modal-footer .download-btn:hover {
+    background-color: rgb(24, 95, 162);
 }
 
-body.dark-mode .modal-footer .confirm-btn:hover {
+body.dark-mode .modal-footer .download-btn:hover {
     background-color: #357abd;
 }
 
 .modal-footer .cancel-btn {
-    background-color: #013A71;
+    background-color: #7D8C6D;
     color: white;
 }
 
@@ -396,59 +382,101 @@ body.dark-mode .modal-footer .cancel-btn {
 }
 
 .modal-footer .cancel-btn:hover {
-    background-color: rgb(24, 95, 162);
+    background-color: #5c7352;
 }
 
 body.dark-mode .modal-footer .cancel-btn:hover {
     background-color: #357abd;
 }
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        margin: 2% auto;
+    }
+}
+
+.toggle-dark-mode {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #7D8C6D;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-dark-mode:hover {
+    background-color: #5c7352;
+}
+
+body.dark-mode .toggle-dark-mode {
+    background-color: #4a90e2;
+}
+
+body.dark-mode .toggle-dark-mode:hover {
+    background-color: #357abd;
+}
 </style>
 
 <div class="example-wrapper">
-    <h1>Liste des partenaires</h1>
+    <h1>Liste des demandes partenaires</h1>
 
     <div class="header">
         <div class="search-box">
-            <input type="text" id="search" placeholder="Rechercher un partenaire...">
+            <input type="text" id="search" placeholder="Rechercher ...">
         </div>
         <select id="statusFilter">
-            <option value="">Tous les statuts</option>
-            <option value="Actif">Actif</option>
-            <option value="Inactif">Inactif</option>
+            <option value="">Tous les états</option>
+            <option value="Refusée">Refusée</option>
+            <option value="Acceptée">Acceptée</option>
+            <option value="En attente">En attente</option>
         </select>
-        <button onclick="openModal()">Modifier date d'expiration</button>
     </div>
 
     <table>
         <thead>
             <tr>
                 <th>#</th>
-                <th>Nom de partenaire</th>
-                <th>Téléphone Partenaire</th>
+                <th>Nom de demandeur</th>
+                <th>Téléphone</th>
                 <th>Email</th>
                 <th>Adresse</th>
-                <th>Nom d'entreprise</th>
-                <th>Date d'expiration</th>
+                <th>Date de demande</th>
                 <th>Type d'activité</th>
-                <th>Status</th>
+                <th>Etat</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody id="userTable">
-            {% for partenaire in partenaires %}
+            {% for demande in demandes %}
             <tr>
-                <td>{{ partenaire.id_partenaire }}</td>
-                <td>{{ partenaire.nom }} {{ partenaire.prenom }}</td>
-                <td>{{ partenaire.partenaire_telephone }}</td>
-                <td>{{ partenaire.email }}</td>
-                <td>{{ partenaire.adresse }}</td>
-                <td>{{ partenaire.nom_entreprise }}</td>
-                <td>{{ partenaire.date_expiration ? partenaire.date_expiration|date('Y-m-d') : 'N/A' }}</td>
-                <td>{{ partenaire.type_activite }}</td>
-                <td>{{ partenaire.utilisateur_statut_verification }}</td>
+                <td>{{ demande.id }}</td>
+                <td>{{ demande.demandeur }}</td>
+                <td>{{ demande.telephone }}</td>
+                <td>{{ demande.email }}</td>
+                <td>{{ demande.adresse }}</td>
+                <td>{{ demande.dateDemande ? demande.dateDemande|date('Y-m-d') : '' }}</td>
+                <td>{{ demande.typeActivite }}</td>
+                <td>{{ demande.etat }}</td>
                 <td class="actions">
-                    <button class="button-block" onclick="blockUser({{ partenaire.id_partenaire }})">Bloquer</button>
-                    <button class="button-unblock"  onclick="unblockUser({{ partenaire.id_partenaire }})">Débloquer</button>
+                    <button 
+                        class="consulter-btn" 
+                        data-id="{{ demande.id }}"
+                        data-demandeur="{{ demande.demandeur }}"
+                        data-telephone="{{ demande.telephone }}"
+                        data-email="{{ demande.email }}"
+                        data-adresse="{{ demande.adresse }}"
+                        data-date-demande="{{ demande.dateDemande ? demande.dateDemande|date('Y-m-d') : '' }}"
+                        data-type-activite="{{ demande.typeActivite }}"
+                        data-etat="{{ demande.etat }}"
+                        data-description="{{ demande.description|default('Aucune description disponible') }}"
+                        data-preuve="{{ demande.preuve ? demande.preuve : '' }}"
+                        onclick="viewDetails(this)"
+                    >
+                        Consulter
+                    </button>
                 </td>
             </tr>
             {% endfor %}
@@ -456,53 +484,19 @@ body.dark-mode .modal-footer .cancel-btn:hover {
     </table>
 </div>
 
-<!-- Modal for updating expiration date -->
-<div id="modal" class="modal">
+<!-- Modal for displaying details -->
+<div id="detailsModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            Sélectionner date d'expiration
+            <span>Détail de la demande</span>
             <button class="close-btn" onclick="closeModal()">×</button>
         </div>
-        <div class="modal-body">
-            <p id="successMessageDate" style="color: green; font-size: 13px; display: none; margin-bottom: 10px;">
-                La date d'expiration a été modifiée avec succès.
-            </p>
-            <label for="partnerSelect">Partenaire :</label>
-            <select id="partnerSelect" required>
-                <option value="">-- Sélectionnez un partenaire --</option>
-                {% for partenaire in partenaires %}
-                <option value="{{ partenaire.id_partenaire }}">{{ partenaire.nom }} {{ partenaire.prenom }}</option>
-                {% endfor %}
-            </select>
-            <label for="expirationDate">Date d'expiration :</label>
-            <input type="date" id="expirationDate" required>
-            <p id="errorMessage" style="color: red; font-size: 13px; display: none; margin-top: 10px;">
-                Veuillez remplir tous les champs correctement.
-            </p>
+        <div class="modal-body" id="modalBody">
+            <!-- Les détails seront remplis dynamiquement -->
         </div>
         <div class="modal-footer">
-            <button class="confirm-btn" onclick="confirmExpiration()">Confirmer</button>
-            <button class="cancel-btn" onclick="closeModal()">Annuler</button>
-        </div>
-    </div>
-</div>
-
-<!-- Confirmation Modal -->
-<div id="actionModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            Confirmation
-            <button class="close-btn" onclick="closeModal()">×</button>
-        </div>
-        <div class="modal-body">
-            <p id="successMessageAction" style="color: green; font-size: 13px; display: none; margin-bottom: 10px;">
-                L'action a été réalisée avec succès.
-            </p>
-            <p id="actionMessage"></p>
-        </div>
-        <div class="modal-footer">
-            <button class="confirm-btn" onclick="confirmAction()">Confirmer</button>
-            <button class="cancel-btn" onclick="closeModal()">Annuler</button>
+            <button class="download-btn" id="downloadButton" style="display: none;">Télécharger la preuve</button>
+            <button class="cancel-btn" onclick="closeModal()">Fermer</button>
         </div>
     </div>
 </div>
@@ -513,135 +507,70 @@ function toggleDarkMode() {
     localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     // Apply dark mode if previously selected
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
     }
 
-    let actionCallback;
+    function viewDetails(button) {
+        const demandeur = button.getAttribute('data-demandeur');
+        const telephone = button.getAttribute('data-telephone');
+        const email = button.getAttribute('data-email');
+        const adresse = button.getAttribute('data-adresse');
+        const dateDemande = button.getAttribute('data-date-demande');
+        const typeActivite = button.getAttribute('data-type-activite');
+        const etat = button.getAttribute('data-etat');
+        const description = button.getAttribute('data-description');
+        const preuve = button.getAttribute('data-preuve');
 
-    function openConfirmationModal(message, callback) {
-        const modal = document.getElementById('actionModal');
-        const actionMessage = document.getElementById('actionMessage');
-        actionMessage.textContent = message;
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = `
+            <p><strong>Nom de demandeur :</strong> ${demandeur}</p>
+            <p><strong>Téléphone :</strong> ${telephone}</p>
+            <p><strong>Email :</strong> ${email}</p>
+            <p><strong>Adresse :</strong> ${adresse}</p>
+            <p><strong>Date de demande :</strong> ${dateDemande}</p>
+            <p><strong>Type d'activité :</strong> ${typeActivite}</p>
+            <p><strong>État :</strong> ${etat}</p>
+            <p><strong>Description :</strong> ${description}</p>
+            <p><strong>Preuve :</strong> ${
+                preuve 
+                ? `<a href="${preuve}" target="_blank">Voir la preuve</a>`
+                : 'Aucune preuve disponible'
+            }</p>
+        `;
+
+        const downloadButton = document.getElementById('downloadButton');
+        if (preuve) {
+            // Check if file exists
+            fetch(preuve, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        downloadButton.style.display = 'inline-block';
+                        downloadButton.onclick = () => window.open(preuve, '_blank');
+                    } else {
+                        downloadButton.style.display = 'none';
+                        modalBody.querySelector('p:last-child').innerHTML = '<strong>Preuve :</strong> Fichier non disponible';
+                    }
+                })
+                .catch(() => {
+                    downloadButton.style.display = 'none';
+                    modalBody.querySelector('p:last-child').innerHTML = '<strong>Preuve :</strong> Fichier non disponible';
+                });
+        } else {
+            downloadButton.style.display = 'none';
+        }
+
+        const modal = document.getElementById('detailsModal');
         modal.style.display = 'block';
-        actionCallback = callback;
-    }
-
-    function confirmAction() {
-        if (typeof actionCallback === 'function') {
-            actionCallback();
-            const successMessage = document.getElementById('successMessageAction');
-            successMessage.style.display = 'block';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-                closeModal();
-            }, 3000);
-        }
-    }
-
-function updateStatus(id, statut_verification) {
-    console.log('Sending data:', { id, statut_verification });
-
-    fetch('/admin/partner/change-status', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: JSON.stringify({ id: id, statut_verification: statut_verification }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-    })
-    .then(() => {
-        location.reload();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
-    function blockUser(id) {
-        openConfirmationModal(`Êtes-vous sûr de vouloir bloquer l'utilisateur #${id} ?`, function () {
-            updateStatus(id, 'Inactif');
-        });
-    }
-
-    function unblockUser(id) {
-        openConfirmationModal(`Êtes-vous sûr de vouloir débloquer l'utilisateur #${id} ?`, function () {
-            updateStatus(id, 'Actif');
-        });
-    }
-
-    function openModal() {
-        document.getElementById('modal').style.display = 'block';
-        document.getElementById('successMessageDate').style.display = 'none';
+        document.body.classList.add('no-scroll');
     }
 
     function closeModal() {
-        document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
-    }
-
-    function confirmExpiration() {
-        const partnerSelect = document.getElementById('partnerSelect');
-        const expirationDate = document.getElementById('expirationDate');
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessageDate');
-        
-        const today = new Date().toISOString().split('T')[0];
-
-        if (partnerSelect.value === "" || expirationDate.value === "") {
-            errorMessage.textContent = "Veuillez remplir tous les champs correctement.";
-            errorMessage.style.display = 'block';
-            successMessage.style.display = 'none';
-            return;
-        }
-
-        if (expirationDate.value < today) {
-            errorMessage.textContent = "Veuillez sélectionner une date valide (postérieure ou égale à la date d'aujourd'hui).";
-            errorMessage.style.display = 'block';
-            successMessage.style.display = 'none';
-            return;
-        }
-
-        const data = {
-            id: partnerSelect.value,
-            expirationDate: expirationDate.value
-        };
-
-        fetch('/admin/partner/update-expiration', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(responseData => {
-            successMessage.textContent = responseData.message;
-            successMessage.style.display = 'block';
-            errorMessage.style.display = 'none';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-                closeModal();
-                location.reload();
-            }, 3000);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            errorMessage.textContent = 'Erreur lors de la mise à jour. Veuillez réessayer.';
-            errorMessage.style.display = 'block';
-        });
+        const modal = document.getElementById('detailsModal');
+        modal.style.display = 'none';
+        document.body.classList.remove('no-scroll');
     }
 
     document.getElementById('search').addEventListener('input', filterTable);
@@ -649,33 +578,24 @@ function updateStatus(id, statut_verification) {
 
     function filterTable() {
         const searchFilter = document.getElementById('search').value.toLowerCase();
-        const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+        const statusFilter = document.getElementById('statusFilter').value;
         const rows = document.querySelectorAll('#userTable tr');
 
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
-            const textMatch = Array.from(cells)
+            const textMatch = Array.from(cells).slice(0, 8)
                 .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
-            const status = cells[8]?.textContent.toLowerCase().trim();
-            const statusMatch = statusFilter === "" || status === statusFilter;
 
-            row.style.display = (textMatch && statusMatch) ? '' : 'none';
+            const etat = cells[7]?.textContent?.trim() || '';
+            const etatMatch = statusFilter === "" || etat === statusFilter;
+
+            row.style.display = (textMatch && etatMatch) ? '' : 'none';
         });
     }
 
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeModal();
-        }
-    });
-
     // Expose functions globally for HTML onclick
-    window.blockUser = blockUser;
-    window.unblockUser = unblockUser;
-    window.openModal = openModal;
+    window.viewDetails = viewDetails;
     window.closeModal = closeModal;
-    window.confirmExpiration = confirmExpiration;
-    window.confirmAction = confirmAction;
 });
 </script>
 {% endblock %}

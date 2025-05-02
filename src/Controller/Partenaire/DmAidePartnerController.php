@@ -212,7 +212,7 @@ class DmAidePartnerController extends AbstractController
         $notification = new Notifications();
         $notification->setMessage("Demande d’aide supprimée.");
         $notification->setDateEnvoi(new DateTime());
-        $notification->setTypeNotification('success');
+        $notification->setTypeNotification('danger');
         $notification->setIsRead(false);
         $notification->setIdUtilisateur($user->getIdUtilisateur());
         $entityManager->persist($notification);
@@ -222,7 +222,7 @@ class DmAidePartnerController extends AbstractController
             $adminNotif = new Notifications();
             $adminNotif->setMessage("Demande d’aide supprimée.");
             $adminNotif->setDateEnvoi(new DateTime());
-            $adminNotif->setTypeNotification('warning');
+            $adminNotif->setTypeNotification('danger');
             $adminNotif->setIsRead(false);
             $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
             $entityManager->persist($adminNotif);

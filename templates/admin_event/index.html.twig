@@ -643,6 +643,10 @@ body.dark-mode .toggle-dark-mode:hover {
                 <label for="explanation">Explication :</label>
                 <textarea id="explanation" rows="4" placeholder="Ajoutez une explication..." required></textarea>
             </div>
+            <!-- Ajouter un conteneur pour le message de validation -->
+            <div id="blockValidationMessage" style="display: none; color: green; text-align: center; margin-top: 10px;">
+                <!-- Le message de validation sera affiché ici -->
+            </div>
         </div>
         <div class="modal-footer">
             <button class="save-btn" onclick="saveBlock()">Enregistrer</button>
@@ -730,6 +734,7 @@ function saveBlock() {
     if (reasons.length === 0 || explanation === "") {
         const modalMessage = document.getElementById('modalMessage');
         modalMessage.innerText = "Veuillez sélectionner une raison et fournir une explication.";
+        modalMessage.style.color = "red";
         modalMessage.style.color = "red";
         return;
     }
@@ -838,6 +843,54 @@ function filterTable() {
         row.style.display = (textMatch && statusMatch && etatMatch) ? '' : 'none';
     });
 }
+
+
+
+function viewEventDetails(button) {
+    // Extract data from the button's data-* attributes
+    const id = button.getAttribute('data-id');
+    const titre = button.getAttribute('data-titre');
+    const nomPartenaire = button.getAttribute('data-nom-partenaire');
+    const prenomPartenaire = button.getAttribute('data-prenom-partenaire');
+    const description = button.getAttribute('data-description');
+    const dateEvenement = button.getAttribute('data-date-evenement');
+    const lieu = button.getAttribute('data-lieu');
+    const status = button.getAttribute('data-status');
+    const etat = button.getAttribute('data-etat');
+    const image = button.getAttribute('data-image');
+
+    // Populate the modal with the extracted data
+    const eventDetailsContainer = document.getElementById('eventDetailsContainer');
+    eventDetailsContainer.innerHTML = `
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h2>${titre}</h2>
+            <img src="${image || 'https://via.placeholder.com/300'}" alt="Image de l'évènement" style="width: 100%; max-width: 300px; height: auto; border-radius: 10px;">
+        </div>
+        <p><strong>Nom du Partenaire:</strong> ${nomPartenaire} ${prenomPartenaire}</p>
+        <p><strong>Description:</strong> ${description}</p>
+        <p><strong>Date:</strong> ${dateEvenement}</p>
+        <p><strong>Lieu:</strong> ${lieu}</p>
+        <p><strong>Status:</strong> ${status}</p>
+        <p><strong>État:</strong> ${etat}</p>
+    `;
+
+    // Show the modal
+    document.body.classList.add('no-scroll');
+    document.getElementById('eventDetailsModal').style.display = 'block';
+}
+
+function closeEventDetailsModal() {
+    document.body.classList.remove('no-scroll');
+    document.getElementById('eventDetailsModal').style.display = 'none';
+}
+
+function closeEventDetailsModal() {
+    document.body.classList.remove('no-scroll');
+    document.getElementById('eventDetailsModal').style.display = 'none';
+}
+
+
+
 </script>
 
 {% endblock %}

@@ -36,7 +36,7 @@ class DemandePartenaire
     #[ORM\Column(name: "description", type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(name: "preuve", length: 255, nullable: true, options: ["default" => 'NULL'])]
+    #[ORM\Column(name: "preuve", length: 255, nullable: true,type: Types::TEXT, options: ["default" => 'NULL'])]
     private ?string $preuve = null;
 
     #[ORM\Column(name: "type_activite", length: 100, nullable: true, options: ["default" => 'NULL'])]
