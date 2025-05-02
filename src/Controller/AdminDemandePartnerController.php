@@ -13,26 +13,31 @@ final class AdminDemandePartnerController extends AbstractController
     #[Route('/admin/demande/partner', name: 'app_admin_demande_partner')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        // Récupérer les demandes partenaires depuis la base de données
+        // Fetch all partner requests
         $demandes = $entityManager->getRepository(DemandePartenaire::class)->findAll();
 
-        // Chemin vers le répertoire public/uploads
+        // Path to the public/uploads directory
         $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/';
 
         foreach ($demandes as $demande) {
             if ($demande->getPreuve()) {
-                $originalPath = $demande->getPreuve(); // Chemin absolu depuis la base de données
-                $fileName = basename($originalPath); // Nom du fichier
-                $publicPath = $uploadDir . $fileName; // Chemin cible dans public/uploads/
+                $originalPath = $demande->getPreuve(); // Original path from the database
+                $fileName = basename($originalPath); // Extract filename
+                $publicPath = $uploadDir . $fileName; // Target path in public/uploads/
 
-                // Si le fichier n'existe pas dans public/uploads, le copier
+                // Ensure the uploads directory exists
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                // Copy file to public/uploads if it doesn't exist
                 if (!file_exists($publicPath) && file_exists($originalPath)) {
                     copy($originalPath, $publicPath);
                 }
 
-                // Mettre à jour le chemin relatif pour la vue
-                $relativePath = 'uploads/' . $fileName;
-                $demande->setPreuve('uploads/' . $fileName);
+                // Set relative path for the view (e.g., /uploads/filename)
+                $relativePath = '/uploads/' . $fileName;
+                $demande->setPreuve($relativePath);
             }
         }
 

@@ -32,13 +32,35 @@ class AdminDemandeAideController extends AbstractController
         // Execute the query
         $demandesAide = $connection->fetchAllAssociative($sql);
 
+        // Path to the public/uploads directory
+        $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/';
+
+        // Process each demande to handle preuves
+        foreach ($demandesAide as &$demande) {
+            if (!empty($demande['preuves'])) {
+                $originalPath = $demande['preuves']; // Original path from database
+                $fileName = basename($originalPath); // Extract filename
+                $publicPath = $uploadDir . $fileName; // Target path in public/uploads/
+
+                // Ensure the uploads directory exists
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                // Copy file to public/uploads if it doesn't exist
+                if (!file_exists($publicPath) && file_exists($originalPath)) {
+                    copy($originalPath, $publicPath);
+                }
+
+                // Set relative path for the view (e.g., /uploads/filename)
+                $demande['preuves'] = '/uploads/' . $fileName;
+            }
+        }
+
         // Pass the data to the Twig template
         return $this->render('admin_demande_aide/index.html.twig', [
             'demandesAide' => $demandesAide,
-            'pageTitle' => 'Demande aide', // Le titre dynamique
-
-
+            'pageTitle' => 'Demande aide',
         ]);
     }
-    
 }

@@ -23,10 +23,12 @@
                         <input type="datetime-local" class="form-control" id="editDateDon{{ don.id_don }}" name="dateDon" value="{{ don.date_don|date('Y-m-d\\TH:i') }}" required>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                     <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>Fermer</button>
+                    <button type="submit" class="btn btn-edit">
+                    <i class="bi bi-check"></i>Modifier</button>
+            </div>
             </form>
         </div>
     </div>

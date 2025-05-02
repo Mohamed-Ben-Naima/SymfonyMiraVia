@@ -28,9 +28,9 @@ final class AdminDonController extends AbstractController
                   partnerUser.nom AS nomPartenaire, partnerUser.prenom AS prenomPartenaire
            FROM App\Entity\Dons d
            LEFT JOIN App\Entity\Clients c WITH d.idClient = c.idClient
-           LEFT JOIN App\Entity\Partenaires p WITH d.idPartenaire = p.idPartenaire
+           LEFT JOIN App\Entity\Partenaires p WITH d.idPartenaire = p.utilisateur
            LEFT JOIN App\Entity\Utilisateurs clientUser WITH clientUser.idUtilisateur = c.idClient
-           LEFT JOIN App\Entity\Utilisateurs partnerUser WITH partnerUser.idUtilisateur = p.idPartenaire'
+           LEFT JOIN App\Entity\Utilisateurs partnerUser WITH partnerUser.idUtilisateur = p.utilisateur'
       );
 
         $dons = $query->getResult();

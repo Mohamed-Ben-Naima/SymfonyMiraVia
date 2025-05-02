@@ -824,7 +824,6 @@
 
 .empty-state {
   padding: 4rem 2rem;
-  background: rgba(232, 231, 222, 0.15);
   border-radius: 1.25rem;
   text-align: center;
   margin: 2rem 0;
@@ -835,7 +834,10 @@
   color: var(--accent-green);
   margin-bottom: 1.5rem;
 }
-
+.event-image {
+  height: 200px;
+  width: 300px;
+}
 /* Style pour le bouton Ajouter */
 .add-event-btn {
   background-color : #86b7fe57; /* Couleur de fond */
@@ -1006,4 +1008,53 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+.holographic-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #000;
+}
+
+/* Style holographique pour le bouton */
+.holographic-card {
+  background: #013a71;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  box-shadow: 0 10px 30px #013a71; /* Ombre ajoutée ici */
+}
+
+.holographic-card i {
+  position: relative;
+  z-index: 2;
+  transition: all 0.5s ease;
+}
+
+.holographic-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(0deg, transparent, #00000057 30%, rgb(0 255 255));
+  transform: rotate(-45deg);
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+
+.holographic-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0,255,255,0.5);
+}
+
+.holographic-card:hover::before {
+  opacity: 1;
+  transform: rotate(-45deg) translateY(100%);
 }

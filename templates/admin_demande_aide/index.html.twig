@@ -19,6 +19,10 @@ body.dark-mode {
     color: #e2e8f0;
 }
 
+body.no-scroll {
+    overflow: hidden;
+}
+
 .example-wrapper {
     margin: 0 auto;
     padding: 20px;
@@ -385,10 +389,6 @@ body.dark-mode .modal-footer .cancel-btn:hover {
     background-color: #357abd;
 }
 
-body.no-scroll {
-    overflow: hidden;
-}
-
 @media (max-width: 768px) {
     .modal-content {
         width: 90%;
@@ -433,7 +433,6 @@ body.dark-mode .toggle-dark-mode:hover {
             <option value="Acceptée">Acceptée</option>
             <option value="Refusée">Refusée</option>
         </select>
-    
     </div>
 
     <table>
@@ -510,12 +509,10 @@ function toggleDarkMode() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Appliquer le mode sombre si précédemment sélectionné
+    // Apply dark mode if previously selected
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
     }
-
-    let currentId;
 
     function viewDetails(button) {
         const clientNom = button.getAttribute('data-client-nom');
@@ -547,8 +544,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const downloadButton = document.getElementById('downloadButton');
         if (preuves) {
-            downloadButton.style.display = 'inline-block';
-            downloadButton.onclick = () => window.open(preuves, '_blank');
+            // Check if file exists
+            fetch(preuves, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        downloadButton.style.display = 'inline-block';
+                        downloadButton.onclick = () => window.open(preuves, '_blank');
+                    } else {
+                        downloadButton.style.display = 'none';
+                        modalBody.querySelector('p:last-child').innerHTML = '<strong>Preuves :</strong> Fichier non disponible';
+                    }
+                })
+                .catch(() => {
+                    downloadButton.style.display = 'none';
+                    modalBody.querySelector('p:last-child').innerHTML = '<strong>Preuves :</strong> Fichier non disponible';
+                });
         } else {
             downloadButton.style.display = 'none';
         }
@@ -559,7 +569,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function closeModal() {
-        document.getElementById('detailsModal').style.display = 'none';
+        const modal = document.getElementById('detailsModal');
+        modal.style.display = 'none';
         document.body.classList.remove('no-scroll');
     }
 
@@ -583,7 +594,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Exposer les fonctions globalement pour les appels depuis HTML
+    // Expose functions globally for HTML onclick
     window.viewDetails = viewDetails;
     window.closeModal = closeModal;
 });

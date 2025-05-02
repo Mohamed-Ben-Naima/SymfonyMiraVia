@@ -259,3 +259,22 @@ function filterTable() {
       }
   });
 }
+
+// Gérer l'importation de fichiers PDF
+document.getElementById('preuve').addEventListener('change', function (event) {
+  const file = event.target.files[0];
+  const pdfIcon = document.getElementById('pdfIcon');
+  const pdfName = document.getElementById('pdfName');
+
+  if (file && file.type === 'application/pdf') {
+      // Afficher le nom du fichier et masquer l'icône PDF
+      pdfName.textContent = file.name;
+      pdfName.style.display = 'block';
+      pdfIcon.style.display = 'none';
+  } else {
+      // Réinitialiser si le fichier n'est pas un PDF
+      pdfName.textContent = '';
+      pdfName.style.display = 'none';
+      pdfIcon.style.display = 'block';
+  }
+});
