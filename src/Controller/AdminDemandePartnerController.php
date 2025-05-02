@@ -7,32 +7,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-
+use App\Entity\Utilisateurs; // Correctly import the Utilisateurs class
+use App\Entity\Partenaires; // Correctly import the Partenaires class
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 final class AdminDemandePartnerController extends AbstractController
 {
     #[Route('/admin/demande/partner', name: 'app_admin_demande_partner')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        // Récupérer les demandes partenaires depuis la base de données
+        // Fetch all partner requests
         $demandes = $entityManager->getRepository(DemandePartenaire::class)->findAll();
 
-        // Chemin vers le répertoire public/uploads
+        // Path to the public/uploads directory
         $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/';
 
         foreach ($demandes as $demande) {
             if ($demande->getPreuve()) {
-                $originalPath = $demande->getPreuve(); // Chemin absolu depuis la base de données
-                $fileName = basename($originalPath); // Nom du fichier
-                $publicPath = $uploadDir . $fileName; // Chemin cible dans public/uploads/
+                $originalPath = $demande->getPreuve(); // Original path from the database
+                $fileName = basename($originalPath); // Extract filename
+                $publicPath = $uploadDir . $fileName; // Target path in public/uploads/
 
-                // Si le fichier n'existe pas dans public/uploads, le copier
+                // Ensure the uploads directory exists
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                // Copy file to public/uploads if it doesn't exist
                 if (!file_exists($publicPath) && file_exists($originalPath)) {
                     copy($originalPath, $publicPath);
                 }
 
-                // Mettre à jour le chemin relatif pour la vue
-                $relativePath = 'uploads/' . $fileName;
-                $demande->setPreuve('uploads/' . $fileName);
+                // Set relative path for the view (e.g., /uploads/filename)
+                $relativePath = '/uploads/' . $fileName;
+                $demande->setPreuve($relativePath);
             }
         }
 
@@ -41,5 +49,69 @@ final class AdminDemandePartnerController extends AbstractController
             'pageTitle' => 'Demandes Partenaires',
             'demandes' => $demandes,
         ]);
+    }
+    #[Route('/admin/demande/partner/update-status', name: 'app_admin_update_status', methods: ['POST'])]
+    public function updateStatus(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        
+        $demande = $entityManager->getRepository(DemandePartenaire::class)->find($data['id']);
+        
+        if (!$demande) {
+            return new JsonResponse(['message' => 'Demande non trouvée'], Response::HTTP_NOT_FOUND);
+        }
+        
+        $demande->setEtat($data['etat']);
+        
+        if ($data['etat'] === 'Acceptée') {
+            // Validate mandatory fields in DemandePartenaire
+            if (
+                !$demande->getDemandeur() ||
+                !$demande->getEmail() ||
+                !$demande->getTelephone() ||
+                !$demande->getAdresse()
+            ) {
+                return new JsonResponse(['message' => 'Données manquantes dans la demande partenaire.'], Response::HTTP_BAD_REQUEST);
+            }
+        
+            try {
+                // Create a new Utilisateur
+                $utilisateur = new Utilisateurs();
+                $utilisateur->setNom($demande->getDemandeur())
+                            ->setEmail($demande->getEmail())
+                            ->setTelephone($demande->getTelephone())
+                            ->setAdresseUtilisateur($demande->getAdresse())
+                            ->setTypeUtilisateur('partenaire')
+                            ->setDateInscription(new \DateTime())
+                            ->setStatus('actif')
+                            ->setStatutVerification('Actif'); // Set statut_verification to 'Actif'
+        
+                $entityManager->persist($utilisateur);
+        
+                // Flush Utilisateurs first to ensure it is saved
+                $entityManager->flush();
+        
+                // Create a new Partenaire
+                $partenaire = new Partenaires();
+                $partenaire->setUtilisateur($utilisateur) // Link to the persisted Utilisateur
+                           ->setNomEntreprise($demande->getDemandeur()) // Assuming the demandeur is the company name
+                           ->setTypeActivite($demande->getTypeActivite())
+                           ->setAdresse($demande->getAdresse())
+                           ->setTelephone($demande->getTelephone())
+                           ->setEtat(1)
+                           ->setDateExpiration((new \DateTime())->modify('+1 year'));
+        
+                $entityManager->persist($partenaire);
+        
+                // Flush Partenaires
+                $entityManager->flush();
+            } catch (\Exception $e) {
+                return new JsonResponse(['message' => 'Erreur lors de l’ajout des données: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            $entityManager->flush();
+        }
+        
+        return new JsonResponse(['message' => 'Statut mis à jour avec succès']);
     }
 }

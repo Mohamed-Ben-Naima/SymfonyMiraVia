@@ -11,20 +11,25 @@ use Doctrine\ORM\Mapping as ORM;
 class Notifications
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(name: "id_notification", nullable: true, options: ["default" => NULL])]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(name: "id_notification", type: "integer")] 
+    #[Groups(['notif:read'])]
     private ?int $idNotification = NULL;
 
     #[ORM\Column(name: "id_utilisateur", nullable: true, options: ["default" => NULL])]
+    #[Groups(['notif:read'])]
     private ?int $idUtilisateur = NULL;
 
     #[ORM\Column(name: "message", type: Types::TEXT, nullable: true)]
+    #[Groups(['notif:read'])]
     private ?string $message = null;
 
     #[ORM\Column(name: "type_notification", length: 20, nullable: true, options: ["default" => 'NULL'])]
+    #[Groups(['notif:read'])]
     private ?string $typeNotification = 'NULL';
 
     #[ORM\Column(name: "date_envoi", type: Types::DATETIME_MUTABLE, nullable: true, options: ["default" => 'current_timestamp()'])]
+    #[Groups(['notif:read'])]
     private ?\DateTimeInterface $dateEnvoi = null;
 
     public function getIdNotification(): ?int
@@ -86,4 +91,20 @@ class Notifications
 
         return $this;
     }
+ #[ORM\Column(name: "is_read", type: "boolean", options: ["default" => false])]
+#[Groups(['notif:read'])]
+private bool $isRead = false;
+
+public function getisRead(): bool
+{
+    return $this->isRead;
+}
+
+public function setIsRead(bool $isRead): static
+{
+    $this->isRead = $isRead;
+
+    return $this;
+}
+
 }

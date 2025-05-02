@@ -1,0 +1,223 @@
+{% extends 'Partenaire/basePartner.html.twig' %}
+
+{% block title %}Demandes d'aide{% endblock %}
+
+
+{% block body %}
+<div class="content">
+  <!-- Titre centré -->
+  <h1 class="text-center mb-4" style="color: #013a71; font-size: 35px;">Liste des demandes d'aide</h1>
+
+  <!-- Card blanche -->
+  <div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border: none;">
+    <div class="card-body">
+      
+      <!-- Barre de recherche, sélection de statut et bouton "Ajouter une demande" -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="search-container" style="position: relative; width: 900px;">
+          <i class="bi bi-search search-icon" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: gray;"></i>
+          <input 
+            type="text" 
+            id="searchBar" 
+            class="form-control" 
+            placeholder="Rechercher une demande..."
+            style="padding-left: 35px;"
+            onkeyup="filterTable()"
+          >
+        </div>
+
+        <!-- Sélection de statut et bouton "Ajouter une demande" -->
+        <div class="d-flex align-items-center">
+          <select id="statusFilter" class="form-select me-2" style="max-width: 200px;">
+          <option value="">Tous les statuts</option>
+          <option value="En attente">En attente</option>
+          <option value="Acceptée">Acceptée</option>
+          <option value="Refusée">Refusée</option>
+          <option value="En traitement">En traitement</option>
+        </select>
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDemandeModal">
+            Ajouter
+          </button>
+        </div>
+      </div>
+
+      <!-- Tableau -->
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Type d'aide</th>
+              <th>Description</th>
+              <th>Montant</th>
+              <th>Date de demande</th>
+              <th>Status</th>
+              <th>Preuves</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="demandesTable">
+          {% for aide in demandes_aide %}
+            <tr data-status="{{ aide.status }}">
+              <!-- Table content -->
+              <td>{{ aide.client_nom }}</td>
+              <td>{{ aide.type_aide }}</td>
+              <td>{{ aide.description }}</td>
+              <td>{{ aide.montant_demande }} €</td>
+              <!-- Updated date display -->
+              <td>{{ aide.date_demande|date('d M Y H:i') }}</td>
+              <td>
+                {% if aide.status == 'En attente' %}
+                  <span class="badge" style="background-color: rgb(255 193 7 / 23%) !important;
+                   color:rgb(255, 191, 0) !important;">En attente</span>
+                {% elseif aide.status == 'Acceptée' %}
+                  <span class="badge bg-success">Acceptée</span>
+                {% elseif aide.status == 'Refusée' %}
+                  <span class="badge bg-danger">Refusée</span>
+                {% elseif aide.status == 'en_traitement' %}
+                  <span class="badge bg-info text-dark">En traitement</span>
+                {% endif %}
+              </td>
+              <td>
+            {% if aide.preuves %}
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <!-- PDF Icon -->
+                <i 
+                    class="bi bi-file-pdf text-danger" 
+                    style="font-size: 1.5rem; cursor: pointer;" 
+                    title="Voir le PDF"
+                    data-bs-toggle="modal"
+                    data-bs-target="#pdfModal{{ aide.id_demande }}">
+                </i>
+                <!-- File Name -->
+                <span style="cursor: pointer;" 
+                      title="Voir le PDF" 
+                      data-bs-toggle="modal" 
+                      data-bs-target="#pdfModal{{ aide.id_demande }}">
+                    {{ aide.preuves }}
+                </span>
+            </div>
+        {% else %}
+            <span class="text-muted">Aucune preuve</span>
+        {% endif %}
+        </td>
+              <td class="text-center" style="width: 120px;">
+
+                <!-- Éditer -->
+        <i 
+            class="bi bi-pencil-fill text-primary" 
+            style="cursor: pointer;
+            {% if aide.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
+            data-bs-toggle="{% if aide.status != 'Accepté' %}modal{% endif %}" 
+            data-bs-target="#editDemandeModal{{ aide.id_demande }}"
+            title="{% if aide.status == 'Accepté' %}
+                Modification désactivée pour les demandes acceptées
+            {% else %}
+                Modifier
+            {% endif %}">
+        </i>
+
+        <!-- Supprimer -->
+        <i 
+            class="bi bi-trash-fill text-danger" 
+            style="cursor: pointer; {% if aide.status == 'Accepté' %}
+            opacity: 0.5; pointer-events: none;{% endif %}" 
+            data-bs-toggle="{% if aide.status != 'Accepté' %}modal{% endif %}" 
+            data-bs-target="#deleteDemandeModal{{ aide.id_demande }}"
+            title="{% if aide.status == 'Accepté' %}
+                Suppression désactivée pour les demandes acceptées
+            {% else %}
+                Supprimer
+            {% endif %}">
+        </i>
+
+              <!-- Icône œil -->
+              <i class="bi bi-eye" 
+              style="cursor: pointer; color: gray;" 
+              data-bs-toggle="modal" 
+              data-bs-target="#viewDemandeModal{{ aide.id_demande }}"
+              title="Voir les détails">
+            </i>
+
+            <!-- Inclure la modale -->
+
+            {% include 'Partenaire/dm_aide_partner/delete.html.twig' with {
+              id: aide.id_demande,
+              client_nom: aide.client_nom,
+              type_aide: aide.type_aide,
+              description: aide.description,
+              montant: aide.montant_demande,
+              date: aide.date_demande,
+              action_path: 'delete_demande' 
+            } %}
+
+            <!-- Modal for editing -->
+
+            <div class="modal fade" id="editDemandeModal{{ aide.id_demande }}" 
+            tabindex="-1" aria-labelledby="editDemandeModalLabel{{ aide.id_demande }}" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editDemandeModalLabel{{ aide.id_demande }}">
+                    Modifier une demande</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    {% include 'Partenaire/dm_aide_partner/edit.html.twig' with { 'aide': aide } %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="pdfModal{{ aide.id_demande }}" tabindex="-1" aria-labelledby="pdfModalLabel{{ aide.id_demande }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="pdfModalLabel{{ aide.id_demande }}">Preuve PDF</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Embedded PDF Viewer -->
+                        <embed 
+                            src="{{ asset('uploads/preuves/' ~ aide.preuves) }}" 
+                            type="application/pdf" 
+                            style="width: 100%; height: 500px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+            <!-- Modal for viewing -->
+            {% include 'Partenaire/dm_aide_partner/consulter.html.twig' with { 'aide': aide } %}
+          {% endfor %}
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Fenêtre modale pour ajouter une demande -->
+
+<div class="modal fade" id="addDemandeModal" tabindex="-1" 
+  aria-labelledby="addDemandeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addDemandeModalLabel">Ajouter une demande</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+          {% include 'Partenaire/dm_aide_partner/add.html.twig' %}
+        </div>
+      </div>
+    </div>
+</div>
+
+</div>
+
+<script src="{{ asset('js/partner/dm_aide.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+{% endblock %}

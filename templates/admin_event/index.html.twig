@@ -10,15 +10,25 @@ html, body {
     padding: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #fdfdfd;
-    overflow: hidden; /* Supprime le scroll global */
+    overflow: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+
+body.no-scroll {
+    overflow: hidden;
 }
 
 .example-wrapper {
     margin: 0 auto;
     padding: 20px;
     margin-left: 15%;
-    max-height: calc(100vh - 40px); /* Ajuste la hauteur au viewport */
-    overflow: visible; /* Supprime le scroll interne */
+    max-height: calc(100vh - 40px);
+    overflow: visible;
 }
 
 .example-wrapper h1 {
@@ -26,6 +36,10 @@ html, body {
     font-size: 30px;
     margin-bottom: 40px;
     color: rgb(0, 0, 0);
+}
+
+body.dark-mode .example-wrapper h1 {
+    color: #e2e8f0;
 }
 
 .header {
@@ -39,23 +53,39 @@ html, body {
 
 .search-box {
     position: relative;
-    width: 87%;
+    width: 75%;
 }
 
 .search-box input {
     width: 100%;
-    padding: 8px 30px 8px 12px;
+    padding: 8px 10px 8px 12px;
     border: 1px solid #7D8C6D;
     border-radius: 6px;
     font-size: 14px;
+    background-color: #fff;
+    color: #000;
 }
 
-#statusFilter {
+body.dark-mode .search-box input {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+}
+
+#statusFilter, #etatFilter {
     padding: 8px;
     border-radius: 6px;
     border: 1px solid #7D8C6D;
     font-size: 14px;
     margin-left: -1%;
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode #statusFilter, body.dark-mode #etatFilter {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .header button {
@@ -73,19 +103,34 @@ html, body {
     background-color: #5c7352;
 }
 
+body.dark-mode .header button {
+    background-color: #4a90e2;
+}
+
+body.dark-mode .header button:hover {
+    background-color: #357abd;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
     background-color: white;
-    box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    table-layout: fixed; /* Limite la largeur des colonnes */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+    table-layout: auto;
+    word-wrap: break-word;
+}
+
+body.dark-mode table {
+    background-color: #2d3748;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 th, td {
     padding: 10px;
     text-align: left;
-    word-wrap: break-word; /* Empêche le débordement du texte */
+    vertical-align: middle;
+    word-wrap: break-word;
 }
 
 th {
@@ -93,8 +138,17 @@ th {
     color: black;
 }
 
+body.dark-mode th {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
 tr:nth-child(even) {
     background-color: #f5f5f5;
+}
+
+body.dark-mode tr:nth-child(even) {
+    background-color: #2d3748;
 }
 
 tr:hover {
@@ -102,24 +156,43 @@ tr:hover {
     color: white;
 }
 
+body.dark-mode tr:hover {
+    background-color: #4a90e2;
+    color: #e2e8f0;
+}
+
 .actions {
     display: flex;
-    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
 }
 
 .actions button {
     background-color: #ccc;
     border: none;
-    padding: 5px 8px;
+    padding: 8px 16px;
     font-size: 12px;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background-color 0.2s ease-in-out;
+    white-space: nowrap;
+    text-align: center;
+}
+
+body.dark-mode .actions button {
+    background-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .actions button:hover {
     background-color: #999;
     color: white;
+}
+
+body.dark-mode .actions button:hover {
+    background-color: #718096;
 }
 
 @media (max-width: 992px) {
@@ -136,12 +209,13 @@ tr:hover {
 
     .search-box,
     #statusFilter,
+    #etatFilter,
     .header button {
         width: 100%;
         margin: 5px 0;
     }
 
-    #statusFilter {
+    #statusFilter, #etatFilter {
         margin-left: 0;
     }
 
@@ -167,7 +241,7 @@ tr:hover {
 @media (max-width: 768px) {
     table {
         display: block;
-        overflow-x: auto; /* Permet un défilement horizontal si nécessaire */
+        overflow-x: auto;
         white-space: nowrap;
     }
 }
@@ -177,38 +251,87 @@ tr:hover {
     color: white;
 }
 
+body.dark-mode .actions button.consulter-btn {
+    background-color: #4a90e2;
+}
+
 .actions button.consulter-btn:hover {
     background-color: #5c7352;
 }
+
+body.dark-mode .actions button.consulter-btn:hover {
+    background-color: #357abd;
+}
+
+.actions button.activer-btn {
+    background-color: #013A71;
+    color: white;
+}
+
+body.dark-mode .actions button.activer-btn {
+    background-color: #4a90e2;
+}
+
+.actions button.activer-btn:hover {
+    background-color: rgb(24, 95, 162);
+}
+
+body.dark-mode .actions button.activer-btn:hover {
+    background-color: #357abd;
+}
+
+.actions button.bloquer-btn {
+    background-color: rgb(146, 151, 155);
+    color: white;
+}
+
+body.dark-mode .actions button.bloquer-btn {
+    background-color: #718096;
+}
+
+.actions button.bloquer-btn:hover {
+    background-color: rgb(116, 118, 120);
+}
+
+body.dark-mode .actions button.bloquer-btn:hover {
+    background-color: #4a5568;
+}
+
 .modal {
-    display: none; /* Par défaut, caché */
+    display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Défilement interne uniquement */
-    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-    position: fixed; /* Permet de positionner l'élément par rapport à la fenêtre */
-    top: 50%; /* Centre verticalement */
-    left: 50%; /* Centre horizontalement */
-    transform: translate(-50%, -50%); /* Ajuste pour centrer parfaitement */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #fff;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     width: 40%;
-    height: auto; /* Ajuste automatiquement la hauteur au contenu */
+    height: auto;
     box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
     max-width: 600px;
     max-height: 80vh;
-    overflow-y: auto; /* Ajoute un défilement interne si nécessaire */
+    overflow-y: auto;
     text-align: left;
+}
+
+body.dark-mode .modal-content {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .modal-header {
@@ -219,6 +342,10 @@ tr:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+body.dark-mode .modal-header {
+    color: #e2e8f0;
 }
 
 .modal-header .close-btn {
@@ -232,6 +359,10 @@ tr:hover {
     transition: color 0.3s ease;
 }
 
+body.dark-mode .modal-header .close-btn {
+    color: #e2e8f0;
+}
+
 .modal-header .close-btn:hover {
     color: #ff0000;
 }
@@ -239,6 +370,10 @@ tr:hover {
 .modal-body {
     margin-bottom: 20px;
     font-size: 14px;
+}
+
+body.dark-mode .modal-body {
+    color: #e2e8f0;
 }
 
 .form-group {
@@ -252,6 +387,9 @@ label {
     color: #333;
 }
 
+body.dark-mode label {
+    color: #e2e8f0;
+}
 
 textarea {
     width: 100%;
@@ -262,6 +400,13 @@ textarea {
     background-color: #f9f9f9;
     resize: vertical;
 }
+
+body.dark-mode textarea {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+}
+
 .modal-body p {
     margin: 10px 0;
     line-height: 1.6;
@@ -287,8 +432,16 @@ textarea {
     color: white;
 }
 
+body.dark-mode .modal-footer .download-btn {
+    background-color: #4a90e2;
+}
+
 .modal-footer .download-btn:hover {
     background-color: rgb(24, 95, 162);
+}
+
+body.dark-mode .modal-footer .download-btn:hover {
+    background-color: #357abd;
 }
 
 .modal-footer .cancel-btn {
@@ -296,20 +449,33 @@ textarea {
     color: white;
 }
 
-.modal-footer .cancel-btn:hover {
-    background-color:rgb(24, 95, 162);
+body.dark-mode .modal-footer .cancel-btn {
+    background-color: #4a90e2;
 }
+
+.modal-footer .cancel-btn:hover {
+    background-color: rgb(24, 95, 162);
+}
+
+body.dark-mode .modal-footer .cancel-btn:hover {
+    background-color: #357abd;
+}
+
 .modal-footer .save-btn {
     background-color: #7D8C6D;
     color: white;
+}
+
+body.dark-mode .modal-footer .save-btn {
+    background-color: #4a90e2;
 }
 
 .modal-footer .save-btn:hover {
     background-color: #5c7352;
 }
 
-body.no-scroll {
-    overflow: hidden; /* Désactive le défilement global */
+body.dark-mode .modal-footer .save-btn:hover {
+    background-color: #357abd;
 }
 
 @media (max-width: 768px) {
@@ -317,6 +483,29 @@ body.no-scroll {
         width: 90%;
         margin: 2% auto;
     }
+}
+
+.toggle-dark-mode {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #7D8C6D;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-dark-mode:hover {
+    background-color: #5c7352;
+}
+
+body.dark-mode .toggle-dark-mode {
+    background-color: #4a90e2;
+}
+
+body.dark-mode .toggle-dark-mode:hover {
+    background-color: #357abd;
 }
 </style>
 
@@ -327,12 +516,16 @@ body.no-scroll {
         <div class="search-box">
             <input type="text" id="search" placeholder="Rechercher ...">
         </div>
-
         <select id="statusFilter">
             <option value="">Tous les statuts</option>
             <option value="En cours">En cours</option>
             <option value="Annulé">Annulé</option>
             <option value="Terminé">Terminé</option>
+        </select>
+        <select id="etatFilter">
+            <option value="">Tous les états</option>
+            <option value="Actif">Actif</option>
+            <option value="Bloqué">Bloqué</option>
         </select>
     </div>
 
@@ -341,14 +534,14 @@ body.no-scroll {
             <tr>
                 <th>#</th>
                 <th>Titre</th>
+                <th>Nom du Partenaire</th>
                 <th>Description</th>
                 <th>Date d'évènement</th>
                 <th>Lieu</th>
-                <th>Partenaire</th>
                 <th>Status</th>
                 <th>État</th>
                 <th>Image</th>
-                <th>Action</th>
+                <th style="width: 180px;">Action</th>
             </tr>
         </thead>
         <tbody id="userTable">
@@ -356,10 +549,10 @@ body.no-scroll {
             <tr>
                 <td>{{ evenement.idEvenement }}</td>
                 <td>{{ evenement.titre }}</td>
-                <td>{{ evenement.description }}</td>
+                <td>{{ evenement.nomPartenaire }} {{ evenement.prenomPartenaire }}</td>
+                <td>{{ evenement.description|length > 30 ? evenement.description|slice(0, 30) ~ '...' : evenement.description }}</td>
                 <td>{{ evenement.dateEvenement ? evenement.dateEvenement|date('Y-m-d H:i:s') : 'N/A' }}</td>
                 <td>{{ evenement.lieu }}</td>
-                <td>{{ evenement.idPartenaire }}</td>
                 <td>{{ evenement.status }}</td>
                 <td id="etat-{{ evenement.idEvenement }}">{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}</td>
                 <td>
@@ -370,14 +563,63 @@ body.no-scroll {
                     {% endif %}
                 </td>
                 <td class="actions">
-                    <button class="consulter-btn" onclick="blockEvent({{ evenement.idEvenement }}, '{{ evenement.estBloque }}')">
-                        {{ evenement.estBloque == 1 ? 'Activer' : 'Bloquer' }}
+                    <button class="consulter-btn" onclick="viewEventDetails(this)"
+                        data-id="{{ evenement.idEvenement }}"
+                        data-titre="{{ evenement.titre }}"
+                        data-nom-partenaire="{{ evenement.nomPartenaire }}"
+                        data-prenom-partenaire="{{ evenement.prenomPartenaire }}"
+                        data-description="{{ evenement.description }}"
+                        data-date-evenement="{{ evenement.dateEvenement ? evenement.dateEvenement|date('Y-m-d H:i:s') : '' }}"
+                        data-lieu="{{ evenement.lieu }}"
+                        data-status="{{ evenement.status }}"
+                        data-etat="{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}"
+                        data-image="{{ evenement.imagename ? asset('images/' ~ evenement.imagename) : '' }}">
+                        Consulter
                     </button>
+                    <button class="activer-btn" onclick="showUnblockModal({{ evenement.idEvenement }})">Activer</button>
+                    <button class="bloquer-btn" onclick="blockEvent({{ evenement.idEvenement }}, {{ evenement.estBloque }})">Bloquer</button>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
+
+<!-- Modals -->
+<div id="unblockModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Confirmation d'activation</span>
+            <button class="close-btn" onclick="closeUnblockModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p style="font-weight: bold; color: #013A71; text-align: center;">
+                Voulez-vous vraiment activer cet évènement ?
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="save-btn" onclick="confirmUnblock()">Oui, Activer</button>
+            <button class="cancel-btn" onclick="closeUnblockModal()">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Event Details -->
+<div id="eventDetailsModal" class="modal">
+    <div class="modal-content card-style">
+        <div class="modal-header">
+            <span>Détails de l'Évènement</span>
+            <button class="close-btn" onclick="closeEventDetailsModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div id="eventDetailsContainer">
+                <!-- Event details will be dynamically populated here -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="cancel-btn" onclick="closeEventDetailsModal()">Fermer</button>
+        </div>
+    </div>
 </div>
 
 <div id="blockModal" class="modal">
@@ -387,9 +629,7 @@ body.no-scroll {
             <button class="close-btn" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
-            <p id="modalMessage" style="font-weight: bold; color: #013A71; text-align: center;">
-                Voulez-vous vraiment modifier l'état de cet évènement ?
-            </p>
+            <p id="modalMessage" style="font-weight: bold; color: #013A71; text-align: center;">Voulez-vous vraiment modifier l'état de cet évènement ?</p>
             <div class="form-group">
                 <label for="reason">Raison :</label>
                 <div id="reason">
@@ -403,6 +643,10 @@ body.no-scroll {
                 <label for="explanation">Explication :</label>
                 <textarea id="explanation" rows="4" placeholder="Ajoutez une explication..." required></textarea>
             </div>
+            <!-- Ajouter un conteneur pour le message de validation -->
+            <div id="blockValidationMessage" style="display: none; color: green; text-align: center; margin-top: 10px;">
+                <!-- Le message de validation sera affiché ici -->
+            </div>
         </div>
         <div class="modal-footer">
             <button class="save-btn" onclick="saveBlock()">Enregistrer</button>
@@ -412,6 +656,11 @@ body.no-scroll {
 </div>
 
 <script>
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+}
+
 let currentEventId;
 
 function blockEvent(id, estBloque) {
@@ -428,6 +677,50 @@ function blockEvent(id, estBloque) {
     document.getElementById('explanation').value = '';
 }
 
+function showUnblockModal(id) {
+    currentEventId = id;
+    document.body.classList.add('no-scroll');
+    document.getElementById('unblockModal').style.display = 'block';
+}
+
+function closeUnblockModal() {
+    document.body.classList.remove('no-scroll');
+    document.getElementById('unblockModal').style.display = 'none';
+}
+
+function confirmUnblock() {
+    const unblockData = { id: currentEventId };
+
+    fetch('/admin/event/unblock', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(unblockData),
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erreur lors de l'activation de l'évènement.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log("Success:", data.message);
+            } else {
+                console.error("Error:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Fetch Error:", error);
+        })
+        .finally(() => {
+            // Toujours fermer le modal et rafraîchir la page
+            closeUnblockModal();
+            window.location.reload();
+        });
+}
+
 function closeModal() {
     document.body.classList.remove('no-scroll');
     document.getElementById('blockModal').style.display = 'none';
@@ -441,44 +734,163 @@ function saveBlock() {
     if (reasons.length === 0 || explanation === "") {
         const modalMessage = document.getElementById('modalMessage');
         modalMessage.innerText = "Veuillez sélectionner une raison et fournir une explication.";
-        modalMessage.style.color = "red"; // Highlight error
+        modalMessage.style.color = "red";
+        modalMessage.style.color = "red";
         return;
     }
 
-    const etatCell = document.getElementById(`etat-${currentEventId}`);
-    const actionButton = document.querySelector(`.actions button[onclick*="${currentEventId}"]`);
+    const blockData = {
+        id: currentEventId,
+        reasons: reasons,
+        explanation: explanation
+    };
 
-    if (etatCell.innerText === "Actif") {
-        etatCell.innerText = "Bloqué";
-        actionButton.innerText = "Activer";
-    } else {
-        etatCell.innerText = "Actif";
-        actionButton.innerText = "Bloquer";
-    }
-
-    const modalMessage = document.getElementById('modalMessage');
-    modalMessage.innerText = `L'état de l'évènement #${currentEventId} a été modifié avec succès.`;
-    modalMessage.style.color = "green"; // Success message
-
-    setTimeout(closeModal, 3000); // Close modal after 3 seconds
+    fetch('/admin/event/block', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(blockData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erreur lors du blocage de l'évènement.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log("Success:", data.message);
+            } else {
+                console.error("Error:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Fetch Error:", error);
+        })
+        .finally(() => {
+            // Toujours fermer le modal et rafraîchir la page
+            closeModal();
+            window.location.reload();
+        });
 }
+
+function viewEventDetails(button) {
+    // Extract data from the button's data-* attributes
+    const id = button.getAttribute('data-id');
+    const titre = button.getAttribute('data-titre');
+    const nomPartenaire = button.getAttribute('data-nom-partenaire');
+    const prenomPartenaire = button.getAttribute('data-prenom-partenaire');
+    const description = button.getAttribute('data-description');
+    const dateEvenement = button.getAttribute('data-date-evenement');
+    const lieu = button.getAttribute('data-lieu');
+    const status = button.getAttribute('data-status');
+    const etat = button.getAttribute('data-etat');
+    const image = button.getAttribute('data-image');
+
+    // Populate the modal with the extracted data
+    const eventDetailsContainer = document.getElementById('eventDetailsContainer');
+eventDetailsContainer.innerHTML = `
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="font-size: 20px; font-weight: bold; color: #013A71; margin-bottom: 10px; letter-spacing: 1.2px;">
+            ${titre}
+        </h2>
+        <img src="${image || 'https://via.placeholder.com/300'}" alt="Image de l'évènement" style="width: 100%; max-width: 300px; height: auto; border-radius: 10px;">
+    </div>
+    <p><strong>Nom du Partenaire:</strong> ${nomPartenaire} ${prenomPartenaire}</p>
+    <p><strong>Description:</strong> ${description}</p>
+    <p><strong>Date:</strong> ${dateEvenement}</p>
+    <p><strong>Lieu:</strong> ${lieu}</p>
+    <p><strong>Status:</strong> ${status}</p>
+    <p><strong>État:</strong> ${etat}</p>
+`;
+
+    // Show the modal
+    document.body.classList.add('no-scroll');
+    document.getElementById('eventDetailsModal').style.display = 'block';
+}
+
+function closeEventDetailsModal() {
+    document.getElementById('eventDetailsModal').style.display = 'none';
+}
+
+
+
 
 document.getElementById('search').addEventListener('input', filterTable);
 document.getElementById('statusFilter').addEventListener('change', filterTable);
-
 function filterTable() {
     const searchFilter = document.getElementById('search').value.toLowerCase();
     const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+    const etatFilter = document.getElementById('etatFilter').value.toLowerCase();
     const rows = document.querySelectorAll('#userTable tr');
 
     rows.forEach(row => {
         const cells = row.querySelectorAll('td');
-        const textMatch = Array.from(cells).slice(0, 6).some(cell => cell.textContent.toLowerCase().includes(searchFilter));
-        const status = cells[6].textContent.trim().toLowerCase();
-        const statusMatch = statusFilter === "" || status === statusFilter;
 
-        row.style.display = (textMatch && statusMatch) ? '' : 'none';
+        // Vérifiez que la ligne contient suffisamment de colonnes
+        if (cells.length < 8) {
+            return; // Ignorez les lignes avec un nombre insuffisant de colonnes
+        }
+
+        const textMatch = Array.from(cells).slice(0, 6).some(cell => cell.textContent.toLowerCase().includes(searchFilter));
+        const status = cells[6].textContent.trim().toLowerCase(); // Status dans la 7e colonne (index 6)
+        const statusMatch = statusFilter === "" || status === statusFilter;
+        const etat = cells[7].textContent.trim().toLowerCase(); // État dans la 8e colonne (index 7)
+        const etatMatch = etatFilter === "" || etat === etatFilter;
+
+        // Affichez la ligne si elle correspond à tous les filtres
+        row.style.display = (textMatch && statusMatch && etatMatch) ? '' : 'none';
     });
 }
+
+
+
+function viewEventDetails(button) {
+    // Extract data from the button's data-* attributes
+    const id = button.getAttribute('data-id');
+    const titre = button.getAttribute('data-titre');
+    const nomPartenaire = button.getAttribute('data-nom-partenaire');
+    const prenomPartenaire = button.getAttribute('data-prenom-partenaire');
+    const description = button.getAttribute('data-description');
+    const dateEvenement = button.getAttribute('data-date-evenement');
+    const lieu = button.getAttribute('data-lieu');
+    const status = button.getAttribute('data-status');
+    const etat = button.getAttribute('data-etat');
+    const image = button.getAttribute('data-image');
+
+    // Populate the modal with the extracted data
+    const eventDetailsContainer = document.getElementById('eventDetailsContainer');
+    eventDetailsContainer.innerHTML = `
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h2>${titre}</h2>
+            <img src="${image || 'https://via.placeholder.com/300'}" alt="Image de l'évènement" style="width: 100%; max-width: 300px; height: auto; border-radius: 10px;">
+        </div>
+        <p><strong>Nom du Partenaire:</strong> ${nomPartenaire} ${prenomPartenaire}</p>
+        <p><strong>Description:</strong> ${description}</p>
+        <p><strong>Date:</strong> ${dateEvenement}</p>
+        <p><strong>Lieu:</strong> ${lieu}</p>
+        <p><strong>Status:</strong> ${status}</p>
+        <p><strong>État:</strong> ${etat}</p>
+    `;
+
+    // Show the modal
+    document.body.classList.add('no-scroll');
+    document.getElementById('eventDetailsModal').style.display = 'block';
+}
+
+function closeEventDetailsModal() {
+    document.body.classList.remove('no-scroll');
+    document.getElementById('eventDetailsModal').style.display = 'none';
+}
+
+function closeEventDetailsModal() {
+    document.body.classList.remove('no-scroll');
+    document.getElementById('eventDetailsModal').style.display = 'none';
+}
+
+
+
 </script>
+
 {% endblock %}

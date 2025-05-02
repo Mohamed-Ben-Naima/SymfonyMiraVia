@@ -1,0 +1,35 @@
+<div class="modal fade" id="editDonModal{{ don.id_don }}" tabindex="-1" aria-labelledby="editDonModalLabel{{ don.id_don }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editDonModalLabel{{ don.id_don }}">Modifier un Don</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ path('edit_don', {'id': don.id_don}) }}">
+                <div class="modal-body">
+                    <!-- Display Client Name -->
+                    <div class="mb-3">
+                        <label for="editClientName{{ don.id_don }}" class="form-label">Client</label>
+                        <input type="text" class="form-control" id="editClientName{{ don.id_don }}" name="clientName" value="{{ don.client_nom }}" readonly>
+                    </div>
+                    <!-- Montant -->
+                    <div class="mb-3">
+                        <label for="editMontant{{ don.id_don }}" class="form-label">Montant</label>
+                        <input type="number" class="form-control" id="editMontant{{ don.id_don }}" name="montant" value="{{ don.montant }}" required>
+                    </div>
+                    <!-- Date -->
+                    <div class="mb-3">
+                        <label for="editDateDon{{ don.id_don }}" class="form-label">Date</label>
+                        <input type="datetime-local" class="form-control" id="editDateDon{{ don.id_don }}" name="dateDon" value="{{ don.date_don|date('Y-m-d\\TH:i') }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                     <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>Fermer</button>
+                    <button type="submit" class="btn btn-edit">
+                    <i class="bi bi-check"></i>Modifier</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

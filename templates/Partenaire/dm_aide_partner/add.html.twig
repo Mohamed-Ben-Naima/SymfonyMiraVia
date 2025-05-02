@@ -1,0 +1,59 @@
+<form action="{{ path('add_demande', { id_partenaire: id_partenaire }) }}" 
+      method="post" enctype="multipart/form-data">
+  <!-- Ligne 1 : Utilisateur et Type d'aide -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label for="id_client" class="form-label">Client :</label>
+      <select class="form-select" id="id_client" name="id_client" required>
+        <option value="" disabled selected>Choisissez un Client</option>
+        {% for client in utilisateurs %}
+          <option value="{{ client.id_utilisateur }}">{{ client.nom }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label for="type_aide" class="form-label">Type d'aide :</label>
+      <select class="form-select" id="type_aide" name="type_aide" required>
+        <option value="financiere">Financière</option>
+        <option value="non_financiere">Non Financière</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Ligne 2 : Description -->
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <label for="description" class="form-label">Description :</label>
+      <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+    </div>
+  </div>
+
+  <!-- Ligne 3 : Montant et Date -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label for="montant_demande" class="form-label">Montant :</label>
+      <input type="number" class="form-control" id="montant_demande" name="montant_demande" required>
+    </div>
+    <div class="col-md-6">
+      <label for="date_demande" class="form-label">Date et Heure :</label>
+      <input type="datetime-local" class="form-control" id="date_demande" name="date_demande" required>
+    </div>
+  </div>
+
+  <!-- Ligne 4 : Preuve -->
+  <div class="row mb-3">
+      <div class="col-md-12">
+          <label for="preuve" class="form-label">Preuve</label>
+          <input type="file" class="form-control" id="preuve" name="preuve" accept="application/pdf" required>
+          <small class="form-text text-muted" style="color: red">* Seuls les fichiers PDF sont acceptés.</small>
+      </div>
+  </div>
+
+  <!-- Boutons Ajouter et Annuler -->
+  <div class="modal-footer justify-content-center">
+    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+    <i class="bi bi-x-circle me-1"></i>Annuler</button>
+    <button type="submit" class="btn btn-add">
+    <i class="bi bi-check"></i>Ajouter</button>
+  </div>
+</form>

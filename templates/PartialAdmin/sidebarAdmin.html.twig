@@ -2,25 +2,27 @@
     <ul class="nav nav-pills flex-column mb-auto">
         <!-- Dashboard -->
         <li class="nav-item">
-            <a href="{{ path('app_admin_dashboard') }}" class="nav-link" data-title="Tableau de bord" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-home me-2"></i> Dashboard
+            <a href="{{ path('app_admin_dashboard') }}" class="nav-link" data-translate-key="dashboard" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-home me-2"></i>
+                <span data-translate="dashboard">Tableau de bord</span>
             </a>
         </li>
 
         <!-- Utilisateurs Section with Submenus -->
         <li>
-            <a href="#usersSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="nav-link" data-title="Utilisateurs" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-users me-2"></i> Utilisateurs
+            <a href="#usersSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="nav-link" data-translate-key="users" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-users me-2"></i>
+                <span data-translate="users">Utilisateurs</span>
             </a>
             <ul class="collapse list-unstyled ps-4" id="usersSubmenu">
                 <li>
-                    <a href="{{ path('app_admin_partner') }}" class="nav-link" data-title="Partenaire" onclick="updateNavbarTitle(event)">
-                        Partenaire
+                    <a href="{{ path('app_admin_partner') }}" class="nav-link" data-translate-key="partner" onclick="updateNavbarTitle(event)">
+                        <span data-translate="partner">Partenaire</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_admin_client') }}" class="nav-link" data-title="Client" onclick="updateNavbarTitle(event)">
-                        Client
+                    <a href="{{ path('app_admin_client') }}" class="nav-link" data-translate-key="client" onclick="updateNavbarTitle(event)">
+                        <span data-translate="client">Client</span>
                     </a>
                 </li>
             </ul>
@@ -28,66 +30,74 @@
 
         <!-- Demandes Partenaires -->
         <li>
-            <a href="{{ path('app_admin_demande_partner') }}" class="nav-link" data-title="Demandes Partenaires" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-handshake me-2"></i> Demandes Partenaires
+            <a href="{{ path('app_admin_demande_partner') }}" class="nav-link" data-translate-key="partner_requests" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-handshake me-2"></i>
+                <span data-translate="partner_requests">Demandes Partenaires</span>
             </a>
         </li>
 
         <!-- Demandes Aide -->
         <li>
-            <a href="{{ path('app_admin_aid_requests') }}" class="nav-link" data-title="Demandes Aide" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-hands-helping me-2"></i> Demandes Aide
+            <a href="{{ path('app_admin_aid_requests') }}" class="nav-link" data-translate-key="aid_requests" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-hands-helping me-2"></i>
+                <span data-translate="aid_requests">Demandes Aide</span>
             </a>
         </li>
 
-    <!-- Don -->
+        <!-- Don -->
         <li>
-            <a href="{{ path('app_admin_donations') }}" class="nav-link" data-title="Don" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-donate me-2"></i> Don
+            <a href="{{ path('app_admin_donations') }}" class="nav-link" data-translate-key="donations" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-donate me-2"></i>
+                <span data-translate="donations">Don</span>
             </a>
         </li>
 
-                <!-- Événement -->
+        <!-- Événement -->
         <li>
-            <a href="{{ path('app_admin_events') }}" class="nav-link" data-title="Événement" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-calendar-alt me-2"></i> Événement
+            <a href="{{ path('app_admin_events') }}" class="nav-link" data-translate-key="events" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-calendar-alt me-2"></i>
+                <span data-translate="events">Événement</span>
             </a>
         </li>
 
-                <!-- Bénévolat -->
+        <!-- Bénévolat -->
         <li>
-            <a href="{{ path('app_admin_volunteering') }}" class="nav-link" data-title="Bénévolat" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-hands me-2"></i> Bénévolat
+            <a href="{{ path('app_admin_volunteering') }}" class="nav-link" data-translate-key="volunteering" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-hands me-2"></i>
+                <span data-translate="volunteering">Bénévolat</span>
             </a>
         </li>
-
 
         <!-- Paramètre -->
         <li>
-            <a href="{{ path('app_admin_settings') }}" class="nav-link" data-title="Paramètre" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-cogs me-2"></i> Paramètre
+            <a href="{{ path('app_admin_settings') }}" class="nav-link" data-translate-key="settings" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-cogs me-2"></i>
+                <span data-translate="settings">Paramètre</span>
             </a>
         </li>
+
         <!-- Messagerie -->
         <li>
-            <a href="{{ path('app_admin_messaging') }}" class="nav-link" data-title="Messagerie" onclick="updateNavbarTitle(event)">
-                <i class="fas fa-envelope me-2"></i> Messagerie
+            <a href="{{ path('app_admin_messaging') }}" class="nav-link" data-translate-key="messaging" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-envelope me-2"></i>
+                <span data-translate="messaging">Messagerie</span>
             </a>
         </li>
 
+        <!-- Se déconnecter -->
         <li>
-    <a href="{{ path('app_login_controller_partner') }}" class="nav-link" data-title="Se déconnecter" onclick="updateNavbarTitle(event)">
-        <i class="fas fa-sign-out-alt me-2"></i> Se déconnecter
-    </a>
-</li>
-
+            <a href="{{ path('app_login_controller_partner') }}" class="nav-link" data-translate-key="logout" onclick="updateNavbarTitle(event)">
+                <i class="fas fa-sign-out-alt me-2"></i>
+                <span data-translate="logout">Se déconnecter</span>
+            </a>
+        </li>
     </ul>
 </div>
 
 <style>
 /* Sidebar styling */
 .sidebar {
-    width: 260px; 
+    width: 270px; 
     background-color: #ffffff; /* White background */
     position: fixed;
     color: #013A71; /* Text color */
@@ -95,7 +105,7 @@
 
 .sidebar .nav-link {
     color: #013A71; /* Text color for links */
-    padding: 10px ;
+    padding: 10px;
     font-size: 16px;
     transition: all 0.3s ease;
     display: block; /* Ensure the link takes the full width of the sidebar */
@@ -161,4 +171,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// Update navbar title with translated text
+function updateNavbarTitle(event) {
+    const link = event.currentTarget;
+    const translateKey = link.getAttribute('data-translate-key');
+    const language = localStorage.getItem('language') || 'fr';
+    const navbarTitle = document.querySelector('#navbar-title'); // Adjust selector based on your navbar
+    if (navbarTitle && translateKey && translations[language][translateKey]) {
+        navbarTitle.textContent = translations[language][translateKey];
+    }
+}
 </script>

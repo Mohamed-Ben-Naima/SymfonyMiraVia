@@ -4,12 +4,48 @@
 
 {% block body %}
 <style>
-    /* Wrapper for the settings page */
     .settings-wrapper {
         margin: 2rem auto;
-        max-width: calc(100% - 250px);
-        margin-left: 250px;
+        max-width: calc(100% - 280px);
+        margin-left: 240px;
         font-family: 'Arial', sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .language-settings {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: #ffffff;
+        border-radius: 12px;
+        transition: background-color 0.3s ease;
+    }
+
+    .language-settings label {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        color: #374151;
+        cursor: pointer;
+    }
+
+    .language-settings select {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        font-size: 1rem;
+        width: 100%;
+        background: #ffffff;
+        transition: border-color 0.2s ease, background-color 0.3s ease;
+    }
+
+    .language-settings select:focus {
+        outline: none;
+        border-color: #013A71;
+        box-shadow: 0 0 0 3px rgba(1, 58, 113, 0.1);
     }
 
     .settings-header {
@@ -22,6 +58,7 @@
         color: #374151;
         position: relative;
         display: inline-block;
+        transition: color 0.3s ease;
     }
 
     .settings-header h1::after {
@@ -33,6 +70,7 @@
         margin: 0.5rem auto 0;
         border-radius: 2px;
         animation: slide-in 1s ease-in-out;
+        transition: background-color 0.3s ease;
     }
 
     @keyframes slide-in {
@@ -58,7 +96,7 @@
         border-radius: 0.5rem;
         padding: 1.5rem;
         text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
         cursor: pointer;
     }
 
@@ -72,6 +110,7 @@
         color: #013A71;
         margin-bottom: 1rem;
         animation: bounce 2s infinite;
+        transition: color 0.3s ease;
     }
 
     @keyframes bounce {
@@ -87,14 +126,15 @@
         font-size: 1.5rem;
         color: #374151;
         margin-bottom: 0.5rem;
+        transition: color 0.3s ease;
     }
 
     .settings-card p {
         font-size: 1rem;
         color: #6b7280;
+        transition: color 0.3s ease;
     }
 
-    /* Modal Styles */
     .modal {
         display: none;
         position: fixed;
@@ -104,45 +144,61 @@
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeInBackdrop 0.3s ease-in-out;
+    }
+
+    @keyframes fadeInBackdrop {
+        from {
+            background-color: rgba(0, 0, 0, 0);
+        }
+        to {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
     }
 
     .modal-content {
-        background-color: #fff;
-        margin: 10% auto;
-        padding: 20px;
-        border-radius: 12px;
-        width: 50%;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        animation: fadeIn 0.3s ease-in-out;
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        margin: 5% auto;
+        padding: 2rem;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        animation: slideInModal 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s ease;
     }
 
-    @keyframes fadeIn {
+    @keyframes slideInModal {
         from {
+            transform: translateY(-50px) scale(0.95);
             opacity: 0;
         }
         to {
+            transform: translateY(0) scale(1);
             opacity: 1;
         }
     }
 
     .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        color: #6b7280;
+        font-size: 1.75rem;
         font-weight: bold;
         cursor: pointer;
+        transition: color 0.2s ease, transform 0.2s ease;
     }
 
     .close:hover,
     .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
+        color: #013A71;
+        transform: scale(1.1);
     }
 
-    /* Toggle Switch */
     .toggle-switch {
         position: relative;
         display: inline-block;
@@ -164,7 +220,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #ccc;
+        background-color: #d1d5db;
         transition: 0.4s;
         border-radius: 34px;
     }
@@ -179,6 +235,7 @@
         background-color: white;
         transition: 0.4s;
         border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     input:checked + .slider {
@@ -190,122 +247,384 @@
     }
 
     .modal-header {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        transition: color 0.3s ease;
     }
 
     .modal-body {
         font-size: 1rem;
-        color: #6b7280;
-        margin-bottom: 1rem;
+        color: #4b5563;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+        transition: color 0.3s ease;
     }
 
     .modal-footer {
         display: flex;
         justify-content: center;
         gap: 1rem;
+        margin-top: 1.5rem;
     }
 
-    .modal-footer button {
-        padding: 0.5rem 1.5rem;
+    .modal-footer button,
+    .modal-footer a button {
+        padding: 0.75rem 2rem;
         font-size: 1rem;
+        font-weight: 500;
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .modal-footer button.primary {
-        background-color: #013A71;
+    .modal-footer button.primary,
+    .modal-footer a button.primary {
+        background: linear-gradient(to right, #013A71, #00509e);
         color: white;
     }
 
-    .modal-footer button.primary:hover {
-        background-color: #00509e;
+    .modal-footer button.primary:hover,
+    .modal-footer a button.primary:hover {
+        background: linear-gradient(to right, #00509e, #013A71);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .modal-footer button.secondary {
-        background-color: #e5e7eb;
+        background: #e5e7eb;
         color: #374151;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .modal-footer button.secondary:hover {
-        background-color: #d1d5db;
+        background: #d1d5db;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .notification-settings {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 1rem;
-        margin-top: 1rem;
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: #ffffff;
+        border-radius: 12px;
+        transition: background-color 0.3s ease;
     }
 
     .notification-settings label {
+        display: flex;
+        align-items: center;
         font-size: 1rem;
         color: #374151;
-    }
-
-    .notification-settings select {
-        padding: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 1rem;
-        width: 100%;
+        cursor: pointer;
+        transition: color 0.3s ease;
     }
 
     .notification-settings input[type="checkbox"] {
-        margin-right: 0.5rem;
+        appearance: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #d1d5db;
+        border-radius: 4px;
+        margin-right: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .notification-settings input[type="checkbox"]:checked {
+        background-color: #013A71;
+        border-color: #013A71;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
+        background-size: 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .notification-settings select {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        font-size: 1rem;
+        width: 100%;
+        background: #ffffff;
+        transition: border-color 0.2s ease, background-color 0.3s ease;
+    }
+
+    .notification-settings select:focus {
+        outline: none;
+        border-color: #013A71;
+        box-shadow: 0 0 0 3px rgba(1, 58, 113, 0.1);
+    }
+
+    /* Animation pour les métriques */
+    @keyframes fadeInMetric {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Style pour la section statistiques */
+    .statistics-settings {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: #ffffff;
+        border-radius: 12px;
+        transition: background-color 0.3s ease;
+    }
+
+    .statistics-settings label {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        color: #374151;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .statistics-settings select {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        font-size: 1rem;
+        width: 100%;
+        background: #ffffff;
+        transition: border-color 0.2s ease, background-color 0.3s ease;
+    }
+
+    .statistics-settings select:focus {
+        outline: none;
+        border-color: #013A71;
+        box-shadow: 0 0 0 3px rgba(1, 58, 113, 0.1);
+    }
+
+    /* Updated metrics container to align items in a single row */
+    .metrics-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .metric-card {
+        flex: 1;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        text-align: center;
+        animation: fadeInMetric 0.5s ease-in;
+        min-width: 120px;
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+        background-color: #1a202c;
+        color: #e2e8f0;
+    }
+
+    body.dark-mode .settings-wrapper {
+        background-color: #2d3748;
+    }
+
+    body.dark-mode .settings-header h1 {
+        color: #e2e8f0;
+    }
+
+    body.dark-mode .settings-header h1::after {
+        background-color: #4a90e2;
+    }
+
+    body.dark-mode .settings-card {
+        background-color: #2d3748;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark-mode .settings-card:hover {
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    body.dark-mode .settings-card i {
+        color: #4a90e2;
+    }
+
+    body.dark-mode .settings-card h3 {
+        color: #e2e8f0;
+    }
+
+    body.dark-mode .settings-card p {
+        color: #a0aec0;
+    }
+
+    body.dark-mode .modal-content {
+        background: linear-gradient(145deg, #2d3748, #1a202c);
+    }
+
+    body.dark-mode .modal-header {
+        color: #e2e8f0;
+    }
+
+    body.dark-mode .modal-body {
+        color: #a0aec0;
+    }
+
+    body.dark-mode .notification-settings,
+    body.dark-mode .language-settings,
+    body.dark-mode .statistics-settings {
+        background-color: #2d3748;
+    }
+
+    body.dark-mode .notification-settings label,
+    body.dark-mode .language-settings label,
+    body.dark-mode .statistics-settings label {
+        color: #e2e8f0;
+    }
+
+    body.dark-mode .notification-settings select,
+    body.dark-mode .language-settings select,
+    body.dark-mode .statistics-settings select {
+        background-color: #1a202c;
+        color: #e2e8f0;
+        border-color: #4a5568;
+    }
+
+    body.dark-mode .modal-footer button.secondary {
+        background: #4a5568;
+        color: #e2e8f0;
+    }
+
+    body.dark-mode .modal-footer button.secondary:hover {
+        background: #718096;
+    }
+
+    body.dark-mode .close {
+        color: #a0aec0;
+    }
+
+    body.dark-mode .close:hover,
+    body.dark-mode .close:focus {
+        color: #4a90e2;
+    }
+
+    body.dark-mode .metrics-preview h4 {
+        color: #e2e8f0;
+    }
+
+    body.dark-mode .metric-card {
+        background: #1a202c;
+    }
+
+    body.dark-mode .metric-value {
+        color: #4a90e2;
+    }
+
+    @media (max-width: 768px) {
+        .modal-content {
+            width: 95%;
+            margin: 10% auto;
+            padding: 1.5rem;
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+        }
+
+        .modal-footer button,
+        .modal-footer a button {
+            padding: 0.6rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .settings-card {
+            flex: 1 1 calc(50% - 2rem);
+        }
+
+        .metrics-container {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .settings-card {
+            flex: 1 1 100%;
+        }
+
+        .modal-content {
+            padding: 1rem;
+        }
+
+        .metrics-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
     }
 </style>
+
 <div class="settings-wrapper">
     <div class="settings-header">
-        <h1>Paramètres </h1>
-        <p>Gérez vos paramètres </p>
+        <h1 data-translate="settings">Paramètres</h1>
+        <p data-translate="manage_settings">Gérez vos paramètres</p>
     </div>
 
     <div class="settings-container">
         <!-- Card 1 -->
         <div class="settings-card" onclick="openModal('user-settings-modal')">
             <i class="fas fa-user-cog"></i>
-            <h3>Profile</h3>
-            <p>Gérez profile.</p>
+            <h3 data-translate="profile">Profile</h3>
+            <p data-translate="manage_profile">Gérez profile.</p>
         </div>
 
         <!-- Card 2 -->
         <div class="settings-card" onclick="openModal('notifications-modal')">
             <i class="fas fa-bell"></i>
-            <h3>Notifications</h3>
-            <p>Configurez vos préférences de notifications.</p>
+            <h3 data-translate="notifications">Notifications</h3>
+            <p data-translate="configure_notifications">Configurez vos préférences de notifications.</p>
         </div>
 
         <!-- Card 3 -->
-        <div class="settings-card" onclick="openModal('database-modal')">
-            <i class="fas fa-database"></i>
-            <h3>Base de Données</h3>
-            <p>Effectuez des sauvegardes et restaurez vos données.</p>
+        <div class="settings-card" onclick="openModal('customization-modal')">
+            <i class="fas fa-paint-brush"></i>
+            <h3 data-translate="customization">Personnalisation</h3>
+            <p data-translate="change_theme">Changez le thème et les couleurs de l'interface.</p>
         </div>
 
         <!-- Card 4 -->
-        <div class="settings-card" onclick="openModal('customization-modal')">
-            <i class="fas fa-paint-brush"></i>
-            <h3>Personnalisation</h3>
-            <p>Changez le thème et les couleurs de l'interface.</p>
+        <div class="settings-card" onclick="openModal('security-modal')">
+            <i class="fas fa-lock"></i>
+            <h3 data-translate="security">Sécurité</h3>
+            <p data-translate="update_security">Mettez à jour les mots de passe et les politiques de sécurité.</p>
         </div>
 
         <!-- Card 5 -->
-        <div class="settings-card" onclick="openModal('security-modal')">
-            <i class="fas fa-lock"></i>
-            <h3>Sécurité</h3>
-            <p>Mettez à jour les mots de passe et les politiques de sécurité.</p>
+        <div class="settings-card" onclick="openModal('statistics-modal')">
+            <i class="fas fa-chart-line"></i>
+            <h3 data-translate="statistics">Statistiques</h3>
+            <p data-translate="view_reports">Consultez les rapports et les performances.</p>
         </div>
 
         <!-- Card 6 -->
-        <div class="settings-card" onclick="openModal('statistics-modal')">
-            <i class="fas fa-chart-line"></i>
-            <h3>Statistiques</h3>
-            <p>Consultez les rapports et les performances.</p>
+        <div class="settings-card" onclick="openModal('language-modal')">
+            <i class="fas fa-globe"></i>
+            <h3 data-translate="language">Langue</h3>
+            <p data-translate="change_language">Changez la langue de l'interface.</p>
         </div>
     </div>
 </div>
@@ -313,74 +632,288 @@
 <!-- Profile Modal -->
 <div id="user-settings-modal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal('user-settings-modal')">&times;</span>
-        <div class="modal-header">Modifier le Profil</div>
+        <span class="close" onclick="closeModal('user-settings-modal')">×</span>
+        <div class="modal-header" data-translate="profile">Modifier le Profil</div>
         <div class="modal-body">
-            <p>Accédez à la page de modification de votre profil en cliquant sur le bouton ci-dessous.</p>
+            <p data-translate="manage_profile">Accédez à la page de modification de votre profil en cliquant sur le bouton ci-dessous.</p>
         </div>
         <div class="modal-footer">
             <a href="{{ path('app_admin_profil') }}">
-                <button class="primary">Modifier le Profil</button>
+                <button class="primary" data-translate="profile">Modifier le Profil</button>
             </a>
-            <button class="secondary" onclick="closeModal('user-settings-modal')">Annuler</button>
+            <button class="secondary" onclick="closeModal('user-settings-modal')" data-translate="cancel">Annuler</button>
         </div>
     </div>
-</div>
-
-<script>
-    function openModal(modalId) {
-        document.getElementById(modalId).style.display = "block";
-    }
-
-    function closeModal(modalId) {
-        document.getElementById(modalId).style.display = "none";
-    }
-</script>
-
 </div>
 
 <!-- Notifications Modal -->
 <div id="notifications-modal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal('notifications-modal')">&times;</span>
-        <div class="modal-header">Notifications</div>
+        <span class="close" onclick="closeModal('notifications-modal')">×</span>
+        <div class="modal-header" data-translate="notifications">Notifications</div>
         <div class="modal-body">
-            <p>Configurez vos préférences de notifications.</p>
+            <p data-translate="configure_notifications">Configurez vos préférences de notifications.</p>
             <div class="notification-settings">
                 <label>
                     <input type="checkbox" id="email-notifications">
-                    Activer les notifications par e-mail
+                    <span data-translate="email_notifications">Activer les notifications par e-mail</span>
                 </label>
                 <label>
                     <input type="checkbox" id="sms-notifications">
-                    Activer les notifications par SMS
+                    <span data-translate="sms_notifications">Activer les notifications par SMS</span>
                 </label>
                 <label>
                     <input type="checkbox" id="push-notifications">
-                    Activer les notifications push
+                    <span data-translate="push_notifications">Activer les notifications push</span>
                 </label>
-                <label for="frequency">Fréquence des notifications :</label>
+                <label for="frequency" data-translate="notification_frequency">Fréquence des notifications :</label>
                 <select id="frequency">
-                    <option value="immediate">Immédiatement</option>
-                    <option value="daily">Quotidiennement</option>
-                    <option value="weekly">Hebdomadairement</option>
+                    <option value="immediate" data-translate="immediate">Immédiatement</option>
+                    <option value="daily" data-translate="daily">Quotidiennement</option>
+                    <option value="weekly" data-translate="weekly">Hebdomadairement</option>
                 </select>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="primary" onclick="saveNotificationSettings()">Enregistrer</button>
-            <button class="secondary" onclick="closeModal('notifications-modal')">Annuler</button>
+            <button class="primary" onclick="saveNotificationSettings()" data-translate="save">Enregistrer</button>
+            <button class="secondary" onclick="closeModal('notifications-modal')" data-translate="cancel">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<!-- Customization Modal -->
+<div id="customization-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('customization-modal')">×</span>
+        <div class="modal-header" data-translate="customization">Personnalisation</div>
+        <div class="modal-body">
+            <p data-translate="change_theme">Changez le thème et les couleurs de l'interface.</p>
+            <div class="customization-settings">
+                <label>
+                    <span data-translate="dark_mode">Mode sombre</span>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()">
+                        <span class="slider"></span>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="primary" onclick="saveCustomizationSettings()" data-translate="save">Enregistrer</button>
+            <button class="secondary" onclick="closeModal('customization-modal')" data-translate="cancel">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<!-- Security Modal -->
+<div id="security-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('security-modal')">×</span>
+        <div class="modal-header" data-translate="security">Sécurité</div>
+        <div class="modal-body">
+            <p data-translate="update_security">Mettez à jour les mots de passe et les politiques de sécurité.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="primary" data-translate="update">Mettre à jour</button>
+            <button class="secondary" onclick="closeModal('security-modal')" data-translate="cancel">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Modal -->
+<div id="statistics-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('statistics-modal')">×</span>
+        <div class="modal-header" data-translate="statistics">Statistiques</div>
+        <div class="modal-body">
+            <p data-translate="view_reports">Consultez et personnalisez vos rapports de performance.</p>
+            <div class="statistics-settings">
+                <!-- Type de rapport -->
+                <label for="report-type" data-translate="report_type">
+                    <i class="fas fa-chart-bar" style="margin-right: 0.5rem;"></i>
+                    Type de rapport :
+                </label>
+                <select id="report-type">
+                    <option value="users" data-translate="partners_report">Rapport de mes partenaires</option>
+                    <option value="system" data-translate="system_report">Rapport de performance système</option>
+                </select>
+
+                <!-- Période -->
+                <label for="report-period" data-translate="report_period">
+                    <i class="fas fa-calendar-alt" style="margin-right: 0.5rem;"></i>
+                    Période :
+                </label>
+                <select id="report-period">
+                    <option value="today" data-translate="today">Aujourd'hui</option>
+                    <option value="week" data-translate="week">Dernière semaine</option>
+                    <option value="month" data-translate="month">Dernier mois</option>
+                    <option value="custom" data-translate="custom">Personnalisé</option>
+                </select>
+
+                <!-- Aperçu des métriques clés -->
+                <div class="metrics-preview" style="margin-top: 1.5rem;">
+                    <h4 data-translate="key_metrics">Métriques clés</h4>
+                    <div class="metrics-container">
+                        <div class="metric-card">
+                            <i class="fas fa-users" style="font-size: 1.5rem; color: #013A71;"></i>
+                            <p data-translate="active_users">Utilisateurs actifs</p>
+                            <span class="metric-value" style="font-size: 1.5rem; font-weight: bold; color: #013A71;">{{ active_users | default('1,245') }}</span>
+                        </div>
+                        <div class="metric-card">
+                            <i class="fas fa-clock" style="font-size: 1.5rem; color: #013A71;"></i>
+                            <p data-translate="average_time">Temps moyen</p>
+                            <span class="metric-value" style="font-size: 1.5rem; font-weight: bold; color: #013A71;">{{ average_time | default('12 min') }}</span>
+                        </div>
+                        <div class="metric-card">
+                            <i class="fas fa-hourglass-half" style="font-size: 1.5rem; color: #013A71;"></i>
+                            <p data-translate="time_spent">Temps passé</p>
+                            <span class="metric-value" style="font-size: 1.5rem; font-weight: bold; color: #013A71;">{{ time_spent | default('0 min') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="primary" onclick="downloadReport()" data-translate="download_report">Générer rapport  (PDF)</button>
+            <button class="secondary" onclick="closeModal('statistics-modal')" data-translate="cancel">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<!-- Language Modal -->
+<div id="language-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('language-modal')">×</span>
+        <div class="modal-header" data-translate="language">Langue</div>
+        <div class="modal-body">
+            <p data-translate="change_language">Configurez la langue de l'interface.</p>
+            <div class="language-settings">
+                <label for="language" data-translate="language">Langue :</label>
+                <select id="language">
+                    <option value="fr" data-translate="french">Français</option>
+                    <option value="en" data-translate="english">English</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="primary" onclick="saveLanguageSettings()" data-translate="save">Enregistrer</button>
+            <button class="secondary" onclick="closeModal('language-modal')" data-translate="cancel">Annuler</button>
         </div>
     </div>
 </div>
 
 <script>
+    const translations = {
+        fr: {
+            settings: "Paramètres",
+            manage_settings: "Gérez vos paramètres",
+            profile: "Profil",
+            manage_profile: "Gérez votre profil",
+            notifications: "Notifications",
+            configure_notifications: "Configurez vos préférences de notifications",
+            email_notifications: "Activer les notifications par e-mail",
+            sms_notifications: "Activer les notifications par SMS",
+            push_notifications: "Activer les notifications push",
+            notification_frequency: "Fréquence des notifications",
+            immediate: "Immédiatement",
+            daily: "Quotidiennement",
+            weekly: "Hebdomadairement",
+            customization: "Personnalisation",
+            change_theme: "Changez le thème et les couleurs de l'interface",
+            dark_mode: "Mode sombre",
+            security: "Sécurité",
+            update_security: "Mettez à jour les mots de passe et les politiques de sécurité",
+            statistics: "Statistiques",
+            view_reports: "Consultez et personnalisez vos rapports de performance",
+            report_type: "Type de rapport",
+            users_report: "Rapport des utilisateurs",
+            activity_report: "Rapport d'activité",
+            system_report: "Rapport de performance système",
+            report_period: "Période",
+            today: "Aujourd'hui",
+            week: "Dernière semaine",
+            month: "Dernier mois",
+            custom: "Personnalisé",
+            key_metrics: "Métriques clés",
+            active_users: "Utilisateurs actifs",
+            average_time: "Temps moyen",
+            time_spent: "Temps passé",
+            generate_report: "Générer le rapport",
+            download_report: "Télécharger (PDF)",
+            language: "Langue",
+            change_language: "Changez la langue de l'interface",
+            french: "Français",
+            english: "English",
+            save: "Enregistrer",
+            cancel: "Annuler",
+            update: "Mettre à jour",
+            enabled: "Activé",
+            disabled: "Désactivé",
+            download_error: "Erreur : Impossible de télécharger le rapport. Veuillez réessayer plus tard."
+        },
+        en: {
+            settings: "Settings",
+            manage_settings: "Manage your settings",
+            profile: "Profile",
+            manage_profile: "Manage your profile",
+            notifications: "Notifications",
+            configure_notifications: "Configure your notification preferences",
+            email_notifications: "Enable email notifications",
+            sms_notifications: "Enable SMS notifications",
+            push_notifications: "Enable push notifications",
+            notification_frequency: "Notification frequency",
+            immediate: "Immediately",
+            daily: "Daily",
+            weekly: "Weekly",
+            customization: "Customization",
+            change_theme: "Change the theme and interface colors",
+            dark_mode: "Dark mode",
+            security: "Security",
+            update_security: "Update passwords and security policies",
+            statistics: "Statistics",
+            view_reports: "View and customize your performance reports",
+            report_type: "Report type",
+            users_report: "Users report",
+            activity_report: "Activity report",
+            system_report: "System performance report",
+            report_period: "Period",
+            today: "Today",
+            week: "Last week",
+            month: "Last month",
+            custom: "Custom",
+            key_metrics: "Key metrics",
+            active_users: "Active users",
+            average_time: "Average time",
+            time_spent: "Time spent",
+            generate_report: "Generate report",
+            download_report: "Download (PDF)",
+            language: "Language",
+            change_language: "Change the interface language",
+            french: "French",
+            english: "English",
+            save: "Save",
+            cancel: "Cancel",
+            update: "Update",
+            enabled: "Enabled",
+            disabled: "Disabled",
+            download_error: "Error: Unable to download the report. Please try again later."
+        }
+    };
+
     function openModal(modalId) {
         document.getElementById(modalId).style.display = "block";
     }
 
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = "none";
+    }
+
+    function applyLanguage() {
+        const language = localStorage.getItem('language') || 'fr';
+        document.querySelectorAll('[data-translate]').forEach(element => {
+            const key = element.getAttribute('data-translate');
+            element.textContent = translations[language][key] || element.textContent;
+        });
     }
 
     function saveNotificationSettings() {
@@ -390,13 +923,97 @@
         const frequency = document.getElementById('frequency').value;
 
         alert(`Paramètres enregistrés :
-            E-mail : ${emailEnabled ? 'Activé' : 'Désactivé'}
-            SMS : ${smsEnabled ? 'Activé' : 'Désactivé'}
-            Push : ${pushEnabled ? 'Activé' : 'Désactivé'}
-            Fréquence : ${frequency}`);
+            E-mail : ${emailEnabled ? translations[localStorage.getItem('language') || 'fr'].enabled : translations[localStorage.getItem('language') || 'fr'].disabled}
+            SMS : ${smsEnabled ? translations[localStorage.getItem('language') || 'fr'].enabled : translations[localStorage.getItem('language') || 'fr'].disabled}
+            Push : ${pushEnabled ? translations[localStorage.getItem('language') || 'fr'].enabled : translations[localStorage.getItem('language') || 'fr'].disabled}
+            Fréquence : ${translations[localStorage.getItem('language') || 'fr'][frequency] || frequency}`);
         closeModal('notifications-modal');
     }
+
+    function saveLanguageSettings() {
+        const language = document.getElementById('language').value;
+        localStorage.setItem('language', language);
+        applyLanguage();
+        alert(`Paramètres enregistrés : Langue : ${language === 'fr' ? translations.fr.french : translations.en.english}`);
+        closeModal('language-modal');
+        const languageChangeEvent = new Event('languageChange');
+        document.dispatchEvent(languageChangeEvent);
+    }
+
+    function toggleDarkMode() {
+        const isDarkMode = document.getElementById('dark-mode-toggle').checked;
+        document.body.classList.toggle('dark-mode', isDarkMode);
+        localStorage.setItem('darkMode', isDarkMode);
+    }
+
+    function saveCustomizationSettings() {
+        const isDarkMode = document.getElementById('dark-mode-toggle').checked;
+        localStorage.setItem('darkMode', isDarkMode);
+        alert(`Paramètres enregistrés : Mode sombre ${isDarkMode ? translations[localStorage.getItem('language') || 'fr'].enabled : translations[localStorage.getItem('language') || 'fr'].disabled}`);
+        closeModal('customization-modal');
+    }
+
+    function generateReport() {
+        const reportType = document.getElementById('report-type').value;
+        const reportPeriod = document.getElementById('report-period').value;
+        const language = localStorage.getItem('language') || 'fr';
+
+        fetch('{{ path('app_admin_generate_report') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `reportType=${reportType}&reportPeriod=${reportPeriod}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(`Rapport généré :
+                    Type : ${translations[language][reportType] || reportType}
+                    Période : ${translations[language][reportPeriod] || reportPeriod}`);
+                closeModal('statistics-modal');
+            } else {
+                alert('Erreur lors de la génération du rapport.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Une erreur est survenue.');
+        });
+    }
+
+    function downloadReport() {
+        const reportType = document.getElementById('report-type').value;
+        const reportPeriod = document.getElementById('report-period').value;
+        const language = localStorage.getItem('language') || 'fr';
+
+        try {
+            const downloadUrl = `{{ path('app_admin_download_report') }}?reportType=${reportType}&reportPeriod=${reportPeriod}`;
+            window.location.href = downloadUrl;
+            alert(`Téléchargement du rapport :
+                Type : ${translations[language][reportType] || reportType}
+                Période : ${translations[language][reportPeriod] || reportPeriod}
+                Format : PDF`);
+            closeModal('statistics-modal');
+        } catch (error) {
+            console.error('Error initiating download:', error);
+            alert(translations[language].download_error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLanguage = localStorage.getItem('language') || 'fr';
+        document.getElementById('language').value = savedLanguage;
+        applyLanguage();
+
+        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+        document.getElementById('dark-mode-toggle').checked = savedDarkMode;
+        document.body.classList.toggle('dark-mode', savedDarkMode);
+
+        document.addEventListener('languageChange', () => {
+            applyLanguage();
+        });
+    });
 </script>
 
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 {% endblock %}

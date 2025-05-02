@@ -6,16 +6,14 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     
     <!-- CSS / JS Imports -->
-    <link rel="stylesheet" href="SymfonyMiraVia-main/assets/styles/AdminStyle/sidebar-style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
     {% block stylesheets %}{% endblock %}
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
     {% block javascripts %}
         {% block importmap %}
             {{ importmap('app') }}
@@ -27,7 +25,10 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* évite scroll global */
+            overflow: hidden;
+            background-color: #ffffff;
+            color: #374151;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container-fluid {
@@ -42,39 +43,170 @@
 
         .sidebar {
             position: fixed;
-            top: 73px; /* hauteur du navbar */
+            top: 73px;
             bottom: 0;
             left: 0;
             width: 250px;
             z-index: 1000;
             overflow-y: auto;
             background-color: #f8f9fa;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .sidebar .nav-link {
+            color: #374151;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            border-radius: 8px;
+            margin: 0.25rem 0.5rem;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+            color: #013A71;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
         }
 
         .main {
-            margin-left: 60px; /* largeur de la sidebar */
-            padding: 0;
-            height: calc(100% - 93px); /* Hauteur moins la navbar */
-            overflow-y: auto;
-            background-color: #E8E7DE;
+            margin-left: 73px;
             padding: 1rem;
+            height: calc(100% - 73px);
+            overflow-y: auto;
+            background-color: #E8E7DE !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .main main {
+            color: #374151;
+            transition: color 0.3s ease;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .sidebar {
+            background-color: #2d3748;
+            border-right: 1px solid #4a5568;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .sidebar .nav-link {
+            color: #a0aec0;
+        }
+
+        body.dark-mode .sidebar .nav-link:hover {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .sidebar .nav-link.active {
+            background-color: #4a90e2;
+            color: #ffffff;
+        }
+
+        body.dark-mode .sidebar .nav-link i {
+            color: #a0aec0;
+        }
+
+        body.dark-mode .sidebar .nav-link:hover i {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .main {
+            background-color: #2d3748 !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-mode .main main {
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-mode .main a {
+            color: #4a90e2;
+        }
+
+        body.dark-mode .main a:hover {
+            color: #63b3ed;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             .sidebar {
-                width: 100%; /* La sidebar occupe toute la largeur de l'écran */
+                width: 100%;
                 position: fixed;
-                height: auto; /* Ajuste la hauteur */
-                top: 0; /* Position en haut */
+                height: auto;
+                top: 0;
                 z-index: 1000;
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+
+            body.dark-mode .sidebar {
+                border-bottom: 1px solid #4a5568;
             }
 
             .main {
-                margin-left: 0; /* Supprime le décalage lié à la sidebar */
-                padding-top: 100px; /* Ajoute un espace sous la sidebar */
+                margin-left: 0;
+                padding-top: 100px;
                 padding-left: 1rem;
             }
+        }
+
+        /* Welcome Notification */
+        .welcome-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        body.dark-mode .welcome-notification {
+            background-color: #2b6cb0;
+        }
+
+        /* Sliding Dashboard Message */
+        .dashboard-welcome {
+            position: fixed;
+            top: 80px;
+            right: -300px; /* Start off-screen */
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: right 0.5s ease-in-out;
+        }
+
+        .dashboard-welcome.show {
+            right: 20px; /* Slide in */
+        }
+
+        body.dark-mode .dashboard-welcome {
+            background-color: #218838;
+        }
+
+        .dashboard-welcome i {
+            margin-right: 10px;
+            font-size: 1.2rem;
         }
     </style>
 </head>
@@ -82,6 +214,15 @@
 <body>
     <!-- Navbar -->
     {% include 'partialAdmin/navbarAdmin.html.twig' %}
+
+    <!-- Welcome Notification -->
+    <div class="welcome-notification" id="welcomeNotification"></div>
+
+    <!-- Dashboard Welcome Message -->
+    <div class="dashboard-welcome" id="dashboardWelcome">
+        <i class="fas fa-user"></i>
+        <span>Bonjour Yosra</span>
+    </div>
 
     <div class="container-fluid">
         <div class="row">
@@ -103,5 +244,242 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Comprehensive translations for platform-wide UI elements
+        const translations = {
+            fr: {
+                welcome: 'Bienvenue !',
+                home: 'Accueil',
+                users: 'Utilisateurs',
+                settings: 'Paramètres',
+                profile: 'Profil',
+                notifications: 'Notifications',
+                customization: 'Personnalisation',
+                security: 'Sécurité',
+                statistics: 'Statistiques',
+                language: 'Langue',
+                logout: 'Se déconnecter',
+                dashboard: 'Tableau de bord',
+                manage_settings: 'Gérez vos paramètres',
+                manage_profile: 'Gérez votre profil',
+                configure_notifications: 'Configurez vos préférences de notifications',
+                change_theme: 'Changez le thème et les couleurs de l\'interface',
+                update_security: 'Mettez à jour les mots de passe et les politiques de sécurité',
+                view_reports: 'Consultez les rapports et les performances',
+                change_language: 'Changez la langue de l\'interface',
+                email_notifications: 'Notifications par e-mail',
+                sms_notifications: 'Notifications par SMS',
+                push_notifications: 'Notifications push',
+                notification_frequency: 'Fréquence des notifications',
+                immediate: 'Immédiatement',
+                daily: 'Quotidiennement',
+                weekly: 'Hebdomadairement',
+                dark_mode: 'Mode sombre',
+                enabled: 'Activé',
+                disabled: 'Désactivé',
+                french: 'Français',
+                english: 'English',
+                save: 'Enregistrer',
+                cancel: 'Annuler',
+                update: 'Mettre à jour',
+                partner: 'Partenaire',
+                client: 'Client',
+                partner_requests: 'Demandes Partenaires',
+                aid_requests: 'Demandes Aide',
+                donations: 'Don',
+                events: 'Événement',
+                volunteering: 'Bénévolat',
+                messaging: 'Messagerie',
+                search: 'Cherche',
+                update_available: 'Nouvelle mise à jour disponible.',
+                task_completed: 'Votre tâche a été complétée avec succès.',
+                action_required: 'Une action est requise de votre part.',
+                sent_by: 'Envoyé par',
+                default_title: 'Titre par défaut'
+            },
+            en: {
+                welcome: 'Welcome!',
+                home: 'Home',
+                users: 'Users',
+                settings: 'Settings',
+                profile: 'Profile',
+                notifications: 'Notifications',
+                customization: 'Customization',
+                security: 'Security',
+                statistics: 'Statistics',
+                language: 'Language',
+                logout: 'Logout',
+                dashboard: 'Dashboard',
+                manage_settings: 'Manage your settings',
+                manage_profile: 'Manage your profile',
+                configure_notifications: 'Configure your notification preferences',
+                change_theme: 'Change the theme and colors of the interface',
+                update_security: 'Update passwords and security policies',
+                view_reports: 'View reports and performance',
+                change_language: 'Change the interface language',
+                email_notifications: 'Email notifications',
+                sms_notifications: 'SMS notifications',
+                push_notifications: 'Push notifications',
+                notification_frequency: 'Notification frequency',
+                immediate: 'Immediately',
+                daily: 'Daily',
+                weekly: 'Weekly',
+                dark_mode: 'Dark mode',
+                enabled: 'Enabled',
+                disabled: 'Disabled',
+                french: 'French',
+                english: 'English',
+                save: 'Save',
+                cancel: 'Cancel',
+                update: 'Update',
+                partner: 'Partner',
+                client: 'Client',
+                partner_requests: 'Partner Requests',
+                aid_requests: 'Aid Requests',
+                donations: 'Donations',
+                events: 'Event',
+                volunteering: 'Volunteering',
+                messaging: 'Messaging',
+                search: 'Search',
+                update_available: 'New update available.',
+                task_completed: 'Your task was completed successfully.',
+                action_required: 'An action is required from you.',
+                sent_by: 'Sent by',
+                default_title: 'Default Title'
+            }
+        };
+
+        // Apply language settings from localStorage
+        function applyLanguage() {
+            const language = localStorage.getItem('language') || 'fr';
+            const translatableElements = document.querySelectorAll('[data-translate]');
+            translatableElements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[language][key]) {
+                    element.textContent = translations[language][key];
+                }
+            });
+            const activeLink = document.querySelector('.sidebar .nav-link.active');
+            const navbarTitle = document.querySelector('#navbar-title');
+            if (navbarTitle) {
+                if (activeLink) {
+                    const translateKey = activeLink.getAttribute('data-translate-key');
+                    if (translateKey && translations[language][translateKey]) {
+                        navbarTitle.textContent = translations[language][translateKey];
+                    }
+                } else {
+                    navbarTitle.textContent = translations[language]['default_title'];
+                }
+            }
+            console.log('Language applied:', language);
+        }
+
+        // Apply dark mode from localStorage
+        function applyDarkMode() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            console.log('Dark mode applied:', isDarkMode);
+        }
+
+        // Show welcome notification
+        function showWelcomeNotification(message) {
+            const notification = document.getElementById('welcomeNotification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        // Play welcome audio using Web Speech API
+        function playWelcomeAudio(userName) {
+            if (!('speechSynthesis' in window)) {
+                console.warn('SpeechSynthesis not supported in this browser.');
+                showWelcomeNotification(`Bienvenue ${userName} !`);
+                return;
+            }
+
+            const message = `Bienvenue ${userName}`;
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.lang = localStorage.getItem('language') === 'en' ? 'en-US' : 'fr-FR';
+            utterance.volume = 1.0;
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+
+            const setVoiceAndSpeak = () => {
+                const voices = window.speechSynthesis.getVoices();
+                console.log('Available voices:', voices.map(v => ({ name: v.name, lang: v.lang })));
+                const voice = voices.find(v => v.lang.includes(utterance.lang.split('-')[0])) || voices[0];
+                if (voice) {
+                    utterance.voice = voice;
+                    try {
+                        window.speechSynthesis.speak(utterance);
+                        console.log('Welcome audio played:', message, 'with voice:', voice.name);
+                        // Mark audio as played in sessionStorage
+                        sessionStorage.setItem('audioPlayed', 'true');
+                    } catch (err) {
+                        console.error('Speech synthesis error:', err);
+                        showWelcomeNotification(`Bienvenue ${userName} !`);
+                    }
+                } else {
+                    console.warn('No voice found for language:', utterance.lang);
+                    showWelcomeNotification(`Bienvenue ${userName} !`);
+                }
+            };
+
+            if (window.speechSynthesis.getVoices().length > 0) {
+                setVoiceAndSpeak();
+            } else {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    setVoiceAndSpeak();
+                    window.speechSynthesis.onvoiceschanged = null;
+                };
+            }
+        }
+
+        // Show sliding dashboard welcome message
+        function showDashboardWelcome() {
+            const dashboardWelcome = document.getElementById('dashboardWelcome');
+            dashboardWelcome.classList.add('show');
+            setTimeout(() => {
+                dashboardWelcome.classList.remove('show');
+            }, 5000); // Hide after 5 seconds
+        }
+
+        // Initialize settings on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            applyDarkMode();
+            applyLanguage();
+
+            // Get user name (hardcoded since no session)
+            const userName = 'Yosra '; // Replace with '{{ app.user.firstname|default('Yosra Besbes')|escape('js') }}' when session is available
+            console.log('User name:', userName);
+
+            // Check if we're on the dashboard page (using URL or active link)
+            const isDashboard = document.querySelector('.sidebar .nav-link.active[data-translate-key="dashboard"]') || window.location.pathname.includes('dashboard');
+
+            if (isDashboard) {
+                // Show sliding welcome message
+                setTimeout(() => {
+                    showDashboardWelcome();
+                }, 10);
+
+                // Play welcome audio only if not played in this session
+                const audioPlayed = sessionStorage.getItem('audioPlayed');
+                if (!audioPlayed) {
+                    setTimeout(() => {
+                        playWelcomeAudio(userName);
+                    }, 10);
+                }
+            }
+
+            // Listen for language change events
+            document.addEventListener('languageChange', () => {
+                applyLanguage();
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

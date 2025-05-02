@@ -11,6 +11,16 @@
 
 {% block body %}
 	<div class="container-fluid d-flex align-items-center justify-content-center min-vh-100 login-container">
+		<!-- If the user is already logged in -->
+				{% if app.user %}
+					<div class="alert alert-info animate__animated animate__fadeIn mb-4" role="alert">
+						<i class="fas fa-user-check me-2"></i>
+						Vous êtes connecté en tant que
+						<strong>{{ app.user.userIdentifier }}</strong>
+						<a href="{{ path('app_logout') }}" class="ms-2">Déconnexion</a>
+						<a href="{{ path('app_profile') }}" class="ms-2">Mon profil</a>
+					</div>
+				{% else %}
 		<div class="card p-4" style="max-width: 450px; width: 100%;">
 			<div class="text-center mb-4">
 				<div class="mb-3">
@@ -28,17 +38,6 @@
 						{{ error.messageKey|trans(error.messageData, 'security') }}
 					</div>
 				{% endif %}
-
-				<!-- If the user is already logged in -->
-				{% if app.user %}
-					<div class="alert alert-info animate__animated animate__fadeIn mb-4" role="alert">
-						<i class="fas fa-user-check me-2"></i>
-						Vous êtes connecté en tant que
-						<strong>{{ app.user.userIdentifier }}</strong>
-						<a href="{{ path('app_logout') }}" class="ms-2">Déconnexion</a>
-					</div>
-				{% endif %}
-
 				<!-- Email input field -->
 				<div class="mb-4">
 					<label for="username" class="form-label">Adresse email</label>
@@ -90,5 +89,6 @@
 				</div>
 			</form>
 		</div>
+			{% endif %}
 	</div>
 {% endblock %}

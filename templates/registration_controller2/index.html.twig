@@ -1,195 +1,248 @@
-{# templates/registration/register.html.twig #}
+{# templates/registration_controller2/index.html.twig #}
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Inscription
+{% endblock %}
 
 {% block body %}
-    <style>
-        /* General Container Styling */
-        .register-container {
-            background-color: #e8e7de; /* Light cream background */
-            padding: 2.5rem;
-            border-radius: 15px;
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
-        }
+	<style>
+		/* Custom Styles to Enhance Bootstrap */
+		.register-container {
+			background: #ffffff;
+			border-radius: 1rem;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+			max-width: 900px;
+			margin: 2rem auto;
+			transition: transform 0.3s ease;
+		}
 
-        .register-card {
-            background-color: #ffffff;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1); /* Soft shadow */
-            overflow: hidden;
-        }
+		.register-container:hover {
+			transform: translateY(-4px);
+		}
 
-        .register-card-header {
-            background: linear-gradient(135deg, #013a71, #81a8c5); /* Gradient header */
-            color: #ffffff;
-            padding: 1.5rem;
-            text-align: center;
-        }
+		.register-card-header {
+			background: linear-gradient(135deg, #2b6cb0, #4299e1);
+			color: #ffffff;
+			padding: 1.5rem;
+			text-align: center;
+			border-radius: 1rem 1rem 0 0;
+		}
 
-        .register-card-header h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 0;
-            letter-spacing: 1px;
-        }
+		.register-card-header h1 {
+			font-size: clamp(1.8rem, 4vw, 2rem);
+			font-weight: 700;
+			margin: 0;
+		}
 
-        .register-card-body {
-            padding: 2rem;
-        }
+		.form-title {
+			color: #2d3748;
+			font-size: clamp(1.4rem, 3vw, 1.5rem);
+			font-weight: 600;
+			margin-bottom: 1.25rem;
+			text-align: center;
+		}
 
-        /* Form Styling */
-        .form-title {
-            color: #013a71;
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
+		.form-group-icon {
+			position: relative;
+		}
 
-        .form-row {
-            display: flex;
-            gap: 1.5rem; /* Consistent spacing between columns */
-        }
+		.form-group-icon .form-control {
+			padding-left: 2.75rem;
+			border-radius: 0.5rem;
+			height: 46px;
+			transition: all 0.3s ease;
+		}
 
-        .form-row .col-md-6 {
-            flex: 1;
-        }
+		.form-group-icon i {
+			position: absolute;
+			left: 0.75rem;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 1.1rem;
+			color: #4299e1;
+		}
 
-        .form-group-icon {
-            position: relative;
-        }
+		.form-control.is-invalid {
+			border-color: #dc3545;
+		}
 
-        .form-group-icon .form-control {
-            padding-left: 40px;
-        }
+		.invalid-feedback {
+			font-size: 0.85rem;
+			font-weight: 500;
+			animation: fadeIn 0.3s ease;
+		}
 
-        .form-group-icon i {
-            position: absolute;
-            left: 15px;
-            top: 80%;
-            transform: translateY(-50%);
-            font-size: 1.2rem;
-            color: #81a8c5;
-        }
+		.form-check.is-invalid .form-check-input {
+			border-color: #dc3545;
+		}
 
-        .form-control {
-            border-radius: 30px;
-            border: 1px solid rgba(129, 168, 197, 0.3);
-            padding: 0.75rem 1rem;
-            transition: all 0.3s ease-in-out;
-        }
+		.btn-primary {
+			background-color: #2b6cb0;
+			border-color: #2b6cb0;
+			border-radius: 0.5rem;
+			padding: 0.75rem 2rem;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
 
-        .form-control:focus {
-            border-color: #013a71;
-            box-shadow: 0 0 5px rgba(1, 58, 113, 0.3); /* Subtle focus shadow */
-        }
+		.btn-primary:hover {
+			background-color: #3182ce;
+			border-color: #3182ce;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		}
 
-        .form-check-input {
-            margin-top: 0.3rem;
-        }
+		.alert {
+			border-radius: 0.5rem;
+			padding: 0.75rem 1rem;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			animation: fadeIn 0.5s ease;
+		}
 
-        .form-check-label {
-            color: #013a71;
-            font-weight: 500;
-        }
+		.alert-success {
+			background-color: #f0fff4;
+			color: #2f855a;
+			border-color: #68d391;
+		}
 
-        /* Button Styling */
-        .btn-primary {
-            background-color: #013a71;
-            border-color: #013a71;
-            border-radius: 30px;
-            padding: 0.75rem 2rem;
-            font-weight: 600;
-            transition: all 0.3s ease-in-out;
-            font-size: 1rem;
-        }
+		.alert-danger {
+			background-color: #fff5f5;
+			color: #c53030;
+			border-color: #f87171;
+		}
 
-        .btn-primary:hover {
-            background-color: #7d8c6d;
-            border-color: #7d8c6d;
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle hover shadow */
-        }
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(-8px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
 
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column; /* Stack rows on smaller screens */
-                gap: 1rem; /* Adjust gap for smaller screens */
-            }
+		/* Responsive Adjustments */
+		@media(max-width: 576px) {
+			.register-container {
+				margin: 1rem;
+				padding: 1.25rem;
+			}
 
-            .btn-primary {
-                width: 100%; /* Full-width button for smaller screens */
-            }
-        }
-    </style>
+			.register-card-header h1 {
+				font-size: 1.6rem;
+			}
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="register-container">
-                    <div class="register-card">
-                        <div class="register-card-header">
-                            <h1>Créer un compte</h1>
-                        </div>
-                        <div class="register-card-body">
-                            {{ form_start(registrationForm) }}
-                                <div class="form-title">Informations personnelles</div>
-                                <div class="form-row">
-                                    <div class="col-md-6 form-group-icon">
-                                        <i class="fas fa-user"></i>
-                                        {{ form_row(registrationForm.nom, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <div class="col-md-6 form-group-icon">
-                                        <i class="fas fa-user-plus"></i>
-                                        {{ form_row(registrationForm.prenom, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                </div>
+			.form-title {
+				font-size: 1.3rem;
+			}
 
-                                <div class="form-group-icon">
-                                    <i class="fas fa-envelope"></i>
-                                    {{ form_row(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
-                                </div>
+			.form-group-icon .form-control {
+				height: 42px;
+				font-size: 0.9rem;
+			}
 
-                                <div class="form-group-icon">
-                                    <i class="fas fa-lock"></i>
-                                    {{ form_row(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
-                                </div>
+			.btn-primary {
+				width: 100%;
+				padding: 0.75rem;
+			}
+		}
+	</style>
 
-                                <div class="form-title mt-4">Informations supplémentaires</div>
-                                <div class="form-row">
-                                    <div class="col-md-6 form-group-icon">
-                                        <i class="fas fa-phone"></i>
-                                        {{ form_row(registrationForm.telephone, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <div class="col-md-6 form-group-icon">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        {{ form_row(registrationForm.birthday, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                </div>
+	<div class="container py-4">
+		<div class="register-container">
+			<div class="register-card">
+				{% if app.user %}
+					<div class="alert alert-info animate__animated animate__fadeIn mb-4" role="alert">
+						<i class="fas fa-user-check me-2"></i>
+						Vous êtes connecté en tant que
+						<strong>{{ app.user.userIdentifier }}</strong>
+						<a href="{{ path('app_logout') }}" class="ms-2">Déconnexion</a>
+						<a href="{{ path('app_profile') }}" class="ms-2">Mon profil</a>
+					</div>
+				{% else %}
+					<div class="register-card-header">
+						<h1>Créer un compte</h1>
+					</div>
+					<div class="register-card-body p-4">
+						{% for flash_message in app.flashes('success') %}
+							<div class="alert alert-success" role="alert">
+								<i class="fas fa-check-circle"></i>
+								{{ flash_message }}
+							</div>
+						{% endfor %}
+						{% for flash_message in app.flashes('error') %}
+							<div class="alert alert-danger" role="alert">
+								<i class="fas fa-exclamation-circle"></i>
+								{{ flash_message }}
+							</div>
+						{% endfor %}
 
-                                <div class="form-group-icon">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    {{ form_row(registrationForm.adresseUtilisateur, {'attr': {'class': 'form-control'}}) }}
-                                </div>
+						{{ form_start(registrationForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+						<div class="form-title">Informations personnelles</div>
+						<div class="row g-3 mb-3">
+							<div class="col-md-6 form-group-icon">
+								<i class="fas fa-user"></i>
+								{{ form_widget(registrationForm.nom, {'attr': {'class': 'form-control', 'placeholder': 'Votre nom'}}) }}
+								{{ form_errors(registrationForm.nom, {'attr': {'class': 'invalid-feedback'}}) }}
+							</div>
+							<div class="col-md-6 form-group-icon">
+								<i class="fas fa-user-plus"></i>
+								{{ form_widget(registrationForm.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Votre prénom'}}) }}
+								{{ form_errors(registrationForm.prenom, {'attr': {'class': 'invalid-feedback'}}) }}
+							</div>
+						</div>
 
-                                <div class="form-group form-check mt-3">
-                                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
-                                    {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'form-check-label'}}) }}
-                                    {{ form_errors(registrationForm.agreeTerms) }}
-                                </div>
+						<div class="form-group-icon mb-3">
+							<i class="fas fa-envelope"></i>
+							{{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'votre@email.com'}}) }}
+							{{ form_errors(registrationForm.email, {'attr': {'class': 'invalid-feedback'}}) }}
+						</div>
 
-                                <div class="text-center mt-4">
-                                    <button type="submit" class="btn btn-primary"><i class="fas fa-user-check me-2"></i>S'inscrire</button>
-                                </div>
-                            {{ form_end(registrationForm) }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+						<div class="form-group-icon mb-3">
+							<i class="fas fa-lock"></i>
+							{{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Minimum 8 caractères'}}) }}
+							{{ form_errors(registrationForm.plainPassword, {'attr': {'class': 'invalid-feedback'}}) }}
+						</div>
+
+						<div class="form-title mt-4">Informations supplémentaires</div>
+						<div class="row g-3 mb-3">
+							<div class="col-md-6 form-group-icon">
+								<i class="fas fa-phone"></i>
+								{{ form_widget(registrationForm.telephone, {'attr': {'class': 'form-control', 'placeholder': 'Ex: +33612345678'}}) }}
+								{{ form_errors(registrationForm.telephone, {'attr': {'class': 'invalid-feedback'}}) }}
+							</div>
+							<div class="col-md-6 form-group-icon">
+								<i class="fas fa-calendar-alt"></i>
+								{{ form_widget(registrationForm.birthday, {'attr': {'class': 'form-control', 'placeholder': 'AAAA-MM-JJ'}}) }}
+								{{ form_errors(registrationForm.birthday, {'attr': {'class': 'invalid-feedback'}}) }}
+							</div>
+						</div>
+
+						<div class="form-group-icon mb-3">
+							<i class="fas fa-map-marker-alt"></i>
+							{{ form_widget(registrationForm.adresseUtilisateur, {'attr': {'class': 'form-control', 'placeholder': 'Votre adresse'}}) }}
+							{{ form_errors(registrationForm.adresseUtilisateur, {'attr': {'class': 'invalid-feedback'}}) }}
+						</div>
+
+						<div class="form-check mb-3 {% if form_errors(registrationForm.agreeTerms) %}is-invalid{% endif %}">
+							{{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+							{{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'form-check-label'}}) }}
+							{{ form_errors(registrationForm.agreeTerms, {'attr': {'class': 'invalid-feedback'}}) }}
+						</div>
+
+						<div class="text-center mt-4">
+							<button type="submit" class="btn btn-primary">
+								<i class="fas fa-user-check me-2"></i>S'inscrire
+							</button>
+						</div>
+						{{ form_end(registrationForm) }}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
 {% endblock %}

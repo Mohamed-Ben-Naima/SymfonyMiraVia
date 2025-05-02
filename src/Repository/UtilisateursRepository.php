@@ -21,28 +21,44 @@ class UtilisateursRepository extends ServiceEntityRepository
         parent::__construct($registry, Utilisateurs::class);
     }
 
-//    /**
-//     * @return Utilisateurs[] Returns an array of Utilisateurs objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findAllAdmins(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.typeUtilisateur = :type')
+            ->setParameter('type', 'admin')
+            ->getQuery()
+            ->getResult();
+    }
+    
 
-//    public function findOneBySomeField($value): ?Utilisateurs
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findAllUsers(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT id_utilisateur, nom
+            FROM utilisateurs
+        ';
+
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery();
+
+        return $result->fetchAllAssociative();
+    }
+    // Dans UtilisateursRepository.php
+public function findAllClients(): array
+{
+    $conn = $this->getEntityManager()->getConnection();
+
+    $sql = '
+        SELECT u.* 
+        FROM utilisateurs u
+        JOIN clients c ON u.id_utilisateur = id_client ;
+    ';
+    
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->executeQuery();
+
+    return $result->fetchAllAssociative();
+}
 }

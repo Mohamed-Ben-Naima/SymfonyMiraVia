@@ -21,28 +21,49 @@ class DonsRepository extends ServiceEntityRepository
         parent::__construct($registry, Dons::class);
     }
 
-//    /**
-//     * @return Dons[] Returns an array of Dons objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Dons
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByPartenaire(int $idPartenaire): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT 
+                d.*, 
+                u.nom AS client_nom,
+                u.id_utilisateur AS client_id 
+            FROM dons d
+            JOIN utilisateurs u ON d.id_client = u.id_utilisateur
+            WHERE d.id_partenaire = :id_partenaire ' ;
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery(['id_partenaire' => $idPartenaire]);
+
+        return $result->fetchAllAssociative();
+    }
+    
+    public function findDonsWithClientNames(int $idPartenaire): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT 
+                d.id_don AS id_don, 
+                d.id_client, 
+                d.id_partenaire, 
+                d.montant, 
+                d.date_don, 
+                d.status, 
+                u.nom AS client_nom,
+                u.id_utilisateur AS utilisateur_id
+            FROM dons d
+            JOIN clients c ON d.id_client = c.id_client
+            JOIN utilisateurs u ON c.id_client = u.id_utilisateur
+            WHERE d.id_partenaire = :id_partenaire
+        ';
+
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery(['id_partenaire' => $idPartenaire]);
+
+        return $resultSet->fetchAllAssociative(); // Returns data as an associative array
+    }
+    
 }

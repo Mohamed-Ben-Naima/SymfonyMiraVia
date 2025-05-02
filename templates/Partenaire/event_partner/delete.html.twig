@@ -1,0 +1,23 @@
+<!-- Modale de confirmation de suppression -->
+<div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteEventModalLabel">Confirmer la Suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer l'événement suivant&nbsp;?</p>
+                <ul>
+                    <li><strong>Titre :</strong> <span id="eventTitle"></span></li>
+                    <li><strong>Date :</strong> <span id="eventDate"></span></li>
+                    <li><strong>Lieu :</strong> <span id="eventLocation"></span></li>
+                </ul>
+            </div>
+            <div class="modal-footer d-flex justify-content-center" >
+                <button type="button" class="btn btn-annuler" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-cancel" id="confirmDeleteButton">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>

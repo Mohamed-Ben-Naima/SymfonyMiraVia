@@ -1,0 +1,393 @@
+{% block stylesheets %}
+<link href="{{ asset('style-partner/bootstrap.min.css') }}" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<style>
+    /* Global Styling */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(to bottom, #87CEEB, #E3FDFD);
+        color: #333;
+        overflow-x: hidden;
+    }
+
+    .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .background .realistic-cloud {
+        position: absolute;
+        background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.7) 60%, rgba(255, 255, 255, 0) 100%);
+        filter: blur(15px);
+        border-radius: 60% 40% 60% 40%;
+        animation: cloud-move 40s linear infinite;
+    }
+
+    .background .trajectory {
+        position: absolute;
+        width: 200%;
+        height: 400px;
+        background: none;
+        border-top: 2px dashed rgba(1, 58, 113, 0.4);
+        border-radius: 50%;
+        animation: trajectory-animation 8s infinite ease-in-out;
+    }
+
+    @keyframes cloud-move {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(120%); }
+    }
+
+    @keyframes trajectory-animation {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(50%); }
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 650px;
+        width: 95%;
+        margin: 2rem auto;
+        background: linear-gradient(to bottom, #ffffff, #f0faff);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .form-container:hover {
+        transform: scale(1.02);
+    }
+
+    .form-image {
+        height: 200px;
+        background-image: url('{{ asset('images-partner/airplane.jpg') }}');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .form-content {
+        padding: 2rem;
+    }
+
+    .form-content h2 {
+        color: #013a71;
+        font-weight: bold;
+        font-size: 1.8rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-content img.logo {
+        max-width: 120px;
+        margin: 0 auto 20px;
+        display: block;
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        padding-left: 45px;
+        height: 50px;
+        border-radius: 10px;
+        border: 1px solid #ced4da;
+        background: #f9f9f9;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #013a71;
+        box-shadow: 0 0 8px rgba(1, 58, 113, 0.3);
+        background: #ffffff;
+    }
+
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .invalid-feedback .fas {
+        margin-right: 5px;
+    }
+
+   .input-icon {
+    position: absolute;
+    left: 15px;              /* Distance depuis la gauche */
+    top: 12px;               /* Ajustez manuellement pour aligner verticalement */
+    transform: translateY(0); /* Supprimez le décalage si nécessaire */
+    color: #6c757d;          /* Couleur de l'icône */
+    font-size: 1.2rem;       /* Taille de l'icône */
+    pointer-events: none;    /* Empêche l'interaction avec l'icône */
+}
+
+    .password-toggle {
+    position: absolute;
+    right: 15px;             /* Position à droite */
+    top: 50%;                /* Centre verticalement */
+    transform: translateY(-50%); /* Ajuste le centrage */
+    cursor: pointer;         /* Curseur cliquable */
+    color: #6c757d;          /* Couleur de l'icône */
+    font-size: 1.2rem;       /* Taille de l'icône */
+}
+
+    .password-toggle:hover {
+        color: #013a71;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #013a71, #015a91);
+        border: none;
+        color: white;
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 1rem;
+        padding: 12px;
+        transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #012a51, #014a71);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(1, 58, 113, 0.3);
+    }
+
+    .captcha {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .captcha img {
+        display: inline-block;
+        height: 60px;
+        width: 160px;
+        margin-bottom: 0.5rem;
+    }
+
+    .captcha button {
+        display: inline-block;
+        margin-left: 1rem;
+        background-color: #015a91;
+        border: none;
+        padding: 0.25rem 0.5rem;
+        color: white;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+
+    .captcha button:hover {
+        background-color: #012a51;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="background">
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+    <div class="trajectory"></div>
+    <div class="trajectory"></div>
+</div>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="form-container shadow-lg">
+        <div class="form-image"></div>
+        <div class="form-content">
+            <img src="{{ asset('images-partner/logo miravia 1 3.png') }}" alt="Logo" class="logo">
+            <h2>Bienvenue à bord – Inscrivez-vous !</h2>
+
+            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+           <div class="row">
+    <!-- Prénom -->
+    <div class="col-md-6 form-group">
+        <i class="fas fa-user input-icon"></i>
+        {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+        <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ form_errors(form.prenom) }}
+        </div>
+    </div>
+
+    <!-- Nom -->
+    <div class="col-md-6 form-group">
+        <i class="fas fa-user input-icon"></i>
+        {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom de famille'}}) }}
+        <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ form_errors(form.nom) }}
+        </div>
+    </div>
+</div>
+
+   <div class="row">
+    <!-- Adresse -->
+    <div class="col-md-6 form-group">
+        <i class="fas fa-map-marker-alt input-icon"></i>
+        {{ form_widget(form.adresse_utilisateur, {
+            'attr': {
+                'class': 'form-control',
+                'placeholder': 'Adresse'
+            }
+        }) }}
+        <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ form_errors(form.adresse_utilisateur) }}
+        </div>
+    </div>
+
+    <!-- Date de naissance -->
+    <div class="col-md-6 form-group">
+        <i class="fas fa-calendar-alt input-icon"></i>
+        {{ form_widget(form.birthday, {
+            'attr': {
+                'class': 'form-control flatpickr',
+                'placeholder': 'Date de naissance',
+                'aria-describedby': 'birthdayHelp'
+            }
+        }) }}
+        <small id="birthdayHelp" class="form-text text-muted">
+            Entrez votre date de naissance (JJ/MM/AAAA).
+        </small>
+        <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ form_errors(form.birthday) }}
+        </div>
+    </div>
+</div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <i class="fas fa-envelope input-icon"></i>
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Adresse email'}}) }}
+                <div class="invalid-feedback">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form_errors(form.email) }}
+                </div>
+            </div>
+
+            <!-- Téléphone -->
+            <div class="form-group">
+                <i class="fas fa-phone input-icon"></i>
+                {{ form_widget(form.telephone, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}}) }}
+                <div class="invalid-feedback">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form_errors(form.telephone) }}
+                </div>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    {{ form_widget(form.mot_de_passe.first, {'attr': {'class': 'form-control', 'placeholder': 'Mot de passe'}}) }}
+                    <i class="far fa-eye-slash password-toggle" onclick="togglePasswordVisibility(this)"></i>
+                    <div class="invalid-feedback">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form_errors(form.mot_de_passe.first) }}
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    {{ form_widget(form.mot_de_passe.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirmez le mot de passe'}}) }}
+                    <i class="far fa-eye-slash password-toggle" onclick="togglePasswordVisibility(this)"></i>
+                    <div class="invalid-feedback">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form_errors(form.mot_de_passe.second) }}
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- CAPTCHA -->
+            <div class="captcha">
+    <div class="mb-3">
+        <p class="fw-bold">CAPTCHA</p>
+        {{ form_widget(form.captcha, {
+            'attr': {
+                'class': 'form-control mt-2',
+                'placeholder': 'Entrez le texte ici'
+            }
+        }) }}
+        <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ form_errors(form.captcha) }}
+        </div>
+    </div>
+</div>
+
+            <!-- Conditions générales -->
+            <div class="form-check mt-3">
+                {{ form_widget(form.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                <label class="form-check-label" for="{{ form.agreeTerms.vars.id }}">
+                    J'accepte les <a href="#" class="text-primary">termes et conditions générales</a>.
+                </label>
+                <div class="invalid-feedback">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form_errors(form.agreeTerms) }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-4">Suivant</button>
+            <!-- Lien retour à la connexion -->
+            <div class="text-center mt-3">
+    <a href="{{ path('app_login_controller_partner') }}" class="text-primary text-decoration-none">Retour à la connexion</a>
+             </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePasswordVisibility(iconElement) {
+    const input = iconElement.previousElementSibling; 
+    if (!input) return;
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        iconElement.classList.remove('fa-eye-slash');
+        iconElement.classList.add('fa-eye');
+    } else {
+        input.type = 'password';
+        iconElement.classList.remove('fa-eye');
+        iconElement.classList.add('fa-eye-slash');
+    }
+}
+
+  function refreshCaptcha() {
+    const captchaImage = document.querySelector('.captcha-image');
+    if (captchaImage) {
+        captchaImage.src = "{{ path('captcha') }}?" + new Date().getTime();
+    }
+}
+    document.querySelector('form').addEventListener('submit', function(e) {
+    const birthdayInput = document.querySelector('.flatpickr');
+    if (!birthdayInput.value) {
+        e.preventDefault();
+        alert('Veuillez fournir une date de naissance valide.');
+    }
+});flatpickr('.flatpickr', {
+        dateFormat: "d/m/Y",
+        locale: Flatpickr.l10ns.fr, // Utilise la localisation française
+    });
+</script>
+{% endblock %}

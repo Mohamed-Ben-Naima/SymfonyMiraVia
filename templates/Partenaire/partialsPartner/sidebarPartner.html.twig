@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MiraVia - Tableau de bord</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+   <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="{{ asset('style-partner/sidebar.css') }}" rel="stylesheet">
+</head>
+<body>
+ <!-- Sidebar -->
+  <div class="sidebar">
+    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img mb-3">
+    <a href="{{ path('app_dashboard_partenaire') }}" class="sidebar-link"><i class="bi bi-bar-chart-fill"></i> Tableau de bord</a>
+    <a href="{{ path('demande_aide')}}" class="sidebar-link"><i class="bi bi-question-circle"></i> Demande d'aide</a>
+    <a href="{{ path('app_don_partner') }}" class="sidebar-link"><i class="bi bi-currency-exchange"></i> Dons</a>
+    <a href="{{ path('app_event_partner') }}" class="sidebar-link"><i class="bi bi-calendar-check-fill"></i> Evénements</a>
+    <a href="{{ path('app_benevolat_partner') }}" class="sidebar-link"><i class="bi bi-valentine"></i> Bénévolat</a>
+    <a href="{{ path('app_don_partner') }}" class="sidebar-link"><i class="bi bi-person-badge-fill"></i> Gérer Responsables</a>
+    <a href="{{ path('app_settings_partner') }}" class="sidebar-link"><i class="bi bi-gear-fill"></i> Paramètres</a>
+    <a href="{{ path('app_messagerie_partner') }}" class="sidebar-link"><i class="bi bi-chat-quote-fill"></i> Messagerie</a>
+    <a href="{{ path('app_logout_partner') }}" class="sidebar-link"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Récupérer tous les liens de la barre latérale
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+    // Ajouter un gestionnaire d'événements à chaque lien
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        console.log(`Lien ouvert : ${link.innerText.trim()}`);
+      });
+    });
+  </script>
+</body>
+</html>

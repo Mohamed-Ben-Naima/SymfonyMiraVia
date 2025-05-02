@@ -10,8 +10,15 @@ html, body {
     padding: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #fdfdfd;
-    overflow: hidden; /* Supprime le défilement général */
+    overflow: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+body.dark-mode {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+
 .no-scroll {
     overflow: hidden;
 }
@@ -20,8 +27,8 @@ html, body {
     margin: 0 auto;
     padding: 20px;
     margin-left: 15%;
-    max-height: calc(100vh - 40px); /* Ajuste la hauteur */
-    overflow: visible; /* Supprime le défilement interne */
+    max-height: calc(100vh - 40px);
+    overflow: visible;
 }
 
 .example-wrapper h1 {
@@ -29,6 +36,10 @@ html, body {
     font-size: 30px;
     margin-bottom: 40px;
     color: rgb(0, 0, 0);
+}
+
+body.dark-mode .example-wrapper h1 {
+    color: #e2e8f0;
 }
 
 .header {
@@ -51,6 +62,14 @@ html, body {
     border: 1px solid #7D8C6D;
     border-radius: 6px;
     font-size: 14px;
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode .search-box input {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 #statusFilter {
@@ -59,6 +78,14 @@ html, body {
     border: 1px solid #7D8C6D;
     font-size: 14px;
     margin-left: -1%;
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode #statusFilter {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .header button {
@@ -76,19 +103,32 @@ html, body {
     background-color: #5c7352;
 }
 
+body.dark-mode .header button {
+    background-color: #4a90e2;
+}
+
+body.dark-mode .header button:hover {
+    background-color: #357abd;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
     background-color: white;
     box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    table-layout: fixed; /* Fixe la largeur des colonnes */
+    table-layout: fixed;
+}
+
+body.dark-mode table {
+    background-color: #2d3748;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
 th, td {
     padding: 10px;
     text-align: left;
-    word-wrap: break-word; /* Permet le retour à la ligne dans les cellules */
+    word-wrap: break-word;
 }
 
 th {
@@ -96,13 +136,27 @@ th {
     color: black;
 }
 
+body.dark-mode th {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
 tr:nth-child(even) {
     background-color: #f5f5f5;
+}
+
+body.dark-mode tr:nth-child(even) {
+    background-color: #2d3748;
 }
 
 tr:hover {
     background-color: #81A8C5;
     color: white;
+}
+
+body.dark-mode tr:hover {
+    background-color: #4a90e2;
+    color: #e2e8f0;
 }
 
 .actions {
@@ -120,9 +174,18 @@ tr:hover {
     transition: background 0.2s;
 }
 
+body.dark-mode .actions button {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
 .actions button:hover {
     background-color: #999;
     color: white;
+}
+
+body.dark-mode .actions button:hover {
+    background-color: #718096;
 }
 
 @media (max-width: 992px) {
@@ -170,7 +233,7 @@ tr:hover {
 @media (max-width: 768px) {
     table {
         display: block;
-        overflow-x: auto; /* Permet le défilement horizontal uniquement si nécessaire */
+        overflow-x: auto;
         white-space: nowrap;
     }
 }
@@ -178,41 +241,56 @@ tr:hover {
 .actions button.consulter-btn {
     background-color: #7D8C6D;
     color: white;
+    font-size: 14px;
+}
+
+body.dark-mode .actions button.consulter-btn {
+    background-color: #4a90e2;
 }
 
 .actions button.consulter-btn:hover {
     background-color: #5c7352;
 }
 
+body.dark-mode .actions button.consulter-btn:hover {
+    background-color: #357abd;
+}
+
 .modal {
-    display: none; /* Par défaut, caché */
+    display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Défilement interne uniquement */
-    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-    position: fixed; /* Permet de positionner l'élément par rapport à la fenêtre */
-    top: 50%; /* Centre verticalement */
-    left: 50%; /* Centre horizontalement */
-    transform: translate(-50%, -50%); /* Ajuste pour centrer parfaitement */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #fff;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     width: 40%;
-    height: auto; /* Ajuste automatiquement la hauteur au contenu */
+    height: auto;
     box-shadow: 0 10px 20px rgba(87, 104, 202, 0.5);
     max-width: 600px;
     max-height: 80vh;
-    overflow-y: auto; /* Ajoute un défilement interne si nécessaire */
+    overflow-y: auto;
     text-align: left;
+}
+
+body.dark-mode .modal-content {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
 .modal-header {
@@ -223,6 +301,10 @@ tr:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+body.dark-mode .modal-header {
+    color: #e2e8f0;
 }
 
 .modal-header .close-btn {
@@ -236,6 +318,10 @@ tr:hover {
     transition: color 0.3s ease;
 }
 
+body.dark-mode .modal-header .close-btn {
+    color: #e2e8f0;
+}
+
 .modal-header .close-btn:hover {
     color: #ff0000;
 }
@@ -243,6 +329,10 @@ tr:hover {
 .modal-body {
     margin-bottom: 20px;
     font-size: 14px;
+}
+
+body.dark-mode .modal-body {
+    color: #e2e8f0;
 }
 
 .modal-body p {
@@ -270,8 +360,16 @@ tr:hover {
     color: white;
 }
 
+body.dark-mode .modal-footer .download-btn {
+    background-color: #4a90e2;
+}
+
 .modal-footer .download-btn:hover {
     background-color: rgb(24, 95, 162);
+}
+
+body.dark-mode .modal-footer .download-btn:hover {
+    background-color: #357abd;
 }
 
 .modal-footer .cancel-btn {
@@ -279,12 +377,16 @@ tr:hover {
     color: white;
 }
 
+body.dark-mode .modal-footer .cancel-btn {
+    background-color: #4a90e2;
+}
+
 .modal-footer .cancel-btn:hover {
     background-color: #5c7352;
 }
 
-body.no-scroll {
-    overflow: hidden; /* Désactive le défilement global */
+body.dark-mode .modal-footer .cancel-btn:hover {
+    background-color: #357abd;
 }
 
 @media (max-width: 768px) {
@@ -292,6 +394,50 @@ body.no-scroll {
         width: 90%;
         margin: 2% auto;
     }
+}
+
+.toggle-dark-mode {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #7D8C6D;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-dark-mode:hover {
+    background-color: #5c7352;
+}
+
+body.dark-mode .toggle-dark-mode {
+    background-color: #4a90e2;
+}
+
+body.dark-mode .toggle-dark-mode:hover {
+    background-color: #357abd;
+}
+.accept-btn {
+    background-color: #7D8C6D;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.refuse-btn {
+    background-color:rgb(201, 59, 49);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.accept-btn:hover, .refuse-btn:hover {
+    opacity: 0.8;
 }
 </style>
 
@@ -302,13 +448,12 @@ body.no-scroll {
         <div class="search-box">
             <input type="text" id="search" placeholder="Rechercher ...">
         </div>
-
-  <select id="statusFilter">
-    <option value="">Tous les états</option>
-    <option value="Refusée">Refusée</option>
-    <option value="Acceptée">Acceptée</option>
-    <option value="En attente">En attente</option>
-</select>
+        <select id="statusFilter">
+            <option value="">Tous les états</option>
+            <option value="Refusée">Refusée</option>
+            <option value="Acceptée">Acceptée</option>
+            <option value="En attente">En attente</option>
+        </select>
     </div>
 
     <table>
@@ -337,7 +482,6 @@ body.no-scroll {
                 <td>{{ demande.typeActivite }}</td>
                 <td>{{ demande.etat }}</td>
                 <td class="actions">
-                    <!-- Ajout des données dans des attributs `data-*` -->
                     <button 
                         class="consulter-btn" 
                         data-id="{{ demande.id }}"
@@ -371,91 +515,142 @@ body.no-scroll {
         <div class="modal-body" id="modalBody">
             <!-- Les détails seront remplis dynamiquement -->
         </div>
-        <div class="modal-footer">
-            <button class="download-btn" id="downloadButton" style="display: none;">Télécharger la preuve</button>
-            <button class="cancel-btn" onclick="closeModal()">Fermer</button>
-        </div>
+<div class="modal-footer">
+    <button class="accept-btn" onclick="updateStatus('Acceptée')">Accepter</button>
+    <button class="refuse-btn" onclick="updateStatus('Refusée')">Refuser</button>
+    <button class="download-btn" id="downloadButton" style="display: none;">Télécharger la preuve</button>
+</div>
     </div>
 </div>
 
 <script>
-    // Fonction pour afficher les détails dans le modal
-function viewDetails(button) {
-    // Récupérer les données depuis les attributs `data-*`
-    const demandeur = button.getAttribute('data-demandeur');
-    const telephone = button.getAttribute('data-telephone');
-    const email = button.getAttribute('data-email');
-    const adresse = button.getAttribute('data-adresse');
-    const dateDemande = button.getAttribute('data-date-demande');
-    const typeActivite = button.getAttribute('data-type-activite');
-    const etat = button.getAttribute('data-etat');
-    const description = button.getAttribute('data-description');
-    const preuve = button.getAttribute('data-preuve');
-
-    // Mettre à jour le contenu du modal
-    const modalBody = document.getElementById('modalBody');
-    modalBody.innerHTML = `
-        <p><strong>Nom de demandeur :</strong> ${demandeur}</p>
-        <p><strong>Téléphone :</strong> ${telephone}</p>
-        <p><strong>Email :</strong> ${email}</p>
-        <p><strong>Adresse :</strong> ${adresse}</p>
-        <p><strong>Date de demande :</strong> ${dateDemande}</p>
-        <p><strong>Type d'activité :</strong> ${typeActivite}</p>
-        <p><strong>État :</strong> ${etat}</p>
-        <p><strong>Description :</strong> ${description}</p>
-        <p><strong>Preuve :</strong> ${
-            preuve 
-            ? `<a href="${preuve}" target="_blank">${preuve}</a>`
-            : 'Aucune preuve disponible'
-        }</p>
-    `;
-
-    // Afficher ou masquer le bouton de téléchargement
-    const downloadButton = document.getElementById('downloadButton');
-    if (preuve) {
-        downloadButton.style.display = 'inline-block';
-        downloadButton.onclick = () => window.location.href = preuve; // Redirect to the file URL
-    } else {
-        downloadButton.style.display = 'none';
-    }
-
-    // Afficher le modal
-    const modal = document.getElementById('detailsModal');
-    modal.style.display = 'block';
-    document.body.classList.add('no-scroll');
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 }
 
-    // Fonction pour fermer le modal
-    function closeModal() {
+document.addEventListener('DOMContentLoaded', function () {
+    // Apply dark mode if previously selected
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+
+    // Toggle dark mode
+    window.toggleDarkMode = function () {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    };
+
+    // Update the status of a request
+    window.updateStatus = function (newStatus) {
+        const modal = document.getElementById('detailsModal');
+        const demandeId = modal.getAttribute('data-id');
+
+        if (!demandeId) return;
+
+        fetch(`/admin/demande/partner/update-status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify({ id: demandeId, etat: newStatus }),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert(
+                        `La demande a été ${
+                            newStatus === 'Acceptée' ? 'acceptée' : 'refusée'
+                        } avec succès.`
+                    );
+                    closeModal();
+                    location.reload(); // Reload the page to reflect changes
+                } else {
+                    alert(
+                        'Une erreur est survenue lors de la mise à jour du statut.'
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue.');
+            });
+    };
+
+    // View details of the request
+    window.viewDetails = function (button) {
+        const demandeur = button.getAttribute('data-demandeur');
+        const telephone = button.getAttribute('data-telephone');
+        const email = button.getAttribute('data-email');
+        const adresse = button.getAttribute('data-adresse');
+        const dateDemande = button.getAttribute('data-date-demande');
+        const typeActivite = button.getAttribute('data-type-activite');
+        const etat = button.getAttribute('data-etat');
+        const description = button.getAttribute('data-description');
+        const preuve = button.getAttribute('data-preuve');
+
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = `
+            <p><strong>Nom de demandeur :</strong> ${demandeur}</p>
+            <p><strong>Téléphone :</strong> ${telephone}</p>
+            <p><strong>Email :</strong> ${email}</p>
+            <p><strong>Adresse :</strong> ${adresse}</p>
+            <p><strong>Date de demande :</strong> ${dateDemande}</p>
+            <p><strong>Type d'activité :</strong> ${typeActivite}</p>
+            <p><strong>État :</strong> ${etat}</p>
+            <p><strong>Description :</strong> ${description}</p>
+            <p><strong>Preuve :</strong> ${
+                preuve
+                    ? `<a href="${preuve}" target="_blank">Voir la preuve</a>`
+                    : 'Aucune preuve disponible'
+            }</p>
+        `;
+
+        const downloadButton = document.getElementById('downloadButton');
+        if (preuve) {
+            downloadButton.style.display = 'inline-block';
+            downloadButton.onclick = () => window.open(preuve, '_blank');
+        } else {
+            downloadButton.style.display = 'none';
+        }
+
+        const modal = document.getElementById('detailsModal');
+        modal.style.display = 'block';
+        modal.setAttribute('data-id', button.getAttribute('data-id')); // Store demande ID
+        document.body.classList.add('no-scroll');
+    };
+
+    // Close the modal
+    window.closeModal = function () {
         const modal = document.getElementById('detailsModal');
         modal.style.display = 'none';
         document.body.classList.remove('no-scroll');
+    };
+
+    // Filter table rows
+    function filterTable() {
+        const searchFilter = document.getElementById('search').value.toLowerCase();
+        const statusFilter = document.getElementById('statusFilter').value;
+        const rows = document.querySelectorAll('#userTable tr');
+
+        rows.forEach((row) => {
+            const cells = row.querySelectorAll('td');
+            const textMatch = Array.from(cells)
+                .slice(0, 8)
+                .some((cell) =>
+                    cell.textContent.toLowerCase().includes(searchFilter)
+                );
+
+            const etat = cells[7]?.textContent?.trim() || '';
+            const etatMatch = statusFilter === '' || etat === statusFilter;
+
+            row.style.display = textMatch && etatMatch ? '' : 'none';
+        });
     }
 
-    // Ajouter les filtres de recherche et état
+    // Add event listeners for search and filter
     document.getElementById('search').addEventListener('input', filterTable);
     document.getElementById('statusFilter').addEventListener('change', filterTable);
-
-function filterTable() {
-    console.log('Filtrage du tableau...'); // Log pour débogage
-    const searchFilter = document.getElementById('search').value.toLowerCase(); // Texte de recherche
-    const statusFilter = document.getElementById('statusFilter').value; // Valeur sélectionnée dans le filtre d'état
-    const rows = document.querySelectorAll('#userTable tr'); // Récupère toutes les lignes du tableau
-
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td'); // Récupère toutes les cellules de la ligne
-        const textMatch = Array.from(cells).slice(0, 9) // Vérifie la correspondance avec le texte de recherche
-            .some(cell => cell.textContent.toLowerCase().includes(searchFilter));
-
-        const etat = cells[7]?.textContent?.trim() || ''; // Récupère la valeur de la colonne "Etat"
-        console.log('Etat extrait:', etat, 'Filtre sélectionné:', statusFilter); // Log pour voir les valeurs d'état
-
-        // Vérifie si l'état correspond ou si aucun filtre n'est appliqué
-        const etatMatch = statusFilter === "" || etat === statusFilter;
-
-        // Affiche la ligne si elle correspond au texte et au filtre, sinon la masque
-        row.style.display = (textMatch && etatMatch) ? '' : 'none';
-    });
-}
+});
 </script>
 {% endblock %}

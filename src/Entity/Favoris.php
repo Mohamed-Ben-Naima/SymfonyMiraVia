@@ -24,6 +24,23 @@ class Favoris
     #[ORM\Column(name: "id_entite", nullable: true, options: ["default" => NULL])]
     private ?int $idEntite = NULL;
 
+    #[ORM\Column(name: "date_favori", type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeInterface $dateFavori = null;
+    
+    public function getDateFavori(): ?\DateTimeInterface
+    {
+        return $this->dateFavori;
+    }
+    
+    public function setDateFavori(?\DateTimeInterface $dateFavori): static
+    {
+        $this->dateFavori = $dateFavori;
+    
+        return $this;
+    }
+    
+
+
     public function getIdFavori(): ?int
     {
         return $this->idFavori;

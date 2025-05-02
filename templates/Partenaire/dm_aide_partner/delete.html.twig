@@ -1,0 +1,25 @@
+<div class="modal fade" id="deleteDemandeModal{{ aide.id_demande }}" tabindex="-1" aria-labelledby="deleteDemandeModalLabel{{ aide.id_demande }}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteDemandeModalLabel{{ aide.id_demande }}">Supprimer la Demande</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="{{ path('delete_demande', {'id': aide.id_demande}) }}">
+        <div class="modal-body">
+          <p>Êtes-vous sûr de vouloir supprimer cette demande ?</p>
+          <p><strong>Client:</strong> {{ aide.client_nom }}</p>
+          <p><strong>Type d'aide:</strong> {{ aide.type_aide }}</p>
+          <p><strong>Description:</strong> {{ aide.description }}</p>
+          <p><strong>Montant:</strong> {{ aide.montant_demande }} €</p>
+          <p><strong>Date:</strong> {{ aide.date_demande|date('d M Y H:i') }}</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-annuler" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>Annuler</button>
+          <button type="submit" class="btn btn-cancel">Supprimer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
