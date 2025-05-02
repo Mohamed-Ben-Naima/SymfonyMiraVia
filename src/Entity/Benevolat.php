@@ -30,6 +30,9 @@ class Benevolat
     #[ORM\Column(name: "status", length: 20, nullable: true, options: ["default" => '\'ouvert\''])]
     private ?string $status = '\'ouvert\'';
 
+    #[ORM\Column(name: "lieu", length: 255, nullable: true, options: ["default" => 'NULL'])]
+    private ?string $lieu = 'NULL';
+
     #[ORM\Column(name: "imageName", length: 255, nullable: true, options: ["default" => 'NULL'])]
     private ?string $imagename = 'NULL';
 
@@ -101,6 +104,18 @@ class Benevolat
     public function setStatus(?string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getLieu(): ?string
+    {
+        return $this->lieu;
+    }
+
+    public function setLieu(?string $lieu): static
+    {
+        $this->lieu = $lieu;
 
         return $this;
     }

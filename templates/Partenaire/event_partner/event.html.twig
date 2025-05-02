@@ -35,7 +35,7 @@
                             <div class="event-card d-flex align-items-start">
                                 
                                 <!-- Image -->
-                                <div class="event-image-container me-3">
+                                <div class="event-image-container ">
                                     <img src="{{ asset('uploads/event_images/' ~ event.imageName) }}" class="event-image" alt="{{ event.titre }}" loading="lazy">
                                 </div>
                                 
@@ -127,6 +127,7 @@
         </div>
     </div>
 </div>
+<link href="{{ asset('style-partner/event.css') }}" rel="stylesheet">
 <!-- Inclure le fichier de la fenêtre modale -->
 {% include 'Partenaire/event_partner/add.html.twig' %}
 <script src="{{ asset('js/partner/event.js') }}"></script>

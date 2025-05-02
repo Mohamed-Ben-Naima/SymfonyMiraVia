@@ -9,6 +9,7 @@ parameters:
     autres_documents_directory: '%kernel.project_dir%/public/uploads/autres_documents'
     partners_logos_directory: '%kernel.project_dir%/public/uploads/logos'
     event_images_directory: '%kernel.project_dir%/public/uploads/event_images'
+    benevolat_images_directory: '%kernel.project_dir%/public/uploads/benevolat_images'
 
 services:
     App\Security\Authenticator\PartnerAuthenticator:

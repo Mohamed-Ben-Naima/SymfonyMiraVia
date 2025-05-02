@@ -21,28 +21,12 @@ class BenevolatRepository extends ServiceEntityRepository
         parent::__construct($registry, Benevolat::class);
     }
 
-//    /**
-//     * @return Benevolat[] Returns an array of Benevolat objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Benevolat
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByPartnerId(int $idPartenaire)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.idPartenaire = :idPartenaire')
+            ->setParameter('idPartenaire', $idPartenaire)
+            ->getQuery()
+            ->getResult();
+    }
 }
