@@ -147,9 +147,14 @@ public function updateProfil(Request $request, EntityManagerInterface $em): Resp
         $isUpdated = true;
     }
     if (!empty($telephone)) {
+        if (!preg_match('/^\+?[0-9]{8,15}$/', $telephone)) {
+            $this->addFlash('error', 'Numéro de téléphone utilisateur invalide.');
+            return $this->redirectToRoute('app_profil_partner');
+        }
         $user->setTelephone($telephone);
         $isUpdated = true;
     }
+    
     if (!empty($adresse)) {
         $user->setAdresseUtilisateur($adresse);
         $isUpdated = true;
@@ -173,10 +178,14 @@ public function updateProfil(Request $request, EntityManagerInterface $em): Resp
             $partenaire->setAdresse($adresseEntreprise);
             $isUpdated = true;
         }
-        if (!empty($telEntreprise)) {
-            $partenaire->setTelephone($telEntreprise);
+        if (!empty($telephone)) {
+            if (!preg_match('/^\+?[0-9]{8,15}$/', $telephone)) {
+                $this->addFlash('error', 'Numéro de téléphone utilisateur invalide.');
+                return $this->redirectToRoute('app_profil_partner');
+            }
+            $user->setTelephone($telephone);
             $isUpdated = true;
-        }
+        }        
     }
 
     // Sauvegarde des modifications
