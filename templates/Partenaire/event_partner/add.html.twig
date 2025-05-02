@@ -1,0 +1,72 @@
+<div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEventModalLabel">Ajouter un Événement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ path('add_event', { id_partenaire: id_partenaire }) }}" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Section gauche : Formulaire -->
+                        <div class="col-md-8">
+                            <!-- Ligne 1 : Titre et Description -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="titre" class="form-label">Titre de l'Événement</label>
+                                    <input type="text" class="form-control" id="titre" name="titre" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="1" required></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Ligne 2 : Date de l'Événement et Lieu -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="date_evenement" class="form-label">Date de l'Événement</label>
+                                    <input type="datetime-local" class="form-control" id="date_evenement" name="date_evenement" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lieu" class="form-label">Lieu</label>
+                                    <input type="text" class="form-control" id="lieu" name="lieu" required>
+                                </div>
+                            </div>
+
+                            <!-- Ligne 3 : Image -->
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label for="imageName" class="form-label">Image</label>
+                                    <input type="file" class="form-control" id="imageName" name="imageName" accept="image/*">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section droite : Aperçu de l'Image -->
+                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
+                            <div class="image-preview-container position-relative">
+                                <!-- Icône d'image -->
+                                <i id="imageIcon" class="bi bi-images position-absolute" 
+                                style="transform: translate(-50%, -50%);"></i>
+                                <!-- Image d'aperçu -->
+                                <img id="imagePreview" 
+                                     src="https://via.placeholder.com/300x200?text=Aperçu+Image" 
+                                     alt="Aperçu de l'image"
+                                     class="img-fluid border rounded shadow d-none">
+                            </div>
+                            <p class="text-muted text-center mt-2">Aperçu de l'image</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center ">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Annuler
+                    </button>
+                    <button type="submit" class="btn btn-add">
+                        <i class="bi bi-check"></i>Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

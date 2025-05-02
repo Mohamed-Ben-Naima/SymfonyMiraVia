@@ -1,0 +1,66 @@
+<div class="modal fade" id="editEventModal{{ event.idEvenement }}" tabindex="-1" aria-labelledby="editEventModalLabel{{ event.idEvenement }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEventModalLabel{{ event.idEvenement }}">Modifier l'Événement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ path('edit_event', { id: event.idEvenement }) }}" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Partie gauche : Formulaire -->
+                        <div class="col-md-8">
+                            <!-- Ligne 1 : Titre et Description -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="titre{{ event.idEvenement }}" class="form-label">Titre :</label>
+                                    <input type="text" class="form-control" id="titre{{ event.idEvenement }}" name="titre" value="{{ event.titre }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="description{{ event.idEvenement }}" class="form-label">Description :</label>
+                                    <textarea class="form-control" id="description{{ event.idEvenement }}" name="description" rows="1" required>{{ event.description }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Ligne 2 : Date et Lieu -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="dateEvenement{{ event.idEvenement }}" class="form-label">Date :</label>
+                                    <input type="datetime-local" class="form-control" id="dateEvenement{{ event.idEvenement }}" name="dateEvenement" value="{{ event.dateEvenement|date('Y-m-d\\TH:i') }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lieu{{ event.idEvenement }}" class="form-label">Lieu :</label>
+                                    <input type="text" class="form-control" id="lieu{{ event.idEvenement }}" name="lieu" value="{{ event.lieu }}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Partie droite : Aperçu de l'Image -->
+                        <div class="col-md-4 d-flex align-items-center justify-content-center">
+                            <div class="image-preview-container position-relative">
+                                <!-- Aperçu de l'image -->
+                                <img id="imagePreview{{ event.idEvenement }}" 
+                                     src="{{ asset('uploads/event_images/' ~ event.imageName) }}" 
+                                     alt="Image actuelle de l'événement"
+                                     class="img-fluid border rounded shadow">
+                                
+                                <!-- Icône de modification -->
+                                <label for="imageName{{ event.idEvenement }}" class="holographic-card position-absolute" 
+                                       style="top: 10%; right: 10%; cursor: pointer; width: 30px; height: 30px; border-radius: 50%;">
+                                    <i class="bi bi-pencil-fill" style="color: white; font-size: 15px;"></i>
+                                </label>
+                                <input type="file" id="imageName{{ event.idEvenement }}" name="imageName" class="d-none" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Annuler</button>
+                    <button type="submit" class="btn btn-edit">
+                        <i class="bi bi-check"></i>Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
