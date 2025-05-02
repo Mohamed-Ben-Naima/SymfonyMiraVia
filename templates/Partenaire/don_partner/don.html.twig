@@ -74,8 +74,27 @@
             <!-- Actions -->
             <td>
               <!-- Example actions -->
-              <i class="bi bi-pencil-fill text-primary" style="cursor: pointer; margin-right: 10px;"></i>
-              <i class="bi bi-trash-fill text-danger" style="cursor: pointer;"></i>
+              <!-- Éditer -->
+              <i 
+                class="bi bi-pencil-fill text-primary" 
+                style="cursor: pointer; margin-right: 10px; 
+                {% if don.status == 'Accepté' %}opacity: 0.5; pointer-events: none;{% endif %}" 
+                data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
+                data-bs-target="#editDonModal{{ don.id_don }}"
+                title="{% if don.status == 'Accepté' %}Modification désactivée pour les dons acceptés{% else %}Modifier{% endif %}">
+              </i>
+              <!-- Supprimer -->
+              <i 
+                class="bi bi-trash-fill text-danger" 
+                style="cursor: pointer; {% if don.status == 'Accepté' %}
+                opacity: 0.5; pointer-events: none;{% endif %}" 
+                data-bs-toggle="{% if don.status != 'Accepté' %}modal{% endif %}" 
+                data-bs-target="#deleteDonModal{{ don.id_don }}"
+                title="{% if don.status == 'Accepté' %}
+                Suppression désactivée pour les dons acceptés
+                {% else %}Supprimer
+                {% endif %}">
+              </i>
             </td>
           </tr>
         {% endfor %}
