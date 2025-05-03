@@ -36,7 +36,7 @@ security:
                 default_target_path: /
             logout:
                 path: app_logout
-                target: app_login
+                target: app_login_controller2 # Redirection après déconnexion
             stateless: false
 
     access_control:
