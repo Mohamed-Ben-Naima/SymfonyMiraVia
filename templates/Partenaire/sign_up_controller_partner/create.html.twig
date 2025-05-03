@@ -1,0 +1,491 @@
+{% block stylesheets %}
+<link href="{{ asset('style-partner/bootstrap.min.css') }}" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<style>
+    /* Global Styling */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(to bottom, #87CEEB, #E3FDFD);
+        color: #333;
+        overflow-x: hidden;
+    }
+
+    .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .background .realistic-cloud {
+        position: absolute;
+        background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.7) 60%, rgba(255, 255, 255, 0) 100%);
+        filter: blur(15px);
+        border-radius: 60% 40% 60% 40%;
+        animation: cloud-move 40s linear infinite;
+    }
+
+    .background .trajectory {
+        position: absolute;
+        width: 200%;
+        height: 400px;
+        background: none;
+        border-top: 2px dashed rgba(1, 58, 113, 0.4);
+        border-radius: 50%;
+        animation: trajectory-animation 8s infinite ease-in-out;
+    }
+  /* Conteneur du logo avec positionnement relatif */
+.logo-container {
+    position: relative;
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center;     /* Centre verticalement si nécessaire */
+    width: 100%;
+}
+
+
+/* Style de l'image du logo : ronde, taille fixe et bordure */
+#logoPreview {
+    width: 150px;       /* Largeur de l'image */
+    height: 150px;      /* Hauteur de l'image */
+    object-fit: cover;  /* L'image s'adapte à la taille sans déformation */
+    border-radius: 50%; /* Rend l'image ronde */
+    border: 3px solid #ccc; /* Bordure légère autour de l'image */
+}
+#logoPreview:hover {
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+
+/* Style de l'icône de modification (pinceau) */
+.edit-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.5); /* Fond sombre semi-transparent */
+    padding: 5px;
+    border-radius: 50%; /* Icône ronde */
+    cursor: pointer; /* Pointeur indiquant que c'est cliquable */
+}
+
+/* Icône de pinceau (style de FontAwesome) */
+.edit-icon i {
+    color: white; /* Couleur de l'icône en blanc */
+    font-size: 20px; /* Taille de l'icône */
+}
+.hidden-file-input {
+    display: none;
+}
+
+.file-upload-container {
+    position: relative;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    max-width: 600px;
+    margin: auto;
+}
+
+.custom-file-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.custom-file-list li {
+    background:  #013a71;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+}
+
+.placeholder {
+    font-style: italic;
+    color: #ccc;
+}
+
+.edit-icon .logo {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+.edit-icon:hover {
+    color: #00bcd4;
+}
+
+/* Style du champ de fichier invisible mais cliquable pour le logo */
+input[type="file"].logo {
+    display: none; /* Cacher le champ de fichier */
+}
+
+/* Style du bouton ou du lien personnalisé pour cliquer */
+label[for="logo"] {
+    background-color: #013A71; /* Couleur de fond pour le bouton */
+    color: #fff; /* Texte blanc */
+    padding: 10px 20px; /* Espacement */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Curseur cliquable */
+    display: inline-block; /* Faire en sorte que ça ressemble à un bouton */
+}
+
+label[for="logo"]:hover {
+    background-color: #011d47; /* Couleur de fond au survol */
+}
+
+
+    @keyframes cloud-move {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(120%); }
+    }
+
+    @keyframes trajectory-animation {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(50%); }
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 650px;
+        width: 95%;
+        margin: 2rem auto;
+        background: linear-gradient(to bottom, #ffffff, #f0faff);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .form-container:hover {
+        transform: scale(1.02);
+    }
+
+    .form-image {
+        height: 200px;
+        background-image: url('{{ asset('images-partner/airplane.jpg') }}');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .form-content {
+        padding: 2rem;
+    }
+
+    .form-content h2 {
+        color: #013a71;
+        font-weight: bold;
+        font-size: 1.8rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+   .form-content h4 {
+        color:rgb(49, 52, 54);
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .form-content img.logo {
+        max-width: 120px;
+        margin: 0 auto 20px;
+        display: block;
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        padding-left: 45px;
+        height: 50px;
+        border-radius: 10px;
+        border: 1px solid #ced4da;
+        background: #f9f9f9;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #013a71;
+        box-shadow: 0 0 8px rgba(1, 58, 113, 0.3);
+        background: #ffffff;
+    }
+
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .invalid-feedback .fas {
+        margin-right: 5px;
+    }
+
+   .input-icon {
+    position: absolute;
+    left: 15px;              /* Distance depuis la gauche */
+    top: 12px;               /* Ajustez manuellement pour aligner verticalement */
+    transform: translateY(0); /* Supprimez le décalage si nécessaire */
+    color: #6c757d;          /* Couleur de l'icône */
+    font-size: 1.2rem;       /* Taille de l'icône */
+    pointer-events: none;    /* Empêche l'interaction avec l'icône */
+}
+
+    .password-toggle {
+    position: absolute;
+    right: 15px;             /* Position à droite */
+    top: 50%;                /* Centre verticalement */
+    transform: translateY(-50%); /* Ajuste le centrage */
+    cursor: pointer;         /* Curseur cliquable */
+    color: #6c757d;          /* Couleur de l'icône */
+    font-size: 1.2rem;       /* Taille de l'icône */
+}
+
+    .password-toggle:hover {
+        color: #013a71;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #013a71, #015a91);
+        border: none;
+        color: white;
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 1rem;
+        padding: 12px;
+        transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #012a51, #014a71);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(1, 58, 113, 0.3);
+    }
+
+    .captcha {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .captcha img {
+        display: inline-block;
+        height: 60px;
+        width: 160px;
+        margin-bottom: 0.5rem;
+    }
+
+    .captcha button {
+        display: inline-block;
+        margin-left: 1rem;
+        background-color: #015a91;
+        border: none;
+        padding: 0.25rem 0.5rem;
+        color: white;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+
+    .captcha button:hover {
+        background-color: #012a51;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="background">
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+    <div class="realistic-cloud"></div>
+    <div class="trajectory"></div>
+    <div class="trajectory"></div>
+</div>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="form-container shadow-lg">
+        <div class="form-image"></div>
+        <div class="form-content">
+            <img src="{{ asset('images-partner/logo miravia 1 3.png') }}" alt="Logo" class="logo">
+            <h2>Bienvenue Cher partenaire !</h2>
+            <h4>Veuillez remplir ces informations !</h4> 
+            <form method="post" enctype="multipart/form-data">
+       {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}})}}
+
+<div class="form-group">
+    <div class="logo-container">
+<img id="logoPreview" src="{{ asset('images-partner/user.png') }}" alt="Aperçu du logo">
+        {{ form_widget(form.logo, {
+    'attr': {
+        'class': 'logo',
+        'onchange': 'previewLogo(event)'
+    }
+}) }}
+<label for="{{ form.logo.vars.id }}" class="edit-icon"><i class="fas fa-edit"></i></label>
+    </div>
+    {{ form_errors(form.logo) }}
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-6 form-group">
+        <i class="fas fa-building input-icon"></i>
+        {{ form_widget(form.nomEntreprise, {'attr': {'class': 'form-control', 'placeholder': 'Nom de l\'entreprise'}}) }}
+        <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ form_errors(form.nomEntreprise) }}
+        </div>
+    </div>
+    <div class="col-md-6 form-group">
+        <i class="fas fa-briefcase input-icon"></i>
+        {{ form_widget(form.typeActivite, {'attr': {'class': 'form-control', 'placeholder': 'Type d\'activité'}}) }}
+        <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ form_errors(form.typeActivite) }}
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <i class="fas fa-link input-icon"></i>
+    {{ form_widget(form.siteWeb, {'attr': {'class': 'form-control', 'placeholder': 'Site web'}}) }}
+    <div class="invalid-feedback">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ form_errors(form.siteWeb) }}
+    </div>
+</div>
+
+<div class="form-group">
+    <i class="fas fa-map-marker-alt input-icon"></i>
+    {{ form_widget(form.adresse, {'attr': {'class': 'form-control', 'placeholder': 'Adresse'}}) }}
+    <div class="invalid-feedback">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ form_errors(form.adresse) }}
+    </div>
+</div>
+
+<div class="form-group">
+    <i class="fas fa-phone input-icon"></i>
+    {{ form_widget(form.telephone, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}}) }}
+    <div class="invalid-feedback">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ form_errors(form.telephone) }}
+    </div>
+</div>
+
+<div class="form-group">
+    {{ form_label(form.autres_documents, 'Autres documents') }}
+
+    <div class="file-upload-container">
+        {{ form_widget(form.autres_documents, {
+            'attr': {
+                'class': 'hidden-file-input',
+                'onchange': 'displaySelectedFiles(event, "fileList-autres")'
+            }
+        }) }}
+
+        <label for="{{ form.autres_documents.vars.id }}" class="edit-icon">
+            <i class="fas fa-upload"></i>
+        </label>
+
+       <ul id="fileList-autres" class="custom-file-list">
+    <li class="placeholder">Aucun fichier sélectionné</li>
+     </ul>
+    </div>
+    {{ form_errors(form.autres_documents) }}
+</div>
+<button type="submit" class="btn btn-primary w-100 mt-4">Enregistrer</button>
+
+{{ form_end(form) }}
+</div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+ // Fonction pour prévisualiser l'image sélectionnée
+ function previewLogo(event) {
+        const input = event.target;
+        const preview = document.getElementById('logoPreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+function displaySelectedFiles(event, listId) {
+    const input = event.target;
+    const fileList = document.getElementById(listId);
+
+    // Clear old list
+    fileList.innerHTML = '';
+
+    if (input.files.length === 0) {
+        fileList.innerHTML = '<li class="placeholder">Aucun fichier sélectionné</li>';
+    } else {
+        Array.from(input.files).forEach(file => {
+            const li = document.createElement('li');
+            li.textContent = file.name;
+            fileList.appendChild(li);
+        });
+    }
+}
+
+document.querySelector('form').addEventListener('submit', function(event) {
+    // Récupérer tous les champs de formulaire
+    const form = event.target;
+    let isValid = true;
+    
+    // Validation des champs obligatoires
+    form.querySelectorAll('input[required], select[required], textarea[required]').forEach(function(input) {
+        if (!input.value.trim()) {
+            input.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            input.classList.remove('is-invalid');
+        }
+    });
+
+    // Validation des fichiers
+    const logoInput = document.querySelector('input[name="partenaire[logo]"]');
+    if (logoInput && !logoInput.files.length) {
+        logoInput.classList.add('is-invalid');
+        isValid = false;
+    } else {
+        logoInput.classList.remove('is-invalid');
+    }
+
+    // Si le formulaire n'est pas valide, empêche la soumission
+    if (!isValid) {
+        event.preventDefault();
+        alert('Veuillez remplir tous les champs obligatoires et vérifier les fichiers.');
+    }
+});
+
+
+</script>
+{% endblock %}

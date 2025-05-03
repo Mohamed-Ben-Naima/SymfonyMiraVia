@@ -16,16 +16,28 @@
  <!-- Sidebar -->
   <div class="sidebar">
     <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img mb-3">
-    <a href="{{ path('app_dashboard_partenaire') }}"><i class="bi bi-bar-chart-fill"></i> Tableau de bord</a>
-    <a href="{{ path('demande_aide', { id_partenaire: 1 }) }}"><i class="bi bi-question-circle"></i> Demande d'aide</a>
-    <a href="{{path('app_don_partner')}}"><i class="bi bi-currency-exchange"></i> Dons</a>
-    <a href="{{path('app_event_partner')}}"><i class="bi bi-calendar-check-fill"></i> Evénements</a>
-    <a href="{{path('app_benevolat_partner')}}"><i class="bi bi-valentine"></i> Bénévolat</a>
-    <a href="{{path('app_don_partner')}}"><i class="bi bi-person-badge-fill"></i> Gérer Responsables</a>
-    <a href="{{path('app_settings_partner')}}"><i class="bi bi-gear-fill"></i> Paramètres</a>
-    <a href="{{path('app_don_partner')}}"><i class="bi bi-chat-quote-fill"></i> Messagerie</a>
-    <a href="{{path('app_don_partner')}}"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
+    <a href="{{ path('app_dashboard_partenaire') }}" class="sidebar-link"><i class="bi bi-bar-chart-fill"></i> Tableau de bord</a>
+    <a href="{{ path('demande_aide')}}" class="sidebar-link"><i class="bi bi-question-circle"></i> Demande d'aide</a>
+    <a href="{{ path('app_don_partner') }}" class="sidebar-link"><i class="bi bi-currency-exchange"></i> Dons</a>
+    <a href="{{ path('app_event_partner') }}" class="sidebar-link"><i class="bi bi-calendar-check-fill"></i> Evénements</a>
+    <a href="{{ path('app_benevolat_partner') }}" class="sidebar-link"><i class="bi bi-valentine"></i> Bénévolat</a>
+    <a href="{{ path('app_don_partner') }}" class="sidebar-link"><i class="bi bi-person-badge-fill"></i> Gérer Responsables</a>
+    <a href="{{ path('app_profil_partner') }}" class="sidebar-link"><i class="bi bi-gear-fill"></i> Paramètres</a>
+    <a href="{{ path('app_messagerie_partner') }}" class="sidebar-link"><i class="bi bi-chat-quote-fill"></i> Messagerie</a>
+    <a href="{{ path('app_logout_partner') }}" class="sidebar-link"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
   </div>
-  </div>
-  </body>
-  </html>
+
+  <!-- JavaScript -->
+  <script>
+    // Récupérer tous les liens de la barre latérale
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+    // Ajouter un gestionnaire d'événements à chaque lien
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        console.log(`Lien ouvert : ${link.innerText.trim()}`);
+      });
+    });
+  </script>
+</body>
+</html>

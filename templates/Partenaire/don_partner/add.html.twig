@@ -1,0 +1,36 @@
+<div class="modal fade" id="addDonModal" tabindex="-1" aria-labelledby="addDonModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addDonModalLabel">Ajouter un Don</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="{{ path('add_don') }}">
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="id_client" class="form-label">Nom du Client</label>
+          <select class="form-select" id="id_client" name="id_client" required>
+            <option value="" disabled selected>Choisissez un Client</option>
+            {% for client in utilisateurs %}
+              <option value="{{ client.id_utilisateur }}">{{ client.nom }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="montant" class="form-label">Montant</label>
+          <input type="number" step="0.01" class="form-control" id="montant" name="montant" required>
+        </div>
+        <div class="mb-3">
+          <label for="date_don" class="form-label">Date du Don</label>
+          <input type="datetime-local" class="form-control" id="date_don" name="date_don" required>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+        <i class="bi bi-x-circle me-1"></i>Annuler</button>
+        <button type="submit" class="btn btn-add"><i class="bi bi-check"></i>Ajouter</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="modal fade" id="deleteDonModal{{ don.id_don }}" tabindex="-1" aria-labelledby="deleteDonModalLabel{{ don.id_don }}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteDonModalLabel{{ don.id_don }}">Supprimer le Don</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="{{ path('delete_don', {'id': don.id_don}) }}">
+        <div class="modal-body">
+          <p>Êtes-vous sûr de vouloir supprimer ce don ?</p>
+          <p><strong>Client ID:</strong> {{ don.id_client }}</p>
+          <p><strong>Montant:</strong> {{ don.montant }} €</p>
+          <p><strong>Date:</strong> {{ don.date_don|date('d M Y H:i') }}</p>
+        </div>
+        <div class="modal-footer d-flex justify-content-center ">
+          <button type="button" class="btn btn-annuler" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>Annuler</button>
+          <button type="submit" class="btn btn-cancel">
+          <i class="bi bi-trash"></i>Supprimer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

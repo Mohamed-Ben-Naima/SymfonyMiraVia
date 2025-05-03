@@ -1,0 +1,137 @@
+{% extends 'Partenaire/basePartner.html.twig' %}
+
+{% block title %}Gestion des Bénévolats{% endblock %}
+
+{% block body %}
+<div class="content">
+    <!-- Titre centré -->
+    <div class="text-center mb-4">
+        <h1 style="color: #013a71; font-size: 35px;">Liste des Bénévolats</h1>
+    </div>
+
+    <!-- Barres de recherche -->
+    <div class="filter-bar d-flex justify-content-center gap-4 mb-4">
+        <select id="itemsPerPage" class="form-select" style="max-width: 300px;">
+            <option value="10">10 Par Page</option>
+            <option value="20">20 Par Page</option>
+            <option value="50">50 Par Page</option>
+        </select>
+
+        <select id="sortByDate" class="form-select" style="max-width: 300px;">
+            <option value="recent">Trier Par Date Récente</option>
+            <option value="oldest">Trier Par Date Ancienne</option>
+        </select>
+    </div>
+
+    <!-- Bouton Ajouter et Cards -->
+
+    <div class="d-flex justify-content-between align-items-start">
+        <!-- Cards Section -->
+        <div class="flex-grow-1 me-4">
+            <div class="row g-4">
+                {% for benevolat in benevolats %}
+                    
+                        <div class="col-12">
+                            <div class="event-card d-flex align-items-start">
+                                
+                                <!-- Image -->
+                                <div class="event-image-container me-3" style="margin-top: 10px; margin-left: 10px;">
+                                    <img src="{{ asset('uploads/benevolat_images/' ~ benevolat.imageName) }}" 
+                                    class="event-image" alt="{{ benevolat.titre }}" loading="lazy">
+                                </div>
+                                
+                                <!-- Details Section -->
+
+                                <div class="flex-grow-1 d-flex flex-column">
+                                    <!-- Date -->
+                                    <div class="event-date text-center mb-3">
+                                        <h4 style="color: #013a71;">{{ benevolat.dateBenevolat|date('d') }}</h4>
+                                        <span style="color: #198754;">{{ benevolat.dateBenevolat|date('M Y') }}</span>
+                                        <!-- Location -->
+                                        <p class="event-location mt-2" style="font-size: 14px; 
+                                        color: #013a71; font-style: italic;">
+                                            <i class="bi bi-geo-alt-fill"></i> {{ benevolat.lieu }}
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Bénévolat Details -->
+                                    <div>
+                                        <!-- Title and Dropdown -->
+                                        <div class="d-flex justify-content-between">
+                                            <!-- Bénévolat Title -->
+                                            <h5 class="event-title mb-1" style="color: #013a71; font-size: 18px; font-weight: bold;">
+                                                <i class="bi bi-calendar2-check"></i> {{ benevolat.titre }}
+                                            </h5>
+                                            <!-- Dropdown Button (3 dots) -->
+                                            <div class="dropdown">
+                                                <button class="btn btn-link p-0" type="button" data-bs-toggle="dropdown" 
+                                                aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                <li>
+                                                    <!-- Modifier : Utilisation de data-bs-toggle et data-bs-target -->
+                                                    <button class="dropdown-item text-warning" data-bs-toggle="modal" 
+                                                    data-bs-target="#editBenevolatModal{{ benevolat.idBenevolat }}">
+                                                        <i class="bi bi-pencil-fill"></i> Modifier
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                <!-- Supprimer : Utilisation de data-bs-toggle et data-bs-target -->
+                                                <button class="dropdown-item text-danger" data-bs-toggle="modal" 
+                                                        data-bs-target="#deleteBenevolatModal"
+                                                        data-benevolat-id="{{ benevolat.idBenevolat }}"
+                                                        data-benevolat-title="{{ benevolat.titre }}"
+                                                        data-benevolat-date="{{ benevolat.dateBenevolat|date('d M Y') }}"
+                                                        data-benevolat-location="{{ benevolat.lieu }}">
+                                                    <i class="bi bi-trash-fill"></i> Supprimer
+                                                </button>
+                                                 </li>
+                                            </ul>
+                                            </div>
+                                        </div>
+                                        <!-- Bénévolat Description -->
+                                        <p class="event-summary text-muted" style="font-size: 14px;">
+                                            {{ benevolat.description|length > 120 ? benevolat.description|slice(0, 120) ~ '...' : benevolat.description }}
+                                        </p>
+
+                                        <!-- Status Button -->
+                                        <div class="mt-auto d-flex justify-content-end" style="margin-bottom: 10px; margin-right: 10px;">
+                                            <button class="btn btn-custom-attend btn-sm">
+                                                <i class="bi bi-clock" style="margin-right: 5px;"></i>{{ benevolat.status }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                <!-- Inclure la modale Modifier -->
+                {% include 'Partenaire/benevolat_partner/edit.html.twig' with { 'benevolat': benevolat } %}
+
+                <!-- Inclure la modale Supprimer -->
+                {% include 'Partenaire/benevolat_partner/delete.html.twig' %}
+                   
+                {% else %}
+                    <div class="empty-state text-center">
+                        <i class="fas fa-calendar-times fa-3x text-muted"></i>
+                        <h3 class="text-muted mt-3">Aucun bénévolat trouvé</h3>
+                        <p class="text-muted">Ajoutez votre première activité de bénévolat pour commencer</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Bouton Ajouter -->
+        <div>
+            <button class="add-event-btn" data-bs-toggle="modal" data-bs-target="#addBenevolatModal">Ajouter</button>
+        </div>
+    </div>
+</div>
+
+<link href="{{ asset('style-partner/event.css') }}" rel="stylesheet">
+<!-- Inclure le fichier de la fenêtre modale -->
+{% include 'Partenaire/benevolat_partner/add.html.twig' %}
+
+<script src="{{ asset('js/partner/benevolat.js') }}"></script>
+{% endblock %}

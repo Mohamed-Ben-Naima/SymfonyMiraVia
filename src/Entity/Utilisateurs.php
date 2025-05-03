@@ -57,7 +57,7 @@ class Utilisateurs implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->idUtilisateur;
     }
 
-    public function setIdUtilisateur(?int $idUtilisateur): static
+    public function setIdUtilisateur(?int $idUtilisateur): self
     {
         $this->idUtilisateur = $idUtilisateur;
 

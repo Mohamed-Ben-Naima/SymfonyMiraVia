@@ -77,7 +77,7 @@ body.dark-mode .search-button:hover {
     font-size: 24px;
     margin-left: 20px;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 body.dark-mode .notification-icon {
@@ -86,6 +86,7 @@ body.dark-mode .notification-icon {
 
 .notification-icon:hover {
     color: #0056b3;
+    transform: scale(1.1);
 }
 
 body.dark-mode .notification-icon:hover {
@@ -101,6 +102,7 @@ body.dark-mode .notification-icon:hover {
     font-size: 12px;
     border-radius: 50%;
     padding: 2px 6px;
+    transition: background-color 0.3s ease;
 }
 
 body.dark-mode .notification-icon .badge {
@@ -112,11 +114,12 @@ body.dark-mode .notification-icon .badge {
     top: 70px;
     right: 20px;
     width: 350px;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(204, 204, 204, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    padding: 15px;
     display: none;
     animation: slide-down 0.3s ease-in-out;
     z-index: 9999;
@@ -124,51 +127,21 @@ body.dark-mode .notification-icon .badge {
 }
 
 body.dark-mode .notification-box {
-    background-color: #2d3748;
-    border-color: #4a5568;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background: rgba(45, 55, 72, 0.95);
+    border-color: rgba(113, 128, 150, 0.3);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
-.notification-box .notification-item {
-    padding: 10px;
-    border-bottom: 1px solid #f1f1f1;
+.notification-box .notification-header {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-body.dark-mode .notification-box .notification-item {
-    border-bottom: 1px solid #4a5568;
-}
-
-.notification-box .notification-item:last-child {
-    border-bottom: none;
-}
-
-.notification-box .notification-item i {
-    color: #013A71;
-    font-size: 18px;
-    margin-right: 8px;
-    transition: color 0.3s ease;
-}
-
-body.dark-mode .notification-box .notification-item i {
-    color: #4a90e2;
-}
-
-.notification-box .notification-item:hover {
-    background-color: #f9f9f9;
-}
-
-body.dark-mode .notification-box .notification-item:hover {
-    background-color: #4a5568;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
 }
 
 .notification-box .notification-title {
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 16px;
     color: #013A71;
     transition: color 0.3s ease;
 }
@@ -177,10 +150,75 @@ body.dark-mode .notification-box .notification-title {
     color: #e2e8f0;
 }
 
+.notification-box .close-button {
+    background: none;
+    border: none;
+    color: #013A71;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+body.dark-mode .notification-box .close-button {
+    color: #e2e8f0;
+}
+
+.notification-box .close-button:hover {
+    color: #0056b3;
+    transform: scale(1.2);
+}
+
+body.dark-mode .notification-box .close-button:hover {
+    color: #4a90e2;
+}
+
+.notification-box .notification-item {
+    padding: 12px;
+    border-bottom: 1px solid rgba(241, 241, 241, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+body.dark-mode .notification-box .notification-item {
+    border-bottom: 1px solid rgba(74, 85, 104, 0.5);
+}
+
+.notification-box .notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-box .notification-item:hover {
+    background-color: rgba(249, 249, 249, 0.7);
+    transform: translateY(-2px);
+}
+
+body.dark-mode .notification-box .notification-item:hover {
+    background-color: rgba(74, 85, 104, 0.7);
+}
+
+.notification-box .notification-item i {
+    color: #013A71;
+    font-size: 20px;
+    margin-right: 10px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+body.dark-mode .notification-box .notification-item i {
+    color: #4a90e2;
+}
+
+.notification-box .notification-item i:hover {
+    transform: scale(1.2);
+}
+
 .notification-details {
     font-size: 12px;
     color: #666;
-    margin-top: 2px;
+    margin-top: 4px;
     transition: color 0.3s ease;
 }
 
@@ -200,7 +238,7 @@ body.dark-mode .notification-details strong {
 .notification-time {
     font-size: 12px;
     color: #28a745;
-    margin-top: 2px;
+    margin-top: 4px;
     transition: color 0.3s ease;
 }
 
@@ -314,7 +352,7 @@ body.dark-mode .toggle-dark-mode:hover {
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="me-2 logo-img">
         </a>
         <div class="navbar-text ms-auto me-auto">
-            <h4 class="mb-0" id="navbar-title" data-translate="default_title">Titre par défaut</h4>
+            <h4 class="mb-0">{{ pageTitle|default('Titre par défaut') }}</h4>
         </div>
 
         <!-- Burger Menu for Mobile -->
@@ -339,7 +377,12 @@ body.dark-mode .toggle-dark-mode:hover {
 
                 <!-- Notification Box -->
                 <div class="notification-box" id="notificationBox">
-                    <div class="notification-title" data-translate="notifications">Notifications</div>
+                    <div class="notification-header">
+                        <div class="notification-title" data-translate="notifications">Notifications</div>
+                        <button class="close-button" onclick="closeNotificationBox()">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
                     <div class="notification-item">
                         <div>
                             <i class="bi bi-info-circle"></i>
@@ -392,32 +435,39 @@ function toggleDarkMode() {
     localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 }
 
+function toggleNotificationBox() {
+    const notificationBox = document.getElementById('notificationBox');
+    if (notificationBox.style.display === 'none' || !notificationBox.style.display) {
+        notificationBox.style.display = 'block';
+    } else {
+        notificationBox.style.display = 'none';
+    }
+}
+
+function closeNotificationBox() {
+    const notificationBox = document.getElementById('notificationBox');
+    notificationBox.style.display = 'none';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Apply dark mode if previously selected
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
     }
 
-    // Expose toggleNotificationBox globally
-    window.toggleNotificationBox = function() {
-        const notificationBox = document.getElementById('notificationBox');
-        if (notificationBox.style.display === 'none' || !notificationBox.style.display) {
-            notificationBox.style.display = 'block';
-        } else {
-            notificationBox.style.display = 'none';
-        }
-    };
+    // Expose functions globally
+    window.toggleNotificationBox = toggleNotificationBox;
+    window.closeNotificationBox = closeNotificationBox;
+    window.toggleDarkMode = toggleDarkMode;
 
     // Hide notification box when clicking outside
     document.addEventListener('click', function(event) {
         const notificationBox = document.getElementById('notificationBox');
         const notificationIcon = document.querySelector('.notification-icon');
-        if (!notificationBox.contains(event.target) && !notificationIcon.contains(event.target)) {
+        const closeButton = document.querySelector('.notification-box .close-button');
+        if (!notificationBox.contains(event.target) && !notificationIcon.contains(event.target) && !closeButton.contains(event.target)) {
             notificationBox.style.display = 'none';
         }
     });
-
-    // Expose toggleDarkMode globally
-    window.toggleDarkMode = toggleDarkMode;
 });
 </script>

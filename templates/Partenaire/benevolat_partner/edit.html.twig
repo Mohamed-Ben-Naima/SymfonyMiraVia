@@ -1,0 +1,67 @@
+<div class="modal fade" id="editBenevolatModal{{ benevolat.idBenevolat }}" tabindex="-1" aria-labelledby="editBenevolatModalLabel{{ benevolat.idBenevolat }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBenevolatModalLabel{{ benevolat.idBenevolat }}">Modifier le Bénévolat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ path('edit_benevolat', { id: benevolat.idBenevolat }) }}" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Partie gauche : Formulaire -->
+                        <div class="col-md-8">
+                            <!-- Ligne 1 : Titre et Description -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="titre{{ benevolat.idBenevolat }}" class="form-label">Titre :</label>
+                                    <input type="text" class="form-control" id="titre{{ benevolat.idBenevolat }}" name="titre" value="{{ benevolat.titre }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="description{{ benevolat.idBenevolat }}" class="form-label">Description :</label>
+                                    <textarea class="form-control" id="description{{ benevolat.idBenevolat }}" name="description" rows="1" required>{{ benevolat.description }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Ligne 2 : Date et Lieu -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="dateBenevolat{{ benevolat.idBenevolat }}" class="form-label">Date :</label>
+                                    <input type="datetime-local" class="form-control" id="dateBenevolat{{ benevolat.idBenevolat }}" name="dateBenevolat" value="{{ benevolat.dateBenevolat|date('Y-m-d\\TH:i') }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lieu{{ benevolat.idBenevolat }}" class="form-label">Lieu :</label>
+                                    <input type="text" class="form-control" id="lieu{{ benevolat.idBenevolat }}" name="lieu" value="{{ benevolat.lieu }}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Partie droite : Aperçu de l'Image -->
+                        <div class="col-md-4 d-flex align-items-center justify-content-center">
+                            <div class="image-preview-container position-relative">
+                                <!-- Aperçu de l'image -->
+                                <img id="imagePreview{{ benevolat.idBenevolat }}" 
+                                     src="{{ asset('uploads/benevolat_images/' ~ benevolat.imageName) }}" 
+                                     alt="Image actuelle du bénévolat"
+                                     class="img-fluid border rounded shadow">
+                                
+                                <!-- Icône de modification -->
+                                <label for="imageName{{ benevolat.idBenevolat }}" class="holographic-card position-absolute" 
+                                       style="top: 10%; right: 10%; cursor: pointer; width: 30px; height: 30px; border-radius: 50%;">
+                                    <i class="bi bi-pencil-fill" style="color: white; font-size: 15px;"></i>
+                                </label>
+                                <input type="file" id="imageName{{ benevolat.idBenevolat }}" name="imageName" class="d-none" accept="image/*" 
+                                       onchange="uploadImageAsync(this, {{ benevolat.idBenevolat }})">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Annuler</button>
+                    <button type="submit" class="btn btn-edit">
+                        <i class="bi bi-check"></i>Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

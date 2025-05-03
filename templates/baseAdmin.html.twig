@@ -6,16 +6,14 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     
     <!-- CSS / JS Imports -->
-    <link rel="stylesheet" href="SymfonyMiraVia-main/assets/styles/AdminStyle/sidebar-style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
     {% block stylesheets %}{% endblock %}
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
     {% block javascripts %}
         {% block importmap %}
             {{ importmap('app') }}
@@ -163,12 +161,68 @@
                 padding-left: 1rem;
             }
         }
+
+        /* Welcome Notification */
+        .welcome-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        body.dark-mode .welcome-notification {
+            background-color: #2b6cb0;
+        }
+
+        /* Sliding Dashboard Message */
+        .dashboard-welcome {
+            position: fixed;
+            top: 80px;
+            right: -300px; /* Start off-screen */
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: right 0.5s ease-in-out;
+        }
+
+        .dashboard-welcome.show {
+            right: 20px; /* Slide in */
+        }
+
+        body.dark-mode .dashboard-welcome {
+            background-color: #218838;
+        }
+
+        .dashboard-welcome i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 
 <body>
     <!-- Navbar -->
     {% include 'partialAdmin/navbarAdmin.html.twig' %}
+
+    <!-- Welcome Notification -->
+    <div class="welcome-notification" id="welcomeNotification"></div>
+
+    <!-- Dashboard Welcome Message -->
+    <div class="dashboard-welcome" id="dashboardWelcome">
+        <i class="fas fa-user"></i>
+        <span>Bonjour Yosra</span>
+    </div>
 
     <div class="container-fluid">
         <div class="row">
@@ -294,7 +348,6 @@
                 sent_by: 'Sent by',
                 default_title: 'Default Title'
             }
-            
         };
 
         // Apply language settings from localStorage
@@ -307,7 +360,6 @@
                     element.textContent = translations[language][key];
                 }
             });
-            // Update navbar title for active sidebar link or default
             const activeLink = document.querySelector('.sidebar .nav-link.active');
             const navbarTitle = document.querySelector('#navbar-title');
             if (navbarTitle) {
@@ -330,16 +382,104 @@
             console.log('Dark mode applied:', isDarkMode);
         }
 
+        // Show welcome notification
+        function showWelcomeNotification(message) {
+            const notification = document.getElementById('welcomeNotification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        // Play welcome audio using Web Speech API
+        function playWelcomeAudio(userName) {
+            if (!('speechSynthesis' in window)) {
+                console.warn('SpeechSynthesis not supported in this browser.');
+                showWelcomeNotification(`Bienvenue ${userName} !`);
+                return;
+            }
+
+            const message = `Bienvenue ${userName}`;
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.lang = localStorage.getItem('language') === 'en' ? 'en-US' : 'fr-FR';
+            utterance.volume = 1.0;
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+
+            const setVoiceAndSpeak = () => {
+                const voices = window.speechSynthesis.getVoices();
+                console.log('Available voices:', voices.map(v => ({ name: v.name, lang: v.lang })));
+                const voice = voices.find(v => v.lang.includes(utterance.lang.split('-')[0])) || voices[0];
+                if (voice) {
+                    utterance.voice = voice;
+                    try {
+                        window.speechSynthesis.speak(utterance);
+                        console.log('Welcome audio played:', message, 'with voice:', voice.name);
+                        // Mark audio as played in sessionStorage
+                        sessionStorage.setItem('audioPlayed', 'true');
+                    } catch (err) {
+                        console.error('Speech synthesis error:', err);
+                        showWelcomeNotification(`Bienvenue ${userName} !`);
+                    }
+                } else {
+                    console.warn('No voice found for language:', utterance.lang);
+                    showWelcomeNotification(`Bienvenue ${userName} !`);
+                }
+            };
+
+            if (window.speechSynthesis.getVoices().length > 0) {
+                setVoiceAndSpeak();
+            } else {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    setVoiceAndSpeak();
+                    window.speechSynthesis.onvoiceschanged = null;
+                };
+            }
+        }
+
+        // Show sliding dashboard welcome message
+        function showDashboardWelcome() {
+            const dashboardWelcome = document.getElementById('dashboardWelcome');
+            dashboardWelcome.classList.add('show');
+            setTimeout(() => {
+                dashboardWelcome.classList.remove('show');
+            }, 5000); // Hide after 5 seconds
+        }
+
         // Initialize settings on page load
         document.addEventListener('DOMContentLoaded', () => {
             applyDarkMode();
             applyLanguage();
+
+            // Get user name (hardcoded since no session)
+            const userName = 'Yosra '; // Replace with '{{ app.user.firstname|default('Yosra Besbes')|escape('js') }}' when session is available
+            console.log('User name:', userName);
+
+            // Check if we're on the dashboard page (using URL or active link)
+            const isDashboard = document.querySelector('.sidebar .nav-link.active[data-translate-key="dashboard"]') || window.location.pathname.includes('dashboard');
+
+            if (isDashboard) {
+                // Show sliding welcome message
+                setTimeout(() => {
+                    showDashboardWelcome();
+                }, 10);
+
+                // Play welcome audio only if not played in this session
+                const audioPlayed = sessionStorage.getItem('audioPlayed');
+                if (!audioPlayed) {
+                    setTimeout(() => {
+                        playWelcomeAudio(userName);
+                    }, 10);
+                }
+            }
+
             // Listen for language change events
             document.addEventListener('languageChange', () => {
                 applyLanguage();
             });
         });
     </script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -14,6 +14,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class PartnerAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -63,18 +64,28 @@ public function authenticate(Request $request): Passport
         throw new AuthenticationException('Email ou mot de passe manquant.');
     }
 
-    // Créer un Passport pour l'authentification
     return new Passport(
         new UserBadge($email, function ($userIdentifier) {
             $user = $this->userProvider->loadUserByIdentifier($userIdentifier);
+    
             if (!$user) {
                 throw new UserNotFoundException('Utilisateur introuvable.');
             }
-
+    
+            // Vérifier que l'utilisateur est validé
+            if (method_exists($user, 'getStatutVerification') && strtolower($user->getStatutVerification()) === 'en attente') {
+                throw new AuthenticationException('Votre compte est en attente de vérification. Veuillez patienter.');
+            }
+            // Vérifier que l'utilisateur est validé
+            if (method_exists($user, 'getStatutVerification') && strtolower($user->getStatutVerification()) === 'inactif') {
+                throw new AuthenticationException('Votre compte est fermé. Veuillez nous contacter .');
+            }
+            
             return $user;
         }),
         new PasswordCredentials($password)
     );
+    
 }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response
@@ -110,4 +121,4 @@ public function authenticate(Request $request): Passport
     {
         return $this->urlGenerator->generate('app_login_controller_partner');
     }
-} 
+}

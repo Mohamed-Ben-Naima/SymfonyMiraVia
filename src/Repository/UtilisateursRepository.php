@@ -21,6 +21,16 @@ class UtilisateursRepository extends ServiceEntityRepository
         parent::__construct($registry, Utilisateurs::class);
     }
 
+    public function findAllAdmins(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.typeUtilisateur = :type')
+            ->setParameter('type', 'admin')
+            ->getQuery()
+            ->getResult();
+    }
+    
+
     public function findAllUsers(): array
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -43,7 +53,7 @@ public function findAllClients(): array
     $sql = '
         SELECT u.* 
         FROM utilisateurs u
-        JOIN clients c ON u.id = c.id_utilisateur
+        JOIN clients c ON u.id_utilisateur = id_client ;
     ';
     
     $stmt = $conn->prepare($sql);

@@ -12,10 +12,179 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
  <link href="{{ asset('style-partner/dashboard.css') }}" rel="stylesheet">
 </head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+  /* Conteneur du chatbot */
+  .chat-container {
+      width: 100%;
+      max-width: 100%;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 500px;
+      transition: box-shadow 0.3s ease;
+  }
+
+  .chat-container:hover {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .messages {
+      height: 100%;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      flex-grow: 1;
+      font-family: 'Arial', sans-serif;
+      font-size: 14px;
+  }
+
+  .message {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 10px;
+      max-width: 80%;
+      word-wrap: break-word;
+      font-size: 14px;
+      line-height: 1.5;
+      transition: transform 0.2s ease;
+  }
+
+  .message.user {
+      background-color: #d4f7d2;
+      align-self: flex-end;
+      border-radius: 20px 20px 0 20px;
+      animation: userMessageAnimation 0.3s ease-in-out;
+  }
+
+  .message.bot {
+      background-color: #e0f7fa;
+      align-self: flex-start;
+      border-radius: 20px 20px 20px 0;
+      animation: botMessageAnimation 0.3s ease-in-out;
+  }
+
+  .message p {
+      margin: 0;
+      font-size: 14px;
+  }
+
+  /* Animation des messages */
+  @keyframes userMessageAnimation {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes botMessageAnimation {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Formulaire de saisie */
+  #chat-form {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+  }
+
+  #message-input {
+      width: 85%;
+      padding: 12px 18px;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.3s ease;
+      background-color: #fafafa;
+  }
+
+  #message-input:focus {
+      border-color: #3498db;
+      background-color: #fff;
+  }
+
+  button[type="submit"] {
+      padding: 12px 18px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+  }
+
+  button[type="submit"]:hover {
+      background-color: #2980b9;
+  }
+
+  .typing-indicator {
+      display: none;
+      font-style: italic;
+      color: #aaa;
+      font-size: 14px;
+      margin-top: 10px;
+  }
+
+  /* Bouton flottant */
+  .chatbot-link {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1050;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background-color: #3498db;
+      padding: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+  }
+
+  .chatbot-link:hover {
+      background-color: #2980b9;
+  }
+
+  .chatbot-image {
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      border-radius: 50%;
+      object-fit: cover;
+  }
+
+  .chatbot-image:hover {
+      transform: scale(1.1);
+  }
+</style>
 <body>
  <!-- Inclure la barre latérale -->
 {% include 'Partenaire/basePartner.html.twig' %}
-
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <script>
+            Swal.fire({
+                icon: '{{ label == "success" ? "success" : "error" }}',
+                title: '{{ message|e("js") }}',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        </script>
+    {% endfor %}
+{% endfor %}
   <div class="content">
     <div class="dashboard-header">
       <h3 style="color: #013a71;">Statistiques</h3>
@@ -215,5 +384,71 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{{ asset('js/partner/dashboard.js') }}"></script>
+<!-- Bouton flottant -->
+<a href="#" data-bs-toggle="modal" data-bs-target="#chatbotModal" class="chatbot-link">
+    <img src="{{ asset('images-partner/chatbot.png') }}" alt="Chatbot" class="chatbot-image">
+</a>
+<!-- Modal Chatbot -->
+<div class="modal fade" id="chatbotModal" tabindex="-1" aria-labelledby="chatbotModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #013a71; color: white;">
+        <h5 class="modal-title" id="chatbotModalLabel">Chatbot</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+        <div class="chat-container">
+          <div class="messages" id="messages"></div>
+          <div class="typing-indicator" id="typing-indicator">Chatbot is typing...</div>
+          <form id="chat-form" style="display: flex; gap: 10px;">
+              <input type="text" id="message-input" placeholder="Tapez votre message..." required 
+                     style="flex-grow: 1; padding: 10px; border-radius: 20px; border: 1px solid #ddd; font-size: 14px;">
+              <button type="submit" 
+                      style="background-color: #3498db; color: white; border: none; border-radius: 20px; padding: 10px 15px; cursor: pointer;">
+                      Envoyer
+              </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $('#chat-form').on('submit', function (e) {
+      e.preventDefault();
+
+      const userMessage = $('#message-input').val();
+      if (userMessage.trim()) {
+          $('#messages').append('<div class="message user"><p>' + userMessage + '</p></div>');
+          $('#message-input').val('');
+
+          $('#typing-indicator').show();
+
+          $.ajax({
+              url: '/chatbot/api',
+              type: 'POST',
+              data: { message: userMessage },
+              success: function (data) {
+                  $('#typing-indicator').hide();
+                  if (data.response) {
+                      $('#messages').append('<div class="message bot"><p>' + data.response + '</p></div>');
+                  } else {
+                      $('#messages').append('<div class="message bot"><p>Erreur du chatbot, veuillez réessayer.</p></div>');
+                  }
+                  $('#messages').scrollTop($('#messages')[0].scrollHeight);
+              },
+              error: function () {
+                  $('#typing-indicator').hide();
+                  $('#messages').append('<div class="message bot"><p>Erreur du chatbot, veuillez réessayer plus tard.</p></div>');
+                  $('#messages').scrollTop($('#messages')[0].scrollHeight);
+              }
+          });
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

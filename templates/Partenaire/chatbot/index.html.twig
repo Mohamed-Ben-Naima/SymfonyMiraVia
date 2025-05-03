@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            flex-grow: 1;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .message.user {
+            background-color: #e1f7d5;
+            align-self: flex-end;
+            border-radius: 15px 15px 0 15px;
+        }
+        .message.bot {
+            background-color: #d0f0fc;
+            align-self: flex-start;
+            border-radius: 15px 15px 15px 0;
+        }
+        .message p {
+            margin: 0;
+        }
+        #chat-form {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        #message-input {
+            width: 85%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+        #message-input:focus {
+            border-color: #3498db;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .typing-indicator {
+            display: none;
+            font-style: italic;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="messages" id="messages"></div>
+        <div class="typing-indicator" id="typing-indicator">Chatbot is typing...</div>
+        <form id="chat-form">
+            <input type="text" id="message-input" placeholder="Tapez votre message..." required>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#chat-form').on('submit', function (e) {
+                e.preventDefault();
+
+                const userMessage = $('#message-input').val();
+                if (userMessage.trim()) {
+                    $('#messages').append('<div class="message user"><p>' + userMessage + '</p></div>');
+                    $('#message-input').val('');
+
+                    // Afficher l'indicateur de saisie du chatbot
+                    $('#typing-indicator').show();
+
+                    $.ajax({
+                        url: '/chatbot/api',
+                        type: 'POST',
+                        data: { message: userMessage },
+                        success: function (data) {
+                            $('#typing-indicator').hide();
+                            if (data.response) {
+                                $('#messages').append('<div class="message bot"><p>' + data.response + '</p></div>');
+                            } else {
+                                $('#messages').append('<div class="message bot"><p>Erreur du chatbot, veuillez réessayer.</p></div>');
+                            }
+                            $('#messages').scrollTop($('#messages')[0].scrollHeight); // Scroll vers le bas
+                        },
+                        error: function () {
+                            $('#typing-indicator').hide();
+                            $('#messages').append('<div class="message bot"><p>Erreur du chatbot, veuillez réessayer plus tard.</p></div>');
+                            $('#messages').scrollTop($('#messages')[0].scrollHeight); // Scroll vers le bas
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

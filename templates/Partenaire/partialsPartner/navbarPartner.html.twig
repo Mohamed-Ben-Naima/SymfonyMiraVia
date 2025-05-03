@@ -1,18 +1,369 @@
+<style>
+.notification-items {
+    max-height: 300px; /* ou une autre valeur selon ton design */
+    overflow-y: auto;
+}
+
+.notification-items::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notification-items::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.notification-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    border-top: 1px solid #ddd;
+    padding-top: 0.75rem;
+}
+.notification-item.danger i {
+    color: #dc3545;
+}
+.notification-actions button {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.btn-mark-read {
+    background-color: #0d6efd;
+    color: white;
+}
+.notification-item.read {
+    opacity: 0.6;
+}
+
+
+.btn-mark-read:hover {
+    background-color: #0b5ed7;
+}
+
+.btn-clear-all {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-clear-all:hover {
+    background-color: #bb2d3b;
+}
+
+.notification-popup {
+    position: absolute;
+    top: 60px;
+    right: 60px;
+    width: 340px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    z-index: 999;
+    display: none;
+}
+
+.notification-popup.active {
+    display: block;
+}
+
+.notification-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: #013A71;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+.notification-item {
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s;
+}
+
+.notification-item:hover {
+    background-color: #f1f1f1;
+}
+
+.notification-icon-text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.notification-icon-text i {
+    font-size: 1.2rem;
+}
+
+.notification-meta {
+    font-size: 0.8rem;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-item.info i {
+    color: #0d6efd;
+}
+
+.notification-item.success i {
+    color: #198754;
+}
+
+.notification-item.warning i {
+    color: #ffc107;
+}
+
+/* Rendre responsive si besoin */
+@media (max-width: 576px) {
+    .notification-popup {
+        width: 90%;
+        right: 5%;
+    }
+}
+</style>
+
 <!-- Floating Header -->
-  <div class="floating-header">
-<!-- Search Card -->
-  <div class="search-card">
-    <input type="text" class="form-control" placeholder="Rechercher..." id="mainSearchBar">
-    <!-- Icons for notifications and profile -->
-    <div class="search-icons">
-    <i class="bi bi-grid-fill dashboard-icon"></i>
-      <!-- Notification Icon -->
-      <i class="bi bi-bell-fill notification-icon"></i>
-      <!-- Profile Icon -->
-      <div class="profile-wrapper">
-        <img src="https://via.placeholder.com/40" alt="Profile" class="profile-icon">
-        <span class="status-indicator"></span>
-      </div>
-    </div>
-  </div>
+<!-- Floating Header -->
+<div class="floating-header">
+    <!-- Search Card -->
+    <div class="search-card">
+        <input type="text" class="form-control" placeholder="Rechercher..." id="mainSearchBar">
+        <!-- Icons for notifications and profile -->
+        <div class="search-icons">
+            <i class="bi bi-grid-fill dashboard-icon"></i>
+            <!-- Notification Icon -->
+            <div class="notification-wrapper">
+                <i class="bi bi-bell-fill notification-icon" id="toggleNotifications"></i>
+                <span class="notification-badge" id="notificationCount"></span>
+            </div>
+
+            <!-- Notification Popup -->
+            <div class="notification-popup" id="notificationPopup">
+                <div class="notification-title" id="notificationTitle">Notifications</div>
+
+                <!-- Section dynamique des notifications -->
+                <div class="notification-items" id="notificationItems"></div>
+
+                <div class="notification-actions">
+                    <button class="btn-mark-read" onclick="markAllAsRead()">Marquer tout comme lu</button>
+                    <button class="btn-clear-all" onclick="clearAllNotifications()">Tout supprimer</button>
+                </div>
+            </div>
+        </div>
+        <!-- Profile Icon -->
+<div class="profile-wrapper">
+  <img src="{{ asset('/images-partner/user.png') }}" alt="Profile" class="profile-icon" onerror="this.src='/images-partner/user.png'">
+
+    <span class="status-indicator"></span>
 </div>
+
+
+    </div>
+</div>
+<script>
+    // Fonction pour déterminer l'icône selon le type de notification
+    function getIcon(type) {
+    switch (type) {
+        case 'info': return 'bi-info-circle';
+        case 'success': return 'bi-check-circle';
+        case 'warning': return 'bi-exclamation-circle';
+        case 'danger': return 'bi-x-circle'; // ← ajouté
+        default: return 'bi-bell';
+    }
+}
+fetch('/api/user/avatar')
+    .then(response => response.json())
+    .then(data => {
+        if (data.avatarUrl && data.avatarUrl.trim() !== "") {
+            document.querySelector('.profile-icon').src = data.avatarUrl;
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de la récupération de l\'avatar:', error);
+    });
+
+    // Fonction pour formater l'heure de la notification
+    function formatTime(datetimeStr) {
+        const date = new Date(datetimeStr);
+        return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+    }
+
+    // Fonction pour supprimer une notification spécifique
+    function deleteNotification(id) {
+        fetch(`/api/notifications/delete/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const notificationItem = document.getElementById(`notification-${id}`);
+                if (notificationItem) {
+                    notificationItem.remove();  // Retirer la notification du DOM
+                    updateNotificationCount();   // Met à jour le compteur
+                }
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la suppression de la notification:', error);
+        });
+    }
+
+    // Fonction pour mettre à jour le compteur de notifications
+   function updateNotificationCount() {
+    const notificationCount = document.getElementById("notificationCount");
+    const items = document.querySelectorAll(".notification-item");
+
+    const count = items.length;
+    notificationCount.textContent = count > 0 ? count : "";
+    notificationCount.style.display = count > 0 ? "inline-block" : "none";
+
+    // Optionnel : mettre à jour dynamiquement le titre
+    const notificationTitle = document.getElementById('notificationTitle');
+    notificationTitle.textContent = count > 0 ? `${count} Notifications` : "Aucune notification";
+}
+
+
+    // Fonction pour marquer toutes les notifications comme lues
+    function markAllAsRead() {
+    fetch('/api/notifications/mark-read', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Marquer toutes les notifications visuellement comme lues
+            const items = document.querySelectorAll(".notification-item");
+            items.forEach(item => {
+                item.classList.add("read");
+            });
+            updateNotificationCount();
+        } else {
+            alert(data.error || "Une erreur s'est produite.");
+        }
+    })
+    .catch(error => {
+        console.error("Erreur lors du marquage des notifications comme lues:", error);
+    });
+}
+
+    // Fonction pour supprimer toutes les notifications
+    function clearAllNotifications() {
+        fetch('/api/notifications/clear', {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.success);
+                // Remove all notification items from the DOM
+                const items = document.querySelectorAll(".notification-item");
+                items.forEach(item => item.remove());
+
+                // Display a message if no notifications are left
+                const emptyMessage = document.createElement("div");
+                emptyMessage.textContent = "Aucune notification.";
+                emptyMessage.style.padding = "1rem";
+                emptyMessage.style.textAlign = "center";
+                emptyMessage.style.color = "#777";
+                document.querySelector('.notification-items').appendChild(emptyMessage);
+
+                // Update the notification count
+                const notificationCount = document.getElementById("notificationCount");
+                updateNotificationCount();
+  
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la suppression de toutes les notifications:', error);
+        });
+    }
+
+    // Chargement du DOM
+    document.addEventListener("DOMContentLoaded", function () {
+        const bell = document.getElementById("toggleNotifications");
+        const popup = document.getElementById("notificationPopup");
+        const notificationCount = document.getElementById("notificationCount");
+        const content = document.getElementById("notificationItems");
+        const notificationTitle = document.getElementById('notificationTitle');  // Pour le titre dynamique
+
+        // Lorsque l'utilisateur clique sur l'icône de notification
+        bell.addEventListener("click", () => {
+            popup.classList.toggle("active");
+        });
+
+        // Fermer la fenêtre des notifications si l'utilisateur clique ailleurs
+        document.addEventListener("click", (e) => {
+            if (!popup.contains(e.target) && !bell.contains(e.target)) {
+                popup.classList.remove("active");
+            }
+        });
+
+        // Récupérer les notifications via l'API
+        fetch('/api/notifications')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error); // Affiche une alerte si l'utilisateur n'est pas connecté
+                } else {
+                    // Mettre à jour le nombre de notifications dans le badge
+                    notificationCount.textContent = data.length > 0 ? data.length : "0";
+
+                    // Mettre à jour le titre des notifications
+                    notificationTitle.textContent = data.length > 0 ? `${data.length} Notifications` : "Aucune notification";
+
+                    // Si aucune notification, afficher un message "Aucune notification"
+                    if (data.length === 0) {
+                        const emptyMessage = document.createElement("div");
+                        emptyMessage.textContent = "Aucune notification.";
+                        emptyMessage.style.padding = "1rem";
+                        emptyMessage.style.textAlign = "center";
+                        emptyMessage.style.color = "#777";
+                        content.appendChild(emptyMessage);
+                    } else {
+                        // Afficher les notifications ici
+                        data.forEach(notification => {
+                            const notificationItem = document.createElement('div');
+                            notificationItem.classList.add('notification-item', notification.type); // Ajoute un type spécifique pour les styles
+                            notificationItem.id = `notification-${notification.id}`; // Ajout d'un ID unique pour chaque notification
+
+                            notificationItem.innerHTML = `
+                                <div class="notification-icon-text">
+                                    <i class="bi ${getIcon(notification.type)}"></i>
+                                    <span>${notification.message}</span>
+                                </div>
+                                <div class="notification-meta">
+                                    <span>${formatTime(notification.dateEnvoi)}</span>
+                                    <!-- Icône corbeille de suppression -->
+                                    <button class="btn-delete" aria-label="Supprimer cette notification" onclick="deleteNotification(${notification.id})">
+                              <i class="bi bi-trash"></i>
+                                  </button>
+                                </div>
+                            `;
+
+                            content.appendChild(notificationItem);
+                        });
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération des notifications:', error);
+            });
+    });
+</script>
+

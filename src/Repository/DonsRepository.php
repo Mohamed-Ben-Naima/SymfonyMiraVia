@@ -21,12 +21,49 @@ class DonsRepository extends ServiceEntityRepository
         parent::__construct($registry, Dons::class);
     }
 
+
     public function findByPartenaire(int $idPartenaire): array
     {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.idPartenaire = :idPartenaire')
-            ->setParameter('idPartenaire', $idPartenaire)
-            ->getQuery()
-            ->getResult();
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT 
+                d.*, 
+                u.nom AS client_nom,
+                u.id_utilisateur AS client_id 
+            FROM dons d
+            JOIN utilisateurs u ON d.id_client = u.id_utilisateur
+            WHERE d.id_partenaire = :id_partenaire ' ;
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery(['id_partenaire' => $idPartenaire]);
+
+        return $result->fetchAllAssociative();
     }
+    
+    public function findDonsWithClientNames(int $idPartenaire): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT 
+                d.id_don AS id_don, 
+                d.id_client, 
+                d.id_partenaire, 
+                d.montant, 
+                d.date_don, 
+                d.status, 
+                u.nom AS client_nom,
+                u.id_utilisateur AS utilisateur_id
+            FROM dons d
+            JOIN clients c ON d.id_client = c.id_client
+            JOIN utilisateurs u ON c.id_client = u.id_utilisateur
+            WHERE d.id_partenaire = :id_partenaire
+        ';
+
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery(['id_partenaire' => $idPartenaire]);
+
+        return $resultSet->fetchAllAssociative(); // Returns data as an associative array
+    }
+    
 }
