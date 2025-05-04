@@ -418,6 +418,27 @@ body.dark-mode .toggle-dark-mode {
 body.dark-mode .toggle-dark-mode:hover {
     background-color: #357abd;
 }
+.accept-btn {
+    background-color: #7D8C6D;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.refuse-btn {
+    background-color:rgb(201, 59, 49);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.accept-btn:hover, .refuse-btn:hover {
+    opacity: 0.8;
+}
 </style>
 
 <div class="example-wrapper">
@@ -497,8 +518,8 @@ body.dark-mode .toggle-dark-mode:hover {
         </div>
         <div class="modal-footer">
             <button class="download-btn" id="downloadButton" style="display: none;">Télécharger la preuve</button>
-            <button class="cancel-btn" onclick="closeModal()">Fermer</button>
-        </div>
+    <button class="accept-btn" onclick="updateStatus('Acceptée')">Accepter</button>
+    <button class="refuse-btn" onclick="updateStatus('Refusée')">Refuser</button>        </div>
     </div>
 </div>
 

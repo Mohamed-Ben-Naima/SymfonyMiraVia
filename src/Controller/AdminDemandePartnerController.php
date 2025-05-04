@@ -51,7 +51,7 @@ final class AdminDemandePartnerController extends AbstractController
         ]);
     }
     #[Route('/admin/demande/partner/update-status', name: 'app_admin_update_status', methods: ['POST'])]
-    public function updateStatus(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function updateStatus(Request $request, EntityManagerInterface $entityManager, \Symfony\Component\Mailer\MailerInterface $mailer): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         
@@ -62,6 +62,8 @@ final class AdminDemandePartnerController extends AbstractController
         }
         
         $demande->setEtat($data['etat']);
+        
+        $emailToSend = null;
         
         if ($data['etat'] === 'Acceptée') {
             // Validate mandatory fields in DemandePartenaire
@@ -85,12 +87,12 @@ final class AdminDemandePartnerController extends AbstractController
                             ->setDateInscription(new \DateTime())
                             ->setStatus('actif')
                             ->setStatutVerification('Actif'); // Set statut_verification to 'Actif'
-        
+            
                 $entityManager->persist($utilisateur);
-        
+            
                 // Flush Utilisateurs first to ensure it is saved
                 $entityManager->flush();
-        
+            
                 // Create a new Partenaire
                 $partenaire = new Partenaires();
                 $partenaire->setUtilisateur($utilisateur) // Link to the persisted Utilisateur
@@ -100,17 +102,46 @@ final class AdminDemandePartnerController extends AbstractController
                            ->setTelephone($demande->getTelephone())
                            ->setEtat(1)
                            ->setDateExpiration((new \DateTime())->modify('+1 year'));
-        
+            
                 $entityManager->persist($partenaire);
-        
+            
                 // Flush Partenaires
                 $entityManager->flush();
+    
+                // Compose acceptance email
+                $emailToSend = (new \Symfony\Component\Mime\Email())
+                    ->from('mayssajrad2002@gmail.com') // Replace with your email
+                    ->to($demande->getEmail())
+                    ->subject('Votre demande a été acceptée')
+                    ->html("
+                        <p>Bonjour {$demande->getDemandeur()},</p>
+                        <p>Votre demande de partenariat a été acceptée avec succès. Bienvenue parmi nos partenaires !</p>
+                    ");
             } catch (\Exception $e) {
                 return new JsonResponse(['message' => 'Erreur lors de l’ajout des données: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-        } else {
-            $entityManager->flush();
+        } elseif ($data['etat'] === 'Refusée') {
+            // Compose refusal email
+            $emailToSend = (new \Symfony\Component\Mime\Email())
+                ->from('mayssajrad2002@gmail.com') // Replace with your email
+                ->to($demande->getEmail())
+                ->subject('Votre demande a été refusée')
+                ->html("
+                    <p>Bonjour {$demande->getDemandeur()},</p>
+                    <p>Nous regrettons de vous informer que votre demande de partenariat a été refusée.</p>
+                ");
         }
+        
+        // Send email notification
+        if ($emailToSend) {
+            try {
+                $mailer->send($emailToSend);
+            } catch (\Exception $e) {
+                return new JsonResponse(['message' => 'Erreur lors de l’envoi de l’email: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+        
+        $entityManager->flush();
         
         return new JsonResponse(['message' => 'Statut mis à jour avec succès']);
     }
