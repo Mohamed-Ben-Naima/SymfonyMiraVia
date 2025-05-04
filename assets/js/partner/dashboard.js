@@ -68,35 +68,7 @@ document.addEventListener('keydown', function(e) {
     setInterval(updateTime, 1000);
     updateTime();
     
-    // Chart initialization
-    const ctx = document.getElementById('donationsChart').getContext('2d');
-    const donationsChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
-        datasets: [{
-          label: 'Dons financiers',
-          data: [1200, 1900, 1500, 2000, 2200, 2500, 2800, 2600, 3000, 3200, 3500, 4000],
-          borderColor: '#d6336c',
-          backgroundColor: '#ffe2e6',
-          tension: 0.4,
-          fill: true
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
+
      function populateModal(button) {
     const row = button.closest('tr');
     const cells = row.querySelectorAll('td');
@@ -117,3 +89,63 @@ document.addEventListener('keydown', function(e) {
     }
   }
 
+  document.addEventListener("DOMContentLoaded", () => {
+    const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+  
+    // Préparer les données pour le graphique
+    const labels = months; // Inclure tous les mois
+    const data = Array(12).fill(0); // Initialiser les données à 0 pour chaque mois
+  
+    // Remplir les données avec les valeurs disponibles
+    donationsData.forEach(d => {
+      data[d.month - 1] = d.total; // Met à jour les données pour le mois correspondant
+    });
+  
+    // Initialiser Chart.js
+    const ctx = document.getElementById('donationsChart').getContext('2d');
+    const donationsChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels, // Inclure tous les mois
+        datasets: [{
+          label: 'Dons financiers',
+          data: data,
+          borderColor: '#339af0',
+          backgroundColor: '#d2e9f9',
+          tension: 0.2,
+          fill: true,
+          pointBackgroundColor: '#ffffff',
+          pointBorderColor: '#339af0',
+          pointRadius: 3,
+          pointHoverRadius: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          datalabels: {
+            display: false, // Désactiver les étiquettes sur les points
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return (value / 1_000).toFixed(1) + ' M'; // Formater les ticks en millions
+              }
+            }
+          },
+          x: {
+            ticks: {
+              autoSkip: false, // Désactiver l'auto-saut pour afficher tous les mois
+            }
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+  });

@@ -54,44 +54,46 @@ final class DashboardPartenaireController extends AbstractController
     }
 
     #[Route('/dashboard/partenaire', name: 'app_dashboard_partenaire')]
-    public function index(
-        ClientsRepository $clientRepository,
-        EvenementsRepository $eventRepository,
-        BenevolatRepository $benevolatRepository,
-        DemandesAideRepository $demandeAideRepository,
-        DonsRepository $donsRepository
-    ): Response {
-        $user = $this->getUser();
+        public function index(
+            ClientsRepository $clientRepository,
+            EvenementsRepository $eventRepository,
+            BenevolatRepository $benevolatRepository,
+            DemandesAideRepository $demandeAideRepository,
+            DonsRepository $donsRepository
+        ): Response {
+            $user = $this->getUser();
 
-        if (!$user instanceof Utilisateurs) {
-            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+            if (!$user instanceof Utilisateurs) {
+                throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+            }
+
+            if (!$user || !in_array('ROLE_PARTENAIRE', $user->getRoles())) {
+                throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette section.');
+            }
+
+            // Récupération des données spécifiques au partenaire
+            $evenements = $eventRepository->findBy(['idPartenaire' => $user->getIdUtilisateur()]);
+            $clientCount = $clientRepository->count([]);
+            $eventCount = $eventRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+            $benevolatCount = $benevolatRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+            $demandeAideCount = $demandeAideRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+            $donationCount = $donsRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+            $donationsAccepted = $donsRepository->getTotalAcceptedDonations($user->getIdUtilisateur());
+
+            // Préparation des données pour le graphique des dons
+            $donationsByMonth = $donsRepository->getDonationsByMonth($user->getIdUtilisateur());
+
+            return $this->render('Partenaire/dashboard_partenaire/dashboard.html.twig', [
+                'evenements' => $evenements,
+                'clients' => $clientCount,
+                'events' => $eventCount,
+                'benevolats' => $benevolatCount,
+                'demandes' => $demandeAideCount,
+                'dons' => $donationCount,
+                'donationsByMonth' => $donationsByMonth,
+                'donationsAccepted' => $donationsAccepted,
+            ]);
         }
-
-        if ($user) {
-            $this->addFlash('success', 'Bienvenue, ' . $user->getNom() . ' ' . $user->getPrenom());
-        } else {
-            $this->addFlash('error', 'Utilisateur non connecté.');
-        }
-
-        if (!$user || !in_array('ROLE_PARTENAIRE', $user->getRoles())) {
-            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette section.');
-        }
-
-        $clientCount = $clientRepository->count([]);
-        $eventCount = $eventRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
-        $benevolatCount = $benevolatRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
-        $demandeAideCount = $demandeAideRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
-        $donationCount = $donsRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
-
-        return $this->render('Partenaire/dashboard_partenaire/dashboard.html.twig', [
-            'clients' => $clientCount,
-            'events' => $eventCount,
-            'benevolats' => $benevolatCount,
-            'demandes' => $demandeAideCount,
-            'dons' => $donationCount,
-            'controller_name' => 'DashboardPartenaireController',
-        ]);
-    }
 
     #[Route('/chatbot', name: 'chatbot_index', methods: ['GET'])]
     public function chatbotPage(): Response

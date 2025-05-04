@@ -35,7 +35,8 @@
                             <div class="event-card d-flex align-items-start">
                                 
                                 <!-- Image -->
-                                <div class="event-image-container ">
+                                <div class="event-image-container" 
+                                style="margin-top: 10px;margin-left: 10px; margin-right: 10px;">
                                     <img src="{{ asset('uploads/event_images/' ~ event.imageName) }}" class="event-image" alt="{{ event.titre }}" loading="lazy">
                                 </div>
                                 
@@ -97,9 +98,15 @@
 
                                     <!-- Attend Button -->
                                     <div class="mt-auto d-flex justify-content-end" style="margin-bottom: 10px; margin-right: 10px;">
-                                        <button class="btn btn-custom-attend btn-sm">
-                                            <i class="bi bi-clock" style="margin-right: 5px;"></i>{{ event.status }}
-                                        </button>
+                                    <button 
+                                        class="btn btn-sm 
+                                            {{ event.status == 'En cours' ? 'btn-en-cours' : (event.status == 'Annuler' ? 'btn-annuler' : 'btn-termine') }}">
+                                        <i 
+                                        class="{{ event.status == 'En cours' ? 'bi bi-clock' : (event.status == 'Annuler' ? 'bi bi-x' : 'bi bi-check') }}" 
+                                        style="margin-right: 5px;">
+                                        </i>
+                                        {{ event.status }}
+                                    </button>
                                     </div>
                                 </div>
                             </div>

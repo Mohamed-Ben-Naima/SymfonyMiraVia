@@ -21,6 +21,44 @@ class DonsRepository extends ServiceEntityRepository
         parent::__construct($registry, Dons::class);
     }
 
+    public function getTotalAcceptedDonations(int $idPartenaire): float
+        {
+            $conn = $this->getEntityManager()->getConnection();
+
+            $sql = '
+                SELECT SUM(d.montant) as total
+                FROM dons d
+                WHERE d.id_partenaire = :idPartenaire AND d.status = :status
+            ';
+
+            $stmt = $conn->prepare($sql);
+            $result = $stmt->executeQuery([
+                'idPartenaire' => $idPartenaire,
+                'status' => 'Accepté',
+            ]);
+
+            return (float) $result->fetchOne();
+        }
+
+    public function getDonationsByMonth(int $idPartenaire): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        // Requête SQL corrigée
+        $sql = '
+            SELECT YEAR(d.date_don) as year, MONTH(d.date_don) as month, SUM(d.montant) as total
+            FROM dons d
+            WHERE d.id_partenaire = :idPartenaire
+            GROUP BY year, month
+            ORDER BY year ASC, month ASC
+        ';
+
+        // Préparation et exécution de la requête avec le paramètre correct
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery(['idPartenaire' => $idPartenaire]); // Assurez-vous que la clé correspond à :idPartenaire dans la requête
+
+        return $result->fetchAllAssociative();
+    }
 
     public function findByPartenaire(int $idPartenaire): array
     {
