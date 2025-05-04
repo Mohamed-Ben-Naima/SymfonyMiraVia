@@ -209,7 +209,9 @@
   
   .company-text {
     display: flex;
-    flex-direction: column; /* Empile nom et URL verticalement */
+    flex-direction: column;
+    align-items: flex-start; /* Aligne le contenu à gauche */
+    text-align: left;  /* Empile nom et URL verticalement */
   }
   
   .company-text strong {
@@ -221,7 +223,7 @@
     font-size: 0.875rem;
     color: #6b7280;
     margin-top: 0.25rem;
-    word-break: break-all;
+    word-break: break-word;
   }
   
   

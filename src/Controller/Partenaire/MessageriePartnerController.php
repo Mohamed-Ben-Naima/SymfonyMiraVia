@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller\Partenaire;
-
+use  Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,9 +9,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class MessageriePartnerController extends AbstractController
 {
-    #[Route('/messagerie/partner', name: 'app_messagerie_partner')]
+    #[Route('/dashboard/partenaire/messagerie', name: 'app_messagerie_partner')]
     public function index(Request $request): Response
+    
     {
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+        }
         // Données statiques pour les contacts
         $contacts = [
             ['id' => 1, 'name' => 'John Doe', 'avatar' => 'https://via.placeholder.com/40', 'lastMessage' => 'Je vais bien, merci !'],
@@ -35,10 +40,12 @@ final class MessageriePartnerController extends AbstractController
             'messages' => $messages,
             'currentUser' => ['id' => 0, 'name' => 'Me'], // Utilisateur actuel simulé
             'currentReceiver' => $currentReceiver,
+            
+            
         ]);
     }
 
-    #[Route('/messagerie/partner/send', name: 'app_messagerie_partner_send', methods: ['POST'])]
+    #[Route('/dashboard/partenaire/send', name: 'app_messagerie_partner_send', methods: ['POST'])]
     public function sendMessage(Request $request): Response
     {
         // Récupérer les données du formulaire
