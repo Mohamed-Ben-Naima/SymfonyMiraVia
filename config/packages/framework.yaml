@@ -1,9 +1,11 @@
 framework:
     secret: '%env(APP_SECRET)%'
+    test: true # <-- Add this line or ensure it's set to true
 
     # Configuration explicite de la session
     session:
         enabled: true
-        storage_factory_id: session.storage.factory.native
+        #storage_factory_id: session.storage.factory.native # Utilisation de la session native par défaut
+        storage_factory_id: session.storage.factory.mock_file # Recommended for tests
         cookie_lifetime: 3600  # Durée de vie du cookie de session en secondes (1 heure)
         gc_maxlifetime: 3600   # Durée de vie de la session côté serveur (1 heure)
