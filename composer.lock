@@ -6,13 +6,6 @@
     ],
 
     "content-hash": "edf49d8fb64b98b36a13b9cf6a5ea389",
-
-    "content-hash": "816af1ea70081923fcb39c42fa41fedc",
-
-    "content-hash": "92da025af1602c6b6c22a4fc014084ff",
-
-    "content-hash": "306d9b5801c0c4bb09f8b52eeaea3ebc",
-
     "packages": [
         {
             "name": "composer/semver",
