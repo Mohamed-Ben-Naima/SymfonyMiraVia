@@ -4,14 +4,24 @@ namespace App\Controller;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class AdminDashboardController extends AbstractController
 {
     #[Route('/admin/dashboard', name: 'app_admin_dashboard')]
-    public function index(Connection $connection): Response
+    public function index(Request $request, Connection $connection): Response
     {
+        // Récupérer les données de l'utilisateur à partir de la session
+        $session = $request->getSession();
+        $userData = $session->get('admin');
+
+        if (!$userData) {
+            $this->addFlash('error', 'Vous devez être connecté pour accéder au tableau de bord.');
+            return $this->redirectToRoute('app_admin_login');
+        }
+
         // Récupération des statistiques
         $totalClients = $connection->fetchOne('SELECT COUNT(*) FROM clients');
         $totalEvenements = $connection->fetchOne('SELECT COUNT(*) FROM evenements');
@@ -112,7 +122,7 @@ final class AdminDashboardController extends AbstractController
             }
         }
 
-        // Envoi des données au template
+        // Envoi des données au template, y compris les données utilisateur
         return $this->render('admin_dashboard/index.html.twig', [
             'totalClients' => $totalClients,
             'totalEvenements' => $totalEvenements,
@@ -128,6 +138,7 @@ final class AdminDashboardController extends AbstractController
             'monthAmounts' => json_encode($monthAmounts),
             'weekLabels' => json_encode($weekLabels),
             'weekFavorites' => json_encode($weekFavorites),
+            'userData' => json_encode($userData), // Ajout des données utilisateur
             'pageTitle' => 'Tableau de bord',
         ]);
     }

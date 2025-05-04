@@ -894,5 +894,9 @@
             };
             new ApexCharts(document.querySelector("#pieChart"), pieChartOptions).render();
         });
+
+         // Inject session data into JavaScript
+    const userData = {{ userData|json_encode|raw }};
+    console.log("Logged-in Admin Data:", userData);
     </script>
 {% endblock %}
