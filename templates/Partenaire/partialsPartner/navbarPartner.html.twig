@@ -31,7 +31,6 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
 .btn-mark-read {
     background-color: #0d6efd;
     color: white;
@@ -165,8 +164,12 @@
         </div>
         <!-- Profile Icon -->
 <div class="profile-wrapper">
-  <img src="{{ asset('/images-partner/user.png') }}" alt="Profile" class="profile-icon" onerror="this.src='/images-partner/user.png'">
-
+ {% if app.user.avatar %}
+    <img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}" alt="Profile" class="profile-icon"
+         onerror="this.src='{{ asset('images-partner/user.png') }}'">
+{% else %}
+    <img src="{{ asset('images-partner/user.png') }}" alt="Profile" class="profile-icon">
+{% endif %}
     <span class="status-indicator"></span>
 </div>
 
@@ -188,7 +191,10 @@ fetch('/api/user/avatar')
     .then(response => response.json())
     .then(data => {
         if (data.avatarUrl && data.avatarUrl.trim() !== "") {
+            // Met à jour l'avatar dans l'élément avec la classe 'profile-icon'
             document.querySelector('.profile-icon').src = data.avatarUrl;
+        } else {
+            console.error('L\'avatar n\'a pas été trouvé ou est vide.');
         }
     })
     .catch(error => {

@@ -4,7 +4,7 @@ namespace App\Controller\Partenaire;
 use App\Entity\Utilisateurs;
 use App\Repository\BenevolatRepository;
 use App\Repository\ClientsRepository;
-use App\Repository\DonsRepository ;
+use App\Repository\DonsRepository;
 use App\Repository\DemandesAideRepository;
 use App\Repository\EvenementsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,80 +26,75 @@ final class DashboardPartenaireController extends AbstractController
         $this->logger = $logger;
     }
 
+    #[Route('/api/user/avatar', name: 'api_user_avatar', methods: ['GET'])]
+    public function getUserAvatar(): JsonResponse
+    {
+        $user = $this->getUser();
 
-#[Route('/api/user/avatar', name: 'api_user_avatar', methods: ['GET'])]
-public function getUserAvatar(): JsonResponse
-{
-    $user = $this->getUser();  // Récupérer l'utilisateur connecté
-
-    if (!$user instanceof Utilisateurs) {
-        throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
-    }
-
-    if (!$user) {
-        return new JsonResponse(['error' => 'Utilisateur non connecté.'], 400);
-    }
-
-    // Vérifie si l'utilisateur a un avatar
-    $avatarUrl = $user->getAvatar(); // Méthode à définir dans l'entité Utilisateurs pour récupérer l'avatar
-
-    // Chemin où les avatars sont stockés
-    $avatarsDirectory = $this->getParameter('avatars_directory'); // Assurez-vous que cette variable est définie dans config/services.yaml
-
-    // Vérifie si l'avatar existe dans le dossier
-    if (!$avatarUrl || !file_exists($avatarsDirectory . '/' . $avatarUrl)) {
-        // Si l'avatar n'existe pas, renvoyer l'avatar par défaut
-        return new JsonResponse(['avatarUrl' => '/images-partner/user.png']);
-    }
-
-    // Si l'avatar existe, renvoyer l'URL de l'avatar
-    return new JsonResponse(['avatarUrl' => '/uploads/avatars/' . $avatarUrl]);
-}
-
-        #[Route('/dashboard/partenaire', name: 'app_dashboard_partenaire')]
-        public function index(
-            ClientsRepository $clientRepository,
-            EvenementsRepository $eventRepository,
-            BenevolatRepository $benevolatRepository,
-            DemandesAideRepository $demandeAideRepository ,
-            DonsRepository $donsRepository ,
-        ): Response {
-            $user = $this->getUser();
-
-            if (!$user instanceof Utilisateurs) {
-                throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
-            }
-
-            if ($user) {
-                $this->addFlash('success', 'Bienvenue, ' . $user->getNom() . ' ' . $user->getPrenom());
-            } else {
-                $this->addFlash('error', 'Utilisateur non connecté.');
-            }
-
-            if (!$user || !in_array('ROLE_PARTENAIRE', $user->getRoles())) {
-                throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette section.');
-            }
-
-            // Fetch counts dynamically
-            $clientCount = $clientRepository->count([]);
-            $eventCount = $eventRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
-            $benevolatCount = $benevolatRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
-            $demandeAideCount = $demandeAideRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
-            $donationCount = $donsRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
-
-            return $this->render('Partenaire/dashboard_partenaire/dashboard.html.twig', [
-                'clients' => $clientCount,
-                'events' => $eventCount,
-                'benevolats' => $benevolatCount,
-                'demandes' => $demandeAideCount,
-                'dons' => $donationCount,
-                'controller_name' => 'DashboardPartenaireController',
-            ]);
+        if (!$user instanceof Utilisateurs) {
+            return new JsonResponse(['error' => 'Utilisateur non connecté.'], 400);
         }
 
+        $avatarName = $user->getAvatar();
 
-   #[Route('/chatbot', name: 'chatbot_index', methods: ['GET'])]
-    public function chatbotPage(): \Symfony\Component\HttpFoundation\Response
+        if (!$avatarName) {
+            return new JsonResponse(['avatarUrl' => '/images-partner/user.png']);
+        }
+
+        $avatarsDirectory = $this->getParameter('avatars_directory');
+        $avatarPath = $avatarsDirectory . '/' . $avatarName;
+
+        if (!file_exists($avatarPath)) {
+            return new JsonResponse(['avatarUrl' => '/images-partner/user.png']);
+        }
+
+        $avatarUrl = '/uploads/avatars/' . $avatarName;
+
+        return new JsonResponse(['avatarUrl' => $avatarUrl]);
+    }
+
+    #[Route('/dashboard/partenaire', name: 'app_dashboard_partenaire')]
+    public function index(
+        ClientsRepository $clientRepository,
+        EvenementsRepository $eventRepository,
+        BenevolatRepository $benevolatRepository,
+        DemandesAideRepository $demandeAideRepository,
+        DonsRepository $donsRepository
+    ): Response {
+        $user = $this->getUser();
+
+        if (!$user instanceof Utilisateurs) {
+            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+        }
+
+        if ($user) {
+            $this->addFlash('success', 'Bienvenue, ' . $user->getNom() . ' ' . $user->getPrenom());
+        } else {
+            $this->addFlash('error', 'Utilisateur non connecté.');
+        }
+
+        if (!$user || !in_array('ROLE_PARTENAIRE', $user->getRoles())) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette section.');
+        }
+
+        $clientCount = $clientRepository->count([]);
+        $eventCount = $eventRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+        $benevolatCount = $benevolatRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+        $demandeAideCount = $demandeAideRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+        $donationCount = $donsRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+
+        return $this->render('Partenaire/dashboard_partenaire/dashboard.html.twig', [
+            'clients' => $clientCount,
+            'events' => $eventCount,
+            'benevolats' => $benevolatCount,
+            'demandes' => $demandeAideCount,
+            'dons' => $donationCount,
+            'controller_name' => 'DashboardPartenaireController',
+        ]);
+    }
+
+    #[Route('/chatbot', name: 'chatbot_index', methods: ['GET'])]
+    public function chatbotPage(): Response
     {
         return $this->render('Partenaire/chatbot/index.html.twig');
     }
@@ -116,49 +111,46 @@ public function getUserAvatar(): JsonResponse
             $response = $this->askDeepSeek($message);
             return new JsonResponse(['response' => $response]);
         } catch (\Exception $e) {
-            // Log additional details about the error
             $this->logger->error('Erreur ChatGPT: ' . $e->getMessage());
             return new JsonResponse(['error' => 'Erreur lors de la communication avec OpenAI.'], 500);
         }
     }
 
     private function askDeepSeek(string $userMessage): string
-{
-    $apiKey = 'sk-91a20114695c4d1496e0884f4f295d2b'; // Remplace ceci par une variable d'environnement dans un projet sérieux
+    {
+        $apiKey = 'sk-91a20114695c4d1496e0884f4f295d2b';
 
-    $url = 'https://api.deepseek.com/chat/completions';
+        $url = 'https://api.deepseek.com/chat/completions';
 
-    $payload = [
-        'model' => 'deepseek-chat',
-        'messages' => [
-            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-            ['role' => 'user', 'content' => $userMessage]
-        ],
-        'stream' => false
-    ];
-
-    try {
-        $response = $this->httpClient->request('POST', $url, [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Content-Type' => 'application/json',
+        $payload = [
+            'model' => 'deepseek-chat',
+            'messages' => [
+                ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+                ['role' => 'user', 'content' => $userMessage]
             ],
-            'json' => $payload,
-        ]);
+            'stream' => false
+        ];
 
-        $statusCode = $response->getStatusCode();
-        $data = $response->toArray(false); // pour éviter les exceptions
+        try {
+            $response = $this->httpClient->request('POST', $url, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $payload,
+            ]);
 
-        if ($statusCode !== 200 || !isset($data['choices'][0]['message']['content'])) {
-            throw new \RuntimeException('Réponse inattendue ou erreur de serveur. Code HTTP: ' . $statusCode);
+            $statusCode = $response->getStatusCode();
+            $data = $response->toArray(false);
+
+            if ($statusCode !== 200 || !isset($data['choices'][0]['message']['content'])) {
+                throw new \RuntimeException('Réponse inattendue ou erreur de serveur. Code HTTP: ' . $statusCode);
+            }
+
+            return trim($data['choices'][0]['message']['content']);
+        } catch (\Exception $e) {
+            $this->logger->error("Erreur lors de l'appel à DeepSeek: " . $e->getMessage());
+            throw new \RuntimeException('Erreur de communication avec DeepSeek : ' . $e->getMessage());
         }
-
-        return trim($data['choices'][0]['message']['content']);
-
-    } catch (\Exception $e) {
-        $this->logger->error("Erreur lors de l'appel à DeepSeek: " . $e->getMessage());
-        throw new \RuntimeException('Erreur de communication avec DeepSeek : ' . $e->getMessage());
     }
-}
-
 }

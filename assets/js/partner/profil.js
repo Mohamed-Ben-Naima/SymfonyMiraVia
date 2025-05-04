@@ -27,3 +27,4 @@ document.querySelector(".user-avatar input[type='file']").addEventListener("chan
       img.src = URL.createObjectURL(file);
     }
   });
+  

@@ -1,36 +1,197 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BenevolatController!
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .filter-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .benevolat-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            height: 100%;
+        }
+        .benevolat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .card-text {
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        .date-badge {
+            background: #e9ecef;
+            color: #495057;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .btn-apply {
+            background: linear-gradient(135deg, #6c63ff, #4a3ff2);
+            border: none;
+            width: 100%;
+            font-weight: 500;
+        }
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        .filter-group {
+            margin-bottom: 20px;
+        }
+        .filter-group h6 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        .form-check-label {
+            font-size: 0.9rem;
+        }
+        .search-header {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
-	<style>
-		.example-wrapper {
-			margin: 1em auto;
-			max-width: 800px;
-			width: 95%;
-			font: 18px / 1.5 sans-serif;
-		}
-		.example-wrapper code {
-			background: #F5F5F5;
-			padding: 2px 6px;
-		}
-	</style>
+<div class="container py-4">
+    <div class="search-header">
+        <h2 class="mb-3">Offres Bénévolat</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Recherche...">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="date" class="form-control" name="date_from" value="{{ filters.date_from }}">
+                    </div>
+                    <div class="col-md-6">
+                        <input type="date" class="form-control" name="date_to" value="{{ filters.date_to }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div
-		class="example-wrapper">
-		{# TODO: Imporve the benevolat Design make it come to life #}
-		<h1>Hello
-			{{ controller_name }}! ✅</h1>
+    <div class="row">
+        <!-- Filter Section -->
+        <div class="col-lg-3">
+            <div class="filter-section sticky-top" style="top: 20px;">
+                <h4 class="filter-title">Filtres</h4>
+                
+                <div class="filter-group">
+                    <h6>Thème</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="theme1" name="theme" value="social">
+                        <label class="form-check-label" for="theme1">Avec des coposages</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="theme2" name="theme" value="nature">
+                        <label class="form-check-label" for="theme2">Nature</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="theme3" name="theme" value="culture">
+                        <label class="form-check-label" for="theme3">Culture</label>
+                    </div>
+                </div>
 
-		This friendly message is coming from:
-		<ul>
-			<li>Your controller at
-				<code>C:/ProjetWebMira/miravia/src/Controller/BenevolatController.php</code>
-			</li>
-			<li>Your template at
-				<code>C:/ProjetWebMira/miravia/templates/benevolat/index.html.twig</code>
-			</li>
-		</ul>
-	</div>
+                <div class="filter-group">
+                    <h6>Durée</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="duree1" name="duree" value="3-5">
+                        <label class="form-check-label" for="duree1">3-5 heures</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="duree2" name="duree" value="7-9">
+                        <label class="form-check-label" for="duree2">7-9 heures</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="duree3" name="duree" value="journee">
+                        <label class="form-check-label" for="duree3">Journée complète</label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h6>Destination</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="dest1" name="destination" value="biscayne">
+                        <label class="form-check-label" for="dest1">Bleu de Biscayne</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="dest2" name="destination" value="mont">
+                        <label class="form-check-label" for="dest2">Gauche-dès-de-Mont</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="dest3" name="destination" value="veyn">
+                        <label class="form-check-label" for="dest3">Couette dès-net de Veynevold</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mt-3">Appliquer les filtres</button>
+            </div>
+        </div>
+
+        <!-- Benevolat List -->
+        <div class="col-lg-9">
+            <div class="row">
+                {% if benevolats|length > 0 %}
+                    {% for benevolat in benevolats %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card benevolat-card">
+                                <img src="{{ benevolat.imagename ? asset('uploads/benevolat/' ~ benevolat.imagename) : 'https://via.placeholder.com/300x200?text=No+Image' }}" 
+                                     class="card-img-top" 
+                                     alt="{{ benevolat.titre }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ benevolat.titre }}</h5>
+                                    <p class="card-text">{{ benevolat.description|u.truncate(120, '...') }}</p>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="date-badge">
+                                            <i class="far fa-calendar-alt me-1"></i>
+                                            {{ benevolat.dateBenevolat|date('d/m/Y') }}
+                                        </span>
+                                        <span class="badge bg-{{ benevolat.status == 'ouvert' ? 'success' : 'secondary' }}">
+                                            {{ benevolat.status }}
+                                        </span>
+                                    </div>
+                                    <a href="#" class="btn btn-apply">Voir l'offre</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">Aucune offre de bénévolat trouvée.</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
