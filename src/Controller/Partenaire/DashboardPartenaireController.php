@@ -2,6 +2,11 @@
 namespace App\Controller\Partenaire;
 
 use App\Entity\Utilisateurs;
+use App\Repository\BenevolatRepository;
+use App\Repository\ClientsRepository;
+use App\Repository\DonsRepository ;
+use App\Repository\DemandesAideRepository;
+use App\Repository\EvenementsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,6 +32,10 @@ public function getUserAvatar(): JsonResponse
 {
     $user = $this->getUser();  // Récupérer l'utilisateur connecté
 
+    if (!$user instanceof Utilisateurs) {
+        throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+    }
+
     if (!$user) {
         return new JsonResponse(['error' => 'Utilisateur non connecté.'], 400);
     }
@@ -47,34 +56,49 @@ public function getUserAvatar(): JsonResponse
     return new JsonResponse(['avatarUrl' => '/uploads/avatars/' . $avatarUrl]);
 }
 
-    #[Route('/dashboard/partenaire', name: 'app_dashboard_partenaire')]
-    public function index(): Response
-    {
-        $user = $this->getUser();
+        #[Route('/dashboard/partenaire', name: 'app_dashboard_partenaire')]
+        public function index(
+            ClientsRepository $clientRepository,
+            EvenementsRepository $eventRepository,
+            BenevolatRepository $benevolatRepository,
+            DemandesAideRepository $demandeAideRepository ,
+            DonsRepository $donsRepository ,
+        ): Response {
+            $user = $this->getUser();
 
-        if (!$user instanceof Utilisateurs) {
-            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+            if (!$user instanceof Utilisateurs) {
+                throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+            }
+
+            if ($user) {
+                $this->addFlash('success', 'Bienvenue, ' . $user->getNom() . ' ' . $user->getPrenom());
+            } else {
+                $this->addFlash('error', 'Utilisateur non connecté.');
+            }
+
+            if (!$user || !in_array('ROLE_PARTENAIRE', $user->getRoles())) {
+                throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette section.');
+            }
+
+            // Fetch counts dynamically
+            $clientCount = $clientRepository->count([]);
+            $eventCount = $eventRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+            $benevolatCount = $benevolatRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+            $demandeAideCount = $demandeAideRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+            $donationCount = $donsRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
+
+            return $this->render('Partenaire/dashboard_partenaire/dashboard.html.twig', [
+                'clients' => $clientCount,
+                'events' => $eventCount,
+                'benevolats' => $benevolatCount,
+                'demandes' => $demandeAideCount,
+                'dons' => $donationCount,
+                'controller_name' => 'DashboardPartenaireController',
+            ]);
         }
 
-        if ($user) {
-            $this->addFlash('success', 'Bienvenue, ' . $user->getNom(). ' '. $user->getPrenom());
-        } else {
-            $this->addFlash('error', 'Utilisateur non connecté.');
-        }
-        
 
-        // Vérifiez si l'utilisateur est connecté et a le rôle partenaire
-        if (!$user || !in_array('ROLE_PARTENAIRE', $user->getRoles())) {
-            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette section.');
-        }
-
-        return $this->render('Partenaire/dashboard_partenaire/dashboard.html.twig', [
-            'controller_name' => 'DashboardPartenaireController',
-        ]);
-    }
-   
-
-    #[Route('/chatbot', name: 'chatbot_index', methods: ['GET'])]
+   #[Route('/chatbot', name: 'chatbot_index', methods: ['GET'])]
     public function chatbotPage(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('Partenaire/chatbot/index.html.twig');

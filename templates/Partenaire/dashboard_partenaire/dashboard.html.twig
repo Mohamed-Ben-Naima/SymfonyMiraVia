@@ -14,161 +14,6 @@
 </head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<style>
-  >
-  /* Conteneur du chatbot */
-  .chat-container {
-      width: 100%;
-      max-width: 100%;
-      background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      height: 500px;
-      transition: box-shadow 0.3s ease;
-  }
-
-  .chat-container:hover {
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-  }
-
-  .messages {
-      height: 100%;
-      overflow-y: auto;
-      margin-bottom: 20px;
-      border: 1px solid #ddd;
-      padding: 10px;
-      border-radius: 10px;
-      background-color: #f9f9f9;
-      flex-grow: 1;
-      font-family: 'Arial', sans-serif;
-      font-size: 14px;
-  }
-
-  .message {
-      margin-bottom: 15px;
-      padding: 10px 15px;
-      border-radius: 10px;
-      max-width: 80%;
-      word-wrap: break-word;
-      font-size: 14px;
-      line-height: 1.5;
-      transition: transform 0.2s ease;
-  }
-
-  .message.user {
-      background-color: #d4f7d2;
-      align-self: flex-end;
-      border-radius: 20px 20px 0 20px;
-      animation: userMessageAnimation 0.3s ease-in-out;
-  }
-
-  .message.bot {
-      background-color: #e0f7fa;
-      align-self: flex-start;
-      border-radius: 20px 20px 20px 0;
-      animation: botMessageAnimation 0.3s ease-in-out;
-  }
-
-  .message p {
-      margin: 0;
-      font-size: 14px;
-  }
-
-  /* Animation des messages */
-  @keyframes userMessageAnimation {
-      0% { transform: scale(0.95); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-  }
-
-  @keyframes botMessageAnimation {
-      0% { transform: scale(0.95); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-  }
-
-  /* Formulaire de saisie */
-  #chat-form {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-  }
-
-  #message-input {
-      width: 85%;
-      padding: 12px 18px;
-      border-radius: 20px;
-      border: 1px solid #ddd;
-      font-size: 14px;
-      outline: none;
-      transition: border 0.3s ease;
-      background-color: #fafafa;
-  }
-
-  #message-input:focus {
-      border-color: #3498db;
-      background-color: #fff;
-  }
-
-  button[type="submit"] {
-      padding: 12px 18px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.3s ease;
-  }
-
-  button[type="submit"]:hover {
-      background-color: #2980b9;
-  }
-
-  .typing-indicator {
-      display: none;
-      font-style: italic;
-      color: #aaa;
-      font-size: 14px;
-      margin-top: 10px;
-  }
-
-  /* Bouton flottant */
-  .chatbot-link {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1050;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 50%;
-      background-color: #3498db;
-      padding: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      transition: background-color 0.3s ease;
-  }
-
-  .chatbot-link:hover {
-      background-color: #2980b9;
-  }
-
-  .chatbot-image {
-      width: 70px;
-      height: 70px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      border-radius: 50%;
-      object-fit: cover;
-  }
-
-  .chatbot-image:hover {
-      transform: scale(1.1);
-  }
-</style>
 <body>
  <!-- Inclure la barre latérale -->
 {% include 'Partenaire/basePartner.html.twig' %}
@@ -196,31 +41,35 @@
     <div class="stats-and-chart">
   <!-- Stats Container -->
  <div class="stats-container">
-  <!-- Carte Clients -->
+  <!-- Carte Dons -->
   <div id="stat-clients" class="stat-item">
     <div class="value" id="h4-clients" >
-      <i class="bi bi-person icon-clients"></i>1,248
+      <i class="bi bi-currency-exchange " style="font-size: 24px;"></i>
+      <span class="stat-number" id="donations-count">{{ dons }}</span>
     </div>
-    <h4>Nombre de clients</h4>
+    <h4>Nombre de dons</h4>
   </div>
   <!-- Carte Événements -->
   <div id="stat-events" class="stat-item">
     <div class="value" id="h4-events">
-      <i class="bi bi-calendar-check-fill icon-events"></i> 42
+      <i class="bi bi-calendar-check-fill icon-events"></i>
+      <span class="stat-number" id="events-count">{{ events }}</span>
     </div>
     <h4>Nombre d'événements</h4>
   </div>
   <!-- Carte Demandes d'aide -->
   <div id="stat-requests" class="stat-item">
     <div class="value" id="h4-requests">
-      <i class="bi bi-question-circle icon-requests"></i> 189
+      <i class="bi bi-question-circle icon-requests"></i>
+      <span class="stat-number" id="requests-count">{{ demandes }}</span>
     </div>
     <h4>Demandes d'aide</h4>
   </div>
   <!-- Carte Bénévoles -->
   <div id="stat-volunteers" class="stat-item">
     <div class="value" id="h4-volunteers">
-      <i class="bi bi-valentine icon-volunteers"></i> 76
+      <i class="bi bi-valentine icon-volunteers"></i>
+      <span class="stat-number" id="volunteers-count">{{ benevolats }}</span>
     </div>
     <h4>Bénévoles</h4>
   </div>

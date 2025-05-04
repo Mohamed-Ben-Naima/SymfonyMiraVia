@@ -116,3 +116,4 @@ document.addEventListener('keydown', function(e) {
       document.getElementById('modal-proof-link').textContent = proofLink.textContent;
     }
   }
+
