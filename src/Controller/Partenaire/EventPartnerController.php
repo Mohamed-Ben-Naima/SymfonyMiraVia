@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventPartnerController extends AbstractController
 {
     #[Route('/dashboard/partenaire/event_partner', name: 'app_event_partner')]
-    public function don(
+    public function Event(
         EvenementsRepository $repository,
         
     ): Response {
@@ -171,6 +171,8 @@ class EventPartnerController extends AbstractController
 
         return $this->json(['error' => 'Aucun fichier reçu.'], Response::HTTP_BAD_REQUEST);
     }
+
+    
     #[Route('/dashboard/partenaire/evenement/supprimer/{id}', name: 'delete_event', methods: ['GET', 'DELETE'])]
     public function deleteEvent(int $id, EntityManagerInterface $entityManager): Response
     {

@@ -16,7 +16,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
-  >
   /* Conteneur du chatbot */
   .chat-container {
       width: 100%;
@@ -169,6 +168,7 @@
       transform: scale(1.1);
   }
 </style>
+
 <body>
  <!-- Inclure la barre latérale -->
 {% include 'Partenaire/basePartner.html.twig' %}
@@ -196,31 +196,35 @@
     <div class="stats-and-chart">
   <!-- Stats Container -->
  <div class="stats-container">
-  <!-- Carte Clients -->
+  <!-- Carte Dons -->
   <div id="stat-clients" class="stat-item">
     <div class="value" id="h4-clients" >
-      <i class="bi bi-person icon-clients"></i>1,248
+      <i class="bi bi-currency-exchange " style="font-size: 24px;"></i>
+      <span class="stat-number" id="donations-count">{{ dons }}</span>
     </div>
-    <h4>Nombre de clients</h4>
+    <h4>Nombre de dons</h4>
   </div>
   <!-- Carte Événements -->
   <div id="stat-events" class="stat-item">
     <div class="value" id="h4-events">
-      <i class="bi bi-calendar-check-fill icon-events"></i> 42
+      <i class="bi bi-calendar-check-fill icon-events"></i>
+      <span class="stat-number" id="events-count">{{ events }}</span>
     </div>
     <h4>Nombre d'événements</h4>
   </div>
   <!-- Carte Demandes d'aide -->
   <div id="stat-requests" class="stat-item">
     <div class="value" id="h4-requests">
-      <i class="bi bi-question-circle icon-requests"></i> 189
+      <i class="bi bi-question-circle icon-requests"></i>
+      <span class="stat-number" id="requests-count">{{ demandes }}</span>
     </div>
     <h4>Demandes d'aide</h4>
   </div>
   <!-- Carte Bénévoles -->
   <div id="stat-volunteers" class="stat-item">
     <div class="value" id="h4-volunteers">
-      <i class="bi bi-valentine icon-volunteers"></i> 76
+      <i class="bi bi-valentine icon-volunteers"></i>
+      <span class="stat-number" id="volunteers-count">{{ benevolats }}</span>
     </div>
     <h4>Bénévoles</h4>
   </div>
