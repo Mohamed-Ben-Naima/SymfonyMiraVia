@@ -172,6 +172,7 @@
 <body>
  <!-- Inclure la barre latérale -->
 {% include 'Partenaire/basePartner.html.twig' %}
+
 {% for label, messages in app.flashes %}
     {% for message in messages %}
         <script>
@@ -463,37 +464,45 @@
         <canvas id="donationsChart"></canvas>
       </div>
 
-      <!-- Right Section: Accepted Donations -->
-      
       <div class="donations-section">
-        <div class="year-dropdown">
-          <select id="year-selector" class="styled-select">
-            <option value="2025" selected>2025</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-          </select>
-        </div>
-        <div class="donations-growth-circle">
-          <div class="growth-circle">
-            <div class="growth-percentage">78%</div>
-          </div>
-          <p class="growth-description">Growth</p>
-        </div>
-        <p class="growth-summary">62% Company Growth</p>
-        <div class="donations-breakdown">
-          <div class="donation-item">
-            <span class="icon">$</span>
-            <span class="year">2024:</span>
-            <span class="amount">{{ donationsAccepted|number_format(2, ',', ' ') }} €</span>
-          </div>
-          <div class="donation-item">
-            <span class="icon">📆</span>
-            <span class="year">2023:</span>
-            <span class="amount">41.2k €</span>
-          </div>
-        </div>
-      </div>
+    <!-- Sélecteur d'années -->
+    <div class="year-dropdown">
+        <select id="year-selector" class="styled-select">
+            {% for year in availableYears %}
+                <option value="{{ year }}" {% if year == "now"|date("Y") %}selected{% endif %}>
+                    {{ year }}
+                </option>
+            {% endfor %}
+        </select>
     </div>
+
+    <!-- Cercle avec les montants des dons -->
+    <div class="donations-growth-circle">
+        <div class="growth-circle">
+            <canvas id="donationPieChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Résumé -->
+    <p class="growth-summary" id="growth-summary">
+        Nombre de dons pour {{ "now"|date("Y") }} :
+    </p>
+
+    <!-- Détails des dons -->
+    <div class="donations-breakdown" id="donations-breakdown">
+        <div class="donation-item">
+            <span class="icon" style="color: #3498db;"><i class="bi bi-check-circle-fill"></i></span>
+            <span class="year">Accepté :</span>
+            <span class="amount" id="accepted-donations">{{ donationsAccepted|number_format(2, ',', ' ') }} €</span>
+        </div>
+        <div class="donation-item">
+            <span class="icon" style="color: #d6336c;"><i class="bi bi-clock-fill"></i></span>
+            <span class="year">En Attente :</span>
+            <span class="amount" id="pending-donations">{{ pendingDonations|number_format(2, ',', ' ') }} €</span>
+        </div>
+    </div>
+</div>
+</div>
 
   <!-- Events Table -->
   <div class="table-container">
@@ -664,6 +673,9 @@
 <script>
   // Transmission des données des dons au JavaScript
   const donationsData = {{ donationsByMonth|json_encode|raw }};
+
+
+  
 </script>
 <script>
   $(document).ready(function () {
@@ -700,6 +712,7 @@
     });
   });
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script src="{{ asset('assets/js/partner/dashboard.js') }}"></script>
 </body>

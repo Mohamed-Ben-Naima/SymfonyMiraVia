@@ -55,6 +55,7 @@ final class DashboardPartenaireController extends AbstractController
 
     #[Route('/dashboard/partenaire', name: 'app_dashboard_partenaire')]
         public function index(
+            Request $request,
             ClientsRepository $clientRepository,
             EvenementsRepository $eventRepository,
             BenevolatRepository $benevolatRepository,
@@ -71,16 +72,19 @@ final class DashboardPartenaireController extends AbstractController
                 throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette section.');
             }
 
-            // Récupération des données spécifiques au partenaire
+            // Retrieve the selected year from the query parameters (default to the current year)
+            $year = $request->query->get('year', date('Y'));
+
+            // Fetch data for the partner
             $evenements = $eventRepository->findBy(['idPartenaire' => $user->getIdUtilisateur()]);
             $clientCount = $clientRepository->count([]);
             $eventCount = $eventRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
             $benevolatCount = $benevolatRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
             $demandeAideCount = $demandeAideRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
             $donationCount = $donsRepository->count(['idPartenaire' => $user->getIdUtilisateur()]);
-            $donationsAccepted = $donsRepository->getTotalAcceptedDonations($user->getIdUtilisateur());
-
-            // Préparation des données pour le graphique des dons
+            $donationsAccepted = $donsRepository->getTotalAcceptedDonationsByYear($user->getIdUtilisateur(), $year);
+            $pendingDonations = $donsRepository->getTotalPendingDonationsByYear($user->getIdUtilisateur(), $year);
+            $availableYears = $donsRepository->getAvailableYears($user->getIdUtilisateur());
             $donationsByMonth = $donsRepository->getDonationsByMonth($user->getIdUtilisateur());
 
             return $this->render('Partenaire/dashboard_partenaire/dashboard.html.twig', [
@@ -90,8 +94,11 @@ final class DashboardPartenaireController extends AbstractController
                 'benevolats' => $benevolatCount,
                 'demandes' => $demandeAideCount,
                 'dons' => $donationCount,
-                'donationsByMonth' => $donationsByMonth,
                 'donationsAccepted' => $donationsAccepted,
+                'pendingDonations' => $pendingDonations,
+                'availableYears' => $availableYears,
+                'donationsByMonth' => $donationsByMonth,
+                'selectedYear' => $year,
             ]);
         }
 

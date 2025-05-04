@@ -517,19 +517,25 @@
   
   .chart-donations-card {
     display: flex;
+    flex-wrap: wrap; /* Permet d'adapter la disposition en fonction de l'espace disponible */
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     padding: 20px;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 15px; /* Ajoute un espace entre les sections */
+    position: relative; /* Nécessaire pour le séparateur */
     
-  }
+}
+
   
   .chart-section {
-    flex: 1.5; /* Le graphique occupe 2/3 de la carte */
-    border-right: 1px solid #eee; /* Ligne de séparation */
-    padding-right: 20px;
+    flex: 1.5; /* Le graphique occupe plus d'espace */
+    min-width: 250px; /* Taille minimale pour éviter que le graphique devienne trop petit */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .chart-header h4 {
@@ -539,11 +545,12 @@
   }
   
   .donations-section {
-    flex: 1; /* La section des montants occupe 1/3 de la carte */
+    flex: 1; /* Le sélecteur de date et les détails occupent moins d'espace */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    gap: 20px;
+    min-width: 200px; /* Taille minimale pour éviter que le contenu devienne trop petit */
   }
   
   .donations-header h4 {
@@ -586,23 +593,6 @@
   }
 
   
-
-  .growth-circle:after {
-    content: '';
-    width: 110px;
-    height: 110px;
-    background: #fff;
-    border-radius: 50%;
-    position: absolute;
-  }
-  
-  .growth-percentage {
-    position: absolute;
-    font-size: 24px;
-    font-weight: bold;
-    color: #3498db;
-  }
-  
   .donations-summary {
     display: flex;
     flex-direction: column;
@@ -626,7 +616,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     padding-right: 10px;
   }
   
@@ -634,9 +624,9 @@
     background-color: #d2e9f9;
     color: #339af0;
     padding: 8px 16px;
-    border: none;
+    border: 1px solid #339af0;
     border-radius: 10px;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     text-align: center;
     text-align-last: center; /* Pour IE/Edge */
@@ -644,7 +634,8 @@
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-    width: 400px;
+    width: 100%; /* Occupe toute la largeur dans son conteneur */
+    max-width: 250px; /* Largeur maximale */
   }
   
   /* Style pour les options (menu déroulant ouvert) */
@@ -664,7 +655,6 @@
   .growth-circle {
     width: 130px;
     height: 130px;
-    background: conic-gradient(#339af0 78%, #d2e9f9 78%);
     border-radius: 50%;
     margin: 0 auto;
     display: flex;
@@ -673,15 +663,22 @@
     position: relative;
   }
   
-  .growth-circle:after {
-    content: '';
-    width: 90px;
-    height: 90px;
-    background: #fff;
-    border-radius: 50%;
-    position: absolute;
+
+  @media (max-width: 768px) {
+    .chart-donations-card {
+        flex-direction: column; /* Empile les éléments */
+        align-items: center;
+    }
+
+    .chart-section {
+        margin-bottom: 20px; /* Ajoute un espace entre le graphique et le sélecteur de date */
+    }
+
+    .year-dropdown select {
+        max-width: 100%; /* S'adapte à la largeur disponible */
+    }
   }
-  
+
   .growth-percentage {
     position: absolute;
     font-size: 24px;

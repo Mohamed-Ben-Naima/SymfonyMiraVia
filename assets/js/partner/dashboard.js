@@ -110,12 +110,12 @@ document.addEventListener('keydown', function(e) {
         datasets: [{
           label: 'Dons financiers',
           data: data,
-          borderColor: '#339af0',
-          backgroundColor: '#d2e9f9',
+          borderColor: '#d6336c',
+          backgroundColor: '#ffe2e6',
           tension: 0.2,
           fill: true,
           pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#339af0',
+          pointBorderColor: '#d6336c',
           pointRadius: 3,
           pointHoverRadius: 7
         }]
@@ -149,3 +149,102 @@ document.addEventListener('keydown', function(e) {
       plugins: [ChartDataLabels]
     });
   });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const yearSelector = document.getElementById("year-selector");
+    const growthAmount = document.getElementById("growth-amount");
+    const growthSummary = document.getElementById("growth-summary");
+    const donationsBreakdown = document.getElementById("donations-breakdown");
+
+    // Données des dons par année (remplies dynamiquement depuis le backend)
+    const donationsData = JSON.parse('{{ donationsByYear|json_encode|e("js") }}');
+
+    // Met à jour les données affichées en fonction de l'année sélectionnée
+    yearSelector.addEventListener("change", function () {
+        const selectedYear = this.value;
+
+        // Met à jour le montant des dons dans le cercle
+        growthAmount.textContent = donationsData[selectedYear]
+            ? `${donationsData[selectedYear].toLocaleString("fr-FR", { minimumFractionDigits: 2 })} €`
+            : "0,00 €";
+
+        // Met à jour le résumé
+        growthSummary.textContent = `Nombre de dons pour ${selectedYear} :`;
+
+        // Met à jour la liste des détails des dons
+        donationsBreakdown.innerHTML = `
+            <div class="donation-item">
+                <span class="icon">📆</span>
+                <span class="year">${selectedYear}:</span>
+                <span class="amount">${
+                    donationsData[selectedYear]
+                        ? `${donationsData[selectedYear].toLocaleString("fr-FR", { minimumFractionDigits: 2 })} €`
+                        : "0,00 €"
+                }</span>
+            </div>
+        `;
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const ctx = document.getElementById("donationPieChart").getContext("2d");
+
+  // Données des dons
+  const acceptedDonations = parseInt(document.getElementById("accepted-donations").textContent.replace(/\s/g, '').replace(',', '')) || 0;
+  const pendingDonations = parseInt(document.getElementById("pending-donations").textContent.replace(/\s/g, '').replace(',', '')) || 0;
+
+  const totalDonations = acceptedDonations + pendingDonations;
+
+  // Initialiser le graphique
+  const donationPieChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      
+      datasets: [
+        {
+          data: [acceptedDonations, pendingDonations], // Include only accepted and pending donations
+          backgroundColor: ["#3498db", "#d6336c"], // Blue and yellow colors
+          hoverOffset: 10,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      cutout: "70%",
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (tooltipItem) {
+              const label = tooltipItem.label || "";
+              const value = tooltipItem.raw || 0;
+              return `${label}: ${value.toLocaleString("fr-FR")} €`;
+            },
+          },
+        },
+        legend: {
+          display: true,
+          position: "top",
+          labels: {
+            usePointStyle: true, // Circular legend markers
+            padding: 10,
+          },
+        },
+      },
+    },
+  });
+
+  // Gère les événements hover pour mettre à jour le texte au centre du cercle
+  document.getElementById("donationPieChart").addEventListener("mousemove", function (event) {
+    const points = donationPieChart.getElementsAtEventForMode(event, "nearest", { intersect: true }, true);
+
+    if (points.length) {
+      const firstPoint = points[0];
+      const label = donationPieChart.data.labels[firstPoint.index];
+      const value = donationPieChart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+
+      const percentage = ((value / totalDonations) * 100).toFixed(1);
+      document.getElementById("growth-percentage").textContent = `${value.toLocaleString("fr-FR")} €`;
+      document.getElementById("growth-status").textContent = label;
+    }
+  });
+});
