@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Conversations;
+use App\Entity\Utilisateurs;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
 /**
  * @extends ServiceEntityRepository<Conversations>
  *
@@ -20,29 +20,12 @@ class ConversationsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Conversations::class);
     }
-
-//    /**
-//     * @return Conversations[] Returns an array of Conversations objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Conversations
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+public function findByUser(Utilisateurs $user)
+{
+    return $this->createQueryBuilder('c')
+        ->where('c.idUser1 = :userId OR c.idUser2 = :userId')
+        ->setParameter('userId', $user->getIdUtilisateur())
+        ->getQuery()
+        ->getResult();
+}
 }
