@@ -15,10 +15,10 @@ class Messages
     #[ORM\Column(name: "id_message", type: "integer")]
     private ?int $idMessage = null;
 
-    #[ORM\Column(name: "id_expediteur", nullable: true, options: ["default" => NULL])]
+    #[ORM\Column(name: "id_expediteur", nullable: true)]
     private ?int $idExpediteur = NULL;
 
-    #[ORM\Column(name: "id_destinataire", nullable: true, options: ["default" => NULL])]
+    #[ORM\Column(name: "id_destinataire", nullable: true)]
     private ?int $idDestinataire = NULL;
 
     #[ORM\Column(name: "message", type: Types::TEXT)]
@@ -30,7 +30,7 @@ class Messages
     #[ORM\Column(name: "date_envoi", type: Types::DATETIME_MUTABLE, nullable: true, options: ["default" => 'current_timestamp()'])]
     private ?\DateTimeInterface $dateEnvoi = null;
 
-    #[ORM\Column(name: "id_conversation", nullable: true, options: ["default" => NULL])]
+    #[ORM\Column(name: "id_conversation", nullable: true)]
     private ?int $idConversation = NULL;
 
     #[ORM\Column(name: "type_message", type: Types::STRING, nullable: true)]

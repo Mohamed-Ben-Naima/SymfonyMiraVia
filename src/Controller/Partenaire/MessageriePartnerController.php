@@ -16,94 +16,98 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 final class MessageriePartnerController extends AbstractController
 {
-    #[Route('/dashboard/partenaire/messagerie', name: 'app_messagerie_partner')]
-    public function index(
-        Request $request,
-        ConversationsRepository $conversationsRepository,
-        MessagesRepository $messagesRepository,
-        UtilisateursRepository $utilisateursRepository
-    ): Response {
-        // Récupérer l'utilisateur connecté
-        $user = $this->getUser();
-        if (!$user) {
-            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
-        }
-
-        // Récupérer tous les contacts sauf l'utilisateur connecté
-        $contacts = array_filter(
-            $utilisateursRepository->findAll(),
-            fn($contact) => $contact->getIdUtilisateur() !== $user->getIdUtilisateur()
-        );
-
-        $contactData = [];
-        foreach ($contacts as $contact) {
-            // Récupérer la conversation avec ce contact
-            $conversation = $conversationsRepository->findOneBy([
-                'idUser1' => $user->getIdUtilisateur(),
-                'idUser2' => $contact->getIdUtilisateur()
-            ]) ?: $conversationsRepository->findOneBy([
-                'idUser1' => $contact->getIdUtilisateur(),
-                'idUser2' => $user->getIdUtilisateur()
-            ]);
-
-            $lastMessageText = '';
-            if ($conversation) {
-                $lastMessage = $messagesRepository->findOneBy(
-                    ['idConversation' => $conversation->getIdConversation()],
-                    ['dateEnvoi' => 'DESC']
-                );
-                $lastMessageText = $lastMessage ? $lastMessage->getMessage() : '';
+            #[Route('/dashboard/partenaire/messagerie', name: 'app_messagerie_partner')]
+        public function index(
+            Request $request,
+            ConversationsRepository $conversationsRepository,
+            MessagesRepository $messagesRepository,
+            UtilisateursRepository $utilisateursRepository
+        ): Response {
+            // 1. Récupérer l'utilisateur connecté
+            $user = $this->getUser();
+            if (!$user) {
+                throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
             }
 
-            $contactData[] = [
-                'idUtilisateur' => $contact->getIdUtilisateur(),
-                'name' => $contact->getNom() . ' ' . $contact->getPrenom(),
-                'avatar' => '/assets/images/avatar-placeholder.png', // À adapter si tu as un champ avatar
-                'lastMessage' => $lastMessageText,
-            ];
-        }
+            // 2. Récupérer tous les contacts sauf l'utilisateur connecté
+            $contacts = $utilisateursRepository->findAllExcept($user);
 
-        // Récupérer les conversations liées à l'utilisateur
-        $conversations = $conversationsRepository->findByUser($user);
+            $contactData = [];
+            foreach ($contacts as $contact) {
+                // Chercher la conversation avec ce contact dans un sens puis dans l'autre
+                $conversation = $conversationsRepository->findOneBy([
+                    'idUser1' => $user->getIdUtilisateur(),
+                    'idUser2' => $contact->getIdUtilisateur()
+                ]) ?: $conversationsRepository->findOneBy([
+                    'idUser1' => $contact->getIdUtilisateur(),
+                    'idUser2' => $user->getIdUtilisateur()
+                ]);
 
-        // Destinataire sélectionné
-        $receiverId = $request->query->get('receiver_id');
+                // Récupérer le dernier message
+                $lastMessageText = '';
+                if ($conversation) {
+                    $lastMessage = $messagesRepository->findOneBy(
+                        ['idConversation' => $conversation->getIdConversation()],
+                        ['dateEnvoi' => 'DESC']
+                    );
+                    $lastMessageText = $lastMessage ? $lastMessage->getMessage() : '';
+                }
 
-        if (!$receiverId && count($conversations) > 0) {
-            $receiverId = $conversations[0]->getIdUser1() === $user->getIdUtilisateur()
-                ? $conversations[0]->getIdUser2()
-                : $conversations[0]->getIdUser1();
-        }
-
-        $currentReceiver = $receiverId ? $utilisateursRepository->find($receiverId) : null;
-        $messages = [];
-
-        if ($currentReceiver) {
-            $conversation = $conversationsRepository->findOneBy([
-                'idUser1' => $receiverId,
-                'idUser2' => $user->getIdUtilisateur()
-            ]) ?: $conversationsRepository->findOneBy([
-                'idUser1' => $user->getIdUtilisateur(),
-                'idUser2' => $receiverId
-            ]);
-
-            if ($conversation) {
-                $messages = $messagesRepository->findBy(
-                    ['idConversation' => $conversation->getIdConversation()],
-                    ['dateEnvoi' => 'ASC']
-                );
+                $contactData[] = [
+                    'idUtilisateur' => $contact->getIdUtilisateur(),
+                    'name' => $contact->getNom() . ' ' . $contact->getPrenom(),
+                    'avatar' => $contact->getAvatar(), // juste le nom de fichier
+                    'lastMessage' => $lastMessageText,
+                    'senderId' => $user->getIdUtilisateur(),
+                ];
             }
-        }
 
-        return $this->render('Partenaire/messagerie_partner/index.html.twig', [
-            'contacts' => $contactData,
-            'conversations' => $conversations,
-            'messages' => $messages,
-            'currentUser' => $user,
-            'currentReceiver' => $currentReceiver,
-            'receiverId' => $receiverId,
-        ]);
-    }
+            // 3. Récupérer toutes les conversations de l'utilisateur connecté
+            $conversations = $conversationsRepository->findByUser($user);
+
+            // 4. Déterminer le destinataire courant
+            $receiverId = $request->query->get('receiver_id');
+
+            // Si aucun destinataire n’est passé dans l’URL, on prend le premier contact en conversation
+            if (!$receiverId && count($conversations) > 0) {
+                $receiverId = $conversations[0]->getIdUser1() === $user->getIdUtilisateur()
+                    ? $conversations[0]->getIdUser2()
+                    : $conversations[0]->getIdUser1();
+            }
+
+            $currentReceiver = $receiverId ? $utilisateursRepository->find($receiverId) : null;
+            $messages = [];
+
+            // 5. Charger les messages si un destinataire est sélectionné
+            if ($currentReceiver) {
+                $conversation = $conversationsRepository->findOneBy([
+                    'idUser1' => $receiverId,
+                    'idUser2' => $user->getIdUtilisateur()
+                ]) ?: $conversationsRepository->findOneBy([
+                    'idUser1' => $user->getIdUtilisateur(),
+                    'idUser2' => $receiverId
+                ]);
+
+                if ($conversation) {
+                    $messages = $messagesRepository->findBy(
+                        ['idConversation' => $conversation->getIdConversation()],
+                        ['dateEnvoi' => 'ASC']
+                    );
+                }
+            }
+
+            // 6. Afficher la vue Twig avec toutes les données nécessaires
+            return $this->render('Partenaire/messagerie_partner/index.html.twig', [
+                'contacts' => $contactData,
+                'conversations' => $conversations,
+                'messages' => $messages,
+                'currentUser' => $user,
+                'senderId' => $user->getIdUtilisateur(),
+                'currentReceiver' => $currentReceiver,
+                'receiverId' => $receiverId,
+                
+            ]);
+        }
 
     #[Route('/dashboard/partenaire/messagerie/send-message', name: 'send_message', methods: ['POST'])]
     public function sendMessage(Request $request, EntityManagerInterface $em): JsonResponse
@@ -149,17 +153,19 @@ final class MessageriePartnerController extends AbstractController
         if (!$conversation) {
             $conversation = new Conversations();
             $conversation->setIdUser1($senderId); // Utiliser senderId ici
-            $conversation->setIdUser2($receiver->getIdUtilisateur());
+            $conversation->setIdUser2($receiverId);
             $conversation->setSujet('Nouvelle conversation');
             $conversation->setDateCreation(new \DateTime());
             $em->persist($conversation);
             $em->flush(); // Sauvegarder la conversation
         }
-    
+
         // Créer le message à envoyer
         $message = new Messages();
-        $message->setIdExpediteur($senderId); 
-        $message->setIdDestinataire($receiver->getIdUtilisateur());
+        $senderUser = $em->getRepository(Utilisateurs::class)->find($senderId);
+        $receiverUser = $em->getRepository(Utilisateurs::class)->find($receiverId);
+        $message->setExpediteur($senderUser);
+        $message->setDestinataire($receiverUser);
         $message->setMessage($messageText);
         $message->setDateEnvoi(new \DateTime());
         $message->setConversation($conversation); // Utiliser la relation ManyToOne pour associer la conversation
@@ -177,7 +183,7 @@ final class MessageriePartnerController extends AbstractController
     
 
     #[Route('/dashboard/partenaire/messagerie/messages', name: 'ajax_get_messages', methods: ['GET'])]
-    public function getMessages(Request $request, MessagesRepository $messageRepo, UtilisateursRepository $userRepo): Response
+    public function getMessages(Request $request, MessagesRepository $messageRepo, UtilisateursRepository $userRepo): JsonResponse
     {
         $receiverId = $request->query->get('receiver_id');
         $receiver = $userRepo->find($receiverId);
@@ -187,20 +193,23 @@ final class MessageriePartnerController extends AbstractController
             return new JsonResponse(['error' => 'Utilisateur non trouvé.'], 404);
         }
     
+        // Récupérer les messages entre l'utilisateur actuel et le destinataire
         $messages = $messageRepo->findMessagesBetween($currentUser, $receiver);
-    
-        $mappedMessages = array_map(function (Messages $msg) use ($currentUser) {
+       
+        // Mapper les entités Messages en tableau simple
+        $messagesArray = array_map(function ($message) use ($userRepo) {
+            // Récupérer l'expéditeur du message
+            $senderId = $message->getIdExpediteur();
+            $sender = $userRepo->find($senderId);
             return [
-                'sender' => $msg->getIdExpediteur() === $currentUser ? 'me' : 'them',
-                'text' => $msg->getMessage(),
-                'time' => $msg->getDateEnvoi()->format('H:i'),
+                'message' => $message->getMessage(),
+                'senderId' => $message->getIdExpediteur(),
+                'dateEnvoi' => $message->getDateEnvoi()->format('Y-m-d H:i:s'),
+                'senderAvatar' => $sender && $sender->getAvatar() ? $sender->getAvatar() : 'user.png',
             ];
         }, $messages);
     
-        return $this->render('Partenaire/messagerie_partner/index.html.twig', [
-            'messages' => $mappedMessages,
-            'receiverId' => $receiverId,
-        ]);
+        return new JsonResponse(['messages' => $messagesArray]);
     }
     
 
