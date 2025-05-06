@@ -1,0 +1,149 @@
+/* Style général pour #chat3 */
+#chat3 .form-control {
+    border-color: transparent;
+    border-radius: 30px;
+    padding-left: 15px;
+    font-size: 14px;
+}
+
+#chat3 .form-control:focus {
+    border-color: transparent;
+    box-shadow: inset 0px 0px 0px 1px transparent;
+}
+
+/* Badge de statut de contact */
+.badge-dot {
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    margin-left: 2.9rem;
+    margin-top: -.75rem;
+}
+
+/* Effet hover sur les éléments avec la classe hoverable */
+.hoverable:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+/* Forme circulaire pour les avatars et icônes */
+.rounded-circle {
+    border-radius: 50%;
+}
+
+/* Style de la barre des actions du message */
+.message-actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 15px;
+    margin-top: 10px;
+}
+
+/* Icônes de la barre des actions */
+.message-actions a {
+    font-size: 20px;
+    color: #999;
+    transition: color 0.3s ease, transform 0.3s ease;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-flex; /* Centrage des icônes */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Effet hover sur les icônes de la barre des actions */
+.message-actions a:hover {
+    color: #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+    transform: scale(1.1);
+}
+
+/* Style pour le bouton d'envoi */
+.message-actions button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    padding: 10px 12px;
+    font-size: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex; /* Centrage de l'icône du bouton */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Effet hover sur le bouton d'envoi */
+.message-actions button:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+.message-actions button:focus {
+    outline: none;
+}
+
+/* Alignement des éléments dans les actions du message */
+.message-actions a, .message-actions button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Animation des icônes lors du survol */
+.message-actions i {
+    transition: transform 0.3s ease;
+}
+
+.message-actions a:hover i, .message-actions button:hover i {
+    transform: scale(1.1);
+}
+
+/* Ajustements pour mobile */
+@media (max-width: 767px) {
+    /* Barre des actions */
+    .message-actions {
+        flex-direction: row;
+        padding: 10px;
+    }
+
+    .message-actions a {
+        font-size: 18px;
+        padding: 7px;
+    }
+
+    .message-actions button {
+        padding: 8px 10px;
+        font-size: 18px;
+    }
+
+    /* Champ de saisie */
+    #chat3 .form-control {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+/* Ajustements pour la container des messages */
+.message-container {
+    max-height: 350px;
+    height: 400px; 
+    overflow-y: auto;
+}
+
+/* Liste des contacts avec une marge */
+.contacts-list {
+    margin-top: 20px;
+    height: 400px; 
+    overflow-y: auto;
+}
+
+/* Responsive adjustments for message input */
+@media (max-width: 767px) {
+    #chat3 .form-control {
+        font-size: 16px;
+        padding: 10px;
+    }
+}

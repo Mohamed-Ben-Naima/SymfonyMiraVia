@@ -20,6 +20,15 @@ class UtilisateursRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Utilisateurs::class);
     }
+    public function findAllExcept(Utilisateurs $user): array
+{
+    return $this->createQueryBuilder('u')
+        ->where('u.idUtilisateur != :id')
+        ->setParameter('id', $user->getIdUtilisateur())
+        ->getQuery()
+        ->getResult();
+}
+
 
     public function findAllAdmins(): array
     {

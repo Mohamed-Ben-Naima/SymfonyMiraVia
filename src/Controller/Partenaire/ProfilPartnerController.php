@@ -201,12 +201,12 @@ public function updateProfil(Request $request, EntityManagerInterface $em): Resp
             $partenaire->setAdresse($adresseEntreprise);
             $isUpdated = true;
         }
-        if (!empty($telephone)) {
-            if (!preg_match('/^\+?[0-9]{8,15}$/', $telephone)) {
-                $this->addFlash('error', 'Numéro de téléphone utilisateur invalide.');
+        if (!empty($telEntreprise)) {
+            if (!preg_match('/^\+?[0-9]{8,15}$/', $telEntreprise)) {
+                $this->addFlash('error', 'Numéro de téléphone entreprise invalide.');
                 return $this->redirectToRoute('app_profil_partner');
             }
-            $user->setTelephone($telephone);
+            $partenaire->setTelephone($telEntreprise);
             $isUpdated = true;
         }        
     }

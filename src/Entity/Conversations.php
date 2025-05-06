@@ -5,18 +5,22 @@ namespace App\Entity;
 use App\Repository\ConversationsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 #[ORM\Table(name: 'conversations')]
 #[ORM\Entity(repositoryClass: ConversationsRepository::class)]
 class Conversations
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(name: "id_conversation", nullable: true, options: ["default" => NULL])]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(name: "id_conversation", type: "integer")]
     private ?int $idConversation = NULL;
 
+    #[ORM\OneToMany(mappedBy: "conversation", targetEntity: Messages::class)]
+    private Collection $messages;
+    
     #[ORM\Column(name: "sujet", length: 255, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $sujet = 'NULL';
+    private ?string $sujet =null;
 
     #[ORM\Column(name: "date_creation", type: Types::DATETIME_MUTABLE, nullable: true, options: ["default" => 'current_timestamp()'])]
     private ?\DateTimeInterface $dateCreation = null;
