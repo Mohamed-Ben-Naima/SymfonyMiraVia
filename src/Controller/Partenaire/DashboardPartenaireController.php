@@ -162,4 +162,6 @@ final class DashboardPartenaireController extends AbstractController
             throw new \RuntimeException('Erreur de communication avec DeepSeek : ' . $e->getMessage());
         }
     }
+
+    
 }

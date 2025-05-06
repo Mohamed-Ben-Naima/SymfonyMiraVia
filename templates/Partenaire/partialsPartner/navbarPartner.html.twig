@@ -137,10 +137,17 @@
 <div class="floating-header">
     <!-- Search Card -->
     <div class="search-card">
-        <input type="text" class="form-control" placeholder="Rechercher..." id="mainSearchBar">
-        <!-- Icons for notifications and profile -->
+        <!-- Search Bar -->
+        <div class="search-bar-wrapper">
+            <input type="text" class="form-control" placeholder="Rechercher..." id="mainSearchBar">
+        </div>
+
+        <!-- Icons Section -->
         <div class="search-icons">
-            <i class="bi bi-grid-fill dashboard-icon"></i>
+            <i class="bi bi-globe2 global-icon"></i> <!-- Global Icon -->
+            <i class="bi bi-sun sun-icon"></i> <!-- Sun Icon -->
+            <i class="bi bi-grid-fill dashboard-icon"></i> <!-- Dashboard Icon -->
+            
             <!-- Notification Icon -->
             <div class="notification-wrapper">
                 <i class="bi bi-bell-fill notification-icon" id="toggleNotifications"></i>
@@ -150,8 +157,6 @@
             <!-- Notification Popup -->
             <div class="notification-popup" id="notificationPopup">
                 <div class="notification-title" id="notificationTitle">Notifications</div>
-
-                <!-- Section dynamique des notifications -->
                 <div class="notification-items" id="notificationItems"></div>
                 <div class="notification-actions">
                     <button class="btn-mark-read" onclick="markAllAsRead()">Marquer tout comme lu</button>
@@ -159,18 +164,17 @@
                 </div>
             </div>
         </div>
-        <!-- Profile Icon -->
-<div class="profile-wrapper">
- {% if app.user.avatar %}
-    <img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}" alt="Profile" class="profile-icon"
-         onerror="this.src='{{ asset('images-partner/user.png') }}'">
-{% else %}
-    <img src="{{ asset('images-partner/user.png') }}" alt="Profile" class="profile-icon">
-{% endif %}
-    <span class="status-indicator"></span>
-</div>
 
-
+        <!-- Profile Section -->
+        <div class="profile-wrapper">
+            {% if app.user.avatar %}
+                <img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}" alt="Profile" class="profile-icon"
+                     onerror="this.src='{{ asset('images-partner/user.png') }}'">
+            {% else %}
+                <img src="{{ asset('images-partner/user.png') }}" alt="Profile" class="profile-icon">
+            {% endif %}
+            <span class="status-indicator"></span>
+        </div>
     </div>
 </div>
 <script>
@@ -239,7 +243,6 @@ fetch('/api/user/avatar')
     const notificationTitle = document.getElementById('notificationTitle');
     notificationTitle.textContent = count > 0 ? `${count} Notifications` : "Aucune notification";
 }
-
 
     // Fonction pour marquer toutes les notifications comme lues
     function markAllAsRead() {
@@ -355,7 +358,7 @@ fetch('/api/user/avatar')
                                     <span>${formatTime(notification.dateEnvoi)}</span>
                                     <!-- Icône corbeille de suppression -->
                                     <button class="btn-delete" aria-label="Supprimer cette notification" onclick="deleteNotification(${notification.id})">
-                              <i class="bi bi-trash"></i>
+                                    <i class="bi bi-trash"></i>
                                   </button>
                                 </div>
                             `;
