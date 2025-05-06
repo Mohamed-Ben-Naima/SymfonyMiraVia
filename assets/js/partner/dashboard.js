@@ -1,15 +1,3 @@
-  // Gestion du header flottant
-  window.addEventListener('scroll', function() {
-    const header = document.querySelector('.floating-header');
-    if (window.scrollY > 50) {
-        
-        header.style.backgroundColor = '#f5f5f9';
-    } else {
-        
-        header.style.backgroundColor = '#f5f5f9';
-    }
-});
-
 // Raccourci clavier CTRL+K pour la recherche
 document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.key === 'k') {
@@ -246,5 +234,51 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("growth-percentage").textContent = `${value.toLocaleString("fr-FR")} €`;
       document.getElementById("growth-status").textContent = label;
     }
+    });
   });
+
+  $(document).ready(function () {
+    $('#chat-form').on('submit', function (e) {
+      e.preventDefault();
+
+      const userMessage = $('#message-input').val();
+      if (userMessage.trim()) {
+          $('#messages').append('<div class="message user"><p>' + userMessage + '</p></div>');
+          $('#message-input').val('');
+
+          $('#typing-indicator').show();
+
+          $.ajax({
+              url: '/chatbot/api',
+              type: 'POST',
+              data: { message: userMessage },
+              success: function (data) {
+                  $('#typing-indicator').hide();
+                  if (data.response) {
+                      $('#messages').append('<div class="message bot"><p>' + data.response + '</p></div>');
+                  } else {
+                      $('#messages').append('<div class="message bot"><p>Erreur du chatbot, veuillez réessayer.</p></div>');
+                  }
+                  $('#messages').scrollTop($('#messages')[0].scrollHeight);
+              },
+              error: function () {
+                  $('#typing-indicator').hide();
+                  $('#messages').append('<div class="message bot"><p>Erreur du chatbot, veuillez réessayer plus tard.</p></div>');
+                  $('#messages').scrollTop($('#messages')[0].scrollHeight);
+              }
+          });
+      }
+    });
+  });
+
+// Gestion du header flottant
+window.addEventListener('scroll', function() {
+  const header = document.querySelector('.floating-header');
+  if (window.scrollY > 50) {
+      
+      header.style.backgroundColor = '#f5f5f9';
+  } else {
+      
+      header.style.backgroundColor = '#f5f5f9';
+  }
 });
