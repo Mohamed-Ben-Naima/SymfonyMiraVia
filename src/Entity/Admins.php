@@ -56,4 +56,9 @@ class Admins
 
         return $this;
     }
+    public function isActive(): bool
+    {
+        // Replace with your own logic to determine if the admin account is active
+        return $this->status === 'active';
+    }
 }

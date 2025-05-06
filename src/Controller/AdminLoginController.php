@@ -85,10 +85,12 @@ final class AdminLoginController extends AbstractController
     }
 
     #[Route('/logout', name: 'app_logout')]
-    public function logout(RequestStack $requestStack): void
+    public function logout(RequestStack $requestStack): Response
     {
         $session = $requestStack->getSession();
         $session->invalidate(); // Invalide la session en cours
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    
+        // Redirection vers la page de connexion après déconnexion
+        return $this->redirectToRoute('app_admin_login');
     }
 }
