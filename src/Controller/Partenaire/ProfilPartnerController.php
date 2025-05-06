@@ -3,6 +3,7 @@
 namespace App\Controller\Partenaire;
 
 use App\Entity\Partenaires;
+use App\Entity\Utilisateurs;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -18,6 +19,10 @@ final class ProfilPartnerController extends AbstractController
     public function index(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
+
+        if (!$user instanceof Utilisateurs) {
+            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+        }
 
         // Récupérer les informations du partenaire
         $partenaire = $entityManager->getRepository(Partenaires::class)->findOneBy(['utilisateur' => $user]);
@@ -50,6 +55,10 @@ final class ProfilPartnerController extends AbstractController
     public function updateAvatar(Request $request, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
+
+        if (!$user instanceof Utilisateurs) {
+            throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+        }
         $avatarFile = $request->files->get('avatar');
     
         if ($avatarFile) {
@@ -72,6 +81,11 @@ final class ProfilPartnerController extends AbstractController
 public function updateLogo(Request $request, EntityManagerInterface $em): Response
 {
     $user = $this->getUser();
+
+    if (!$user instanceof Utilisateurs) {
+        throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+    }
+
     $partenaire = $em->getRepository(Partenaires::class)->findOneBy(['utilisateur' => $user]);
     $logoFile = $request->files->get('logo');
 
@@ -94,6 +108,10 @@ public function updateLogo(Request $request, EntityManagerInterface $em): Respon
 public function updatePassword(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
 {
     $user = $this->getUser();
+
+    if (!$user instanceof Utilisateurs) {
+        throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+    }
     $oldPassword = $request->request->get('oldPassword');
     $newPassword = $request->request->get('newPassword');
 
@@ -122,6 +140,11 @@ public function updatePassword(Request $request, EntityManagerInterface $em, Use
 public function updateProfil(Request $request, EntityManagerInterface $em): Response
 {
     $user = $this->getUser();
+
+    if (!$user instanceof Utilisateurs) {
+        throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+    }
+    
     $partenaire = $em->getRepository(Partenaires::class)->findOneBy(['utilisateur' => $user]);
 
     // Récupération des données de la requête

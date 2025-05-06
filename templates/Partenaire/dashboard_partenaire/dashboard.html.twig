@@ -11,6 +11,7 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
  <link href="{{ asset('style-partner/dashboard.css') }}" rel="stylesheet">
+
 </head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -359,8 +360,6 @@
 </style>
 
 <body>
- <!-- Inclure la barre latérale -->
-{% include 'Partenaire/basePartner.html.twig' %}
 {% for label, messages in app.flashes %}
     {% for message in messages %}
         <script>
@@ -375,7 +374,9 @@
         </script>
     {% endfor %}
 {% endfor %}
-  
+
+<!-- Sidebar -->
+  {% include 'Partenaire/basePartner.html.twig' %}
 
 <div class="content">
   <div class="dashboard-header">
@@ -594,10 +595,6 @@
     </div>
   </div>
 </div>
-<script>
-  // Transmission des données des dons au JavaScript
-  const donationsData = {{ donationsByMonth|json_encode|raw }};
-</script>
 <script>
   $(document).ready(function () {
     $('#chat-form').on('submit', function (e) {
