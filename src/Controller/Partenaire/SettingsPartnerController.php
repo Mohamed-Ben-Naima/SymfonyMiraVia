@@ -8,10 +8,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SettingsPartnerController extends AbstractController
 {
-    #[Route('/settings/partner', name: 'app_settings_partner')]
+    #[Route('/dashboard/partenaire/paramètres', name: 'app_settings_partner')]
     public function index(): Response
     {
-        return $this->render('Partenaire/settings_partner/index.html.twig', [
+        return $this->render('Partenaire/settings_partner/settings.html.twig', [
             'controller_name' => 'SettingsPartnerController',
         ]);
     }

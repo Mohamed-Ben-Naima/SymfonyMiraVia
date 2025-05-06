@@ -1,0 +1,20 @@
+{% extends 'Partenaire/basePartner.html.twig' %}
+
+{% block title %}Paramètres{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1 style="color: #013a71; font-size: 35px; margin-bottom: 30px;">Paramètres </h1>
+    <div class="tabs">
+        <button class="tab hover-underline" data-tab="profile"><i class="bi bi-person-fill-gear"></i>Profil</button>
+        <button class="tab hover-underline" data-tab="notifications"><i class="bi bi-bell-fill"></i>Notifications</button>
+        <button class="tab hover-underline" data-tab="custome"><i class="bi bi-brush-fill"></i>Personnalisation</button>
+        <button class="tab hover-underline" data-tab="security"><i class="bi bi-shield-lock-fill"></i>Sécurité</button>
+        <button class="tab hover-underline" data-tab="Ln"><i class="bi bi-globe2"></i>Langue</button>
+        <button class="tab hover-underline" data-tab="Ln"><i class="bi bi-info-circle"></i>Á propos</button>
+    </div>
+
+</div>
+<link href="{{ asset('style-partner/settings.css') }}" rel="stylesheet">
+<script src="{{ asset('js/partner/settings.js') }}"></script>
+{% endblock %}

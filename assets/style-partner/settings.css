@@ -1,0 +1,115 @@
+.settings-container {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-content {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.settings-group {
+    margin-top: 20px;
+}
+
+.setting {
+    margin-bottom: 20px;
+}
+
+.setting span {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.toggles {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.toggles label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.tab {
+    font-size: 1rem;
+    color: #013a71;
+    font-weight: bold;
+    background: #d6e6ff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    display: flex; /* Make the button content flex */
+    align-items: center; /* Center icon and text vertically */
+    gap: 8px; /* Add spacing between the icon and text */
+    padding: 12px 18px; /* Add padding for the buttons */
+}
+
+.tab.active {
+    font-size: 1rem;
+    color: #ffffff;
+    background: linear-gradient(to right, #013a71 , #d6e6ff);
+}
+
+.tab.hover-underline::after,
+.tab.hover-underline::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, #d6e6ff, #013a71);
+    bottom: -5px;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s ease-out;
+}
+
+.tab.hover-underline::before {
+    top: -5px;
+    transform-origin: left;
+}
+
+.tab.hover-underline:hover::after,
+.tab.hover-underline:hover::before {
+    transform: scaleX(1);
+}
+
+.tab-content {
+    display: none;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Optional: Style for icons inside tabs */
+.tab i {
+    font-size: 1rem; /* Adjust icon size */
+}
