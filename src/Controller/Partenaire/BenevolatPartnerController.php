@@ -3,8 +3,11 @@
 namespace App\Controller\Partenaire;
 use App\Entity\Utilisateurs;
 use App\Entity\Benevolat;
+use App\Entity\Notifications;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\BenevolatRepository;
+use App\Repository\UtilisateursRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +19,7 @@ final class BenevolatPartnerController extends AbstractController
     #[Route('/dashboard/partenaire/benevolats', name: 'app_benevolat_partner')]
 
     public function Benevolat(
-
+        UtilisateursRepository $utilisateursRepository,
         BenevolatRepository $repository,
         
     ): Response {
@@ -38,7 +41,8 @@ final class BenevolatPartnerController extends AbstractController
     }
 
     #[Route('/dashboard/partenaire/benevolats/ajouter', name: 'add_benevolat', methods: ['POST', 'GET'])]
-    public function addBenevolat(Request $request, EntityManagerInterface $entityManager): Response
+    public function addBenevolat(Request $request, EntityManagerInterface $entityManager,UtilisateursRepository $utilisateursRepository
+    ): Response
     {
         $user = $this->getUser();
 
@@ -84,7 +88,7 @@ final class BenevolatPartnerController extends AbstractController
         $admins = $utilisateursRepository->findAllAdmins();
         foreach ($admins as $admin) {
             $adminNotif = new Notifications();
-            $adminNotif->setMessage(" Nouveau bénévolat ajouté par " . $user->getNomUtilisateur());
+            $adminNotif->setMessage(" Nouveau bénévolat ajouté par " . $user->getNom()." " . $user->getPrenom());
             $adminNotif->setDateEnvoi(new DateTime());
             $adminNotif->setTypeNotification('success');
             $adminNotif->setIsRead(false);
@@ -103,7 +107,7 @@ final class BenevolatPartnerController extends AbstractController
     }
 
     #[Route('/dashboard/partenaire/benevolats/modifier/{id}', name: 'edit_benevolat', methods: ['POST', 'GET'])]
-        public function editBenevolat(Request $request, Benevolat $benevolat, EntityManagerInterface $entityManager): Response
+        public function editBenevolat(Request $request, Benevolat $benevolat, EntityManagerInterface $entityManager,  UtilisateursRepository $utilisateursRepository  ): Response
         {
             if ($request->isMethod('POST')) {
                 $data = $request->request->all();
@@ -133,7 +137,7 @@ final class BenevolatPartnerController extends AbstractController
                 $admins = $utilisateursRepository->findAllAdmins();
                 foreach ($admins as $admin) {
                     $adminNotif = new Notifications();
-                    $adminNotif->setMessage("Bénévolat modifié par " . $user->getNomUtilisateur());
+                    $adminNotif->setMessage("Bénévolat modifié par " . $user->getNom()." " . $user->getPrenom());
                     $adminNotif->setDateEnvoi(new DateTime());
                     $adminNotif->setTypeNotification('warning');
                     $adminNotif->setIsRead(false);
@@ -154,7 +158,8 @@ final class BenevolatPartnerController extends AbstractController
         }
     
         #[Route('/dashboard/partenaire/benevolat/upload-image/{id}', name: 'upload_benevolat_image', methods: ['POST'])]
-        public function uploadImage(Request $request, int $id, EntityManagerInterface $entityManager): Response
+        public function uploadImage(Request $request, int $id, EntityManagerInterface $entityManager,        UtilisateursRepository $utilisateursRepository
+        ): Response
         {
             $user = $this->getUser();
             $benevolat = $entityManager->getRepository(Benevolat::class)->find($id);
@@ -220,7 +225,7 @@ final class BenevolatPartnerController extends AbstractController
          $admins = $utilisateursRepository->findAllAdmins();
          foreach ($admins as $admin) {
              $adminNotif = new Notifications();
-             $adminNotif->setMessage("Bénévolat supprimé par " . $user->getNomUtilisateur());
+             $adminNotif->setMessage("Bénévolat supprimé par " . $user->getNom()." " . $user->getPrenom());
              $adminNotif->setDateEnvoi(new DateTime());
              $adminNotif->setTypeNotification('danger');
              $adminNotif->setIsRead(false);
