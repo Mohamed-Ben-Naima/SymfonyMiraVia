@@ -27,5 +27,25 @@
     <a href="{{ path('app_messagerie_partner') }}" class="sidebar-link"><i class="bi bi-chat-quote-fill"></i> Messagerie</a>
     <a href="{{ path('app_logout_partner') }}" class="sidebar-link"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
   </div>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sidebarLinks = document.querySelectorAll(".sidebar a");
+
+    sidebarLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+            // Remove active class from all links
+            sidebarLinks.forEach((l) => l.classList.remove("active"));
+
+            // Add active class to the clicked link
+            link.classList.add("active");
+        });
+    });
+
+    // Set the first link as active by default
+    if (sidebarLinks.length > 0) {
+        sidebarLinks[0].classList.add("active");
+    }
+  });
+  </script>
 </body>
 </html>
