@@ -450,7 +450,6 @@ body.dark-mode .toggle-dark-mode:hover {
         <select id="statusFilter">
             <option value="">Tous les statuts</option>
             <option value="En attente">En attente</option>
-            <option value="En traitement">En traitement</option>
             <option value="Acceptée">Acceptée</option>
             <option value="Refusée">Refusée</option>
         </select>
@@ -518,8 +517,9 @@ body.dark-mode .toggle-dark-mode:hover {
         </div>
         <div class="modal-footer">
             <button class="download-btn" id="downloadButton" style="display: none;">Télécharger la preuve</button>
-    <button class="accept-btn" onclick="updateStatus('Acceptée')">Accepter</button>
-    <button class="refuse-btn" onclick="updateStatus('Refusée')">Refuser</button>        </div>
+            <button class="accept-btn" onclick="updateStatus('Acceptée')">Accepter</button>
+            <button class="refuse-btn" onclick="updateStatus('Refusée')">Refuser</button>
+        </div>
     </div>
 </div>
 
@@ -587,6 +587,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('detailsModal');
         modal.style.display = 'block';
         document.body.classList.add('no-scroll');
+
+        // Set the modal's data-id-demande attribute
+        document.querySelector('.modal-content').setAttribute('data-id-demande', button.getAttribute('data-id'));
     }
 
     function closeModal() {
@@ -595,8 +598,38 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.remove('no-scroll');
     }
 
-    document.getElementById('search').addEventListener('input', filterTable);
-    document.getElementById('statusFilter').addEventListener('change', filterTable);
+    function updateStatus(newStatus) {
+        const idDemande = document.querySelector('.modal-content').getAttribute('data-id-demande');
+
+        if (!idDemande) {
+            alert('ID de la demande introuvable.');
+            return;
+        }
+
+fetch('/admin/demande/aide/update-status', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        id_demande: idDemande,
+        status: newStatus,
+    }),
+
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Statut mis à jour avec succès.');
+                    location.reload(); // Reload the page to reflect changes
+                } else {
+                    alert('Erreur : ' + (data.error || 'Une erreur inconnue s\'est produite.'));
+                }
+            })
+            .catch(error => {
+                alert('Erreur réseau : ' + error.message);
+            });
+    }
 
     function filterTable() {
         const searchFilter = document.getElementById('search').value.toLowerCase();
@@ -615,9 +648,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Attach event listeners
+    document.getElementById('search').addEventListener('input', filterTable);
+    document.getElementById('statusFilter').addEventListener('change', filterTable);
+
     // Expose functions globally for HTML onclick
     window.viewDetails = viewDetails;
     window.closeModal = closeModal;
+    window.updateStatus = updateStatus;
 });
 </script>
 {% endblock %}

@@ -198,6 +198,9 @@ class Utilisateurs implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->typeUtilisateur === 'partenaire'or $this->typeUtilisateur === 'Partenaire') {
             $roles[] = 'ROLE_PARTENAIRE';
         }
+        if ($this->typeUtilisateur === 'admin'or $this->typeUtilisateur === 'Admin') {
+          $roles[] = 'ROLE_ADMIN';
+      }
     
         // Ajouter un rôle par défaut
         $roles[] = 'ROLE_USER';

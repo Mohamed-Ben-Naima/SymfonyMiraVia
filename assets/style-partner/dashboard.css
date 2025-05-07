@@ -25,7 +25,7 @@
     width: calc(100% - 290px);
     z-index: 1050;
     background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 10px 20px;
     border-radius: 8px;
     height: 60px;
@@ -329,7 +329,7 @@
       zoom: 1;
     }
 }
-@media screen and (min-width: 968px) {
+  @media screen and (min-width: 968px) {
     :root {
       --biggest-font-size: 3.5rem;
       --small-font-size: .875rem;
@@ -379,7 +379,7 @@
 }
 
 
-.stats-container {
+  .stats-container {
     flex: 1 1 65%;
     background-color: rgb(255, 255, 255);
     padding: 20px;
@@ -388,7 +388,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-}
+  }
   
   .stat-item {
     flex: 1 1 calc(50% - 15px);
@@ -523,8 +523,6 @@
     position: relative; /* Nécessaire pour le séparateur */
     
 }
-
-  
   .chart-section {
     flex: 1.5; /* Le graphique occupe plus d'espace */
     min-width: 250px; /* Taille minimale pour éviter que le graphique devienne trop petit */
@@ -612,7 +610,6 @@
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    padding-right: 10px;
   }
   
   .styled-select {
@@ -959,11 +956,11 @@
     flex: 1;
 }
 
-/* Floating Header */
+
 .floating-header {
   position: fixed;
   top: 0;
-  left: 270px; /* Ajustez selon la largeur de votre sidebar */
+  left: 270px;
   right: 0;
   z-index: 1030;
   padding: 15px 20px;
@@ -997,11 +994,6 @@
   display: flex;
   align-items: center;
   gap: 20px;
-}
-
-/* Ajustement du contenu principal */
-.content {
-  margin-top: 80px; /* Doit correspondre à la hauteur du header */
 }
 
 .table {
@@ -1412,14 +1404,6 @@ button[type="submit"]:hover {
 .chatbot-image:hover {
   transform: scale(1.1);
 }
-
-.floating-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: Arial, sans-serif;
-}
-
 .search-card {
   display: flex;
   align-items: center;
@@ -1471,7 +1455,7 @@ button[type="submit"]:hover {
   color: #ffffff;
   font-size: 0.7rem;
   font-weight: bold;
-  padding: 2px 6px;
+  padding: 1px 5px;
   border-radius: 50%;
 }
 
