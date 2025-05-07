@@ -22,6 +22,21 @@ class MessagesRepository extends ServiceEntityRepository
     }
 
 // src/Repository/MessagesRepository.php
+public function countUnreadMessages($user, $contact): int
+{
+    $qb = $this->createQueryBuilder('m')
+        ->select('COUNT(m.idMessage)')
+        ->where('m.statut = :status')
+        ->andWhere('m.destinataire = :user')
+        ->andWhere('m.expediteur = :contact')
+        ->setParameter('status', 'reçu')
+        ->setParameter('user', $user)
+        ->setParameter('contact', $contact)
+        ->getQuery();
+
+    return (int) $qb->getSingleScalarResult();
+}
+
 
 public function findMessagesBetween($user1, $user2): array
 {

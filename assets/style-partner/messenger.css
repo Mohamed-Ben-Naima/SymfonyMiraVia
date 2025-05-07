@@ -1,149 +1,180 @@
-/* Style général pour #chat3 */
 #chat3 .form-control {
-    border-color: transparent;
-    border-radius: 30px;
-    padding-left: 15px;
-    font-size: 14px;
-}
-
-#chat3 .form-control:focus {
-    border-color: transparent;
-    box-shadow: inset 0px 0px 0px 1px transparent;
-}
-
-/* Badge de statut de contact */
-.badge-dot {
+    border: none;
+    border-radius: 24px;
+    padding: 0.75rem 1.2rem;
+    background-color: #f7f9fc;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  #chat3 .form-control:focus {
+    background-color: #ffffff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+  }
+  
+  #chat3 .card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  }
+  
+  #chat3 .card-body {
+    padding: 2rem;
+  }
+  
+  #chat3 .list-unstyled {
+    margin: 0;
+    padding: 0;
+  }
+  
+  #chat3 .list-unstyled li {
+    list-style: none;
+  }
+  
+  #chat3 .list-unstyled li a {
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.2s ease;
+    border-radius: 14px;
+    display: block;
+    padding: 0.75rem;
+    position: relative;
+  }
+  
+  #chat3 .list-unstyled li a:hover {
+    background-color: #eaf3ff;
+  }
+  
+  #chat3 .list-unstyled li.selected a {
+    background-color: #3399ff;
+    color: #fff;
+  }
+  
+  #chat3 .list-unstyled li.selected a p,
+  #chat3 .list-unstyled li.selected a .small {
+    color: #ffffff !important;
+  }
+  
+  #chat3 .list-unstyled li.selected a::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 4px;
+    background-color: #ffffff;
+    border-radius: 4px;
+  }
+  
+  .badge-dot {
     border-radius: 50%;
     height: 10px;
     width: 10px;
     margin-left: 2.9rem;
-    margin-top: -.75rem;
-}
-
-/* Effet hover sur les éléments avec la classe hoverable */
-.hoverable:hover {
-    background-color: #f0f0f0;
-    cursor: pointer;
-}
-
-/* Forme circulaire pour les avatars et icônes */
-.rounded-circle {
+    margin-top: -0.75rem;
+    box-shadow: 0 0 0 2px white;
+    background-color: #28a745;
+  }
+  
+  .btn-send {
     border-radius: 50%;
-}
-
-/* Style de la barre des actions du message */
-.message-actions {
-    width: 100%;
+    width: 45px;
+    height: 45px;
+    padding: 0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 15px;
-    margin-top: 10px;
-}
-
-/* Icônes de la barre des actions */
-.message-actions a {
-    font-size: 20px;
-    color: #999;
-    transition: color 0.3s ease, transform 0.3s ease;
-    padding: 5px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: inline-flex; /* Centrage des icônes */
     align-items: center;
     justify-content: center;
-}
-
-/* Effet hover sur les icônes de la barre des actions */
-.message-actions a:hover {
-    color: #007bff;
-    background-color: rgba(0, 123, 255, 0.1);
-    transform: scale(1.1);
-}
-
-/* Style pour le bouton d'envoi */
-.message-actions button {
-    background-color: #007bff;
-    color: #fff;
+    background-color: #3399ff;
+    color: white;
     border: none;
-    border-radius: 50%;
-    padding: 10px 12px;
-    font-size: 20px;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    display: inline-flex; /* Centrage de l'icône du bouton */
-    align-items: center;
-    justify-content: center;
-}
-
-/* Effet hover sur le bouton d'envoi */
-.message-actions button:hover {
-    background-color: #0056b3;
-    transform: scale(1.1);
-}
-
-.message-actions button:focus {
-    outline: none;
-}
-
-/* Alignement des éléments dans les actions du message */
-.message-actions a, .message-actions button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Animation des icônes lors du survol */
-.message-actions i {
-    transition: transform 0.3s ease;
-}
-
-.message-actions a:hover i, .message-actions button:hover i {
-    transform: scale(1.1);
-}
-
-/* Ajustements pour mobile */
-@media (max-width: 767px) {
-    /* Barre des actions */
-    .message-actions {
-        flex-direction: row;
-        padding: 10px;
+    box-shadow: 0 4px 10px rgba(51, 153, 255, 0.3);
+  }
+  
+  .btn-send:hover {
+    background-color: #1e88e5;
+    transform: scale(1.05);
+  }
+  
+  #messageInput::placeholder {
+    color: #bbb;
+  }
+  
+  .message-container {
+    padding: 0.5rem;
+  }
+  
+  .message-container .bg-primary {
+    background-color: #3399ff !important;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .message-container .bg-light {
+    background-color: #f0f2f5 !important;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
     }
-
-    .message-actions a {
-        font-size: 18px;
-        padding: 7px;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
-
-    .message-actions button {
-        padding: 8px 10px;
-        font-size: 18px;
-    }
-
-    /* Champ de saisie */
-    #chat3 .form-control {
-        font-size: 16px;
-        padding: 10px;
-    }
+  }
+  
+  .contacts-list, .message-container {
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+  }
+  
+  .contacts-list::-webkit-scrollbar,
+  .message-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .contacts-list::-webkit-scrollbar-thumb,
+  .message-container::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+  .message.read {
+    background-color: #f5f5f5; /* Exemple d'arrière-plan pour les messages lus */
+    color: #6c757d; /* Couleur de texte pour les messages lus */
 }
 
-/* Ajustements pour la container des messages */
-.message-container {
-    max-height: 350px;
-    height: 400px; 
-    overflow-y: auto;
-}
-
-/* Liste des contacts avec une marge */
-.contacts-list {
-    margin-top: 20px;
-    height: 400px; 
-    overflow-y: auto;
-}
-
-/* Responsive adjustments for message input */
-@media (max-width: 767px) {
-    #chat3 .form-control {
-        font-size: 16px;
-        padding: 10px;
+  
+  /* Style pour les éléments mobiles */
+@media (max-width: 768px) {
+    #contactsList {
+      display: none;  /* Cache la liste des contacts par défaut sur les petits écrans */
     }
-}
+  
+    #chatWindow {
+      width: 100%; /* Le chat occupe toute la largeur */
+    }
+  
+    #toggleButton {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
+    }
+  
+    .contacts-list {
+      height: auto; /* Permet de faire défiler la liste des contacts */
+    }
+  }
+  
+  /* Si la taille de l'écran est plus grande (tablette et plus), affiche les contacts */
+  @media (min-width: 769px) {
+    #contactsList {
+      display: block;
+    }
+  
+    #chatWindow {
+      width: 70%; /* Chat prend 70% de la largeur sur grands écrans */
+    }
+  }
+  

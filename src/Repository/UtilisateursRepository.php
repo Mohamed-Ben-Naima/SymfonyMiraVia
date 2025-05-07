@@ -29,6 +29,18 @@ class UtilisateursRepository extends ServiceEntityRepository
         ->getResult();
 }
 
+public function findContactsExcept(Utilisateurs $user, string $searchTerm = '') {
+    $qb = $this->createQueryBuilder('u')
+        ->where('u.idUtilisateur != :userId')
+        ->setParameter('userId', $user->getIdUtilisateur());
+
+    if ($searchTerm) {
+        $qb->andWhere('u.nom LIKE :searchTerm OR u.prenom LIKE :searchTerm')
+           ->setParameter('searchTerm', '%' . $searchTerm . '%');
+    }
+
+    return $qb->getQuery()->getResult();
+}
 
     public function findAllAdmins(): array
     {
