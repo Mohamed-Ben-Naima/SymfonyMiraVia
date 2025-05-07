@@ -33,6 +33,11 @@ final class MessageriePartnerController extends AbstractController
 
         // 2. Récupérer tous les contacts sauf l'utilisateur connecté
         $contacts = $utilisateursRepository->findAllExcept($user);
+            // Récupérer le terme de recherche de la requête (s'il y en a un)
+            $searchTerm = $request->query->get('search', '');
+
+            // 2. Récupérer les contacts sauf l'utilisateur connecté (et filtrer par le terme de recherche)
+            $contacts = $utilisateursRepository->findContactsExcept($user, $searchTerm);
 
         $contactData = [];
         foreach ($contacts as $contact) {
@@ -70,6 +75,7 @@ final class MessageriePartnerController extends AbstractController
                 'lastMessageTime' => $lastMessageTime, // Afficher le temps relatif pour le dernier message
                 'senderId' => $user->getIdUtilisateur(),
                 'unreadCount' => $unreadCount, // Nombre de messages non lus
+
             ];
         }
 
@@ -123,6 +129,7 @@ final class MessageriePartnerController extends AbstractController
             'senderId' => $user->getIdUtilisateur(),
             'currentReceiver' => $currentReceiver,
             'receiverId' => $receiverId,
+            'searchTerm' => $searchTerm,
         ]);
     }
 

@@ -16,17 +16,19 @@
               <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0 d-none d-md-block">
                 <div class="p-3">
                   <div class="input-group rounded mb-3">
-                    <input type="search" class="form-control rounded" placeholder="Rechercher un contact..." aria-label="Search" aria-describedby="search-addon" />
+                    <input type="search" class="form-control rounded" placeholder="Rechercher un contact..." 
+                          aria-label="Search" aria-describedby="search-addon" id="search-input" />
                     <span class="input-group-text border-0" id="search-addon">
-                      <i class="fas fa-search"></i>
+                        <i class="fas fa-search"></i>
                     </span>
                   </div>
+
                   <div class="contacts-list" style="position: relative; height: 400px; overflow-y: auto;">
-                    <ul class="list-unstyled mb-0">
+                    <ul class="list-unstyled mb-0" id="contacts-list">
                     {% if contacts is defined and contacts is not empty %}
                       {% for contact in contacts %}
-                      <li class="p-2 border-bottom hoverable position-relative {% if contact.idUtilisateur == receiverId %}selected{% endif %}">
-                      <a href="{{ path('app_messagerie_partner', {'receiver_id': contact.idUtilisateur}) }}">
+                      <li class="p-2 border-bottom hoverable position-relative {% if contact.idUtilisateur == receiverId %}selected{% endif %}" data-contact-name="{{ contact.name }}">
+                        <a href="{{ path('app_messagerie_partner', {'receiver_id': contact.idUtilisateur}) }}">
                           <div class="d-flex flex-row">
                             <div class="me-3 position-relative">
                               {% set avatarPath = 'uploads/avatars/' ~ contact.avatar %}
@@ -40,10 +42,10 @@
                             </div>
                           </div>
                           <div class="pt-1 text-end">
-                           <p class="small text-muted mb-1">{{ contact.lastMessageTime }}</p>
-                              {% if contact.unreadCount > 0 %}
-                          <span class="badge bg-danger rounded-pill">{{ contact.unreadCount }}</span>
-                        {% endif %}
+                            <p class="small text-muted mb-1">{{ contact.lastMessageTime }}</p>
+                            {% if contact.unreadCount > 0 %}
+                              <span class="badge bg-danger rounded-pill">{{ contact.unreadCount }}</span>
+                            {% endif %}
                           </div>
                         </a>
                       </li>
@@ -117,6 +119,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const messageContainer = document.getElementById('messageContainer');
   const receiverId = document.getElementById('receiverId').value;
   const senderId = document.getElementById('senderId').value;
+  const searchInput = document.getElementById('search-input');
+  const contactsList = document.getElementById('contacts-list');
 
   // Fonction pour récupérer et afficher les messages
   function fetchMessages() {
@@ -150,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function () {
           });
           messageContainer.scrollTop = messageContainer.scrollHeight;
         }
-        
       })
       .catch(error => console.error('Erreur chargement messages:', error));
   }
@@ -170,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(data => {
       if (data.success) {
         console.log('Message marqué comme lu');
-        // Mettez à jour l'UI pour marquer ce message comme lu (par exemple, changer la couleur de fond)
         const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
         messageElement.classList.add('read');
       } else {
@@ -207,6 +209,20 @@ document.addEventListener('DOMContentLoaded', function () {
     .catch(error => {
       console.error('Erreur AJAX:', error);
       Swal.fire('Erreur', 'Erreur lors de l\'envoi du message.', 'error');
+    });
+  });
+
+  // Fonction de recherche
+  searchInput.addEventListener('input', function() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const contacts = contactsList.querySelectorAll('li');
+    contacts.forEach(function(contact) {
+      const contactName = contact.getAttribute('data-contact-name').toLowerCase();
+      if (contactName.includes(searchTerm)) {
+        contact.style.display = '';  // Affiche le contact
+      } else {
+        contact.style.display = 'none';  // Cache le contact
+      }
     });
   });
 
