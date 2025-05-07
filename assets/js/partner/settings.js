@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     tabs[0].classList.add("active");
     contents[0].classList.add("active");
 });
+
 // Gestion du header flottant
 window.addEventListener('scroll', function() {
     const header = document.querySelector('.floating-header');

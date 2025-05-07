@@ -5,16 +5,54 @@
 {% block body %}
 <div class="content">
     <h1 style="color: #013a71; font-size: 35px; margin-bottom: 30px;">Paramètres </h1>
-    <div class="tabs">
-        <button class="tab hover-underline" data-tab="profile"><i class="bi bi-person-fill-gear"></i>Profil</button>
-        <button class="tab hover-underline" data-tab="notifications"><i class="bi bi-bell-fill"></i>Notifications</button>
-        <button class="tab hover-underline" data-tab="custome"><i class="bi bi-brush-fill"></i>Personnalisation</button>
-        <button class="tab hover-underline" data-tab="security"><i class="bi bi-shield-lock-fill"></i>Sécurité</button>
-        <button class="tab hover-underline" data-tab="Ln"><i class="bi bi-globe2"></i>Langue</button>
-        <button class="tab hover-underline" data-tab="Ln"><i class="bi bi-info-circle"></i>Á propos</button>
-    </div>
 
+    <div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border: none; padding: 20px;">
+        <div class="settings-layout" style="display: flex; gap: 20px;">
+            <!-- Tabs Section -->
+            <div class="tabs" style="flex: 0 0 200px; display: flex; flex-direction: column; gap: 10px;">
+                <button class="tab hover-underline" data-tab="profile"><i class="bi bi-person-fill-gear"></i>Profil</button>
+                <button class="tab hover-underline" data-tab="notifications"><i class="bi bi-bell-fill"></i>Notifications</button>
+                <button class="tab hover-underline" data-tab="custome"><i class="bi bi-brush-fill"></i>Personnalisation</button>
+                <button class="tab hover-underline" data-tab="security"><i class="bi bi-shield-lock-fill"></i>Sécurité</button>
+                <button class="tab hover-underline" data-tab="Ln"><i class="bi bi-globe2"></i>Langue</button>
+                <button class="tab hover-underline" data-tab="about"><i class="bi bi-info-circle"></i>À propos</button>
+            </div>
+
+            <!-- Separator -->
+            <div style="width: 1px; background-color: #ddd; height: auto;"></div>
+
+            <!-- Content Section -->
+            <div class="tab-content-container" style="flex: 1;">
+
+                <div class="tab-content active" id="profile">
+                    <h3>Profil</h3>
+                    
+                </div>
+                <div class="tab-content" id="notifications">
+                    <h3>Notifications</h3>
+                    <p>Gérez vos préférences de notification.</p>
+                </div>
+                <div class="tab-content" id="custome">
+                    <h3>Personnalisation</h3>
+                    <p>Personnalisez l'apparence de votre interface.</p>
+                </div>
+                <div class="tab-content" id="security">
+                    <h3>Sécurité</h3>
+                    <p>Paramètres de sécurité pour votre compte.</p>
+                </div>
+                <div class="tab-content" id="Ln">
+                    <h3>Langue</h3>
+                    <p>Choisissez votre langue préférée.</p>
+                </div>
+                <div class="tab-content" id="about">
+                    <h3>À propos</h3>
+                    <p>Informations sur l'application.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <link href="{{ asset('style-partner/settings.css') }}" rel="stylesheet">
+<link href="{{ asset('style-partner/navbar.css') }}" rel="stylesheet">
 <script src="{{ asset('js/partner/settings.js') }}"></script>
 {% endblock %}
