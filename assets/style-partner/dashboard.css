@@ -1355,8 +1355,8 @@ button[type="submit"] {
   background-color: #3498db;
   color: white;
   border: none;
-  border-radius: 25px;
   cursor: pointer;
+  border-radius: 0.2rem;
   transition: background-color 0.3s ease;
 }
 
@@ -1455,7 +1455,7 @@ button[type="submit"]:hover {
   color: #ffffff;
   font-size: 0.7rem;
   font-weight: bold;
-  padding: 1px 5px;
+  padding: 0.2px 5px;
   border-radius: 50%;
 }
 

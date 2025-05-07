@@ -51,7 +51,7 @@ final class ProfilPartnerController extends AbstractController
             'logoUrl' => $logoUrl,
         ]);
     }
-    #[Route('/dashboard/partenaire/avatar', name: 'app_update_avatar', methods: ['POST'])]
+    #[Route('dashboard/partenaire/paramètres/avatar', name: 'app_update_avatar', methods: ['POST'])]
     public function updateAvatar(Request $request, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
@@ -77,7 +77,7 @@ final class ProfilPartnerController extends AbstractController
     }
     
 
-#[Route('/dashboard/partenaire/logo', name: 'app_update_logo', methods: ['POST'])]
+#[Route('dashboard/partenaire/paramètres/logo', name: 'app_update_logo', methods: ['POST'])]
 public function updateLogo(Request $request, EntityManagerInterface $em): Response
 {
     $user = $this->getUser();
@@ -104,7 +104,7 @@ public function updateLogo(Request $request, EntityManagerInterface $em): Respon
     return $this->redirectToRoute('app_profil_partner');
 }
 
-#[Route('/dashboard/partenaire/password', name: 'app_update_password', methods: ['POST'])]
+#[Route('dashboard/partenaire/paramètres/password', name: 'app_update_password', methods: ['POST'])]
 public function updatePassword(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
 {
     $user = $this->getUser();
@@ -136,7 +136,7 @@ public function updatePassword(Request $request, EntityManagerInterface $em, Use
     return $this->redirectToRoute('app_profil_partner');
 }
 
-#[Route('/dashboard/partenaire/profil/update', name: 'app_update_profil', methods: ['POST'])]
+#[Route('dashboard/partenaire/paramètres/profil/update', name: 'app_update_profil', methods: ['POST'])]
 public function updateProfil(Request $request, EntityManagerInterface $em): Response
 {
     $user = $this->getUser();
