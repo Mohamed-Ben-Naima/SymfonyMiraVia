@@ -1,9 +1,8 @@
 #chat3 .form-control {
     border: none;
-    border-radius: 24px;
-    padding: 0.75rem 1.2rem;
     background-color: #f7f9fc;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 0.9rem;
   }
   
   #chat3 .form-control:focus {
@@ -17,9 +16,6 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   }
   
-  #chat3 .card-body {
-    padding: 2rem;
-  }
   
   #chat3 .list-unstyled {
     margin: 0;
@@ -54,7 +50,7 @@
     color: #ffffff !important;
   }
   
-  #chat3 .list-unstyled li.selected a::before {
+  /*#chat3 .list-unstyled li.selected a::before {
     content: "";
     position: absolute;
     left: 0;
@@ -63,15 +59,15 @@
     width: 4px;
     background-color: #ffffff;
     border-radius: 4px;
-  }
+  }*/
   
   .badge-dot {
     border-radius: 50%;
     height: 10px;
     width: 10px;
     margin-left: 2.9rem;
-    margin-top: -0.75rem;
-    box-shadow: 0 0 0 2px white;
+    margin-top: -0.55rem;
+    box-shadow: 0 0 0 1px white;
     background-color: #28a745;
   }
   
