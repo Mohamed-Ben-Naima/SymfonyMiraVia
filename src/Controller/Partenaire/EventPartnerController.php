@@ -70,6 +70,25 @@ class EventPartnerController extends AbstractController
                 $file->move($this->getParameter('event_images_directory'), $fileName);
                 $event->setImageName($fileName);
             }
+             // Notifications
+        $notification = new Notifications();
+        $notification->setMessage("Nouveau Evènement ajouté.");
+        $notification->setDateEnvoi(new DateTime());
+        $notification->setTypeNotification('success');
+        $notification->setIsRead(false);
+        $notification->setIdUtilisateur($user->getIdUtilisateur());
+        $entityManager->persist($notification);
+
+        $admins = $utilisateursRepository->findAllAdmins();
+        foreach ($admins as $admin) {
+            $adminNotif = new Notifications();
+            $adminNotif->setMessage(" Nouveau Evènement ajouté par " . $user->getNomUtilisateur());
+            $adminNotif->setDateEnvoi(new DateTime());
+            $adminNotif->setTypeNotification('success');
+            $adminNotif->setIsRead(false);
+            $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
+            $entityManager->persist($adminNotif);
+        }
 
             $entityManager->persist($event);
             $entityManager->flush();
@@ -123,6 +142,25 @@ class EventPartnerController extends AbstractController
 
                 $event->setImageName($fileName);
             }
+             // Notifications
+        $notification = new Notifications();
+        $notification->setMessage(" Evènement modifié .");
+        $notification->setDateEnvoi(new DateTime());
+        $notification->setTypeNotification('warning');
+        $notification->setIsRead(false);
+        $notification->setIdUtilisateur($user->getIdUtilisateur());
+        $entityManager->persist($notification);
+
+        $admins = $utilisateursRepository->findAllAdmins();
+        foreach ($admins as $admin) {
+            $adminNotif = new Notifications();
+            $adminNotif->setMessage("Evènement modifié par " . $user->getNomUtilisateur());
+            $adminNotif->setDateEnvoi(new DateTime());
+            $adminNotif->setTypeNotification('warning');
+            $adminNotif->setIsRead(false);
+            $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
+            $entityManager->persist($adminNotif);
+        }
 
             $entityManager->flush();
 
@@ -188,6 +226,25 @@ class EventPartnerController extends AbstractController
             $this->addFlash('error', 'Accès refusé.');
             return $this->redirectToRoute('app_event_partner');
         }
+          // Notifications
+          $notification = new Notifications();
+          $notification->setMessage(" Evènement supprimé.");
+          $notification->setDateEnvoi(new DateTime());
+          $notification->setTypeNotification('danger');
+          $notification->setIsRead(false);
+          $notification->setIdUtilisateur($user->getIdUtilisateur());
+          $entityManager->persist($notification);
+  
+          $admins = $utilisateursRepository->findAllAdmins();
+          foreach ($admins as $admin) {
+              $adminNotif = new Notifications();
+              $adminNotif->setMessage("Evènement supprimé par " . $user->getNomUtilisateur());
+              $adminNotif->setDateEnvoi(new DateTime());
+              $adminNotif->setTypeNotification('danger');
+              $adminNotif->setIsRead(false);
+              $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
+              $entityManager->persist($adminNotif);
+          }
 
         // Supprimez l'événement
         $entityManager->remove($event);

@@ -72,6 +72,25 @@ final class BenevolatPartnerController extends AbstractController
                 $this->addFlash('error', 'Veuillez ajouter une image.');
                 return $this->redirectToRoute('app_benevolat_partner');
             }
+             // Notifications
+        $notification = new Notifications();
+        $notification->setMessage("Nouveau bénévolat ajouté.");
+        $notification->setDateEnvoi(new DateTime());
+        $notification->setTypeNotification('success');
+        $notification->setIsRead(false);
+        $notification->setIdUtilisateur($user->getIdUtilisateur());
+        $entityManager->persist($notification);
+
+        $admins = $utilisateursRepository->findAllAdmins();
+        foreach ($admins as $admin) {
+            $adminNotif = new Notifications();
+            $adminNotif->setMessage(" Nouveau bénévolat ajouté par " . $user->getNomUtilisateur());
+            $adminNotif->setDateEnvoi(new DateTime());
+            $adminNotif->setTypeNotification('success');
+            $adminNotif->setIsRead(false);
+            $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
+            $entityManager->persist($adminNotif);
+        }
 
             $entityManager->persist($benevolat);
             $entityManager->flush();
@@ -101,6 +120,25 @@ final class BenevolatPartnerController extends AbstractController
                     $fileName = uniqid() . '.' . $file->guessExtension();
                     $file->move($this->getParameter('benevolat_images_directory'), $fileName);
                     $benevolat->setImageName($fileName);
+                }
+                // Notifications
+                $notification = new Notifications();
+                $notification->setMessage(" Bénévolat modifié .");
+                $notification->setDateEnvoi(new DateTime());
+                $notification->setTypeNotification('warning');
+                $notification->setIsRead(false);
+                $notification->setIdUtilisateur($user->getIdUtilisateur());
+                $entityManager->persist($notification);
+
+                $admins = $utilisateursRepository->findAllAdmins();
+                foreach ($admins as $admin) {
+                    $adminNotif = new Notifications();
+                    $adminNotif->setMessage("Bénévolat modifié par " . $user->getNomUtilisateur());
+                    $adminNotif->setDateEnvoi(new DateTime());
+                    $adminNotif->setTypeNotification('warning');
+                    $adminNotif->setIsRead(false);
+                    $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
+                    $entityManager->persist($adminNotif);
                 }
 
                 // Enregistrer les modifications
@@ -170,6 +208,25 @@ final class BenevolatPartnerController extends AbstractController
             $this->addFlash('error', 'Accès refusé.');
             return $this->redirectToRoute('app_benevolat_partner');
         }
+         // Notifications
+         $notification = new Notifications();
+         $notification->setMessage(" Bénévolat supprimé.");
+         $notification->setDateEnvoi(new DateTime());
+         $notification->setTypeNotification('danger');
+         $notification->setIsRead(false);
+         $notification->setIdUtilisateur($user->getIdUtilisateur());
+         $entityManager->persist($notification);
+ 
+         $admins = $utilisateursRepository->findAllAdmins();
+         foreach ($admins as $admin) {
+             $adminNotif = new Notifications();
+             $adminNotif->setMessage("Bénévolat supprimé par " . $user->getNomUtilisateur());
+             $adminNotif->setDateEnvoi(new DateTime());
+             $adminNotif->setTypeNotification('danger');
+             $adminNotif->setIsRead(false);
+             $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
+             $entityManager->persist($adminNotif);
+         }
 
         // Supprimez l'événement
         $entityManager->remove($benevolat);

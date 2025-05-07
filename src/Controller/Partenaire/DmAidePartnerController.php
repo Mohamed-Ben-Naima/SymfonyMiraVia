@@ -95,7 +95,7 @@ class DmAidePartnerController extends AbstractController
         $admins = $utilisateursRepository->findAllAdmins();
         foreach ($admins as $admin) {
             $adminNotif = new Notifications();
-            $adminNotif->setMessage("Demande d’aide modifiée.");
+            $adminNotif->setMessage("Demande d’aide modifiéepar " . $user->getNomUtilisateur());
             $adminNotif->setDateEnvoi(new DateTime());
             $adminNotif->setTypeNotification('warning');
             $adminNotif->setIsRead(false);
@@ -168,7 +168,7 @@ class DmAidePartnerController extends AbstractController
             $admins = $utilisateursRepository->findAllAdmins();
             foreach ($admins as $admin) {
                 $adminNotif = new Notifications();
-                $adminNotif->setMessage("Nouvelle demande d’aide ajoutée.");
+                $adminNotif->setMessage("Nouvelle demande d’aide ajoutée par " . $user->getNomUtilisateur());
                 $adminNotif->setDateEnvoi(new DateTime());
                 $adminNotif->setTypeNotification('success');
                 $adminNotif->setIsRead(false);
@@ -220,7 +220,7 @@ class DmAidePartnerController extends AbstractController
         $admins = $utilisateursRepository->findAllAdmins();
         foreach ($admins as $admin) {
             $adminNotif = new Notifications();
-            $adminNotif->setMessage("Demande d’aide supprimée.");
+            $adminNotif->setMessage("Demande d’aide supprimée par " . $user->getNomUtilisateur());
             $adminNotif->setDateEnvoi(new DateTime());
             $adminNotif->setTypeNotification('danger');
             $adminNotif->setIsRead(false);
