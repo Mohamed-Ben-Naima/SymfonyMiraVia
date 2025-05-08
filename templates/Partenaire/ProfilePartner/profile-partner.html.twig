@@ -3,6 +3,8 @@
 {% block body %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/partner/profil.js') }}"></script>
+<link href="{{ asset('style-partner/profil.css') }}" rel="stylesheet">
 
 <div class="content">
     <div class="container">
@@ -146,7 +148,5 @@
     });
 </script>
 {% endfor %}
-<link href="{{ asset('style-partner/navbar.css') }}" rel="stylesheet">
-<script src="{{ asset('js/partner/profil.js') }}"></script>
-<link href="{{ asset('style-partner/profil.css') }}" rel="stylesheet">
+
 {% endblock %}
