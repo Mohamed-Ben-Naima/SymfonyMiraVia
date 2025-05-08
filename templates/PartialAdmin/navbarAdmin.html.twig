@@ -28,49 +28,6 @@ body.dark-mode .navbar-text h4 {
     color: #e2e8f0;
 }
 
-.search-bar {
-    width: 500px;
-    border-radius: 5px;
-}
-
-.search-input {
-    border-radius: 15px;
-    padding: 5px 10px;
-    width: 100%;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    color: #000;
-    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-}
-
-body.dark-mode .search-input {
-    background-color: #4a5568;
-    border-color: #718096;
-    color: #e2e8f0;
-}
-
-.search-button {
-    background-color: #013A71;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-body.dark-mode .search-button {
-    background-color: #4a90e2;
-}
-
-.search-button:hover {
-    background-color: #0056b3;
-}
-
-body.dark-mode .search-button:hover {
-    background-color: #357abd;
-}
-
 .notification-icon {
     position: relative;
     color: #013A71;
@@ -170,6 +127,11 @@ body.dark-mode .notification-box .close-button {
 
 body.dark-mode .notification-box .close-button:hover {
     color: #4a90e2;
+}
+
+.notification-list {
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 .notification-box .notification-item {
@@ -327,11 +289,6 @@ body.dark-mode .toggle-dark-mode:hover {
 }
 
 @media (max-width: 992px) {
-    .search-bar {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
     .navbar-text h4 {
         margin-left: 0;
         text-align: center;
@@ -363,16 +320,12 @@ body.dark-mode .toggle-dark-mode:hover {
         <!-- Collapsible Content -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <div class="ms-auto d-flex align-items-center">
-                <!-- Search Bar -->
-                <form class="d-flex search-bar">
-                    <input class="form-control me-2 search-input" type="search" placeholder="Cherche" data-translate-placeholder="search" aria-label="Search">
-                    <button class="btn search-button" type="submit" data-translate="search">Cherche</button>
-                </form>
-
                 <!-- Notification Icon -->
                 <div class="notification-icon" onclick="toggleNotificationBox()">
                     <i class="bi bi-bell"></i>
-                    <span class="badge">3</span>
+                    {% if notifications|length > 0 %}
+                        <span class="badge">{{ notifications|length }}</span>
+                    {% endif %}
                 </div>
 
                 <!-- Notification Box -->
@@ -383,35 +336,21 @@ body.dark-mode .toggle-dark-mode:hover {
                             <i class="bi bi-x"></i>
                         </button>
                     </div>
-                    <div class="notification-item">
-                        <div>
-                            <i class="bi bi-info-circle"></i>
-                            <span data-translate="update_available">Nouvelle mise à jour disponible.</span>
-                        </div>
-                        <div class="notification-details">
-                            <span data-translate="sent_by">Envoyé par</span> <strong>Admin</strong>
-                        </div>
-                        <div class="notification-time">10:45 AM</div>
-                    </div>
-                    <div class="notification-item">
-                        <div>
-                            <i class="bi bi-check-circle"></i>
-                            <span data-translate="task_completed">Votre tâche a été complétée avec succès.</span>
-                        </div>
-                        <div class="notification-details">
-                            <span data-translate="sent_by">Envoyé par</span> <strong>Yosra</strong>
-                        </div>
-                        <div class="notification-time">09:30 AM</div>
-                    </div>
-                    <div class="notification-item">
-                        <div>
-                            <i class="bi bi-exclamation-circle"></i>
-                            <span data-translate="action_required">Une action est requise de votre part.</span>
-                        </div>
-                        <div class="notification-details">
-                            <span data-translate="sent_by">Envoyé par</span> <strong>Support</strong>
-                        </div>
-                        <div class="notification-time">08:15 AM</div>
+                    <div class="notification-list">
+                        {% for notif in notifications %}
+                            <div class="notification-item">
+                                <div>
+                                    <i class="bi {{ notif.icon }}"></i>
+                                    {{ notif.message }}
+                                </div>
+                                <div class="notification-details">
+                                    <span data-translate="sent_by">Envoyé par</span> <strong>{{ notif.sender }}</strong>
+                                </div>
+                                <div class="notification-time">{{ notif.time }}</div>
+                            </div>
+                        {% else %}
+                            <div class="notification-item text-muted">Aucune notification</div>
+                        {% endfor %}
                     </div>
                 </div>
 
@@ -420,45 +359,79 @@ body.dark-mode .toggle-dark-mode:hover {
                     <a href="{{ path('app_admin_profil') }}" class="profile-sphere">
                         <i class="bi bi-person"></i>
                     </a>
-                    <a href="{{ path('app_admin_profil') }}" class="user-name">Yosra Besbes</a>
+                    <a href="{{ path('app_admin_profil') }}" class="user-name">{{ user.nom }} {{ user.prenom }}</a>
                 </div>
 
-                <!-- Dark Mode Toggle -->
             </div>
         </div>
     </div>
 </nav>
 
+<!-- Audio for Notifications -->
+<audio id="notificationSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
+
 <script>
+let lastNotificationCount = {{ notifications|length }};
+
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    console.log('Dark mode toggled');
 }
 
 function toggleNotificationBox() {
     const notificationBox = document.getElementById('notificationBox');
     if (notificationBox.style.display === 'none' || !notificationBox.style.display) {
         notificationBox.style.display = 'block';
+        // Play sound if there are new notifications
+        const currentCount = {{ notifications|length }};
+        if (currentCount > lastNotificationCount) {
+            playNotificationSound();
+            lastNotificationCount = currentCount;
+        }
+        console.log('Notification box opened');
     } else {
         notificationBox.style.display = 'none';
+        console.log('Notification box closed');
     }
 }
 
 function closeNotificationBox() {
     const notificationBox = document.getElementById('notificationBox');
     notificationBox.style.display = 'none';
+    console.log('Notification box closed via close button');
+}
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebarMenu');
+    if (sidebar) {
+        sidebar.classList.toggle('show');
+        console.log('Sidebar toggled');
+    }
+}
+
+function playNotificationSound() {
+    const sound = document.getElementById('notificationSound');
+    if (sound) {
+        console.log('Attempting to play notification sound');
+        sound.play().catch(error => console.error('Error playing sound:', error));
+    } else {
+        console.error('Notification sound element not found');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     // Apply dark mode if previously selected
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
+        console.log('Dark mode applied from localStorage');
     }
 
     // Expose functions globally
     window.toggleNotificationBox = toggleNotificationBox;
     window.closeNotificationBox = closeNotificationBox;
     window.toggleDarkMode = toggleDarkMode;
+    window.toggleSidebar = toggleSidebar;
 
     // Hide notification box when clicking outside
     document.addEventListener('click', function(event) {
@@ -467,7 +440,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeButton = document.querySelector('.notification-box .close-button');
         if (!notificationBox.contains(event.target) && !notificationIcon.contains(event.target) && !closeButton.contains(event.target)) {
             notificationBox.style.display = 'none';
+            console.log('Notification box closed by clicking outside');
         }
     });
+
+    // Check for new notifications periodically
+    function checkNotifications() {
+        fetch('{{ path('admin_notification_count') }}')
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
+                const newNotificationCount = data.count || 0;
+                console.log('Fetched notification count:', newNotificationCount);
+                if (newNotificationCount > lastNotificationCount) {
+                    playNotificationSound();
+                    lastNotificationCount = newNotificationCount;
+                }
+            })
+            .catch(error => console.error('Error fetching notification count:', error));
+    }
+
+    // Initial check and set interval
+    checkNotifications();
+    setInterval(checkNotifications, 10000); // Check every 10 seconds
+
+    console.log('Navbar script loaded');
 });
 </script>

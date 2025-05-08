@@ -1,41 +1,40 @@
 <?php
 
 namespace App\Entity;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 use App\Repository\UtilisateursRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'utilisateurs')]
 #[ORM\Entity(repositoryClass: UtilisateursRepository::class)]
-class Utilisateurs implements UserInterface, PasswordAuthenticatedUserInterface
+class Utilisateurs
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
-    #[ORM\Column(name: "id_utilisateur", type: "integer")]
-    private ?int $idUtilisateur = null;
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: "id_utilisateur", nullable: true, options: ["default" => NULL])]
+    private ?int $idUtilisateur = NULL;
 
-    #[ORM\Column(name: "nom", length: 50, nullable: true)]
-    private ?string $nom = null;
+    #[ORM\Column(name: "nom", length: 50, nullable: true, options: ["default" => 'NULL'])]
+    private ?string $nom = 'NULL';
 
-    #[ORM\Column(name: "prenom", length: 50, nullable: true)]
-    private ?string $prenom = null;
+    #[ORM\Column(name: "prenom", length: 50, nullable: true, options: ["default" => '\'\''])]
+    private ?string $prenom = '\'\'';
 
-    #[ORM\Column(name: "email", length: 100, nullable: true)]
-    private ?string $email = null;
+    #[ORM\Column(name: "email", length: 100, nullable: true, options: ["default" => 'NULL'])]
+    private ?string $email = 'NULL';
 
-    #[ORM\Column(name: "mot_de_passe", length: 255, nullable: true)]
-    private ?string $motDePasse = null;
+    #[ORM\Column(name: "mot_de_passe", length: 255, nullable: true, options: ["default" => 'NULL'])]
+    private ?string $motDePasse = 'NULL';
 
-    #[ORM\Column(name: "telephone", length: 50, nullable: true)]
-    private ?string $telephone = null;
+    #[ORM\Column(name: "telephone", length: 50, nullable: true, options: ["default" => 'NULL'])]
+    private ?string $telephone = 'NULL';
 
     #[ORM\Column(name: "date_inscription", type: Types::DATETIME_MUTABLE, nullable: true, options: ["default" => 'current_timestamp()'])]
     private ?\DateTimeInterface $dateInscription = null;
 
     #[ORM\Column(name: "type_utilisateur", length: 20, nullable: true, options: ["default" => 'NULL'])]
-    private ?string $typeUtilisateur =null;
+    private ?string $typeUtilisateur = 'NULL';
 
     #[ORM\Column(name: "avatar", length: 255, nullable: true, options: ["default" => '\'https://example.com/default-avatar.png\''])]
     private ?string $avatar = '\'https://example.com/default-avatar.png\'';
@@ -46,18 +45,18 @@ class Utilisateurs implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: "status", length: 10, nullable: true, options: ["default" => '\'actif\''])]
     private ?string $status = '\'actif\'';
 
-    #[ORM\Column(name: "birthday", type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(name: "birthday", type: Types::DATE_MUTABLE, nullable: true, options: ["default" => 'NULL'])]
     private ?\DateTimeInterface $birthday = null;
 
-    #[ORM\Column(name: "adresse_utilisateur", length: 255, nullable: true)]
-    private ?string $adresseUtilisateur = null;
+    #[ORM\Column(name: "adresse_utilisateur", length: 255, nullable: true, options: ["default" => 'NULL'])]
+    private ?string $adresseUtilisateur = 'NULL';
 
     public function getIdUtilisateur(): ?int
     {
         return $this->idUtilisateur;
     }
 
-    public function setIdUtilisateur(?int $idUtilisateur): self
+    public function setIdUtilisateur(?int $idUtilisateur): static
     {
         $this->idUtilisateur = $idUtilisateur;
 
@@ -198,9 +197,6 @@ class Utilisateurs implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->typeUtilisateur === 'partenaire'or $this->typeUtilisateur === 'Partenaire') {
             $roles[] = 'ROLE_PARTENAIRE';
         }
-        if ($this->typeUtilisateur === 'admin'or $this->typeUtilisateur === 'Admin') {
-          $roles[] = 'ROLE_ADMIN';
-      }
     
         // Ajouter un rôle par défaut
         $roles[] = 'ROLE_USER';
@@ -225,29 +221,4 @@ class Utilisateurs implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-     // Methods required by UserInterface
-
-    
- 
-     public function getSalt(): ?string
-     {
-         // Not needed when using modern hashers (e.g., bcrypt or Argon2i)
-         return null;
-     }
- 
-     public function eraseCredentials(): void
-     {
-         // If you store any temporary, sensitive data, clear it here
-     }
- 
-     public function getUserIdentifier(): string
-     {
-         // Return a unique identifier for the user (e.g., email or username)
-         return $this->email;
-     }
- 
-     public function getPassword(): ?string
-     {
-         return $this->motDePasse;
-     }
 }

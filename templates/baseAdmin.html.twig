@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Welcome!{% endblock %}</title>
     
-    <!-- CSS / JS Imports -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
     {% block stylesheets %}{% endblock %}
@@ -44,9 +42,9 @@
         .sidebar {
             position: fixed;
             top: 73px;
-            bottom: 0;
             left: 0;
             width: 250px;
+            height: calc(100% - 73px);
             z-index: 1000;
             overflow-y: auto;
             background-color: #f8f9fa;
@@ -88,7 +86,6 @@
             transition: color 0.3s ease;
         }
 
-        /* Dark Mode Styles */
         body.dark-mode {
             background-color: #1a202c;
             color: #e2e8f0;
@@ -139,30 +136,6 @@
             color: #63b3ed;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                position: fixed;
-                height: auto;
-                top: 0;
-                z-index: 1000;
-                border-right: none;
-                border-bottom: 1px solid #e9ecef;
-            }
-
-            body.dark-mode .sidebar {
-                border-bottom: 1px solid #4a5568;
-            }
-
-            .main {
-                margin-left: 0;
-                padding-top: 100px;
-                padding-left: 1rem;
-            }
-        }
-
-        /* Welcome Notification */
         .welcome-notification {
             position: fixed;
             top: 20px;
@@ -180,11 +153,10 @@
             background-color: #2b6cb0;
         }
 
-        /* Sliding Dashboard Message */
         .dashboard-welcome {
             position: fixed;
             top: 80px;
-            right: -300px; /* Start off-screen */
+            right: -300px;
             background-color: #28a745;
             color: white;
             padding: 10px 20px;
@@ -197,7 +169,7 @@
         }
 
         .dashboard-welcome.show {
-            right: 20px; /* Slide in */
+            right: 20px;
         }
 
         body.dark-mode .dashboard-welcome {
@@ -208,35 +180,54 @@
             margin-right: 10px;
             font-size: 1.2rem;
         }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                height: auto;
+                top: 73px;
+                z-index: 1000;
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+
+            body.dark-mode .sidebar {
+                border-bottom: 1px solid #4a5568;
+            }
+
+            .main {
+                margin-left: 0;
+                padding-top: 1rem;
+            }
+
+            .sidebar.collapse:not(.show) {
+                display: none;
+            }
+
+            .sidebar.collapse.show {
+                display: block;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    {% include 'partialAdmin/navbarAdmin.html.twig' %}
-
-    <!-- Welcome Notification -->
+    {{ render(controller('App\\Controller\\AdminnavbarController::navbar')) }}
     <div class="welcome-notification" id="welcomeNotification"></div>
-
-    <!-- Dashboard Welcome Message -->
     <div class="dashboard-welcome" id="dashboardWelcome">
         <i class="fas fa-user"></i>
-        <span>Bonjour Yosra</span>
+        <span id="welcomeMessage"></span>
     </div>
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
             <div class="col-12 col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" id="sidebarMenu">
                 {% include 'partialAdmin/sidebarAdmin.html.twig' %}
             </div>
-
-            <!-- Button for toggling sidebar on smaller screens -->
             <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
             </button>
-
-            <!-- Main content -->
             <div class="col main">
                 <main>
                     {% block body %}{% endblock %}
@@ -246,7 +237,6 @@
     </div>
 
     <script>
-        // Comprehensive translations for platform-wide UI elements
         const translations = {
             fr: {
                 welcome: 'Bienvenue !',
@@ -350,8 +340,7 @@
             }
         };
 
-        // Apply language settings from localStorage
-        function applyLanguage() {
+        function applyLanguage(userName) {
             const language = localStorage.getItem('language') || 'fr';
             const translatableElements = document.querySelectorAll('[data-translate]');
             translatableElements.forEach(element => {
@@ -372,17 +361,20 @@
                     navbarTitle.textContent = translations[language]['default_title'];
                 }
             }
+            // Update welcome message
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            if (welcomeMessage && userName) {
+                welcomeMessage.textContent = translations[language].welcome + ' ' + userName;
+            }
             console.log('Language applied:', language);
         }
 
-        // Apply dark mode from localStorage
         function applyDarkMode() {
             const isDarkMode = localStorage.getItem('darkMode') === 'true';
             document.body.classList.toggle('dark-mode', isDarkMode);
             console.log('Dark mode applied:', isDarkMode);
         }
 
-        // Show welcome notification
         function showWelcomeNotification(message) {
             const notification = document.getElementById('welcomeNotification');
             notification.textContent = message;
@@ -392,17 +384,17 @@
             }, 5000);
         }
 
-        // Play welcome audio using Web Speech API
         function playWelcomeAudio(userName) {
             if (!('speechSynthesis' in window)) {
                 console.warn('SpeechSynthesis not supported in this browser.');
-                showWelcomeNotification(`Bienvenue ${userName} !`);
+                showWelcomeNotification(`${translations[localStorage.getItem('language') || 'fr'].welcome} ${userName} !`);
                 return;
             }
 
-            const message = `Bienvenue ${userName}`;
+            const language = localStorage.getItem('language') || 'fr';
+            const message = `${translations[language].welcome} ${userName}`;
             const utterance = new SpeechSynthesisUtterance(message);
-            utterance.lang = localStorage.getItem('language') === 'en' ? 'en-US' : 'fr-FR';
+            utterance.lang = language === 'en' ? 'en-US' : 'fr-FR';
             utterance.volume = 1.0;
             utterance.rate = 1.0;
             utterance.pitch = 1.0;
@@ -416,15 +408,13 @@
                     try {
                         window.speechSynthesis.speak(utterance);
                         console.log('Welcome audio played:', message, 'with voice:', voice.name);
-                        // Mark audio as played in sessionStorage
-                        sessionStorage.setItem('audioPlayed', 'true');
                     } catch (err) {
                         console.error('Speech synthesis error:', err);
-                        showWelcomeNotification(`Bienvenue ${userName} !`);
+                        showWelcomeNotification(`${translations[language].welcome} ${userName} !`);
                     }
                 } else {
                     console.warn('No voice found for language:', utterance.lang);
-                    showWelcomeNotification(`Bienvenue ${userName} !`);
+                    showWelcomeNotification(`${translations[language].welcome} ${userName} !`);
                 }
             };
 
@@ -438,45 +428,82 @@
             }
         }
 
-        // Show sliding dashboard welcome message
         function showDashboardWelcome() {
             const dashboardWelcome = document.getElementById('dashboardWelcome');
             dashboardWelcome.classList.add('show');
             setTimeout(() => {
                 dashboardWelcome.classList.remove('show');
-            }, 5000); // Hide after 5 seconds
+            }, 2000);
         }
 
-        // Initialize settings on page load
         document.addEventListener('DOMContentLoaded', () => {
             applyDarkMode();
-            applyLanguage();
 
-            // Get user name (hardcoded since no session)
-            const userName = 'Yosra '; // Replace with '{{ app.user.firstname|default('Yosra Besbes')|escape('js') }}' when session is available
-            console.log('User name:', userName);
-
-            // Check if we're on the dashboard page (using URL or active link)
-            const isDashboard = document.querySelector('.sidebar .nav-link.active[data-translate-key="dashboard"]') || window.location.pathname.includes('dashboard');
-
-            if (isDashboard) {
-                // Show sliding welcome message
-                setTimeout(() => {
-                    showDashboardWelcome();
-                }, 10);
-
-                // Play welcome audio only if not played in this session
-                const audioPlayed = sessionStorage.getItem('audioPlayed');
-                if (!audioPlayed) {
-                    setTimeout(() => {
-                        playWelcomeAudio(userName);
-                    }, 10);
+            // Fetch user data
+            fetch('{{ path('admin_user_data_fetch') }}', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
                 }
-            }
+            })
+                .then(response => {
+                    console.log('Fetch response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Fetched user data:', data);
+                    const userName = (data.nom || data.prenom) ? `${data.nom || ''} ${data.prenom || ''}`.trim() : 'Utilisateur';
+                    console.log('User name:', userName);
 
-            // Listen for language change events
+                    // Apply language with user name
+                    applyLanguage(userName);
+
+                    const isDashboard = document.querySelector('.sidebar .nav-link.active[data-translate-key="dashboard"]') || 
+                                       window.location.pathname.includes('dashboard');
+
+                    if (isDashboard) {
+                        setTimeout(() => {
+                            showDashboardWelcome();
+                        }, 100);
+                        setTimeout(() => {
+                            playWelcomeAudio(userName);
+                        }, 500);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error.message);
+                    // Fallback to default user name
+                    const userName = 'Utilisateur';
+                    applyLanguage(userName);
+                });
+
             document.addEventListener('languageChange', () => {
-                applyLanguage();
+                // Re-fetch user data on language change
+                fetch('{{ path('admin_user_data_fetch') }}', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        console.log('Language change fetch response status:', response.status);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Fetched user data on language change:', data);
+                        const userName = (data.nom || data.prenom) ? `${data.nom || ''} ${data.prenom || ''}`.trim() : 'Utilisateur';
+                        applyLanguage(userName);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user data on language change:', error.message);
+                        applyLanguage('Utilisateur');
+                    });
             });
         });
     </script>
