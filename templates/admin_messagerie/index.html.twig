@@ -295,7 +295,7 @@
         scrollbar-color: #d1d5db #f9fafb;
     }
 
-       body.dark-mode .chat-container .chat-area {
+    body.dark-mode .chat-container .chat-area {
         background-color: #1a202c;
         scrollbar-color: #718096 #1a202c;
     }
@@ -353,6 +353,7 @@
             opacity: 1;
             transform: translateY(0);
         }
+主播: 0 auto;
     }
 
     .chat-container .chat-footer {
@@ -486,7 +487,7 @@
                     <div class="person {{ loop.first ? 'selected' : '' }}" data-id="{{ partenaire.idUtilisateur }}">
                         <div class="flex items-center">
                             <img alt="Profile picture of {{ partenaire.prenom }} {{ partenaire.nom }}" 
-                                 src="{{ partenaire.avatar ?: 'https://example.com/default-avatar.png' }}">
+                                 src="{{ partenaire.avatar ? asset(partenaire.avatar) : asset('images/user.JPG') }}">
                             <div class="person-info">
                                 <p class="name">{{ partenaire.prenom }} {{ partenaire.nom }}</p>
                                 <p class="status">
@@ -512,7 +513,7 @@
             <div class="chat-header">
                 {% if partenaires|length > 0 %}
                     <img alt="Profile picture of {{ partenaires[0].prenom }} {{ partenaires[0].nom }}" 
-                         src="{{ partenaires[0].avatar ?: 'https://example.com/default-avatar.png' }}">
+                         src="{{ partenaires[0].avatar ? asset(partenaires[0].avatar) : asset('images/user.JPG') }}">
                     <div>
                         <p class="name">{{ partenaires[0].prenom }} {{ partenaires[0].nom }}</p>
                         <p class="status">
