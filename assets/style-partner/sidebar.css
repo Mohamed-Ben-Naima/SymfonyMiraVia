@@ -14,6 +14,9 @@ body {
   background-color: rgb(255, 255, 255);
   padding-top: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.15);
+  max-height: 100vh; /* Limite la hauteur à 100% de la fenêtre */
+  overflow-y: auto; /* Active le scrollbar vertical si nécessaire */
+  overflow-x: hidden; /* Désactive le scrolling horizontal */
 }
 
 /* Sidebar link styles */
@@ -87,4 +90,31 @@ body {
   height: 30px;
   margin-left: 30px;
   margin-bottom: 30px;
+}
+
+.treeview {
+  display: none; /* Hidden by default */
+  padding-left: 50px;
+  margin-top: 5px;
+  border-left: 2px solid #ddd;
+}
+
+.treeview button {
+  display: block;
+  background: none;
+  border: none;
+  color: #013a71;
+  text-align: left;
+  padding: 5px 0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.treeview button:hover {
+  color: #5095d6;
+}
+
+.sidebar-link.active + .treeview {
+  display: block; /* Show treeview when parent is active */
 }

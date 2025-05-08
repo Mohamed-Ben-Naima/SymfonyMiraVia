@@ -11,10 +11,10 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="{{ asset('style-partner/sidebar.css') }}" rel="stylesheet">
-  <link href="{{ asset('style-partner/navbar.css') }}" rel="stylesheet">
+
 </head>
 <body>
- <!-- Sidebar -->
+  <!-- Sidebar -->
   <div class="sidebar">
     <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img mb-3">
     <a href="{{ path('app_dashboard_partenaire') }}" class="sidebar-link"><i class="bi bi-bar-chart-fill"></i> Tableau de bord</a>
@@ -23,27 +23,63 @@
     <a href="{{ path('app_event_partner') }}" class="sidebar-link"><i class="bi bi-calendar-check-fill"></i> Evénements</a>
     <a href="{{ path('app_benevolat_partner') }}" class="sidebar-link"><i class="bi bi-valentine"></i> Bénévolat</a>
     <a href="{{ path('app_don_partner') }}" class="sidebar-link"><i class="bi bi-person-badge-fill"></i> Gérer Responsables</a>
-    <a href="{{ path('app_settings_partner') }}" class="sidebar-link"><i class="bi bi-gear-fill"></i> Paramètres</a>
+    <a href="{{ path('app_settings_partner') }}" class="sidebar-link" id="settingsLink"><i class="bi bi-gear-fill"></i> Paramètres</a>
+    <!-- Treeview for Settings -->
+    <div class="treeview">
+      <button class="tab hover-underline" data-tab="profile"><i class="bi bi-person-fill-gear"></i> Profil</button>
+      <button class="tab hover-underline" data-tab="notifications"><i class="bi bi-bell-fill"></i> Notifications</button>
+      <button class="tab hover-underline" data-tab="custome"><i class="bi bi-brush-fill"></i> Personnalisation</button>
+      <button class="tab hover-underline" data-tab="security"><i class="bi bi-shield-lock-fill"></i> Sécurité</button>
+      <button class="tab hover-underline" data-tab="Ln"><i class="bi bi-globe2"></i> Langue</button>
+      <button class="tab hover-underline" data-tab="about"><i class="bi bi-info-circle"></i> À propos</button>
+    </div>
     <a href="{{ path('app_messagerie_partner') }}" class="sidebar-link"><i class="bi bi-chat-quote-fill"></i> Messagerie</a>
     <a href="{{ path('app_logout_partner') }}" class="sidebar-link"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
   </div>
+
   <script>
   document.addEventListener("DOMContentLoaded", function () {
     const sidebarLinks = document.querySelectorAll(".sidebar a");
+    const settingsLink = document.getElementById("settingsLink"); // Settings link
+    const treeview = document.querySelector(".treeview"); // Treeview element
 
+    // Function to set the active link
+    function setActiveLink(link) {
+        // Remove active class from all links
+        sidebarLinks.forEach((l) => l.classList.remove("active"));
+
+        // Add active class to the clicked link
+        link.classList.add("active");
+
+        // Store the active link's href in localStorage
+        localStorage.setItem("activeSidebarLink", link.getAttribute("href"));
+
+        // Show or hide the treeview
+        if (link === settingsLink) {
+            treeview.style.display = "block";
+        } else {
+            treeview.style.display = "none";
+        }
+    }
+
+    // Add click event to all sidebar links
     sidebarLinks.forEach((link) => {
-        link.addEventListener("click", () => {
-            // Remove active class from all links
-            sidebarLinks.forEach((l) => l.classList.remove("active"));
-
-            // Add active class to the clicked link
-            link.classList.add("active");
+        link.addEventListener("click", function (event) {
+            // Prevent default if the link is "Paramètres"
+            if (link === settingsLink) {
+                event.preventDefault();
+            }
+            setActiveLink(link);
         });
     });
 
-    // Set the first link as active by default
-    if (sidebarLinks.length > 0) {
-        sidebarLinks[0].classList.add("active");
+    // On page load, set the active link based on localStorage
+    const activeLinkHref = localStorage.getItem("activeSidebarLink");
+    if (activeLinkHref) {
+        const activeLink = document.querySelector(`.sidebar a[href="${activeLinkHref}"]`);
+        if (activeLink) {
+            setActiveLink(activeLink);
+        }
     }
   });
   </script>
