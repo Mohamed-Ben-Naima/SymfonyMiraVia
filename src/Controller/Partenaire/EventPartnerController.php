@@ -4,6 +4,8 @@ namespace App\Controller\Partenaire;
 
 use App\Entity\Evenements;
 use App\Entity\Utilisateurs;
+use App\Entity\Notifications;
+use DateTime;
 use App\Repository\EvenementsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UtilisateursRepository;
@@ -17,6 +19,7 @@ class EventPartnerController extends AbstractController
     #[Route('/dashboard/partenaire/event_partner', name: 'app_event_partner')]
     public function Event(
         EvenementsRepository $repository,
+        UtilisateursRepository $utilisateursRepository
         
     ): Response {
         $user = $this->getUser();
@@ -37,7 +40,8 @@ class EventPartnerController extends AbstractController
     }
 
     #[Route('/dashboard/partenaire/evenement/ajouter', name: 'add_event', methods: ['POST', 'GET'])]
-    public function addEvent(Request $request, EntityManagerInterface $entityManager): Response
+    public function addEvent(Request $request, EntityManagerInterface $entityManager,UtilisateursRepository $utilisateursRepository
+    ): Response
     {
         $user = $this->getUser();
 
@@ -70,6 +74,25 @@ class EventPartnerController extends AbstractController
                 $file->move($this->getParameter('event_images_directory'), $fileName);
                 $event->setImageName($fileName);
             }
+             // Notifications
+        $notification = new Notifications();
+        $notification->setMessage("Nouveau Evènement ajouté.");
+        $notification->setDateEnvoi(new DateTime());
+        $notification->setTypeNotification('success');
+        $notification->setIsRead(false);
+        $notification->setIdUtilisateur($user->getIdUtilisateur());
+        $entityManager->persist($notification);
+
+        $admins = $utilisateursRepository->findAllAdmins();
+        foreach ($admins as $admin) {
+            $adminNotif = new Notifications();
+            $adminNotif->setMessage(" Nouveau Evènement ajouté par " .$user->getNom()." " . $user->getPrenom());
+            $adminNotif->setDateEnvoi(new DateTime());
+            $adminNotif->setTypeNotification('success');
+            $adminNotif->setIsRead(false);
+            $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
+            $entityManager->persist($adminNotif);
+        }
 
             $entityManager->persist($event);
             $entityManager->flush();
@@ -83,7 +106,8 @@ class EventPartnerController extends AbstractController
 
     // Route to edit an event
     #[Route('/dashboard/partenaire/evenement/edit/{id}', name: 'edit_event')]
-    public function edit(int $id, EntityManagerInterface $entityManager, Request $request): Response
+    public function edit(int $id, EntityManagerInterface $entityManager, Request $request,UtilisateursRepository $utilisateursRepository
+    ): Response
     {
         $user = $this->getUser();
         $event = $entityManager->getRepository(Evenements::class)->find($id);
@@ -123,6 +147,25 @@ class EventPartnerController extends AbstractController
 
                 $event->setImageName($fileName);
             }
+             // Notifications
+        $notification = new Notifications();
+        $notification->setMessage(" Evènement modifié .");
+        $notification->setDateEnvoi(new DateTime());
+        $notification->setTypeNotification('warning');
+        $notification->setIsRead(false);
+        $notification->setIdUtilisateur($user->getIdUtilisateur());
+        $entityManager->persist($notification);
+
+        $admins = $utilisateursRepository->findAllAdmins();
+        foreach ($admins as $admin) {
+            $adminNotif = new Notifications();
+            $adminNotif->setMessage("Evènement modifié par " .$user->getNom()." " . $user->getPrenom());
+            $adminNotif->setDateEnvoi(new DateTime());
+            $adminNotif->setTypeNotification('warning');
+            $adminNotif->setIsRead(false);
+            $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
+            $entityManager->persist($adminNotif);
+        }
 
             $entityManager->flush();
 
@@ -136,7 +179,8 @@ class EventPartnerController extends AbstractController
     }
 
     #[Route('/dashboard/partenaire/evenement/upload-image/{id}', name: 'upload_event_image', methods: ['POST'])]
-    public function uploadImage(Request $request, int $id, EntityManagerInterface $entityManager): Response
+    public function uploadImage(Request $request, int $id, EntityManagerInterface $entityManager, UtilisateursRepository $utilisateursRepository
+    ): Response
     {
         $user = $this->getUser();
         $event = $entityManager->getRepository(Evenements::class)->find($id);
@@ -188,6 +232,25 @@ class EventPartnerController extends AbstractController
             $this->addFlash('error', 'Accès refusé.');
             return $this->redirectToRoute('app_event_partner');
         }
+          // Notifications
+          $notification = new Notifications();
+          $notification->setMessage(" Evènement supprimé.");
+          $notification->setDateEnvoi(new DateTime());
+          $notification->setTypeNotification('danger');
+          $notification->setIsRead(false);
+          $notification->setIdUtilisateur($user->getIdUtilisateur());
+          $entityManager->persist($notification);
+  
+          $admins = $utilisateursRepository->findAllAdmins();
+          foreach ($admins as $admin) {
+              $adminNotif = new Notifications();
+              $adminNotif->setMessage("Evènement supprimé par " .$user->getNom()." " . $user->getPrenom());
+              $adminNotif->setDateEnvoi(new DateTime());
+              $adminNotif->setTypeNotification('danger');
+              $adminNotif->setIsRead(false);
+              $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
+              $entityManager->persist($adminNotif);
+          }
 
         // Supprimez l'événement
         $entityManager->remove($event);

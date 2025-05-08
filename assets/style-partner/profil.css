@@ -1,242 +1,322 @@
+/* Conteneur général */
 .container {
-    width: 90%;
-    max-width: 1200px;
-    margin: auto;
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
 }
 
+/* Cartes modernes */
 .card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    padding: 24px;
-    margin-bottom: 24px;
-    border: none;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(5px);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+  border: none;
+  transition: transform 0.3s;
+  animation: fadeInUp 0.5s ease forwards;
+}
+.card:hover {
+  transform: translateY(-4px);
 }
 
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* Profil utilisateur */
 .user-profile {
-    text-align: center;
+  text-align: center;
 }
 .user-avatar {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .avatar-edit {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    border-radius: 50%;
-    width: 40px; /* taille fixe à adapter à ton design */
-    height: 40px; 
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .avatar-edit i {
-    color: #007ae1;
-    font-size: 1.9rem; /* ajuste si besoin */
-    margin: 0;
-  }
-  /* Logo editable */
-  .company-logo-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .logo-edit {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: #fff;
-    border-radius: 50%;
-    padding: 4px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    cursor: pointer;
-  }
-  
-  .logo-edit i {
-    color: #007ae1;
-    font-size: 0.9rem;
-  }
-  
-
+  position: relative;
+  display: inline-block;
+}
 .user-avatar img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 3px solid #fff;
+  transition: transform 0.3s ease;
 }
+.user-avatar img:hover {
+  transform: scale(1.05);
+}
+.avatar-edit {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-edit i {
+  color: #007ae1;
+  font-size: 1.9rem;
+  margin: 0;
+}
+
+/* Logo entreprise editable */
+.company-logo-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.logo-edit {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #fff;
+  border-radius: 50%;
+  padding: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  cursor: pointer;
+}
+.logo-edit i {
+  color: #007ae1;
+  font-size: 0.9rem;
+}
+
+/* Informations utilisateur */
 .user-name {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-top: 12px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 12px;
 }
-
 .user-email {
-    font-size: 0.875rem;
-    color: #6b7280;
+  font-size: 0.875rem;
+  color: #6b7280;
 }
 
+/* Section à propos */
 .about {
-    margin-top: 20px;
-    text-align: left;        /* tout le contenu à gauche */
+  margin-top: 20px;
+  text-align: left;
 }
-
 .about h5,
 .about p {
-    text-align: left;        /* titre et paragraphe à gauche */
-    margin-bottom: 10px;
+  text-align: left;
+  margin-bottom: 10px;
 }
 
-/* Bloc logo + nom d’entreprise également à gauche */
+/* Informations entreprise */
 .company-info {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;  /* alignement à gauche */
-    gap: 12px;
-    margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.company-info img {
+  width: 59px;
+  height: 59px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border: 3px solid #fff;
+  transition: transform 0.3s ease;
+}
+.company-info img:hover {
+  transform: scale(1.05);
+}
+.company-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+.company-text strong {
+  font-size: 1rem;
+  color: #013A71;
+}
+.company-url {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+  word-break: break-word;
 }
 
+/* Champs de formulaire */
 .form-group {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
-
 .form-control-profil {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    background: #f9fafb;
-    transition: border-color 0.3s;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #f9fafb;
+  transition: border-color 0.3s;
 }
-
 .form-control-profil:focus {
-    outline: none;
-    border-color: #007ae1;
-    background: #fff;
+  outline: none;
+  border-color: #007ae1;
+  background: #fff;
 }
 
+/* Disposition des colonnes */
 .row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    align-items: stretch;    /* toutes les colonnes auront la même hauteur */
-  }
-  
-  .col-6 {
-    flex: 1 1 48%;           /* deux colonnes de 48% chacune */
-    display: flex;           /* pour permettre à la carte à l’intérieur de s’étirer */
-  }
-  .col-6 > .card {
-    flex: 1;                 /* la carte occupe toute la hauteur disponible */
-    display: flex;
-    flex-direction: column;  /* pour garder le contenu vertical */
-  }
-        
-
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: stretch;
+}
+.col-6 {
+  flex: 1 1 48%;
+  display: flex;
+}
+.col-6 > .card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .col-12 {
-    width: 100%;
+  width: 100%;
 }
 
-.text-primary {
-    color: #007ae1;
-    margin-bottom: 16px;
-    font-weight: 600;
-}
-
+/* Boutons modernes */
 .btn {
-    padding: 10px 18px;
-    font-size: 0.9rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  padding: 12px 22px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 122, 225, 0.2);
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease-in-out;
 }
-
 .btn-primary {
-    background-color: #007ae1;
-    color: white;
+  background: linear-gradient(135deg, #007ae1, #005fa3);
+  color: #fff;
 }
-
 .btn-primary:hover {
-    background-color: #005fa3;
+  background: linear-gradient(135deg, #005fa3, #004e85);
+  transform: translateY(-2px);
 }
-
 .btn-secondary {
-    background-color: #6c757d;
-    color: white;
+  background-color: #e2e8f0;
+  color: #374151;
 }
-
 .btn-secondary:hover {
-    background-color: #5a6268;
+  background-color: #cbd5e1;
 }
 
+/* Autres utilitaires */
+.text-primary {
+  color: #007ae1;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
 .text-right {
-    text-align: right;
+  text-align: right;
 }
-
 .form-row {
-    display: flex;
-    gap: 16px;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
-
 .form-row .form-group {
-    width: 48%;
+  width: 48%;
 }
-.company-info {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+/* 
+@media (max-width: 1280px) {
+  .profil-wrapper {
+    position: static;
+    width: 100%;
+    margin-top: 100px;
+  }
+
+  .col-6 {
+    flex: 1 1 48%; 
+  }
+
+  .form-row .form-group {
+    width: 100%;
+  }
+}
+*/
+/* Tablettes et petits laptops et Grand écran jusqu’à 1280px  */
+@media (max-width: 1280px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .row,
+  .form-row {
     gap: 12px;
-    margin-top: 16px;
   }
-  
-  .company-info img {
-    width: 59px;
-    height: 59px;
-    border-radius: 8px;
-    object-fit: cover;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-  
-  .company-text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Aligne le contenu à gauche */
-    text-align: left;  /* Empile nom et URL verticalement */
-  }
-  
-  .company-text strong {
+
+  .btn {
+    padding: 12px 20px;
     font-size: 1rem;
-    color: #013A71;
   }
-  
-  .company-url {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin-top: 0.25rem;
-    word-break: break-word;
+
+  .company-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
-  
-  
 
-@media (max-width: 768px) {
-    .profil-wrapper {
-        position: static;
-        width: 100%;
-        margin-top: 120px;
-    }
+  .company-text {
+    align-items: center;
+  }
+}
 
-    .form-row .form-group {
-        width: 100%;
-    }
+/* ✅ Très petits écrans (<576px) avec 2 champs par ligne */
+@media (max-width: 576px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .form-row {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .form-row .form-group {
+    width: 48%; /* ➤ Garde deux champs côte à côte */
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .avatar-edit,
+  .logo-edit {
+    width: 32px;
+    height: 32px;
+  }
+
+  .avatar-edit i,
+  .logo-edit i {
+    font-size: 1.2rem;
+  }
 }
