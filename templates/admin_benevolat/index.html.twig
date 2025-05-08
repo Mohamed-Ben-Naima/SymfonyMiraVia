@@ -434,43 +434,46 @@ body.dark-mode .toggle-dark-mode:hover {
         </select>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Date de bénévolat</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="userTable">
-            {% for benevolat in benevolats %}
-            <tr>
-                <td>{{ benevolat.idBenevolat }}</td>
-                <td>{{ benevolat.titre }}</td>
-                <td>{{ benevolat.description|length > 30 ? benevolat.description|slice(0, 30) ~ '...' : benevolat.description }}</td>
-                <td>{{ benevolat.dateBenevolat ? benevolat.dateBenevolat|date('Y-m-d') : '' }}</td>
-                <td>{{ benevolat.status }}</td>
-                <td class="actions">
-                    <button 
-                        class="consulter-btn" 
-                        data-id="{{ benevolat.idBenevolat }}"
-                        data-titre="{{ benevolat.titre }}"
-                        data-description="{{ benevolat.description }}"
-                        data-date-benevolat="{{ benevolat.dateBenevolat ? benevolat.dateBenevolat|date('Y-m-d') : '' }}"
-                        data-status="{{ benevolat.status }}"
-                        data-image="{{ benevolat.imagename|default('') }}"
-                        onclick="viewDetails(this)"
-                    >
-                        Consulter
-                    </button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Date de bénévolat</th>
+            <th>Lieu</th> <!-- Added -->
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="userTable">
+        {% for benevolat in benevolats %}
+        <tr>
+            <td>{{ benevolat.idBenevolat }}</td>
+            <td>{{ benevolat.titre }}</td>
+            <td>{{ benevolat.description|length > 30 ? benevolat.description|slice(0, 30) ~ '...' : benevolat.description }}</td>
+            <td>{{ benevolat.dateBenevolat ? benevolat.dateBenevolat|date('Y-m-d') : '' }}</td>
+            <td>{{ benevolat.lieu }}</td> <!-- Added -->
+            <td>{{ benevolat.status }}</td>
+<td class="actions">
+    <button 
+        class="consulter-btn" 
+        data-id="{{ benevolat.idBenevolat }}"
+        data-titre="{{ benevolat.titre }}"
+        data-description="{{ benevolat.description }}"
+        data-date-benevolat="{{ benevolat.dateBenevolat ? benevolat.dateBenevolat|date('Y-m-d') : '' }}"
+        data-lieu="{{ benevolat.lieu }}"
+        data-status="{{ benevolat.status }}"
+        data-image="{{ benevolat.imagename|default('') }}"
+        onclick="viewDetails(this)"
+    >
+        Consulter
+    </button>
+</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </div>
 
 <div id="detailsModal" class="modal">
@@ -501,43 +504,37 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('dark-mode');
     }
 
-    function viewDetails(button) {
-        const titre = button.getAttribute('data-titre');
-        const description = button.getAttribute('data-description');
-        const dateBenevolat = button.getAttribute('data-date-benevolat');
-        const status = button.getAttribute('data-status');
-        const image = button.getAttribute('data-image');
+window.viewDetails = function(button) {
+    // Récupérer les données à partir des attributs data-*
+    const titre = button.getAttribute('data-titre');
+    const description = button.getAttribute('data-description');
+    const dateBenevolat = button.getAttribute('data-date-benevolat');
+    const lieu = button.getAttribute('data-lieu');
+    const status = button.getAttribute('data-status');
 
-        const modalBody = document.getElementById('modalBody');
-        modalBody.innerHTML = `
-            <p><strong>Titre :</strong> ${titre}</p>
-            <p><strong>Description :</strong> ${description}</p>
-            <p><strong>Date de bénévolat :</strong> ${dateBenevolat}</p>
-            <p><strong>Status :</strong> ${status}</p>
-            <p><strong>Image :</strong> ${
-                image 
-                ? `<a href="${image}" target="_blank">${image}</a>` 
-                : 'Aucune image disponible'
-            }</p>
-        `;
+    // Ajouter les données dans le contenu de la modale
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = `
+        <p><strong>Titre :</strong> ${titre}</p>
+        <p><strong>Description :</strong> ${description}</p>
+        <p><strong>Date de bénévolat :</strong> ${dateBenevolat}</p>
+        <p><strong>Lieu :</strong> ${lieu}</p>
+        <p><strong>Status :</strong> ${status}</p>
 
-        const downloadButton = document.getElementById('downloadButton');
-        if (image) {
-            downloadButton.style.display = 'inline-block';
-            downloadButton.onclick = () => window.location.href = image;
-        } else {
-            downloadButton.style.display = 'none';
-        }
+    `;
 
-        const modal = document.getElementById('detailsModal');
-        modal.style.display = 'block';
-        document.body.classList.add('no-scroll');
-    }
 
-    function closeModal() {
+
+    // Afficher la modale
+    const modal = document.getElementById('detailsModal');
+    modal.style.display = 'block';
+    document.body.classList.add('no-scroll');
+};
+
+    window.closeModal = function() {
         document.getElementById('detailsModal').style.display = 'none';
         document.body.classList.remove('no-scroll');
-    }
+    };
 
     document.getElementById('search').addEventListener('input', filterTable);
     document.getElementById('statusFilter').addEventListener('change', filterTable);
@@ -558,10 +555,6 @@ document.addEventListener('DOMContentLoaded', function() {
             row.style.display = (textMatch && statusMatch) ? '' : 'none';
         });
     }
-
-    // Exposer les fonctions globalement pour les appels depuis HTML
-    window.viewDetails = viewDetails;
-    window.closeModal = closeModal;
 });
 </script>
 {% endblock %}
