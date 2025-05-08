@@ -1,0 +1,321 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block title %}Notifications{% endblock %}
+
+{% block body %}
+<style>
+    :root {
+        --primary-color: #1e3a8a; /* Deeper blue for professionalism */
+        --primary-hover: #2563eb; /* Brighter hover for interactivity */
+        --success-color: #16a34a; /* Modern green for success */
+        --success-light: #4ade80; /* Lighter green for dark mode */
+        --text-light: #6b7280; /* Softer gray for secondary text */
+        --text-dark: #1f2937; /* Darker for main text */
+        --bg-light: #ffffff; /* Clean white background */
+        --bg-dark: #1e293b; /* Professional dark mode background */
+        --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+        --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.4); /* Stronger for dark mode */
+        --border-light: #e5e7eb; /* Light border */
+        --border-dark: #374151; /* Dark mode border */
+        --transition: all 0.2s ease-in-out; /* Smooth transitions */
+    }
+
+    .notification-container {
+        margin: 3rem auto;
+        max-width: 450px;
+        width: 90%;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-light);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: var(--shadow-light);
+        transition: var(--transition);
+        max-height: 500px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) #f1f5f9;
+    }
+
+    body.dark-mode .notification-container {
+        background: var(--bg-dark);
+        box-shadow: var(--shadow-dark);
+    }
+
+    .notification-title {
+        font-weight: 600;
+        font-size: 1.75rem; /* 28px */
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+    }
+
+    body.dark-mode .notification-title {
+        color: #f1f5f9;
+    }
+
+    .notification-item {
+        padding: 16px;
+        border-bottom: 1px solid var(--border-light);
+        border-radius: 8px;
+        transition: var(--transition);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    body.dark-mode .notification-item {
+        border-bottom: 1px solid var(--border-dark);
+    }
+
+    .notification-item:last-child {
+        border-bottom: none;
+    }
+
+    .notification-item:hover {
+        background: #f8fafc; /* Subtle hover background */
+        transform: translateY(-2px);
+    }
+
+    body.dark-mode .notification-item:hover {
+        background: #334155;
+    }
+
+    .notification-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 5px;
+        height: 100%;
+        background: var(--primary-color);
+        opacity: 0;
+        transition: var(--transition);
+    }
+
+    .notification-item:hover::before {
+        opacity: 1;
+    }
+
+    .notification-item i {
+        color: var(--primary-color);
+        font-size: 1.25rem; /* 20px */
+        margin-right: 12px;
+        transition: var(--transition);
+    }
+
+    body.dark-mode .notification-item i {
+        color: #60a5fa;
+    }
+
+    .notification-item i:hover {
+        transform: scale(1.1);
+    }
+
+    .notification-details {
+        font-size: 0.875rem; /* 14px */
+        color: var(--text-light);
+        line-height: 1.5;
+    }
+
+    body.dark-mode .notification-details {
+        color: #9ca3af;
+    }
+
+    .notification-details strong {
+        color: var(--text-dark);
+        font-weight: 500;
+    }
+
+    body.dark-mode .notification-details strong {
+        color: #f1f5f9;
+    }
+
+    .notification-time {
+        font-size: 0.875rem; /* 14px */
+        color: var(--success-color);
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    body.dark-mode .notification-time {
+        color: var(--success-light);
+    }
+
+    /* Dropdown-specific styles */
+    .notification-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 360px;
+        max-height: 480px;
+        overflow-y: auto;
+        background: var(--bg-light);
+        border-radius: 12px;
+        box-shadow: var(--shadow-light);
+        padding: 20px;
+        display: none;
+        z-index: 1000;
+        transform: translateY(10px);
+        opacity: 0;
+        transition: var(--transition);
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) #f1f5f9;
+    }
+
+    .notification-dropdown.show {
+        display: block;
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    body.dark-mode .notification-dropdown {
+        background: var(--bg-dark);
+        box-shadow: var(--shadow-dark);
+    }
+
+    .notification-dropdown .notification-title {
+        font-size: 1.5rem; /* 24px */
+        margin-bottom: 1.25rem;
+        position: sticky;
+        top: 0;
+        background: inherit;
+        z-index: 1;
+        padding-bottom: 8px;
+    }
+
+    .notification-dropdown .notification-item {
+        font-size: 0.9375rem; /* 15px */
+        padding: 12px;
+    }
+
+    .notification-dropdown .notification-item i {
+        font-size: 1.125rem; /* 18px */
+    }
+
+    .notification-dropdown .notification-details,
+    .notification-dropdown .notification-time {
+        font-size: 0.8125rem; /* 13px */
+    }
+
+    .notification-link {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+        color: var(--primary-color);
+        text-decoration: none;
+        font-size: 0.9375rem; /* 15px */
+        font-weight: 500;
+        padding: 10px;
+        border-radius: 8px;
+        transition: var(--transition);
+    }
+
+    .notification-link:hover {
+        color: var(--primary-hover);
+        background: #f1f5f9;
+    }
+
+    body.dark-mode .notification-link {
+        color: #60a5fa;
+    }
+
+    body.dark-mode .notification-link:hover {
+        color: #93c5fd;
+        background: #374151;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .notification-container {
+            width: 95%;
+            padding: 16px;
+        }
+
+        .notification-title {
+            font-size: 1.5rem; /* 24px */
+        }
+
+        .notification-item {
+            font-size: 0.9375rem; /* 15px */
+            padding: 12px;
+        }
+
+        .notification-item i {
+            font-size: 1.125rem; /* 18px */
+        }
+
+        .notification-details,
+        .notification-time {
+            font-size: 0.8125rem; /* 13px */
+        }
+
+        .notification-dropdown {
+            width: 300px;
+            max-height: 400px;
+        }
+    }
+
+    /* Accessibility */
+    .notification-item:focus {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+        background: #f1f5f9;
+    }
+
+    body.dark-mode .notification-item:focus {
+        background: #374151;
+    }
+
+    .notification-link:focus {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+</style>
+
+<div class="notification-container" role="region" aria-labelledby="notification-title">
+    <h1 class="notification-title" id="notification-title">Notifications</h1>
+    {% for notification in notifications %}
+        <div class="notification-item" role="alert" tabindex="0">
+            <div class="d-flex align-items-center">
+                <i class="bi {{ notification.icon }}" aria-hidden="true"></i>
+                <span>{{ notification.message }}</span>
+            </div>
+            <div class="notification-details">
+            </div>
+            <div class="notification-time">{{ notification.time }}</div>
+        </div>
+    {% else %}
+        <div class="notification-item" role="alert">
+            Aucune notification disponible.
+        </div>
+    {% endfor %}
+    <a href="{{ path('app_admin_notification') }}" class="notification-link" role="link">Voir toutes les notifications</a>
+</div>
+
+<!-- Dropdown template for navbar -->
+<template id="notification-dropdown-template">
+    <div class="notification-dropdown" role="region" aria-labelledby="dropdown-notification-title">
+        <h1 class="notification-title" id="dropdown-notification-title">Notifications</h1>
+        {% for notification in notifications %}
+            <div class="notification-item" role="alert" tabindex="0">
+                <div class="d-flex align-items-center">
+                    <i class="bi {{ notification.icon }}" aria-hidden="true"></i>
+                    <span>{{ notification.message }}</span>
+                </div>
+                <div class="notification-details">
+                    Envoyé par <strong>{{ notification.sender }}</strong>
+                </div>
+                <div class="notification-time">{{ notification.time }}</div>
+            </div>
+        {% else %}
+            <div class="notification-item" role="alert">
+                Aucune notification disponible.
+            </div>
+        {% endfor %}
+        <a href="{{ path('app_admin_notification') }}" class="notification-link" role="link">Voir toutes les notifications</a>
+    </div>
+</template>
+{% endblock %}

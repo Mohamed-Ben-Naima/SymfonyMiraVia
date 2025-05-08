@@ -1,21 +1,22 @@
 body {
-    overflow-x: hidden;
-    margin: 0;
-    background-color: #f5f5f9;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+  background-color: #f5f5f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .sidebar {
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgb(255, 255, 255);
-    padding-top: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.15);
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgb(255, 255, 255);
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.15);
 }
 
+/* Sidebar link styles */
 .sidebar a {
   color: #013a71;
   padding: 12px 15px;
@@ -23,25 +24,64 @@ body {
   align-items: center;
   text-decoration: none;
   margin-bottom: 11px;
-  transition: background-color 0.3s ease;
-
+  position: relative; /* Required for hover underline */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.sidebar a:hover {
-  background-color: rgb(185, 211, 231);
+/* Hover underline effect - both top and bottom */
+.sidebar a::before,
+.sidebar a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(to right, #d6e6ff, #013a71);
+  left: 0;
+  transition: width 0.3s ease-in-out;
 }
 
+.sidebar a::before {
+  top: 0; /* Top underline */
+  transform-origin: left;
+}
+
+.sidebar a::after {
+  bottom: 0; /* Bottom underline */
+  transform-origin: right;
+}
+
+/* Expand underline on hover */
+.sidebar a:hover::before,
+.sidebar a:hover::after {
+  width: 100%; /* Expand underline */
+}
+
+/* Active link styling */
+.sidebar a.active {
+  color: #013a71;
+  background: #d6e6ff; /* Light blue background */
+  border-right: 4px solid #013a71; /* Highlight active link */
+}
+
+.sidebar a:hover::after {
+  width: 100%; /* Expand underline on hover */
+}
+
+/* Icon spacing */
 .sidebar a i {
   margin-right: 10px;
   flex-shrink: 0;
 }
 
+/* Content area for the rest of the page */
 .content {
   padding: 20px;
   min-height: 100vh;
+  margin-left: 250px; /* Leave space for the sidebar */
   margin-top: 80px;
 }
 
+/* Logo styling */
 .logo-img {
   max-width: 80%;
   height: 30px;

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\NotificationsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Table(name: 'notifications')]
 #[ORM\Entity(repositoryClass: NotificationsRepository::class)]
@@ -12,13 +13,13 @@ class Notifications
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "AUTO")]
-    #[ORM\Column(name: "id_notification", type: "integer")] 
+    #[ORM\Column(name: "id_notification", type: "integer")]
     #[Groups(['notif:read'])]
-    private ?int $idNotification = NULL;
+    private ?int $idNotification = null;
 
-    #[ORM\Column(name: "id_utilisateur", nullable: true, options: ["default" => NULL])]
+    #[ORM\Column(name: "id_utilisateur", nullable: true, options: ["default" => null])]
     #[Groups(['notif:read'])]
-    private ?int $idUtilisateur = NULL;
+    private ?int $idUtilisateur = null;
 
     #[ORM\Column(name: "message", type: Types::TEXT, nullable: true)]
     #[Groups(['notif:read'])]
@@ -31,6 +32,10 @@ class Notifications
     #[ORM\Column(name: "date_envoi", type: Types::DATETIME_MUTABLE, nullable: true, options: ["default" => 'current_timestamp()'])]
     #[Groups(['notif:read'])]
     private ?\DateTimeInterface $dateEnvoi = null;
+
+    #[ORM\Column(name: "is_read", type: "boolean", options: ["default" => false])]
+    #[Groups(['notif:read'])]
+    private bool $isRead = false;
 
     public function getIdNotification(): ?int
     {
@@ -91,20 +96,16 @@ class Notifications
 
         return $this;
     }
- #[ORM\Column(name: "is_read", type: "boolean", options: ["default" => false])]
-#[Groups(['notif:read'])]
-private bool $isRead = false;
 
-public function getisRead(): bool
-{
-    return $this->isRead;
-}
+    public function getIsRead(): bool
+    {
+        return $this->isRead;
+    }
 
-public function setIsRead(bool $isRead): static
-{
-    $this->isRead = $isRead;
+    public function setIsRead(bool $isRead): static
+    {
+        $this->isRead = $isRead;
 
-    return $this;
-}
-
+        return $this;
+    }
 }

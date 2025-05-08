@@ -4,14 +4,6 @@
     font-family: Arial, sans-serif;
 }
 
-
-.tab-content {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-}
-
 .settings-group {
     margin-top: 20px;
 }
@@ -51,7 +43,6 @@
     font-size: 1rem;
     color: #013a71;
     font-weight: bold;
-    background: #d6e6ff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -60,12 +51,13 @@
     align-items: center; /* Center icon and text vertically */
     gap: 8px; /* Add spacing between the icon and text */
     padding: 12px 18px; /* Add padding for the buttons */
+    background-color: transparent;
 }
 
 .tab.active {
     font-size: 1rem;
-    color: #ffffff;
-    background: linear-gradient(to right, #013a71 , #d6e6ff);
+    color: #013a71;
+    background: #d6e6ff;
 }
 
 .tab.hover-underline::after,
@@ -109,3 +101,6 @@
     font-size: 1rem; /* Adjust icon size */
 }
 
+.tab.hover {
+    background-color: #d6e6ff;
+}
