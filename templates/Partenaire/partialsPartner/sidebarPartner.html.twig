@@ -11,7 +11,6 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="{{ asset('style-partner/sidebar.css') }}" rel="stylesheet">
-
 </head>
 <body>
   <!-- Sidebar -->
@@ -26,7 +25,7 @@
     <a href="{{ path('app_settings_partner') }}" class="sidebar-link" id="settingsLink"><i class="bi bi-gear-fill"></i> Paramètres</a>
     <!-- Treeview for Settings -->
     <div class="treeview">
-      <button class="tab hover-underline" data-tab="profile"><i class="bi bi-person-fill-gear"></i> Profil</button>
+      <button class="tab hover-underline" data-tab="profile" data-path="{{ path('app_profil_partner') }}"><i class="bi bi-person-fill-gear"></i> Profil</button>
       <button class="tab hover-underline" data-tab="notifications"><i class="bi bi-bell-fill"></i> Notifications</button>
       <button class="tab hover-underline" data-tab="custome"><i class="bi bi-brush-fill"></i> Personnalisation</button>
       <button class="tab hover-underline" data-tab="security"><i class="bi bi-shield-lock-fill"></i> Sécurité</button>
@@ -51,9 +50,6 @@
         // Add active class to the clicked link
         link.classList.add("active");
 
-        // Store the active link's href in localStorage
-        localStorage.setItem("activeSidebarLink", link.getAttribute("href"));
-
         // Show or hide the treeview
         if (link === settingsLink) {
             treeview.style.display = "block";
@@ -65,11 +61,24 @@
     // Add click event to all sidebar links
     sidebarLinks.forEach((link) => {
         link.addEventListener("click", function (event) {
-            // Prevent default if the link is "Paramètres"
             if (link === settingsLink) {
                 event.preventDefault();
             }
             setActiveLink(link);
+        });
+    });
+
+    // Add click event to treeview buttons
+    const treeviewButtons = document.querySelectorAll(".treeview button");
+    treeviewButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            const tab = button.getAttribute("data-tab");
+            const path = button.getAttribute("data-path");
+            
+            // Redirige vers le chemin si défini
+            if (path && tab === "profile") {
+                window.location.href = path;
+            }
         });
     });
 
