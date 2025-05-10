@@ -220,9 +220,8 @@ class EventPartnerController extends AbstractController
 
     
     #[Route('/dashboard/partenaire/evenement/supprimer/{id}', name: 'delete_event', methods: ['GET', 'DELETE'])]
-    public function deleteEvent(int $id, 
-    EntityManagerInterface $entityManager , 
-    UtilisateursRepository $utilisateursRepository): Response
+    public function deleteEvent(int $id, EntityManagerInterface $entityManager,UtilisateursRepository $utilisateursRepository): Response
+
     {
         $user = $this->getUser();
         $event = $entityManager->getRepository(Evenements::class)->find($id);

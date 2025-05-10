@@ -102,7 +102,6 @@ final class BenevolatPartnerController extends AbstractController
             $this->addFlash('success', 'Bénévolat ajouté avec succès.');
             return $this->redirectToRoute('app_benevolat_partner');
         }
-
     return $this->render('Partenaire/benevolat_partner/add.html.twig');
     }
 
@@ -204,8 +203,10 @@ final class BenevolatPartnerController extends AbstractController
         public function deleteBenevolat(
             Request $request, 
             BenevolatRepository $benevolatRepository, 
-            UtilisateursRepository $utilisateursRepository ,
-            EntityManagerInterface $entityManager, $id): Response
+            EntityManagerInterface $entityManager, $id,
+            UtilisateursRepository $utilisateursRepository
+            ): Response
+           
         {
         $user = $this->getUser();
         $benevolat = $entityManager->getRepository(Benevolat::class)->find($id);
