@@ -53,9 +53,6 @@
             <div class="mb-3">
               <h6 class="text-muted">Preuves fournies</h6>
               {% if aide.preuves %}
-                <img src="{{ asset('uploads/preuves/' ~ aide.preuves) }}" 
-                     alt="Preuve" class="img-fluid rounded border" 
-                     style="max-height: 100px;">
                 <div class="mt-2">
                   <a href="{{ asset('uploads/preuves/' ~ aide.preuves) }}" 
                      target="_blank" class="btn btn-sm btn-outline-primary">
