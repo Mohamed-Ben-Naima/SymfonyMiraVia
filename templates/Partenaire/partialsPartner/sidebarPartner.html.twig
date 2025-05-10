@@ -26,12 +26,12 @@
     <!-- Treeview for Settings -->
     <div class="treeview">
 
-      <button class="tab hover-underline" data-tab="profile" data-path="{{ path('app_profil_partner') }}"><i class="bi bi-person-fill-gear"></i> Profil</button>
-      <button class="tab hover-underline" data-tab="notifications"><i class="bi bi-bell-fill"></i> Notifications</button>
-      <button class="tab hover-underline" data-tab="custome"><i class="bi bi-brush-fill"></i> Personnalisation</button>
-      <button class="tab hover-underline" data-tab="security"><i class="bi bi-shield-lock-fill"></i> Sécurité</button>
-      <button class="tab hover-underline" data-tab="Ln"><i class="bi bi-globe2"></i> Langue</button>
-      <button class="tab hover-underline" data-tab="about" data-path="{{ path('app_partenaire_about') }}"><i class="bi bi-info-circle"></i> À propos</button>
+      <button class="tab hover-underline" data-tab="profile" data-path="{{ path('app_profil_partner') }}">Profil</button>
+      <button class="tab hover-underline" data-tab="notifications">Notifications</button>
+      <button class="tab hover-underline" data-tab="custome">Personnalisation</button>
+      <button class="tab hover-underline" data-tab="security">Sécurité</button>
+      <button class="tab hover-underline" data-tab="Ln">Langue</button>
+      <button class="tab hover-underline" data-tab="about" data-path="{{ path('app_partenaire_about') }}">À propos</button>
 
     </div>
     <a href="{{ path('app_messagerie_partner') }}" class="sidebar-link"><i class="bi bi-chat-quote-fill"></i> Messagerie</a>
@@ -39,7 +39,7 @@
   </div>
 
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const sidebarLinks = document.querySelectorAll(".sidebar a");
     const settingsLink = document.getElementById("settingsLink"); // Settings link
     const treeview = document.querySelector(".treeview"); // Treeview element
@@ -60,13 +60,19 @@
         });
     });
 
-    // Keep treeview always open when settings link is clicked
+    // Toggle treeview visibility when settings link is clicked
     settingsLink.addEventListener("click", function (event) {
         event.preventDefault(); // Prevent default link behavior
-        setActiveLink(settingsLink);
 
-        // Ensure treeview stays open
-        treeview.style.display = "block";
+        // Toggle the display of the treeview
+        if (treeview.style.display === "block") {
+            treeview.style.display = "none"; // Hide treeview
+        } else {
+            treeview.style.display = "block"; // Show treeview
+        }
+
+        // Set active link
+        setActiveLink(settingsLink);
     });
 
     // Add click event to treeview buttons
@@ -74,6 +80,9 @@
     treeviewButtons.forEach((button) => {
         button.addEventListener("click", function () {
             const path = button.getAttribute("data-path");
+
+            // Ensure "Paramètres" link stays active
+            setActiveLink(settingsLink);
 
             // Redirect to the path if defined
             if (path) {
@@ -94,8 +103,9 @@
     const currentTab = Array.from(treeviewButtons).find(button => button.getAttribute("data-path") === currentPath);
     if (currentTab) {
         treeview.style.display = "block"; // Keep treeview open
+        setActiveLink(settingsLink); // Set "Paramètres" as active
     }
-  });
+});
   </script>
 </body>
 </html>
