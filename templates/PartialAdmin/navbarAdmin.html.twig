@@ -12,7 +12,7 @@ body.dark-mode .navbar {
 
 .logo-img {
     padding-top: 10px;
-    padding-left: 20px;
+    padding-left: 30px;
     width: 150px;
     height: 50px;
     cursor: pointer;
@@ -70,50 +70,60 @@ body.dark-mode .notification-icon .badge {
     position: fixed;
     top: 70px;
     right: 20px;
-    width: 350px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(204, 204, 204, 0.3);
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    padding: 15px;
+    width: 360px;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(200, 200, 200, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
     display: none;
     animation: slide-down 0.3s ease-in-out;
     z-index: 9999;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    transition: all 0.3s ease;
 }
 
 body.dark-mode .notification-box {
-    background: rgba(45, 55, 72, 0.95);
-    border-color: rgba(113, 128, 150, 0.3);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    background: rgba(45, 55, 72, 0.98);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 .notification-box .notification-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(200, 200, 200, 0.2);
+}
+
+body.dark-mode .notification-box .notification-header {
+    border-bottom: 1px solid rgba(100, 116, 139, 0.3);
 }
 
 .notification-box .notification-title {
-    font-weight: 600;
-    font-size: 16px;
-    color: #013A71;
+    font-weight: 700;
+    font-size: 18px;
+    color: #1a202c;
+    letter-spacing: 0.02em;
     transition: color 0.3s ease;
 }
 
 body.dark-mode .notification-box .notification-title {
-    color: #e2e8f0;
+    color: #edf2f7;
 }
 
 .notification-box .close-button {
     background: none;
     border: none;
-    color: #013A71;
-    font-size: 16px;
+    color: #4a5568;
+    font-size: 20px;
     cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 4px;
+    border-radius: 50%;
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
 }
 
 body.dark-mode .notification-box .close-button {
@@ -121,66 +131,91 @@ body.dark-mode .notification-box .close-button {
 }
 
 .notification-box .close-button:hover {
-    color: #0056b3;
-    transform: scale(1.2);
+    color: #2d3748;
+    background-color: rgba(200, 200, 200, 0.2);
+    transform: scale(1.1);
 }
 
 body.dark-mode .notification-box .close-button:hover {
-    color: #4a90e2;
+    color: #ffffff;
+    background-color: rgba(100, 116, 139, 0.3);
 }
 
 .notification-list {
-    max-height: 400px;
+    max-height: 420px;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(200, 200, 200, 0.5) transparent;
+}
+
+.notification-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+    background: rgba(200, 200, 200, 0.5);
+    border-radius: 3px;
+}
+
+body.dark-mode .notification-list::-webkit-scrollbar-thumb {
+    background: rgba(100, 116, 139, 0.5);
 }
 
 .notification-box .notification-item {
-    padding: 12px;
-    border-bottom: 1px solid rgba(241, 241, 241, 0.5);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    font-size: 14px;
+    padding: 14px;
     border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    background: rgba(245, 245, 245, 0.5);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 body.dark-mode .notification-box .notification-item {
-    border-bottom: 1px solid rgba(74, 85, 104, 0.5);
+    background: rgba(74, 85, 104, 0.4);
 }
 
 .notification-box .notification-item:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
 }
 
 .notification-box .notification-item:hover {
-    background-color: rgba(249, 249, 249, 0.7);
-    transform: translateY(-2px);
+    background: rgba(237, 242, 247, 0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 body.dark-mode .notification-box .notification-item:hover {
-    background-color: rgba(74, 85, 104, 0.7);
+    background: rgba(100, 116, 139, 0.6);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .notification-box .notification-item i {
-    color: #013A71;
-    font-size: 20px;
-    margin-right: 10px;
+    color: #3182ce;
+    font-size: 18px;
+    flex-shrink: 0;
     transition: color 0.3s ease, transform 0.2s ease;
 }
 
 body.dark-mode .notification-box .notification-item i {
-    color: #4a90e2;
+    color: #63b3ed;
 }
 
 .notification-box .notification-item i:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .notification-details {
     font-size: 12px;
-    color: #666;
-    margin-top: 4px;
+    color: #718096;
+    margin-top: 6px;
+    line-height: 1.4;
     transition: color 0.3s ease;
 }
 
@@ -189,7 +224,8 @@ body.dark-mode .notification-details {
 }
 
 .notification-details strong {
-    color: #333;
+    color: #2d3748;
+    font-weight: 600;
     transition: color 0.3s ease;
 }
 
@@ -199,8 +235,9 @@ body.dark-mode .notification-details strong {
 
 .notification-time {
     font-size: 12px;
-    color: #28a745;
-    margin-top: 4px;
+    color: #38a169;
+    margin-top: 6px;
+    font-weight: 500;
     transition: color 0.3s ease;
 }
 
@@ -218,29 +255,22 @@ body.dark-mode .notification-time {
 .profile-sphere {
     width: 40px;
     height: 40px;
-    background-color: #ccc;
     border-radius: 50%;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    color: #013A71;
     margin-right: 10px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow: hidden;
+    transition: transform 0.2s ease;
 }
 
-body.dark-mode .profile-sphere {
-    background-color: #4a5568;
-    color: #e2e8f0;
+.profile-sphere img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .profile-sphere:hover {
-    background-color: #aaa;
-}
-
-body.dark-mode .profile-sphere:hover {
-    background-color: #718096;
+    transform: scale(1.1);
 }
 
 .user-name {
@@ -344,7 +374,6 @@ body.dark-mode .toggle-dark-mode:hover {
                                     {{ notif.message }}
                                 </div>
                                 <div class="notification-details">
-                                    <span data-translate="sent_by">Envoyé par</span> <strong>{{ notif.sender }}</strong>
                                 </div>
                                 <div class="notification-time">{{ notif.time }}</div>
                             </div>
@@ -357,11 +386,10 @@ body.dark-mode .toggle-dark-mode:hover {
                 <!-- Profile Section -->
                 <div class="profile-container">
                     <a href="{{ path('app_admin_profil') }}" class="profile-sphere">
-                        <i class="bi bi-person"></i>
+                        <img src="{{ asset('images/user.JPG') }}" alt="Default Profile">
                     </a>
                     <a href="{{ path('app_admin_profil') }}" class="user-name">{{ user.nom }} {{ user.prenom }}</a>
                 </div>
-
             </div>
         </div>
     </div>
@@ -381,15 +409,41 @@ function toggleDarkMode() {
 
 function toggleNotificationBox() {
     const notificationBox = document.getElementById('notificationBox');
-    if (notificationBox.style.display === 'none' || !notificationBox.style.display) {
+    const isOpening = notificationBox.style.display === 'none' || !notificationBox.style.display;
+    
+    if (isOpening) {
         notificationBox.style.display = 'block';
-        // Play sound if there are new notifications
-        const currentCount = {{ notifications|length }};
-        if (currentCount > lastNotificationCount) {
-            playNotificationSound();
-            lastNotificationCount = currentCount;
-        }
         console.log('Notification box opened');
+        
+        // Mark notifications as read
+        fetch('{{ path('admin_mark_notifications_read') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                console.error('Mark notifications read: Error, status:', response.status);
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Mark notifications read:', data);
+            if (data.success) {
+                // Update badge to reflect 0 unread notifications
+                const badge = document.querySelector('.notification-icon .badge');
+                if (badge) {
+                    badge.remove();
+                }
+                lastNotificationCount = 0;
+            }
+        })
+        .catch(error => {
+            console.error('Error marking notifications as read:', error);
+        });
     } else {
         notificationBox.style.display = 'none';
         console.log('Notification box closed');
@@ -414,7 +468,10 @@ function playNotificationSound() {
     const sound = document.getElementById('notificationSound');
     if (sound) {
         console.log('Attempting to play notification sound');
-        sound.play().catch(error => console.error('Error playing sound:', error));
+        sound.play().catch(error => {
+            console.error('Error playing sound:', error);
+            console.warn('Ensure the notification.mp3 file exists at public/sounds/notification.mp3');
+        });
     } else {
         console.error('Notification sound element not found');
     }
@@ -448,7 +505,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkNotifications() {
         fetch('{{ path('admin_notification_count') }}')
             .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) {
+                    console.error('Fetch error, status:', response.status, 'Status text:', response.statusText);
+                    throw new Error('Network response was not ok: ' + response.status);
+                }
                 return response.json();
             })
             .then(data => {
@@ -457,9 +517,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (newNotificationCount > lastNotificationCount) {
                     playNotificationSound();
                     lastNotificationCount = newNotificationCount;
+                    // Update badge count
+                    const badge = document.querySelector('.notification-icon .badge');
+                    if (badge) {
+                        badge.textContent = newNotificationCount;
+                    } else if (newNotificationCount > 0) {
+                        const badgeElement = document.createElement('span');
+                        badgeElement.className = 'badge';
+                        badgeElement.textContent = newNotificationCount;
+                        document.querySelector('.notification-icon').appendChild(badgeElement);
+                    }
+                } else if (newNotificationCount === 0 && badge) {
+                    badge.remove();
                 }
             })
-            .catch(error => console.error('Error fetching notification count:', error));
+            .catch(error => {
+                console.error('Error fetching notification count:', error);
+                let retryDelay = 10000; // Default retry delay (10 seconds)
+                if (error.message.includes('Network response was not ok')) {
+                    console.warn('Server error (e.g., 500). Check server logs for issues with /_fragment/notification-count endpoint. Retrying in 30 seconds...');
+                    retryDelay = 30000; // Longer delay for server errors
+                } else if (error.message.includes('Failed to fetch')) {
+                    console.warn('Network error or server unreachable. Ensure http://127.0.0.1:8000 is running. Retrying in 30 seconds...');
+                    retryDelay = 30000; // Longer delay for network errors
+                }
+                setTimeout(checkNotifications, retryDelay);
+            });
     }
 
     // Initial check and set interval

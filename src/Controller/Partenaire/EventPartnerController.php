@@ -40,7 +40,8 @@ class EventPartnerController extends AbstractController
     }
 
     #[Route('/dashboard/partenaire/evenement/ajouter', name: 'add_event', methods: ['POST', 'GET'])]
-    public function addEvent(Request $request, EntityManagerInterface $entityManager,UtilisateursRepository $utilisateursRepository
+    public function addEvent(Request $request, EntityManagerInterface $entityManager,
+    UtilisateursRepository $utilisateursRepository
     ): Response
     {
         $user = $this->getUser();
@@ -179,7 +180,8 @@ class EventPartnerController extends AbstractController
     }
 
     #[Route('/dashboard/partenaire/evenement/upload-image/{id}', name: 'upload_event_image', methods: ['POST'])]
-    public function uploadImage(Request $request, int $id, EntityManagerInterface $entityManager, UtilisateursRepository $utilisateursRepository
+    public function uploadImage(Request $request, int $id, EntityManagerInterface $entityManager, 
+                                UtilisateursRepository $utilisateursRepository
     ): Response
     {
         $user = $this->getUser();
@@ -219,6 +221,7 @@ class EventPartnerController extends AbstractController
     
     #[Route('/dashboard/partenaire/evenement/supprimer/{id}', name: 'delete_event', methods: ['GET', 'DELETE'])]
     public function deleteEvent(int $id, EntityManagerInterface $entityManager,UtilisateursRepository $utilisateursRepository): Response
+
     {
         $user = $this->getUser();
         $event = $entityManager->getRepository(Evenements::class)->find($id);
@@ -251,7 +254,6 @@ class EventPartnerController extends AbstractController
               $adminNotif->setIdUtilisateur($admin->getIdUtilisateur());
               $entityManager->persist($adminNotif);
           }
-
         // Supprimez l'événement
         $entityManager->remove($event);
         $entityManager->flush();

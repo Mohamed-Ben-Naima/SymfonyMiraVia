@@ -107,7 +107,12 @@ final class BenevolatPartnerController extends AbstractController
 
     #[Route('/dashboard/partenaire/benevolats/modifier/{id}', name: 'edit_benevolat', methods: ['POST', 'GET'])]
         public function editBenevolat(Request $request, Benevolat $benevolat, EntityManagerInterface $entityManager,  UtilisateursRepository $utilisateursRepository  ): Response
-        {
+        {   
+            $user = $this->getUser();
+            if (!$user instanceof Utilisateurs) {
+                throw $this->createAccessDeniedException('Vous devez être un partenaire connecté.');
+            }
+
             if ($request->isMethod('POST')) {
                 $data = $request->request->all();
 
@@ -201,6 +206,7 @@ final class BenevolatPartnerController extends AbstractController
             EntityManagerInterface $entityManager, $id,
             UtilisateursRepository $utilisateursRepository
             ): Response
+           
         {
         $user = $this->getUser();
         $benevolat = $entityManager->getRepository(Benevolat::class)->find($id);

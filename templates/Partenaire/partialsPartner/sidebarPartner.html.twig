@@ -11,7 +11,6 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="{{ asset('style-partner/sidebar.css') }}" rel="stylesheet">
-
 </head>
 <body>
   <!-- Sidebar -->
@@ -26,7 +25,7 @@
     <a href="{{ path('app_settings_partner') }}" class="sidebar-link" id="settingsLink"><i class="bi bi-gear-fill"></i> Paramètres</a>
     <!-- Treeview for Settings -->
     <div class="treeview">
-      <button class="tab hover-underline" data-tab="profile"><i class="bi bi-person-fill-gear"></i> Profil</button>
+      <button class="tab hover-underline" data-tab="profile" data-path="{{ path('app_profil_partner') }}"><i class="bi bi-person-fill-gear"></i> Profil</button>
       <button class="tab hover-underline" data-tab="notifications"><i class="bi bi-bell-fill"></i> Notifications</button>
       <button class="tab hover-underline" data-tab="custome"><i class="bi bi-brush-fill"></i> Personnalisation</button>
       <button class="tab hover-underline" data-tab="security"><i class="bi bi-shield-lock-fill"></i> Sécurité</button>
@@ -50,36 +49,49 @@
 
         // Add active class to the clicked link
         link.classList.add("active");
-
-        // Store the active link's href in localStorage
-        localStorage.setItem("activeSidebarLink", link.getAttribute("href"));
-
-        // Show or hide the treeview
-        if (link === settingsLink) {
-            treeview.style.display = "block";
-        } else {
-            treeview.style.display = "none";
-        }
     }
 
     // Add click event to all sidebar links
     sidebarLinks.forEach((link) => {
         link.addEventListener("click", function (event) {
-            // Prevent default if the link is "Paramètres"
-            if (link === settingsLink) {
-                event.preventDefault();
-            }
             setActiveLink(link);
         });
     });
 
-    // On page load, set the active link based on localStorage
-    const activeLinkHref = localStorage.getItem("activeSidebarLink");
-    if (activeLinkHref) {
-        const activeLink = document.querySelector(`.sidebar a[href="${activeLinkHref}"]`);
-        if (activeLink) {
-            setActiveLink(activeLink);
+    // Keep treeview always open when settings link is clicked
+    settingsLink.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default link behavior
+        setActiveLink(settingsLink);
+
+        // Ensure treeview stays open
+        treeview.style.display = "block";
+    });
+
+    // Add click event to treeview buttons
+    const treeviewButtons = document.querySelectorAll(".treeview button");
+    treeviewButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            const path = button.getAttribute("data-path");
+
+            // Redirect to the path if defined
+            if (path) {
+                window.location.href = path;
+            }
+        });
+    });
+
+    // On page load, set the active link based on the current URL
+    const currentPath = window.location.pathname; // Get the current URL path
+    sidebarLinks.forEach((link) => {
+        if (link.getAttribute("href") === currentPath) {
+            setActiveLink(link);
         }
+    });
+
+    // Ensure treeview remains open if the current path is one of its buttons
+    const currentTab = Array.from(treeviewButtons).find(button => button.getAttribute("data-path") === currentPath);
+    if (currentTab) {
+        treeview.style.display = "block"; // Keep treeview open
     }
   });
   </script>

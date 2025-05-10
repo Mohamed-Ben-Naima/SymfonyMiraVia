@@ -250,7 +250,7 @@
     <div class="main-wrapper">
         <div class="profile-header">
             <img id="profile-image" alt="Photo de profil" class="profile-image"
-                 src="{{ userData.avatar }}" />
+                 src="{{ userData.avatar ?: asset('images/user.JPG') }}" />
             <div class="edit-icon" onclick="document.getElementById('upload-input').click();">
                 <i class="fas fa-edit"></i>
             </div>
