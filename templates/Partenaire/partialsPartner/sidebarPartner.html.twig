@@ -49,46 +49,49 @@
 
         // Add active class to the clicked link
         link.classList.add("active");
-
-        // Show or hide the treeview
-        if (link === settingsLink) {
-            treeview.style.display = "block";
-        } else {
-            treeview.style.display = "none";
-        }
     }
 
     // Add click event to all sidebar links
     sidebarLinks.forEach((link) => {
         link.addEventListener("click", function (event) {
-            if (link === settingsLink) {
-                event.preventDefault();
-            }
             setActiveLink(link);
         });
+    });
+
+    // Keep treeview always open when settings link is clicked
+    settingsLink.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default link behavior
+        setActiveLink(settingsLink);
+
+        // Ensure treeview stays open
+        treeview.style.display = "block";
     });
 
     // Add click event to treeview buttons
     const treeviewButtons = document.querySelectorAll(".treeview button");
     treeviewButtons.forEach((button) => {
         button.addEventListener("click", function () {
-            const tab = button.getAttribute("data-tab");
             const path = button.getAttribute("data-path");
-            
-            // Redirige vers le chemin si défini
-            if (path && tab === "profile") {
+
+            // Redirect to the path if defined
+            if (path) {
                 window.location.href = path;
             }
         });
     });
 
-    // On page load, set the active link based on localStorage
-    const activeLinkHref = localStorage.getItem("activeSidebarLink");
-    if (activeLinkHref) {
-        const activeLink = document.querySelector(`.sidebar a[href="${activeLinkHref}"]`);
-        if (activeLink) {
-            setActiveLink(activeLink);
+    // On page load, set the active link based on the current URL
+    const currentPath = window.location.pathname; // Get the current URL path
+    sidebarLinks.forEach((link) => {
+        if (link.getAttribute("href") === currentPath) {
+            setActiveLink(link);
         }
+    });
+
+    // Ensure treeview remains open if the current path is one of its buttons
+    const currentTab = Array.from(treeviewButtons).find(button => button.getAttribute("data-path") === currentPath);
+    if (currentTab) {
+        treeview.style.display = "block"; // Keep treeview open
     }
   });
   </script>

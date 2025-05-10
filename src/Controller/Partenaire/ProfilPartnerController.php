@@ -227,5 +227,8 @@ public function updateProfil(Request $request, EntityManagerInterface $em): Resp
     // Redirection après la mise à jour
     return $this->redirectToRoute('app_profil_partner');
 }
-    }
+
+
+
+}
 
