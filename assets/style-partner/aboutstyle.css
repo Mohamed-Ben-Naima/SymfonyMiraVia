@@ -1,0 +1,357 @@
+/* Reset de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+html {
+    scroll-behavior: smooth;
+}
+.about-content {
+    animation: fadeInUp 1.5s ease-out;
+}
+
+
+/* Loader */
+#loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(255, 255, 255, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #013A71;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Bannière */
+.banner {
+    background: linear-gradient(135deg, #013A71, #026bb3);
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 200%; height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%) rotate(60deg);
+    animation: rotateBg 5s linear infinite;
+}
+
+@keyframes rotateBg {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.banner h1 {
+    font-size: 48px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    animation: fadeInUp 1.5s ease-out;
+}
+
+.banner p {
+    font-size: 20px;
+    margin-bottom: 30px;
+    animation: fadeInUp 2s ease-out;
+}
+
+.banner .btn {
+    background-color: #026bb3;
+    color: white;
+    padding: 14px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    animation: fadeInUp 2.5s ease-out;
+}
+
+.banner .btn:hover {
+    background-color: #013A71;
+    transform: scale(1.1);
+}
+
+/* Animation fadeInUp */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Section générale */
+section {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+/* À propos */
+.about-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.about-content img {
+    width: 100%;
+    max-width: 700px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.about-text {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: justify;
+    font-size: 18px;
+    color: #444;
+}
+
+/* Titre de section */
+section h2 {
+    font-size: 36px;
+    color: #013A71;
+    margin-bottom: 30px;
+}
+
+/* Timeline */
+.timeline {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 25px;
+    text-align: left;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 4px;
+    height: 100%;
+    background-color: #013A71;
+}
+
+.timeline-item {
+    background: #fff;
+    padding: 20px 25px;
+    margin: 20px 0;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 20px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border: 4px solid #013A71;
+    border-radius: 50%;
+}
+
+.timeline-item h4 {
+    font-size: 20px;
+    color: #013A71;
+    margin-bottom: 10px;
+}
+
+.timeline-item p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Section Valeurs */
+.values {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.value-box {
+    background: #fff;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    width: 23%;
+}
+
+.value-box h4 {
+    font-size: 20px;
+    color: #013A71;
+    margin: 20px 0;
+}
+
+.value-box p {
+    font-size: 16px;
+    color: #555;
+}
+
+.value-box i {
+    font-size: 40px;
+    color: #013A71;
+}
+
+/* Chiffres clés */
+.stats-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.stat-box {
+    background: #fff;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    width: 23%;
+}
+
+.stat-box h3 {
+    font-size: 32px;
+    color: #013A71;
+    margin: 20px 0;
+}
+
+.stat-box p {
+    font-size: 16px;
+    color: #555;
+}
+
+.stat-box i {
+    font-size: 40px;
+    color: #013A71;
+}
+
+/* Témoignages */
+.testimonials-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.testimonial {
+    background: #fff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    width: 30%;
+}
+
+.testimonial p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.testimonial strong {
+    font-size: 18px;
+    color: #013A71;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f1f1f1;
+}
+
+footer .btn {
+    background-color: #013A71;
+    color: white;
+    padding: 12px 25px;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 30px;
+    text-transform: uppercase;
+}
+
+footer .btn:hover {
+    background-color: #026bb3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .values {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .value-box {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .stat-box {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .testimonial {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .banner h1 {
+        font-size: 32px;
+    }
+
+    .banner p {
+        font-size: 18px;
+    }
+
+    .banner .btn {
+        font-size: 16px;
+        padding: 12px 25px;
+    }
+
+    .timeline {
+        padding-left: 10px;
+    }
+
+    .timeline::before {
+        left: 10px;
+    }
+
+    .timeline-item::before {
+        left: -12px;
+    }
+}
