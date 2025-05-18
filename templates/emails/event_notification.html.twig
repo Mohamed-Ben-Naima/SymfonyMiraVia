@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Évènement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .email-header {
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .email-body {
+            padding: 20px;
+            color: #555555;
+        }
+        .email-body p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        .email-footer {
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 10px;
+            color: #888888;
+            font-size: 12px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>Notification Évènement</h1>
+        </div>
+        <div class="email-body">
+            <p>Bonjour {{ prenom }} {{ nom }},</p>
+
+            <p>
+                {% if status == 'bloqué' %}
+                    L'évènement <strong>{{ titre }}</strong> a été <span style="color: #dc3545;">bloqué</span> pour les raisons suivantes :
+                {% else %}
+                    L'évènement <strong>{{ titre }}</strong> a été <span style="color: #28a745;">débloqué</span> et est maintenant actif.
+                {% endif %}
+            </p>
+
+            {% if raisons %}
+                <p><strong>Raisons :</strong> {{ raisons }}</p>
+            {% endif %}
+
+            {% if explication %}
+                <p><strong>Explication :</strong> {{ explication }}</p>
+            {% endif %}
+
+            <p>Cordialement,</p>
+            <p><strong>L'équipe administrative "MIRAVIA" </strong></p>
+
+            <a href="#" class="button">Voir les détails</a>
+        </div>
+        <div class="email-footer">
+            <p>© 2025 Votre Entreprise. Tous droits réservés.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Évènement débloqué</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #333; background-color: #f9f9f9; padding: 20px;">
+    <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 20px;">
+        <h2 style="color: #4CAF50;">Bonjour {{ partner.prenom }} {{ partner.nom }},</h2>
+        <p style="font-size: 14px; color: #333;">
+            <span style="color: #2196F3;">L'évènement</span> 
+            <strong style="color: #FF5722;">{{ event.titre }}</strong> 
+            a été débloqué et est maintenant <span style="color: #4CAF50;">actif</span>.
+        </p>
+        <p style="font-size: 14px; color: #666;">
+            Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter.
+        </p>
+        <p style="font-size: 14px; color: #333;">Cordialement,</p>
+        <p style="font-size: 14px; font-weight: bold; color: #9C27B0;">L'équipe administrative</p>
+    </div>
+</body>
+</html>
