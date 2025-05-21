@@ -4,22 +4,6 @@
 
 {% block body %}
 
-<script src="{{ asset('assets/js/partner/dashboard.js') }}"></script>
-
-{% for label, messages in app.flashes %}
-    {% for message in messages %}
-        <script>
-            Swal.fire({
-                icon: '{{ label == "success" ? "success" : "error" }}',
-                title: '{{ message|e("js") }}',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-        </script>
-    {% endfor %}
-{% endfor %}
 
 {% for label, messages in app.flashes %}
     {% for message in messages %}
@@ -235,25 +219,19 @@
         <div class="chat-container">
           <div class="messages" id="messages"></div>
           <div class="typing-indicator" id="typing-indicator">Chatbot is typing...</div>
-          <form id="chat-form" style="display: flex; gap: 10px;">
-              <input type="text" id="message-input" placeholder="Tapez votre message..." required 
-                     style="flex-grow: 1; padding: 10px; border-radius: 20px; border: 1px solid #ddd; font-size: 14px;">
-              <button type="submit" 
-                      style="background-color: #3498db; color: white; border: none; border-radius: 20px; padding: 10px 15px; cursor: pointer;">
-                      Envoyer
-              </button>
+          <form id="chat-form">
+  <input type="text" id="message-input" placeholder="Écris un message..." autocomplete="off" />
+  <button type="submit">Envoyer</button>
+</form>
+
+<div id="messages"></div>
+<div id="typing-indicator" style="display:none;">Le chatbot est en train d'écrire...</div>
           </form>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- Bouton flottant -->
-<a href="#" data-bs-toggle="modal" data-bs-target="#chatbotModal" class="chatbot-link">
-    <img src="{{ asset('images-partner/chatbot.png') }}" alt="Chatbot" class="chatbot-image">
-</a>
-
 <script src="{{ asset('js/partner/dashboard.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
@@ -284,7 +262,60 @@
         header.style.backgroundColor = '#f5f5f9';
     }
   });
+  // Chatbot
+$(document).ready(function () {
+  $('#chat-form').on('submit', function (e) {
+    e.preventDefault();
+
+    const userMessage = $('#message-input').val().trim();
+    if (userMessage) {
+      // Affiche le message de l'utilisateur
+      $('#messages').append('<div class="message user"><p>' + escapeHtml(userMessage) + '</p></div>');
+      $('#message-input').val('');
+      $('#messages').scrollTop($('#messages')[0].scrollHeight);
+
+      // Affiche l'indicateur de saisie du chatbot
+      $('#typing-indicator').show();
+
+      // Appel AJAX vers l'API chatbot
+      $.ajax({
+        url: '/chatbot/api',
+        type: 'POST',
+        data: { message: userMessage },
+        success: function (data) {
+          $('#typing-indicator').hide();
+          if (data.response) {
+            // Affiche la réponse du chatbot
+            $('#messages').append('<div class="message bot"><p>' + escapeHtml(data.response) + '</p></div>');
+          } else {
+            $('#messages').append('<div class="message bot"><p>Erreur du chatbot, veuillez réessayer.</p></div>');
+          }
+          $('#messages').scrollTop($('#messages')[0].scrollHeight);
+        },
+        error: function () {
+          $('#typing-indicator').hide();
+          $('#messages').append('<div class="message bot"><p>Erreur du chatbot, veuillez réessayer plus tard.</p></div>');
+          $('#messages').scrollTop($('#messages')[0].scrollHeight);
+        }
+      });
+    }
+  });
+
+  // Petite fonction pour échapper le HTML dans les messages pour éviter les injections XSS
+  function escapeHtml(text) {
+    return text.replace(/[&<>"']/g, function (m) {
+      return ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[m];
+    });
+  }
+});
   </script>
+  
 {% endblock %}
 
  

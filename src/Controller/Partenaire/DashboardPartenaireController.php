@@ -108,60 +108,59 @@ final class DashboardPartenaireController extends AbstractController
         return $this->render('Partenaire/chatbot/index.html.twig');
     }
 
-    #[Route('/chatbot/api', name: 'chatbot_api', methods: ['POST'])]
-    public function chatbotApi(Request $request): JsonResponse
-    {
-        $message = $request->request->get('message');
-        if (!$message) {
-            return new JsonResponse(['error' => 'Le message est requis.'], 400);
-        }
-
-        try {
-            $response = $this->askDeepSeek($message);
-            return new JsonResponse(['response' => $response]);
-        } catch (\Exception $e) {
-            $this->logger->error('Erreur ChatGPT: ' . $e->getMessage());
-            return new JsonResponse(['error' => 'Erreur lors de la communication avec OpenAI.'], 500);
-        }
+   #[Route('/chatbot/api', name: 'chatbot_api', methods: ['POST'])]
+public function chatbotApi(Request $request): JsonResponse
+{
+    $message = $request->request->get('message');
+    if (!$message) {
+        return new JsonResponse(['error' => 'Le message est requis.'], 400);
     }
 
-    private function askDeepSeek(string $userMessage): string
-    {
-        $apiKey = 'sk-91a20114695c4d1496e0884f4f295d2b';
+    try {
+        $response = $this->askGemini($message);
+        return new JsonResponse(['response' => $response]);
+    } catch (\Exception $e) {
+        $this->logger->error('Erreur Gemini: ' . $e->getMessage());
+        return new JsonResponse(['error' => 'Erreur lors de la communication avec Gemini.'], 500);
+    }
+}
+   private function askGemini(string $userMessage): string
+{
+    $apiKey = $_ENV['GEMINI_API_KEY'];
 
-        $url = 'https://api.deepseek.com/chat/completions';
+    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
 
-        $payload = [
-            'model' => 'deepseek-chat',
-            'messages' => [
-                ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-                ['role' => 'user', 'content' => $userMessage]
+    $payload = [
+        'contents' => [
+            [
+                'parts' => [
+                    ['text' => $userMessage]
+                ]
+            ]
+        ]
+    ];
+
+    try {
+        $response = $this->httpClient->request('POST', $url, [
+            'headers' => [
+                'Content-Type' => 'application/json',
             ],
-            'stream' => false
-        ];
+            'json' => $payload,
+        ]);
 
-        try {
-            $response = $this->httpClient->request('POST', $url, [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $apiKey,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => $payload,
-            ]);
+        $statusCode = $response->getStatusCode();
+        $data = $response->toArray(false);
 
-            $statusCode = $response->getStatusCode();
-            $data = $response->toArray(false);
-
-            if ($statusCode !== 200 || !isset($data['choices'][0]['message']['content'])) {
-                throw new \RuntimeException('Réponse inattendue ou erreur de serveur. Code HTTP: ' . $statusCode);
-            }
-
-            return trim($data['choices'][0]['message']['content']);
-        } catch (\Exception $e) {
-            $this->logger->error("Erreur lors de l'appel à DeepSeek: " . $e->getMessage());
-            throw new \RuntimeException('Erreur de communication avec DeepSeek : ' . $e->getMessage());
+        if ($statusCode !== 200 || !isset($data['candidates'][0]['content']['parts'][0]['text'])) {
+            throw new \RuntimeException('Réponse invalide ou erreur serveur.');
         }
+
+        return trim($data['candidates'][0]['content']['parts'][0]['text']);
+    } catch (\Exception $e) {
+        $this->logger->error("Erreur lors de l'appel à Gemini : " . $e->getMessage());
+        throw new \RuntimeException('Erreur de communication avec Gemini : ' . $e->getMessage());
     }
+}
 
     
 }
