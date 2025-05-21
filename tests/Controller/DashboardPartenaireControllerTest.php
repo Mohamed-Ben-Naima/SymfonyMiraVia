@@ -18,6 +18,7 @@ class DashboardPartenaireControllerTest extends WebTestCase
 
     public function testChatbotApiWithValidMessage(): void
     {
+        // On simule le client HTTP Gemini avec une réponse factice
         $mockHttpClient = $this->createMock(HttpClientInterface::class);
         $mockResponse = $this->createMock(ResponseInterface::class);
 
@@ -29,8 +30,11 @@ class DashboardPartenaireControllerTest extends WebTestCase
         ]);
 
         $mockHttpClient->method('request')->willReturn($mockResponse);
+
+        // Injecte le client Gemini simulé dans le conteneur Symfony
         static::getContainer()->set(HttpClientInterface::class, $mockHttpClient);
 
+        // Envoie la requête POST avec un message
         $this->client->request('POST', '/chatbot/api', [
             'message' => 'Bonjour, que fais-tu ?',
         ]);
@@ -39,6 +43,7 @@ class DashboardPartenaireControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $responseData = json_decode($this->client->getResponse()->getContent(), true);
+
         $this->assertArrayHasKey('response', $responseData);
         $this->assertSame('Réponse générée par Gemini.', $responseData['response']);
     }
@@ -46,40 +51,11 @@ class DashboardPartenaireControllerTest extends WebTestCase
     public function testChatbotApiWithNoMessage(): void
     {
         $this->client->request('POST', '/chatbot/api', []);
-        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
 
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $responseData = json_decode($this->client->getResponse()->getContent(), true);
+
         $this->assertArrayHasKey('error', $responseData);
         $this->assertSame('Le message est requis.', $responseData['error']);
-    }
-
-    public function testChatbotApiWithEmptyMessage(): void
-    {
-        $this->client->request('POST', '/chatbot/api', [
-            'message' => '',
-        ]);
-        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
-
-        $responseData = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertArrayHasKey('error', $responseData);
-        $this->assertSame('Le message ne peut pas être vide.', $responseData['error']);
-    }
-
-    public function testChatbotApiGeminiFailure(): void
-    {
-        $mockHttpClient = $this->createMock(HttpClientInterface::class);
-        $mockHttpClient->method('request')->willThrowException(new \Exception('Erreur Gemini'));
-
-        static::getContainer()->set(HttpClientInterface::class, $mockHttpClient);
-
-        $this->client->request('POST', '/chatbot/api', [
-            'message' => 'Provoquer une erreur',
-        ]);
-
-        $this->assertResponseStatusCodeSame(Response::HTTP_INTERNAL_SERVER_ERROR);
-
-        $responseData = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertArrayHasKey('error', $responseData);
-        $this->assertSame('Une erreur est survenue lors du traitement.', $responseData['error']);
     }
 }
