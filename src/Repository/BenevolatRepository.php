@@ -20,6 +20,16 @@ class BenevolatRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Benevolat::class);
     }
+// src/Repository/BenevolatRepository.php
+
+public function countByStatuses(array $statuses): int
+{
+    return (int) $this->createQueryBuilder('b')
+        ->select('COUNT(b.idBenevolat)')
+        ->where('b.status IN (:statuses)')
+        ->setParameter('statuses', $statuses)
+        ->getQuery()
+        ->getSingleScalarResult();}
 
     public function findByPartnerId(int $idPartenaire)
     {

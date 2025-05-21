@@ -91,7 +91,7 @@ class DonPartnerController extends AbstractController
         $admins = $utilisateursRepository->findAllAdmins();
         foreach ($admins as $admin) {
             $adminNotif = new Notifications();
-            $adminNotif->setMessage(" Nouveau don ajouté par " . $user->getNomUtilisateur());
+            $adminNotif->setMessage(" Nouveau don ajouté par " .$user->getNom()." " . $user->getPrenom());
             $adminNotif->setDateEnvoi(new DateTime());
             $adminNotif->setTypeNotification('success');
             $adminNotif->setIsRead(false);
@@ -147,7 +147,7 @@ class DonPartnerController extends AbstractController
         $admins = $utilisateursRepository->findAllAdmins();
         foreach ($admins as $admin) {
             $adminNotif = new Notifications();
-            $adminNotif->setMessage("Don modifié par " . $user->getNomUtilisateur());
+            $adminNotif->setMessage("Don modifié par " .$user->getNom()." " . $user->getPrenom());
             $adminNotif->setDateEnvoi(new DateTime());
             $adminNotif->setTypeNotification('warning');
             $adminNotif->setIsRead(false);
@@ -189,7 +189,7 @@ class DonPartnerController extends AbstractController
         $admins = $utilisateursRepository->findAllAdmins();
         foreach ($admins as $admin) {
             $adminNotif = new Notifications();
-            $adminNotif->setMessage("Don supprimé par " . $user->getNomUtilisateur());
+            $adminNotif->setMessage("Don supprimé par " .$user->getNom()." " . $user->getPrenom());
             $adminNotif->setDateEnvoi(new DateTime());
             $adminNotif->setTypeNotification('danger');
             $adminNotif->setIsRead(false);

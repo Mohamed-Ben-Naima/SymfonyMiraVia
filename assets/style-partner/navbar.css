@@ -1,6 +1,40 @@
 .dropdown-menu i{
     margin-right: 5px;
 }
+.payment-warning-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 16px 20px;
+    border-left: 5px solid #ffc107;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    display: none;
+    max-width: 90vw; /* Limite la largeur à 90% de l’écran */
+    width: fit-content; /* S’adapte à la taille du contenu */
+    white-space: normal; /* Permet les retours à la ligne */
+    word-wrap: break-word; /* Casse les longs mots si besoin */
+}
+
+.payment-warning-toast .btn-pay-now {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: #856404;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.payment-warning-toast .btn-pay-now:hover {
+    background-color: #5a3e00;
+}
+
 
 .dropdown-menu {
     display: none; /* Hidden by default */

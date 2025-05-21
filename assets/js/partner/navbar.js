@@ -240,3 +240,12 @@ fetch('/api/user/avatar')
                 console.error('Erreur lors de la récupération des notifications:', error);
             });
     });
+    window.addEventListener('load', function () {
+    const toast = document.getElementById('paymentToast');
+    if (toast) {
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 10000); // disparaît après 10 secondes
+    }
+});

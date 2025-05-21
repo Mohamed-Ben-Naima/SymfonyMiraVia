@@ -20,6 +20,15 @@ class DonsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Dons::class);
     }
+// src/Repository/DonRepository.php
+
+public function getTotalMontant(): float
+{
+    return (float) $this->createQueryBuilder('d')
+        ->select('SUM(d.montant)')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
 
     public function getDonationsByYear(int $idPartenaire): array
 {
