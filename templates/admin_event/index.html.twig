@@ -555,27 +555,31 @@ body.dark-mode .toggle-dark-mode:hover {
                 <td>{{ evenement.lieu }}</td>
                 <td>{{ evenement.status }}</td>
                 <td id="etat-{{ evenement.idEvenement }}">{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}</td>
-                <td>
-                    {% if evenement.imagename %}
-                        <img src="{{ asset('images/' ~ evenement.imagename) }}" alt="Image {{ evenement.titre }}" style="width: 50px; height: auto;">
-                    {% else %}
-                        N/A
-                    {% endif %}
-                </td>
+<td>
+    {% if evenement.imagename %}
+        <img src="{{ asset('images/Event/' ~ evenement.imagename) }}" 
+             alt="Image {{ evenement.titre }}" 
+             style="width: 150px; height: auto; border-radius: 8px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);">
+    {% else %}
+        <img src="https://via.placeholder.com/300" 
+             alt="Placeholder Image" 
+             style="width: 150px; height: auto; border-radius: 8px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);">
+    {% endif %}
+</td>
                 <td class="actions">
-                    <button class="consulter-btn" onclick="viewEventDetails(this)"
-                        data-id="{{ evenement.idEvenement }}"
-                        data-titre="{{ evenement.titre }}"
-                        data-nom-partenaire="{{ evenement.nomPartenaire }}"
-                        data-prenom-partenaire="{{ evenement.prenomPartenaire }}"
-                        data-description="{{ evenement.description }}"
-                        data-date-evenement="{{ evenement.dateEvenement ? evenement.dateEvenement|date('Y-m-d H:i:s') : '' }}"
-                        data-lieu="{{ evenement.lieu }}"
-                        data-status="{{ evenement.status }}"
-                        data-etat="{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}"
-                        data-image="{{ evenement.imagename ? asset('images/' ~ evenement.imagename) : '' }}">
-                        Consulter
-                    </button>
+<button class="consulter-btn" onclick="viewEventDetails(this)"
+    data-id="{{ evenement.idEvenement }}"
+    data-titre="{{ evenement.titre }}"
+    data-nom-partenaire="{{ evenement.nomPartenaire }}"
+    data-prenom-partenaire="{{ evenement.prenomPartenaire }}"
+    data-description="{{ evenement.description }}"
+    data-date-evenement="{{ evenement.dateEvenement ? evenement.dateEvenement|date('Y-m-d H:i:s') : '' }}"
+    data-lieu="{{ evenement.lieu }}"
+    data-status="{{ evenement.status }}"
+    data-etat="{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}"
+    data-image="{{ evenement.imagename ? asset('images/Event/' ~ evenement.imagename) : 'https://via.placeholder.com/300' }}">
+    Consulter
+</button>
                     <button class="activer-btn" onclick="showUnblockModal({{ evenement.idEvenement }})">Activer</button>
                     <button class="bloquer-btn" onclick="blockEvent({{ evenement.idEvenement }}, {{ evenement.estBloque }})">Bloquer</button>
                 </td>
@@ -779,9 +783,8 @@ function saveBlock() {
         });
 }
 
+// Mise à jour de la fonction viewEventDetails
 function viewEventDetails(button) {
-    // Extract data from the button's data-* attributes
-    const id = button.getAttribute('data-id');
     const titre = button.getAttribute('data-titre');
     const nomPartenaire = button.getAttribute('data-nom-partenaire');
     const prenomPartenaire = button.getAttribute('data-prenom-partenaire');
@@ -792,24 +795,23 @@ function viewEventDetails(button) {
     const etat = button.getAttribute('data-etat');
     const image = button.getAttribute('data-image');
 
-    // Populate the modal with the extracted data
     const eventDetailsContainer = document.getElementById('eventDetailsContainer');
-eventDetailsContainer.innerHTML = `
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h2 style="font-size: 20px; font-weight: bold; color: #013A71; margin-bottom: 10px; letter-spacing: 1.2px;">
-            ${titre}
-        </h2>
-        <img src="${image || 'https://via.placeholder.com/300'}" alt="Image de l'évènement" style="width: 100%; max-width: 300px; height: auto; border-radius: 10px;">
-    </div>
-    <p><strong>Nom du Partenaire:</strong> ${nomPartenaire} ${prenomPartenaire}</p>
-    <p><strong>Description:</strong> ${description}</p>
-    <p><strong>Date:</strong> ${dateEvenement}</p>
-    <p><strong>Lieu:</strong> ${lieu}</p>
-    <p><strong>Status:</strong> ${status}</p>
-    <p><strong>État:</strong> ${etat}</p>
-`;
+    eventDetailsContainer.innerHTML = `
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h2 style="margin-bottom: 15px;">${titre}</h2> <!-- Espace ajouté ici -->
+            <img src="${image || 'https://via.placeholder.com/300'}" 
+                 alt="Image de l'évènement" 
+                 style="width: 80%; max-width: 250px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        </div>
+        <p><strong>Nom du Partenaire:</strong> ${nomPartenaire} ${prenomPartenaire}</p>
+        <p><strong>Description:</strong> ${description}</p>
+        <p><strong>Date:</strong> ${dateEvenement}</p>
+        <p><strong>Lieu:</strong> ${lieu}</p>
+        <p><strong>Status:</strong> ${status}</p>
+        <p><strong>État:</strong> ${etat}</p>
+    `;
 
-    // Show the modal
+    // Afficher le modal
     document.body.classList.add('no-scroll');
     document.getElementById('eventDetailsModal').style.display = 'block';
 }
