@@ -557,7 +557,7 @@ body.dark-mode .toggle-dark-mode:hover {
                 <td id="etat-{{ evenement.idEvenement }}">{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}</td>
 <td>
     {% if evenement.imagename %}
-        <img src="{{ asset('images/Event/' ~ evenement.imagename) }}" 
+        <img src="{{ asset('uploads/event_images/' ~ evenement.imagename) }}" 
              alt="Image {{ evenement.titre }}" 
              style="width: 150px; height: auto; border-radius: 8px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);">
     {% else %}
@@ -577,7 +577,7 @@ body.dark-mode .toggle-dark-mode:hover {
     data-lieu="{{ evenement.lieu }}"
     data-status="{{ evenement.status }}"
     data-etat="{{ evenement.estBloque == 1 ? 'Bloqué' : 'Actif' }}"
-    data-image="{{ evenement.imagename ? asset('images/Event/' ~ evenement.imagename) : 'https://via.placeholder.com/300' }}">
+    data-image="{{ evenement.imagename ? asset('uploads/event_images/' ~ evenement.imagename) : 'https://via.placeholder.com/300' }}">
     Consulter
 </button>
                     <button class="activer-btn" onclick="showUnblockModal({{ evenement.idEvenement }})">Activer</button>

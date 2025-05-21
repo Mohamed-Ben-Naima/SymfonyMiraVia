@@ -40,15 +40,19 @@ final class AdminLoginController extends AbstractController
             // Vérifier si un utilisateur existe avec cet email
             $user = $this->entityManager->getRepository(Utilisateurs::class)->findOneBy(['email' => $email]);
 
-            if (!$user) {
-              $this->addFlash('error', 'Utilisateur non trouvé avec cet email.');
-              return $this->redirectToRoute('app_admin_login');
-          }
-          
-          if ($user->getMotDePasse() !== $password) {
-            $this->addFlash('error', 'Mot de passe incorrect.');
-            return $this->redirectToRoute('app_admin_login');
-        }
+if (!$user) {
+    $this->addFlash('error', 'Utilisateur non trouvé avec cet email.');
+    return $this->redirectToRoute('app_admin_login');
+}
+
+$motDePasseEnBase = $user->getMotDePasse();
+
+if ($motDePasseEnBase !== $password) {
+    if (!$this->passwordHasher->isPasswordValid($user, $password)) {
+        $this->addFlash('error', 'Mot de passe incorrect.');
+        return $this->redirectToRoute('app_admin_login');
+    }
+}
           
           $this->addFlash('success', 'Connexion réussie.');
 
