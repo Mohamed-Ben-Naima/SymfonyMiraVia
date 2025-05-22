@@ -1,0 +1,1061 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;500;600;700&family=Emotional+Rescue+Personal+Use&family=Mulish:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Emotional+Rescue+Personal+Use&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@800&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #fff;
+  color: hsl(222.2, 84%, 4.9%);
+}
+
+.btnpar {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-secondary {
+  width: 150px;
+  height: 54px;
+  flex-shrink: 0;
+  border-radius: 40px;
+  background: #81A8C5;
+  color: white;
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: hsl(210, 40%, 91%);
+}
+
+.hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  background: url('../images/bg.png') center/cover no-repeat;
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+  z-index: 1;
+}
+
+.hero-content {
+  z-index: 2;
+  text-align: center;
+  color: #013A71;
+  text-shadow: 0px 5px 13px rgba(255, 255, 255, 0.40);
+  font-family: 'Volkhov', serif;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.partners {
+  position: relative;
+  z-index: 3;
+  /* Positions the section above the hero's background */
+  margin-top: -4rem;
+  padding: 2rem 0;
+}
+
+.partners-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.partners-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 85px;
+  justify-content: center;
+  margin-left: 46px;
+}
+
+.partners-logos img {
+  max-width: 100px;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.partners-logos img:hover {
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero {
+    height: auto;
+    padding: 2rem 0;
+  }
+
+  .hero-content h1 {
+    color: #013A71;
+    text-shadow: 0px 5px 13px rgba(255, 255, 255, 0.40);
+    font-family: 'Volkhov', serif;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .partners-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .partners-logos {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 1.25rem;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem;
+  }
+
+  .partners-logos img {
+    max-width: 80px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.categori {
+  background: #fff;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.containerc {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 100px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.box {
+  background: #fff;
+  text-align: center;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  width: 220px;
+  position: relative;
+  z-index: 1;
+}
+
+.box.highlight {
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.box img {
+  width: 50px;
+  margin-bottom: 20px;
+}
+
+.box h3 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1e1e1e;
+  margin-bottom: 10px;
+}
+
+.box p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.highlight-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.highlight-decoration {
+  position: absolute;
+  bottom: -50px;
+  left: -40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.highlight-decoration img {
+  max-width: 100px;
+  height: auto;
+}
+
+.highlight-container .box {
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.text-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.categorie-title {
+  width: 137px;
+  height: 38px;
+  flex-shrink: 0;
+  color: #587CA0;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.service-description {
+  width: 666px;
+  height: 65px;
+  flex-shrink: 0;
+  color: #181E4B;
+  text-align: center;
+  font-family: 'Volkhov', serif;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.text-section1 {
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+  /* Add spacing above */
+
+  /* Add shadow for consistency */
+
+  /* Flexbox for center-left alignment */
+  display: flex;
+  flex-direction: column;
+  /* Stack text vertically */
+  justify-content: center;
+  /* Center content vertically */
+  align-items: flex-start;
+  /* Align content to the left horizontally */
+
+  /* Optional width to match .partners */
+  max-width: 1280px;
+  /* Match the width of .partners */
+  margin-left: auto;
+  /* Center content horizontally within parent */
+  margin-right: auto;
+  /* Center content horizontally within parent */
+}
+
+.compare-prices {
+  color: #013A71;
+  text-shadow: 0px 5px 13px rgba(255, 255, 255, 0.4);
+  font-family: 'Volkhov', serif;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 1rem;
+  /* Add spacing between the two texts */
+  text-align: left;
+  /* Align the text to the left */
+}
+
+.choose-excellence {
+  color: #778088;
+  font-family: 'Mulish', sans-serif;
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.5;
+  text-align: left;
+  /* Align the text to the left */
+}
+
+
+
+.blocdon {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: hsl(0, 0%, 100%);
+  color: hsl(222.2, 84%, 4.9%);
+  height: 590px;
+
+  /* Ensure height is explicitly set */
+}
+
+.full-screen {
+  height: 100%;
+  /* Match parent block's height */
+  width: 100%;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  /* Match .blocdon's height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-image: url('../images/don.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Dark overlay */
+}
+
+.content {
+  z-index: 10;
+  text-align: center;
+  padding: 1rem;
+  max-width: 90%;
+  display: flex;
+  /* Enable flexbox */
+  flex-direction: column;
+  /* Stack children vertically */
+  align-items: center;
+  /* Center horizontally */
+  justify-content: center;
+  /* Center vertically */
+  height: 100%;
+  /* Take full height of the container */
+}
+
+/* Title styles */
+.title {
+  color: #BFD4A8;
+  font-family: 'Raleway', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 50px;
+  letter-spacing: 4.8px;
+  margin-bottom: 20px;
+}
+
+/* Quote styles */
+.quote {
+  margin-bottom: 20px;
+  position: relative;
+  max-width: 752px;
+  width: 100%;
+}
+
+.quote-mark {
+  position: absolute;
+  color: #d3e4fd;
+  font-size: 2.5rem;
+  font-family: 'Dancing Script', cursive;
+}
+
+.quote-mark.left {
+  left: -1.5rem;
+  top: 0;
+}
+
+.quote-mark.right {
+  right: 0;
+  bottom: -1.5rem;
+}
+
+.quote-text {
+  color: #FFF;
+  text-align: center;
+  font-family: "Emotional Rescue Personal Use", cursive;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 50px;
+  letter-spacing: 3px;
+  margin: 0 auto;
+  max-width: 100%;
+  padding: 1rem;
+}
+
+.donate-button {
+  width: 168.999px;
+  height: 41px;
+  border-radius: 40px;
+  background: #81A8C5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+  /* Add space above the button */
+}
+
+.donate-button span {
+  color: #013A71;
+  text-align: center;
+  font-family: 'Mulish', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 22px;
+}
+
+.donate-button:hover {
+  background-color: #3a6ea3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .quote-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: 0.5rem;
+  }
+
+  .donate-button {
+    font-size: 0.875rem;
+    padding: 0.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .quote-text {
+    font-size: 0.875rem;
+  }
+
+  .donate-button {
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.video-button {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border: 1px solid #d0d0d0;
+  background-color: transparent;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #81A8C5;
+  text-transform: capitalize;
+}
+
+.video-button .icon {
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.video-button .text {
+  color: var(--Main-Dark, #1C2B38);
+  text-align: center;
+  font-family: Mulish, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.video-button:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-color: #ffffff;
+}
+
+.video-button:focus {
+  outline: none;
+}
+
+.trip-card-section {
+  /* Previous styles for alignment */
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start; /* Aligns cards to the left */
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px; /* Or 0 if cards should use full width up to the edge */
+  padding-left: 0;
+
+  /* New styles for multiple cards */
+  flex-wrap: wrap; /* Allows cards to wrap to the next line */
+  gap: 20px;       /* Adds space between cards (adjust as needed) */
+}
+
+.trip-card {
+  width: 270px;
+  height: 405px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  background: #FFF;
+  box-shadow: 0px 8px 34px 0px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.trip-image-container {
+  position: relative;
+  width: 100%;
+  height: 160px;
+}
+
+.trip-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.favorite-btn svg {
+  width: 16px;
+  height: 17px;
+}
+
+.trip-content {
+  padding: 20px;
+}
+
+.trip-title {
+  width: 245px;
+  color: #1C2B38;
+  text-shadow: 0px 5px 13px rgba(255, 255, 255, 0.40);
+  font-family: Volkhov, serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  /* 137.5% */
+  margin: 0 0 10px 0;
+}
+
+.trip-date {
+  display: flex;
+  align-items: center;
+  color: #495560;
+  font-family: Mulish, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 10px;
+}
+
+.date-icon {
+  margin-right: 5px;
+  font-size: 16px;
+}
+
+.trip-description {
+  width: 250px;
+  height: 72px;
+  flex-shrink: 0;
+  color: #495560;
+  font-family: Mulish, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0 0 20px 0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.apply-btn,
+.details-btn {
+  width: 97px;
+  height: 29px;
+  flex-shrink: 0;
+  border-radius: 40px;
+  background: #81A8C5;
+  color: #fff;
+  border: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .trip-card {
+    width: 100%;
+    max-width: 270px;
+    height: auto;
+    min-height: 405px;
+  }
+
+  .trip-image-container {
+    height: 140px;
+  }
+
+  .trip-title {
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .trip-date {
+    font-size: 13px;
+  }
+
+  .trip-description {
+    width: 100%;
+    height: auto;
+    min-height: 72px;
+    font-size: 13px;
+  }
+
+  .apply-btn,
+  .details-btn {
+    font-size: 13px;
+  }
+
+  .favorite-btn {
+    width: 35px;
+    height: 35px;
+  }
+
+  .favorite-btn svg {
+    width: 14px;
+    height: 15px;
+  }
+}
+
+@media (max-width: 400px) {
+  .trip-card {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 380px;
+  }
+
+  .trip-image-container {
+    height: 120px;
+  }
+
+  .trip-title {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .trip-date {
+    font-size: 12px;
+  }
+
+  .trip-description {
+    font-size: 12px;
+  }
+
+  .apply-btn,
+  .details-btn {
+    font-size: 12px;
+  }
+
+  .favorite-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .favorite-btn svg {
+    width: 12px;
+    height: 13px;
+  }
+}
+
+.review-section .container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 650.558px));
+  grid-template-rows: repeat(2, auto);
+  gap: 30px;
+  padding: 30px;
+  max-width: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+  /* Add this line */
+
+}
+
+.review-section .review-card {
+  width: 100%;
+  max-width: 650.558px;
+  height: 210.911px;
+  flex-shrink: 0;
+  border-radius: 47.647px;
+  background: #FFF;
+  box-shadow: 0px 520px 146px 0px rgba(0, 0, 0, 0.00),
+    0px 333px 133px 0px rgba(0, 0, 0, 0.01),
+    0px 187px 112px 0px rgba(0, 0, 0, 0.05),
+    0px 83px 83px 0px rgba(0, 0, 0, 0.09),
+    0px 21px 46px 0px rgba(0, 0, 0, 0.10),
+    0px 0px 0px 0px rgba(0, 0, 0, 0.10);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 25px;
+  box-sizing: border-box;
+}
+
+.review-section .header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.review-section .profile-img {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;   /* This is the magic property that makes it circular */
+  object-fit: cover;    /* Ensures the image covers the area, cropping if necessary, without distortion */
+  /* Optional: Add a border around the circle */
+  /* border: 2px solid #ddd; */
+  flex-shrink: 0; 
+  flex-shrink: 0;
+  margin-right: 15px;
+}
+
+.review-section .name {
+  color: #000;
+  font-family: Raleway;
+  font-size: 19.059px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+  margin-right: 262px;
+}
+
+.review-section .rating {
+  font-size: 18px;
+  color: #ffd700;
+}
+
+.review-section .review-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #2d2d2d;
+}
+
+@media (max-width: 1400px) {
+  .review-section .container {
+    grid-template-columns: repeat(2, minmax(0, 500px));
+  }
+
+  .review-section .review-card {
+    max-width: 500px;
+    height: 180px;
+  }
+
+  .review-section .profile-img {
+    width: 55px;
+    height: 57px;
+  }
+
+  .review-section .name {
+    font-size: 16px;
+    margin-right: 200px;
+  }
+
+  .review-section .rating {
+    font-size: 16px;
+  }
+
+  .review-section .review-text {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .review-section .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .review-section .review-card {
+    max-width: 650.558px;
+    height: 210.911px;
+  }
+
+  .review-section .profile-img {
+    width: 68px;
+    height: 70px;
+  }
+
+  .review-section .name {
+    font-size: 19.059px;
+    margin-right: 262px;
+  }
+
+  .review-section .rating {
+    font-size: 18px;
+  }
+
+  .review-section .review-text {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 700px) {
+  .review-section {
+    padding: 15px;
+  }
+
+  .review-section .container {
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .review-section .review-card {
+    max-width: 100%;
+    height: auto;
+    min-height: 180px;
+    padding: 20px;
+  }
+
+  .review-section .header {
+    flex-wrap: wrap;
+  }
+
+  .review-section .profile-img {
+    width: 50px;
+    height: 52px;
+  }
+
+  .review-section .name {
+    font-size: 14px;
+    margin-right: 150px;
+  }
+
+  .review-section .rating {
+    font-size: 14px;
+  }
+
+  .review-section .review-text {
+    font-size: 12px;
+  }
+}
+/* New parent container for the event section header */
+.events-header-with-navigation {
+  display: flex; /* Lays out text and buttons side-by-side */
+  justify-content: space-between; /* Pushes text to left, buttons to right */
+  align-items: center; /* Vertically aligns items in the middle. Use 'flex-start' for top alignment. */
+  max-width: 1280px; /* Same max-width as your .text-section1 for overall centering */
+  margin-left: auto;
+  margin-right: auto;
+  /* Preserve the original vertical margins that .text-section1 had */
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+  padding: 0 20px; /* Optional: adds some horizontal padding to the whole header if needed. Adjust or remove. */
+                   /* If your .text-section1 relies on its own padding, this might not be needed here. */
+  box-sizing: border-box;
+}
+
+/* Adjustments for .text-section1 when it's inside the new wrapper */
+.events-header-with-navigation .text-section1 {
+  /* Remove margins that were for its own centering, as the parent now handles it */
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0; /* Was auto */
+  margin-right: 0; /* Was auto */
+  max-width: none; /* Let it take space naturally within the flex parent */
+  /* flex-grow: 1; /* Optional: if you want the text section to take up more available space */
+}
+
+.event-navigation-buttons {
+  display: flex;         /* This will lay out the SVGs in a row */
+  align-items: center;   /* Vertically aligns the SVGs if their heights differ (e.g., 90px vs 58px) */
+  gap: 15px;             /* Adds space BETWEEN the two buttons. Adjust 15px as needed. */
+  flex-shrink: 0;        /* Prevents this container from shrinking */
+  margin-right: 70px;    /* Keeps the whole button group positioned as you requested */
+}
+
+.trip-card-section-viewport {
+  /* Calculate width for 4 cards: (4 * card_width) + (3 * gap_between_cards) */
+  /* Assuming card width = 270px and desired gap = 20px: */
+  /* (4 * 270px) + (3 * 20px) = 1080px + 60px = 1140px */
+  max-width: 1140px;
+  margin-left: auto;  /* Center the viewport */
+  margin-right: auto; /* Center the viewport */
+  overflow: hidden;   /* CRUCIAL: This hides the cards outside the visible area */
+  padding-left: 0; /* Ensure it aligns with the header if that was intended */
+  /* Keep any vertical padding or margins you had for the original section */
+  padding-top: 20px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
+/* Track that holds all event cards */
+.events-track {
+  display: flex; /* Lays out cards in a single horizontal row */
+  gap: 20px;     /* Space between cards (adjust as needed) */
+  transition: transform 0.5s ease-in-out; /* Smooth sliding animation */
+  /* DO NOT use flex-wrap: wrap; here */
+}
+
+/* styles/styles.css */
+
+/* ... your existing styles ... */
+
+/* Wrapper for the new testimonial intro texts */
+.testimonial-intro-section {
+  display: flex;
+  flex-direction: column; /* Stack title and subtitle vertically */
+  align-items: center;    /* Center items horizontally */
+  padding: 40px 20px;     /* Add some vertical and horizontal padding */
+  margin-top: 2rem;       /* Space above this section */
+  margin-bottom: 2rem;    /* Space below this section before reviews */
+}
+
+/* Styling for the main testimonial title */
+.testimonial-main-title {
+  color: #013A71;
+  text-align: center;
+  font-family: "Emotional Rescue Personal Use", cursive; /* Added cursive as a generic fallback */
+  font-size: 38.146px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.1; /* Adjusted from 107.203% for better readability, approx 41.96px */
+  max-width: 1113px; /* Maximum width */
+  width: 90%;        /* Takes 90% of its container's width */
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem; /* Space between title and subtitle */
+  /* height: auto; /* Height should be automatic based on content */
+  /* flex-shrink: 0; /* Not directly applicable here unless this itself is a flex item */
+}
+
+/* Styling for the testimonial subtitle */
+.testimonial-subtitle {
+  /* Assuming --GRIGIO-TESTO is defined, otherwise it uses #6B7D8D */
+  /* If --GRIGIO-TESTO is not defined, you can define it in :root or just use #6B7D8D */
+  /* :root { --GRIGIO-TESTO: #6B7D8D; } */
+  color: var(--GRIGIO-TESTO, #6B7D8D);
+  text-align: center;
+  font-family: 'Raleway', sans-serif; /* Added sans-serif as a generic fallback */
+  font-size: 21.518px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5; /* Adjusted for better readability */
+  max-width: 668px;  /* Maximum width */
+  width: 90%;       /* Takes 90% of its container's width */
+  margin-left: auto;
+  margin-right: auto;
+  /* height: auto; /* Height should be automatic */
+  /* flex-shrink: 0; */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .testimonial-main-title {
+      font-size: 30px; /* Slightly smaller font on smaller screens */
+      width: 95%;
+  }
+
+  .testimonial-subtitle {
+      font-size: 18px; /* Slightly smaller font on smaller screens */
+      width: 95%;
+  }
+
+  .testimonial-intro-section {
+      padding: 30px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonial-main-title {
+      font-size: 24px;
+  }
+
+  .testimonial-subtitle {
+      font-size: 16px;
+  }
+}
+
+/* ... your existing styles for review-section etc. ... */

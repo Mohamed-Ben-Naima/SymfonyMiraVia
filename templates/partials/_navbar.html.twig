@@ -1,321 +1,416 @@
-<style>
-	/* Navbar Styling */
-	.navbar.custom-navbar {
-		background-color: rgba(255, 255, 255, 0.95);
-		border-bottom: 1px solid rgba(129, 168, 197, 0.3);
-		padding: 1rem 1.5rem;
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-		transition: all 0.3s ease-in-out;
-		position: sticky;
-		top: 0;
-		z-index: 1050;
-	}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiraVia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: 'Inter', sans-serif; /* Vous devez inclure Inter via Google Fonts si ce n'est pas fait */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0; /* Important pour éviter les marges par défaut */
+        }
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
 
-	.navbar.custom-navbar:hover {
-		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-	}
+        /* Navbar Styling */
+        .navbar.custom-navbar {
+            background-color: transparent;
+            border-bottom: 1px solid rgba(129, 168, 197, 0.3);
+            padding: 0.8rem 1.5rem;
+            box-shadow: none;
+            transition: all 0.3s ease-in-out;
+            position: sticky;
+            top: 0;
+            z-index: 1050;
+        }
+        .navbar.custom-navbar.scrolled {
+            background-color: rgba(255, 255, 255, 0.97);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+        .navbar.custom-navbar.dark-mode {
+            background-color: rgba(18, 18, 18, 0.97);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .navbar.custom-navbar.dark-mode.scrolled {
+            background-color: rgba(18, 18, 18, 0.97);
+        }
+        .navbar-brand.custom-logo {
+            font-size: 1.8rem;font-weight: 700;color: #013a71;text-transform: uppercase;letter-spacing: 0.05rem;display: flex;align-items: center;
+        }
+        body.dark-mode .navbar-brand.custom-logo { color: #ffffff; }
+        .logo-img { height: 45px; margin-right: 0.7rem; }
+        .navbar-nav.custom-nav-links { display: flex; justify-content: center; flex-grow: 1; }
+        .navbar-nav.custom-nav-links .nav-link {
+            color: #013a71;font-size: 1rem;font-weight: 500;text-transform: capitalize;padding: 0.6rem 1rem;margin: 0 0.3rem;border-radius: 6px;transition: all 0.3s ease-in-out;
+        }
+        .navbar-nav.custom-nav-links .nav-link:hover,
+        .navbar-nav.custom-nav-links .nav-link:focus,
+        .navbar-nav.custom-nav-links .nav-link.active { color: #ffffff; background-color: #013a71; }
+        body.dark-mode .navbar-nav.custom-nav-links .nav-link { color: #e0e0e0; }
+        body.dark-mode .navbar-nav.custom-nav-links .nav-link:hover,
+        body.dark-mode .navbar-nav.custom-nav-links .nav-link:focus,
+        body.dark-mode .navbar-nav.custom-nav-links .nav-link.active { background-color: #ffffff; color: #121212; }
+        .navbar-right-controls { display: flex; align-items: center; gap: 0.75rem; }
+        .btn-option-style.language-currency-btn {
+            background-color: #013A71; color: #ffffff; border: none; padding: 0.5rem 0.9rem; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 500; text-transform: none; transition: background-color 0.3s ease, opacity 0.3s ease; cursor: pointer;
+        }
+        .btn-option-style.language-currency-btn:hover { background-color: #012c58; }
+        .flag-icon { width: 20px; height: auto; margin-left: 0.4rem; margin-right: 0.4rem; vertical-align: middle; border-radius: 2px; }
+        .language-text, .currency-text { line-height: 1; }
+        .auth-section .btn { padding: 0.5rem 0.9rem; font-size: 0.85rem; font-weight: 500; }
+        .auth-section .custom-btn-outline { border-color: #013a71; color: #013a71; }
+        .auth-section .custom-btn-outline:hover { background-color: #013a71; color: #fff; }
+        body.dark-mode .auth-section .custom-btn-outline { border-color: #5c95c9; color: #a0c3e0; }
+        body.dark-mode .auth-section .custom-btn-outline:hover { background-color: #a0c3e0; color: #121212; }
+        .auth-section .custom-btn-primary { background-color: #013a71; border-color: #013a71; }
+        .auth-section .custom-btn-primary:hover { background-color: #012c58; border-color: #012c58; }
+        body.dark-mode .auth-section .custom-btn-primary { background-color: #5c95c9; border-color: #5c95c9; color: #121212; }
+        body.dark-mode .auth-section .custom-btn-primary:hover { background-color: #7badda; border-color: #7badda; }
+        .auth-section .user-dropdown-toggle { color: #013a71; }
+        body.dark-mode .auth-section .user-dropdown-toggle { color: #ffffff; }
+        .auth-section .user-avatar { width: 36px; height: 36px; }
+        .auth-section .user-name { font-size: 0.9rem; font-weight: 500; }
+        body.dark-mode .dropdown-menu { background-color: #2a2a2a; border-color: #3a3a3a; }
+        body.dark-mode .dropdown-item { color: #e0e0e0; }
+        body.dark-mode .dropdown-item:hover,
+        body.dark-mode .dropdown-item:focus { background-color: #3a3a3a; color: #ffffff; }
+        body.dark-mode .dropdown-divider { border-top-color: #3a3a3a; }
 
-	.navbar-brand.custom-logo {
-		font-size: 1.8rem;
-		font-weight: 700;
-		color: #013a71;
-		text-transform: uppercase;
-		letter-spacing: 0.05rem;
-		display: flex;
-		align-items: center;
-	}
+        /* Styles Pop-up Paramètres Régionaux */
+        .popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; /* Caché par défaut */ justify-content: center; align-items: center; z-index: 1100; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+        }
+        .popup-overlay.show { opacity: 1; visibility: visible; transition-delay: 0s; display: flex; }
+        .popup-content.regional-settings-popup {
+            background-color: #ffffff; color: #333; padding: 25px 30px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); width: 100%; max-width: 480px; transform: scale(0.95); transition: transform 0.3s ease;
+        }
+        .popup-overlay.show .popup-content.regional-settings-popup { transform: scale(1); }
+        body.dark-mode .popup-content.regional-settings-popup { background-color: #2c2c2c; color: #e0e0e0; border: 1px solid #444; }
+        .popup-title { font-size: 1.5rem; font-weight: 600; color: #013A71; margin-bottom: 25px; text-align: left; }
+        body.dark-mode .popup-title { color: #a0c3e0; }
+        .form-group-popup { margin-bottom: 20px; }
+        .form-group-popup label { display: block; font-size: 0.95rem; font-weight: 500; margin-bottom: 8px; color: #495057; display: flex; align-items: center; }
+        body.dark-mode .form-group-popup label { color: #c0c0c0; }
+        .form-group-popup label i { margin-right: 8px; color: #013A71; font-size: 1.1em; }
+        body.dark-mode .form-group-popup label i { color: #7badda; }
+        .switch-lang-link { margin-left: auto; font-size: 0.8rem; color: #007bff; text-decoration: none; }
+        .switch-lang-link:hover { text-decoration: underline; }
+        body.dark-mode .switch-lang-link { color: #8ab4f8; }
+        .popup-description { font-size: 0.85rem; color: #6c757d; margin-bottom: 10px; line-height: 1.4; }
+        body.dark-mode .popup-description { color: #a0a0a0; }
+        .form-group-popup select {
+            width: 100%; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 1rem; font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #495057; cursor: pointer; transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        body.dark-mode .form-group-popup select { background-color: #3a3a3a; border-color: #555; color: #e0e0e0; }
+        .form-group-popup select:focus { border-color: #007bff; outline: none; box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15); }
+        body.dark-mode .form-group-popup select:focus { border-color: #8ab4f8; box-shadow: 0 0 0 3px rgba(138, 180, 248, 0.25); }
+        .popup-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e9ecef; }
+        body.dark-mode .popup-actions { border-top-color: #444; }
+        .btn-popup { padding: 10px 25px; border: none; border-radius: 6px; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease; }
+        .btn-popup.btn-save { background-color: #013A71; color: #ffffff; }
+        .btn-popup.btn-save:hover { background-color: #012c58; }
+        body.dark-mode .btn-popup.btn-save { background-color: #5c95c9; color: #121212; }
+        body.dark-mode .btn-popup.btn-save:hover { background-color: #7badda; }
+        .btn-popup.btn-cancel { background-color: #f0f2f5; color: #333; border: 1px solid #d6d8db; }
+        .btn-popup.btn-cancel:hover { background-color: #e2e6ea; }
+        body.dark-mode .btn-popup.btn-cancel { background-color: #4a4a4a; color: #e0e0e0; border-color: #555; }
+        body.dark-mode .btn-popup.btn-cancel:hover { background-color: #5a5a5a; }
 
-	.logo-img {
-		height: 45px;
-		margin-right: 0.7rem;
-	}
+        /* Responsive */
+        @media(max-width: 992px) {
+            .navbar-nav.custom-nav-links .nav-link { font-size: 0.95rem; margin: 0.2rem 0.4rem; }
+            .navbar-collapse { justify-content: flex-start; }
+            .navbar-right-controls { width: 100%; justify-content: flex-start; padding-top: 0.5rem; padding-bottom: 0.5rem; border-top: 1px solid rgba(0,0,0,0.1); }
+            body.dark-mode .navbar-right-controls { border-top: 1px solid rgba(255,255,255,0.1); }
+            .auth-section { margin-left: auto !important; }
+        }
+        @media(max-width: 768px) {
+            .navbar-brand.custom-logo { font-size: 1.4rem; }
+            .navbar-right-controls { flex-direction: column; align-items: flex-start; }
+            .btn-option-style.language-currency-btn, .auth-section { margin-left: 0 !important; margin-bottom: 0.5rem; }
+            .auth-section { width: 100%; display: flex; justify-content: flex-start; }
+            .popup-content.regional-settings-popup { max-width: calc(100% - 40px); padding: 20px; }
+            .popup-title { font-size: 1.3rem; }
+            .form-group-popup select, .btn-popup { font-size: 0.9rem; }
+        }
 
-	/* Navigation Links */
-	.navbar-nav.custom-nav-links .nav-link {
-		color: #013a71;
-		font-size: 1rem;
-		font-weight: 500;
-		text-transform: capitalize;
-		padding: 0.7rem 1rem;
-		margin: 0 0.5rem;
-		position: relative;
-		display: flex;
-		align-items: center;
-		border-radius: 8px;
-		transition: all 0.3s ease-in-out;
-	}
+        /* Styles pour le widget Google Translate (optionnel, vous pouvez le rendre visible) */
+        #google_translate_element {
+            /* Pour le cacher si on ne veut pas du widget Google standard visible */
+            /* display: none !important; */
+            /* Ou pour le styler si vous le rendez visible quelque part */
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 4px;
+            /* background-color: #f8f9fa; */
+        }
+        .goog-te-gadget-simple {
+            background-color: transparent !important;
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            padding: 5px !important;
+            font-size: 0.9rem !important;
+        }
+        .goog-te-gadget-simple span {
+            color: #013A71 !important;
+        }
+        body.dark-mode .goog-te-gadget-simple {
+            border-color: #555 !important;
+        }
+        body.dark-mode .goog-te-gadget-simple span {
+            color: #e0e0e0 !important;
+        }
+        iframe.goog-te-menu-frame { /* Style le dropdown du widget */
+             box-shadow: 0 3px 10px rgba(0,0,0,0.2) !important;
+             border-radius: 4px !important;
+        }
 
-	.navbar-nav.custom-nav-links .nav-link:hover,
-	.navbar-nav.custom-nav-links .nav-link:focus {
-		color: #ffffff;
-		background-color: #013a71;
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-		transform: translateY(-2px);
-		outline: none;
-	}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand custom-logo" href="{{ path('app_home') }}">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img">
+            </a>
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 custom-nav-links">
+                    <li class="nav-item"><a class="nav-link {% if app.request.get('_route') == 'app_home' %}active{% endif %}" href="{{ path('app_home') }}">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link {% if app.request.get('_route') == 'app_vol_page' %}active{% endif %}" href="{{ path('app_vol_page') }}">Vols</a></li>
+                    <li class="nav-item"><a class="nav-link {% if app.request.get('_route') == 'app_benevolat' %}active{% endif %}" href="{{ path('app_benevolat') }}">Bénévolat</a></li>
+                    <li class="nav-item"><a class="nav-link {% if app.request.get('_route') == 'app_demande_aide' %}active{% endif %}" href="{{ path('app_demande_aide') }}">Demande D'aide</a></li>
+                    <li class="nav-item"><a class="nav-link {% if app.request.get('_route') == 'app_evenement' %}active{% endif %}" href="{{ path('app_evenement') }}">Évènements</a></li>
+                     <li class="nav-item"><a class="nav-link {% if app.request.get('_route') == 'app_apropos_page' %}active{% endif %}" href="{{ path('app_apropos_page') }}">À propos de nous</a></li>
+                 
+                </ul>
+                <div class="navbar-right-controls">
+                    <button type="button" class="btn btn-option-style language-currency-btn" id="languageCurrencyBtn">
+                        <span class="language-text">français (FR)</span>
+                        <img src="{{ asset('images/tn.png') }}" alt="Tunisie" class="flag-icon">
+                        <span class="currency-text">TND د.ت</span>
+                    </button>
+                    <div class="auth-section">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <div class="dropdown">
+                                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle user-dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="{{ app.user.avatar ? asset('Uploads/avatars/' ~ app.user.avatar) : 'https://i.pravatar.cc/40' }}" alt="{{ app.user.prenom|e }}" class="rounded-circle me-2 user-avatar">
+                                    <span class="user-name">{{ app.user.prenom|e }}</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="{{ path('app_profile') }}"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('app_logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                                        <form id="logout-form" action="{{ path('app_logout') }}" method="post" style="display: none;"><input type="hidden" name="_token" value="{{ csrf_token('logout') }}"></form>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <a href="{{ path('app_register') }}" class="btn btn-outline-primary custom-btn-outline me-2"><i class="fas fa-user-plus me-1"></i>S'inscrire</a>
+                            <a href="{{ path('app_login_controller2') }}" class="btn btn-primary custom-btn-primary"><i class="fas fa-sign-in-alt me-1"></i>Se connecter</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-	.navbar-nav.custom-nav-links .nav-link.active {
-		color: #ffffff;
-		background-color: #81a8c5;
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-		padding: 0.7rem 1.2rem;
-		border-radius: 8px;
-	}
+    <div id="regionalSettingsPopup" class="popup-overlay">
+        <div class="popup-content regional-settings-popup">
+            <h3 class="popup-title">Paramètres régionaux</h3>
+            <div class="form-group-popup">
+                <label for="langueSelect"><i class="fas fa-comments"></i> Langue
+                    {# Le lien "Switch to English" pourrait être réactivé avec une logique JS si besoin #}
+                    {# <a href="#" class="switch-lang-link" id="switchToEnglishLink">Switch to English</a> #}
+                </label>
+                <select id="langueSelect" name="langue">
+                    <option value="fr" selected>Français (France)</option>
+                    <option value="en">English (US)</option>
+                    <option value="ar">العربية (تونس)</option>
+                    <option value="es">Español</option>
+                    <option value="de">Deutsch</option>
+                </select>
+            </div>
+            <div class="form-group-popup">
+                <label for="paysRegionSelect"><i class="fas fa-globe-americas"></i> Pays/région</label>
+                <p class="popup-description">En sélectionnant le pays où vous vous trouvez, vous profiterez d'offres et d'informations locales.</p>
+                <select id="paysRegionSelect" name="paysRegion">
+                    <option value="TN" selected>Tunisie</option>
+                    <option value="FR">France</option>
+                    <option value="US">États-Unis</option>
+                </select>
+            </div>
+            <div class="form-group-popup">
+                <label for="deviseSelect"><i class="fas fa-coins"></i> Devise</label>
+                <select id="deviseSelect" name="devise">
+                    <option value="TND" selected>TND - د.ت</option>
+                    <option value="EUR">EUR - €</option>
+                    <option value="USD">USD - $</option>
+                </select>
+            </div>
+            <div class="popup-actions">
+                <button type="button" id="saveRegionalSettingsBtn" class="btn-popup btn-save">Enregistrer</button>
+                <button type="button" id="cancelRegionalSettingsBtn" class="btn-popup btn-cancel">Annuler</button>
+            </div>
+        </div>
+    </div>
 
-	/* Search Bar */
-	.search-bar {
-		position: relative;
-		width: 100%;
-		max-width: 300px;
-	}
+    <div id="google_translate_element_wrapper" style="position: fixed; bottom: 10px; right: 10px; z-index: 1200; background: white; padding: 5px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+      <div id="google_translate_element"></div>
+    </div>
 
-	.search-bar input {
-		width: 100%;
-		border-radius: 30px;
-		border: 1px solid rgba(129, 168, 197, 0.3);
-		padding: 0.5rem 2rem 0.5rem 1rem;
-		transition: all 0.3s ease-in-out;
-	}
 
-	.search-bar input:focus {
-		border-color: #013a71;
-		outline: none;
-		box-shadow: 0 0 5px rgba(1, 58, 113, 0.3);
-	}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.querySelector('.navbar.custom-navbar');
+            const languageCurrencyBtn = document.getElementById('languageCurrencyBtn');
+            const regionalSettingsPopup = document.getElementById('regionalSettingsPopup');
+            const cancelRegionalSettingsBtn = document.getElementById('cancelRegionalSettingsBtn');
+            const saveRegionalSettingsBtn = document.getElementById('saveRegionalSettingsBtn');
+            const langueSelectPopup = document.getElementById('langueSelect'); // Sélecteur de langue dans le popup
 
-	.search-bar button {
-		position: absolute;
-		top: 50%;
-		right: 10px;
-		transform: translateY(-50%);
-		border: none;
-		background: none;
-		color: #013a71;
-		cursor: pointer;
-		font-size: 1.2rem;
-	}
+            // Gestion du scroll pour la navbar
+            window.addEventListener('scroll', () => {
+                if (navbar) {
+                    if (window.scrollY > 50) navbar.classList.add('scrolled');
+                    else navbar.classList.remove('scrolled');
+                }
+            });
 
-	/* Notification Icon */
-	.notification-icon {
-		position: relative;
-		color: #013a71;
-		font-size: 1.5rem;
-		cursor: pointer;
-		transition: all 0.3s ease-in-out;
-		margin-right: 1rem;
-	}
+            // Logique pour le Pop-up des Paramètres Régionaux
+            if (languageCurrencyBtn && regionalSettingsPopup) {
+                languageCurrencyBtn.addEventListener('click', () => {
+                    regionalSettingsPopup.style.display = 'flex';
+                    void regionalSettingsPopup.offsetWidth;
+                    regionalSettingsPopup.classList.add('show');
+                });
+            }
 
-	.notification-icon:hover {
-		color: #81a8c5;
-	}
+            function closeRegionalPopup() {
+                if (regionalSettingsPopup) {
+                    regionalSettingsPopup.classList.remove('show');
+                    setTimeout(() => {
+                        if (!regionalSettingsPopup.classList.contains('show')) {
+                            regionalSettingsPopup.style.display = 'none';
+                        }
+                    }, 300);
+                }
+            }
 
-	.notification-icon .badge {
-		position: absolute;
-		top: -5px;
-		right: -5px;
-		background-color: #e63946;
-		color: #ffffff;
-		font-size: 0.75rem;
-		padding: 0.2rem 0.4rem;
-		border-radius: 50%;
-	}
+            if (cancelRegionalSettingsBtn) {
+                cancelRegionalSettingsBtn.addEventListener('click', closeRegionalPopup);
+            }
 
-	/* Dark Mode Toggle */
-	.dark-mode-toggle {
-		display: flex;
-		align-items: center;
-		cursor: pointer;
-		margin-right: 1rem;
-	}
+            if (regionalSettingsPopup) {
+                regionalSettingsPopup.addEventListener('click', function(event) {
+                    if (event.target === regionalSettingsPopup) closeRegionalPopup();
+                });
+            }
 
-	.dark-mode-toggle i {
-		margin-right: 0.5rem;
-		color: #013a71;
-		transition: all 0.3s ease-in-out;
-	}
+            // Logique de "Sauvegarde" du popup
+            if (saveRegionalSettingsBtn && langueSelectPopup) {
+                saveRegionalSettingsBtn.addEventListener('click', () => {
+                    const selectedLangCode = langueSelectPopup.value; // ex: 'en', 'fr', 'ar'
+                    const selectedLangTextFull = langueSelectPopup.options[langueSelectPopup.selectedIndex].text;
 
-	.dark-mode-toggle:hover i {
-		color: #81a8c5;
-	}
+                    console.log('Langue sélectionnée dans le popup:', selectedLangCode, `(${selectedLangTextFull})`);
 
-	/* Language Switcher */
-	.language-switcher {
-		color: #013a71;
-		cursor: pointer;
-		font-weight: 500;
-		transition: all 0.3s ease-in-out;
-	}
+                    // Action : Déclencher le changement de langue Google Translate
+                    // Cette fonction essaiera de changer la langue du widget Google.
+                    // Elle nécessite que le widget soit déjà initialisé.
+                    if (typeof changeGoogleTranslateLanguage === "function") {
+                        changeGoogleTranslateLanguage(selectedLangCode);
+                    } else {
+                        console.warn("La fonction changeGoogleTranslateLanguage n'est pas définie. Le widget Google pourrait ne pas être prêt.");
+                        // Fallback simple: essayer de manipuler le cookie et recharger
+                        // Vous pouvez affiner la langue source si elle n'est pas toujours 'fr'
+                        setGoogleTranslateCookieAndReload('fr', selectedLangCode);
+                    }
 
-	.language-switcher:hover {
-		color: #81a8c5;
-	}
 
-	/* Buttons */
-	.btn.custom-btn-primary {
-		background-color: #013a71;
-		border: none;
-		color: #ffffff;
-		padding: 0.6rem 1.2rem;
-		border-radius: 30px;
-		font-weight: 600;
-		transition: all 0.3s ease-in-out;
-		display: inline-flex;
-		align-items: center;
-		letter-spacing: 0.03em;
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	}
+                    // Mettre à jour le bouton principal (affichage)
+                    const langTextSpan = languageCurrencyBtn.querySelector('.language-text');
+                    if (langTextSpan) {
+                        let langDisplay = selectedLangTextFull.split('(')[0].trim();
+                        if (selectedLangCode.toUpperCase() === 'FR') langDisplay += " (FR)";
+                        else if (selectedLangCode.toUpperCase() === 'EN') langDisplay += " (EN)";
+                        else if (selectedLangCode.toUpperCase() === 'AR') langDisplay += " (AR)";
+                         else if (selectedLangCode.toUpperCase() === 'ES') langDisplay += " (ES)";
+                          else if (selectedLangCode.toUpperCase() === 'DE') langDisplay += " (DE)";
+                        langTextSpan.textContent = langDisplay;
+                    }
+                    // La logique pour la devise et le drapeau reste la même que précédemment si besoin
 
-	.btn.custom-btn-primary:hover,
-	.btn.custom-btn-primary:focus {
-		background-color: #7d8c6d;
-		transform: scale(1.05);
-		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-		outline: none;
-	}
+                    closeRegionalPopup();
+                });
+            }
+        });
 
-	.btn.custom-btn-outline {
-		background-color: transparent;
-		border: 2px solid #013a71;
-		color: #013a71;
-		padding: 0.6rem 1.2rem;
-		border-radius: 30px;
-		font-weight: 600;
-		transition: all 0.3s ease-in-out;
-		display: inline-flex;
-		align-items: center;
-		letter-spacing: 0.03em;
-	}
+        // --- Logique Google Translate Widget ---
+        // Cette fonction est appelée par le script Google une fois qu'il est chargé.
+        function googleTranslateElementInit() {
+            console.log('googleTranslateElementInit est appelée.');
+            try {
+                new google.translate.TranslateElement({
+                    pageLanguage: 'fr', // Langue originale de votre page
+                    includedLanguages: 'en,fr,ar,es,de', // Langues à proposer
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE, // Ou . lựa chọn khác
+                    autoDisplay: true // Affichez le widget par défaut pour cette méthode simple
+                }, 'google_translate_element');
+                console.log('Widget Google Translate configuré.');
+            } catch (e) {
+                console.error("Erreur dans googleTranslateElementInit:", e);
+            }
+        }
 
-	.btn.custom-btn-outline:hover,
-	.btn.custom-btn-outline:focus {
-		background-color: #013a71;
-		color: #ffffff;
-		transform: scale(1.05);
-		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-		outline: none;
-	}
+        // Fonction pour tenter de changer la langue via le widget Google
+        // Note: Interagir directement avec l'iframe de Google est peu fiable et peut casser.
+        // La méthode la plus simple avec le widget est de laisser l'utilisateur le manipuler,
+        // ou de s'appuyer sur la manipulation de cookie.
+        function changeGoogleTranslateLanguage(targetLangCode) {
+            console.log(`Tentative de changement vers: ${targetLangCode}`);
+            const googleWidget = document.getElementById('google_translate_element');
+            if (!googleWidget) {
+                console.error("L'élément 'google_translate_element' n'existe pas.");
+                return;
+            }
 
-	/* Responsive Adjustments */
-	@media(max-width: 992px) {
-		.navbar-nav.custom-nav-links .nav-link {
-			font-size: 0.95rem;
-			margin: 0.2rem 0.4rem;
-		}
-	}
+            // La méthode la plus "simple" pour forcer un changement avec le widget
+            // est de manipuler le cookie 'googtrans' et de recharger la page.
+            setGoogleTranslateCookieAndReload('fr', targetLangCode);
+        }
 
-	@media(max-width: 768px) {
-		.navbar-brand.custom-logo {
-			font-size: 1.4rem;
-		}
-		.search-bar input {
-			width: 200px;
-		}
-	}
+        function setGoogleTranslateCookieAndReload(sourceLang, targetLang) {
+            console.log(`Définition du cookie: de ${sourceLang} vers ${targetLang}`);
+            let cookieValue = `/auto/${targetLang}`; // Laissez Google détecter la source avec /auto/
+            if (sourceLang === targetLang) { // Revenir à la langue originale
+                 cookieValue = ""; // Pour supprimer/réinitialiser
+            }
 
-	@media(max-width: 576px) {
-		.navbar-nav.custom-nav-links {
-			text-align: center;
-		}
-
-		.navbar-nav.custom-nav-links .nav-link {
-			display: block;
-			margin: 0.5rem 0;
-			font-size: 0.9rem;
-		}
-
-		.search-bar {
-			width: 100%;
-			margin-top: 1rem;
-		}
-
-		.btn.custom-btn-primary,
-		.btn.custom-btn-outline {
-			width: 100%;
-			text-align: center;
-			padding: 0.5rem;
-		}
-	}
-</style>
-
-<nav class="navbar navbar-expand-lg navbar-light custom-navbar">
-	<div
-		class="container-fluid">
-		<!-- Logo -->
-		<a class="navbar-brand custom-logo" href="{{ path('app_home') }}">
-			<img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img">
-		</a>
-
-		<!-- Burger Menu -->
-		<button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-
-		<!-- Navigation Links -->
-		<div class="collapse navbar-collapse" id="navbarNav">
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0 custom-nav-links">
-				<li class="nav-item">
-					<a class="nav-link {% if app.request.get('_route') == 'app_home' %}active{% endif %}" href="{{ path('app_home') }}">
-						<i class="fas fa-home me-2"></i>Accueil
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link " href="#">
-						<i class="fas fa-info-circle me-2"></i>Vols
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if app.request.get('_route') == 'app_benevolat' %}active{% endif %}" href="{{ path('app_benevolat') }}">
-						<i class="fas fa-map-marker-alt me-2"></i>Bénévolat
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link " href="#">
-						<i class="fas fa-tags me-2"></i>Demande D'aide
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if app.request.get('_route') == 'app_evenement' %}active{% endif %}" href="{{ path('app_evenement') }}">
-						<i class="fas fa-calendar-alt me-2"></i>Évènements
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link " href="#">
-						<i class="fas fa-lightbulb me-2"></i>Favoris
-					</a>
-				</li>
-			</ul>
-
-			<!-- Authentication Section -->
-			<div class="d-flex align-items-center ms-3">
-				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-					<div class="dropdown">
-						<a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="{{ app.user.avatar ? asset('uploads/avatars/' ~ app.user.avatar) : 'https://i.pravatar.cc/120' }}" alt="{{ app.user.prenom|e }}" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-							<span>{{ app.user.prenom|e }}</span>
-						</a>
-						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-							<li>
-								<a class="dropdown-item" href="{{ path('app_profile') }}">
-									<i class="fas fa-user me-2"></i>Profile</a>
-							</li>
-							<li><hr class="dropdown-divider"></li>
-							<li>
-								<a class="dropdown-item" href="{{ path('app_logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-									<i class="fas fa-sign-out-alt me-2"></i>Logout
-								</a>
-								<form id="logout-form" action="{{ path('app_logout') }}" method="post" style="display: none;">
-									<input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
-								</form>
-							</li>
-						</ul>
-					</div>
-				{% else %}
-					<a href="{{ path('app_register') }}" class="btn btn-outline-primary custom-btn-outline me-2">
-						<i class="fas fa-user-plus me-2"></i>S'inscrire</a>
-					<a href="{{ path('app_login_controller2') }}" class="btn btn-primary custom-btn-primary">
-						<i class="fas fa-sign-in-alt me-2"></i>Se connecter</a>
-				{% endif %}
-			</div>
-		</div>
-	</div>
-</nav>
+            const cookieName = 'googtrans';
+            // Essayer de supprimer l'ancien cookie sur plusieurs chemins/domaines possibles pour le nettoyage
+            document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${window.location.hostname}; SameSite=Lax`;
+            document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=.${window.location.hostname.split('.').slice(-2).join('.')}; SameSite=Lax`;
+            document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
+            
+            if (cookieValue) {
+                // Définir le nouveau cookie. Samesite=Lax est souvent une bonne pratique.
+                document.cookie = `${cookieName}=${cookieValue}; path=/; SameSite=Lax`;
+            }
+            
+            console.log('Cookies actuels:', document.cookie);
+            console.log('Rechargement de la page pour appliquer la traduction Google...');
+            window.location.reload();
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

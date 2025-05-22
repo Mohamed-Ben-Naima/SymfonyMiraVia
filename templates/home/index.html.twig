@@ -1,102 +1,624 @@
+{# templates/home/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}MiraVia{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('styles/styles.css') }}">
+   {# CSS DU MODULE DE RECHERCHE (anciennement volss.css) #}
+    <link rel="stylesheet" href="{{ asset('styles/volss.css') }}"> {# Assurez-vous que le chemin est correct et que ce fichier contient les styles du module de recherche #}
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Emotional+Rescue+Personal+Use&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;500;600;700&family=Emotional+Rescue+Personal+Use&family=Mulish:wght@800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Volkhov:wght@700&display=swap" rel="stylesheet">
+  {# CSS de Flatpickr #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
 
 {% block body %}
-    <style>
-        /* General container styling */
-        .container {
-            position: relative;
-            width: 100%;
-        }
-
-        /* Styling for the header area */
-        .header-include {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: auto;
-            z-index: 1;
-        }
-
-        /* Styling for the main image */
-        .rectangle {
-            display: block;
-            width: 100%;
-            height: 740px; /* Fixed height */
-            object-fit: cover; /* Ensures the image fills without distortion */
-            z-index: 0;
-        }
-
-        /* Styling for the text overlay */
-        .text-overlay {
-            position: absolute;
-            top: 213px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #013A71;
-            text-align: center;
-            text-shadow: 0px 5px 13px rgba(255, 255, 255, 0.4);
-            font-family: Volkhov, serif;
-            font-size: 48px;
-            font-weight: 700;
-            line-height: normal;
-            width: 90%;
-            max-width: 744px; /* Keeps text responsive */
-            z-index: 2;
-        }
-
-        /* Flex container for image and text alignment */
-        .video-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 43px;
-        }
-
-        /* Styling for the video play image */
-        .load-image {
-            display: block;
-            margin: 0;
-        }
-
-        /* Styling for the video text */
-        .video-text {
-            color: var(--Main-Dark, #1C2B38);
-            text-align: center;
-            font-family: Mulish, sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            margin-left: 10px;
-        }
-
-        /* Styling for the additional styled block */
-        .styled-block {
-            position: absolute;
-            top: 480px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 966.404px;
-            height: 90px;
-            border-radius: 10px;
-            background: #FFF;
-            box-shadow: 0px 10px 30px rgba(123, 188, 176, 0.5);
-        }
-    </style>
-
+  <section class="hero">
+    <div class="hero-background">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <h1>Nous trouvons les meilleures excursions pour vous.</h1>
+      <div class="button-container">
+        <button class="video-button">
+          <span class="icon">▶</span>
+          <span class="text">Regarder la vidéo</span>
+        </button>
+      </div>
+    </div>
+  </section>
+<section class="partners">
     <div class="container">
-        <!-- Text overlay section -->
-        <div class="text-overlay">
-            Nous trouvons les meilleures excursions pour vous.
-            <div class="video-container">
-                <img class="load-image" src="{{ asset('images/looad.png') }}" alt="Load Image" />
-                <div class="video-text">Regarder la vidéo</div>
+      <div class="partners-content">
+        <div class="partners-logos">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Swiss_International_Air_Lines_Logo_2011.svg"
+            alt="Emirates logo">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Swiss_International_Air_Lines_Logo_2011.svg"
+            alt="Emirates logo">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Swiss_International_Air_Lines_Logo_2011.svg"
+            alt="Emirates logo">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Swiss_International_Air_Lines_Logo_2011.svg"
+            alt="Swiss logo">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Swiss_International_Air_Lines_Logo_2011.svg"
+            alt="Swiss logo">
+        </div>
+        <button class="btnpar btn-secondary" >Afficher Plus</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="text-section">
+    <div class="categorie-title">CATÉGORIE</div>
+    <div class="service-description">Nous offrons les meilleurs services.</div>
+  </div>
+  <div class="categori">
+    <div class="containerc">
+      <div class="box">
+        <img src="https://c.animaapp.com/m9u73nw5frNzDy/img/tour-guide-1.png" alt="Événements">
+        <h3>Evènements</h3>
+        <p>sunt qui repellat saepe quo velit aperiam id aliquam placeat.</p>
+      </div>
+
+      <div class="highlight-container">
+        <div class="box highlight">
+          <img src="https://c.animaapp.com/m9u73nw5frNzDy/img/travelling-1.png" alt="Prix">
+          <h3>Les meilleures prix</h3>
+          <p>sunt qui repellat saepe quo velit aperiam id aliquam placeat.</p>
+        </div>
+        <div class="highlight-decoration">
+          <img src="https://c.animaapp.com/m9u73nw5frNzDy/img/rectangle-157.svg" alt="Décoration">
+        </div>
+      </div>
+
+      <div class="box">
+        <img src="https://c.animaapp.com/m9u73nw5frNzDy/img/hands-1.png" alt="Aide">
+        <h3>Besoin d’aide</h3>
+        <p>sunt qui repellat saepe quo velit aperiam id aliquam placeat.</p>
+      </div>
+
+      <div class="box">
+        <img src="https://c.animaapp.com/m9u73nw5frNzDy/img/medical-team-1.png" alt="Bénévolat">
+        <h3>Bénévolat</h3>
+        <p>sunt qui repellat saepe quo velit aperiam id aliquam placeat.</p>
+      </div>
+    </div>
+  </div>
+  <div class="text-section1">
+    <div class="compare-prices">
+      Comparer Les prix
+    </div>
+    <div class="choose-excellence">
+      Choisissez l'excellence, payez le prix juste !
+    </div>
+  </div>
+  {# --- DÉBUT DU MODULE DE RECHERCHE INTÉGRÉ --- #}
+       <section class="search-module-section" style="background-color: transparent; max-width: 900px; margin: 0 auto 30px auto; padding: 30px 0;">
+        <div class="search-container">
+            <div class="tabs">
+                <button class="tab-button active" data-form="flights-form"><i class="fas fa-plane"></i> Vols</button>
+                <button class="tab-button" data-form="hotels-form"><i class="fas fa-hotel"></i> Hôtels</button>
+                <button class="tab-button" data-form="cars-form"><i class="fas fa-car"></i> Voitures</button>
             </div>
-            <div class="styled-block"></div>
+
+            <div id="flights-form" class="search-form active-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="from-flight">De</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" id="from-flight" placeholder="Ville ou aéroport de départ">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="to-flight">À</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" id="to-flight" placeholder="Ville ou aéroport d'arrivée">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="departure-flight">Départ</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="text" id="departure-flight" class="datepicker" placeholder="Sélectionnez une date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="return-flight">Retour</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="text" id="return-flight" class="datepicker" placeholder="Sélectionnez une date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="travelers-flight-input">Voyageurs</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="travelers-flight-input" value="1 Adulte, Économie" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" class="search-ai-button"><i class="fas fa-search"></i> Recherche IA Vols</button>
+                </div>
+            </div>
+
+            <div id="hotels-form" class="search-form">
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="destination-hotel">Destination</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-city"></i>
+                            <input type="text" id="destination-hotel" placeholder="Ville, région ou hôtel spécifique">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="checkin-hotel">Arrivée</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="text" id="checkin-hotel" class="datepicker" placeholder="Sélectionnez une date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout-hotel">Départ</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="text" id="checkout-hotel" class="datepicker" placeholder="Sélectionnez une date">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="guests-rooms-hotel-input">Nb de personnes et chambres</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-users"></i>
+                            <input type="text" id="guests-rooms-hotel-input" value="1 Adulte, 1 Chambre" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" class="search-ai-button"><i class="fas fa-concierge-bell"></i> Recherche Hôtels</button>
+                </div>
+            </div>
+
+            <div id="cars-form" class="search-form">
+                 <div class="form-row">
+                    <div class="form-group">
+                        <label for="pickup-car">Lieu de prise en charge</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" id="pickup-car" placeholder="Ville ou aéroport">
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label for="dropoff-car">Lieu de restitution (si différent)</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" id="dropoff-car" placeholder="Ville ou aéroport">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pickup-date-car">Date de prise en charge</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="text" id="pickup-date-car" class="datepicker" placeholder="Sélectionnez une date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dropoff-date-car">Date de restitution</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="text" id="dropoff-date-car" class="datepicker" placeholder="Sélectionnez une date">
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" class="search-ai-button"><i class="fas fa-car-side"></i> Recherche Voitures</button>
+                </div>
+            </div>
+        </div> {# FIN de .search-container #}
+
+        {# POP-UPS - Doivent être en dehors de .search-container mais dans le flux normal du body #}
+        <div id="travelers-popup-flights" class="travelers-popup">
+            <div class="travelers-popup-content">
+                <div class="form-group">
+                    <label for="cabin-class-flights">Classe de cabine</label>
+                    <select id="cabin-class-flights" name="cabin-class-flights">
+                        <option value="Economie" selected>Économie</option>
+                        <option value="Premium Economie">Premium Économie</option>
+                        <option value="Affaires">Affaires</option>
+                        <option value="Premiere">Première</option>
+                    </select>
+                </div>
+                <div class="traveler-type">
+                    <div class="traveler-label">
+                        <span>Adultes</span>
+                        <span class="age-range">18 ans et plus</span>
+                    </div>
+                    <div class="traveler-counter">
+                        <button type="button" class="counter-btn" data-action="decrement" data-type="adults-flights">-</button>
+                        <input type="text" id="adults-flights-count" value="1" readonly class="counter-value">
+                        <button type="button" class="counter-btn" data-action="increment" data-type="adults-flights">+</button>
+                    </div>
+                </div>
+                <div class="traveler-type">
+                    <div class="traveler-label">
+                        <span>Enfants</span>
+                        <span class="age-range">0 à 17 ans</span>
+                    </div>
+                    <div class="traveler-counter">
+                        <button type="button" class="counter-btn" data-action="decrement" data-type="children-flights">-</button>
+                        <input type="text" id="children-flights-count" value="0" readonly class="counter-value">
+                        <button type="button" class="counter-btn" data-action="increment" data-type="children-flights">+</button>
+                    </div>
+                </div>
+                <p class="info-text">Votre âge à la date du voyage doit être valide pour la catégorie d’âge réservée...</p>
+                <p class="info-text">Les limites d’âge et les politiques en matière de voyage avec des enfants peuvent varier...</p>
+                <button type="button" id="done-travelers-flights" class="popup-done-btn">Terminer</button>
+            </div>
         </div>
 
-        <!-- Main background image -->
-        <img class="rectangle" src="https://c.animaapp.com/m9u73nw5frNzDy/img/rectangle-143.svg" alt="Background Image" />
+        <div id="guests-rooms-popup-hotel" class="travelers-popup">
+            <div class="travelers-popup-content">
+                <div class="traveler-type">
+                    <div class="traveler-label-hotel">
+                        <i class="fas fa-male icon-popup-hotel"></i> Adultes
+                    </div>
+                    <div class="traveler-counter">
+                        <button type="button" class="counter-btn" data-action="decrement" data-type="adults-hotel">-</button>
+                        <input type="text" id="adults-hotel-count" value="1" readonly class="counter-value">
+                        <button type="button" class="counter-btn" data-action="increment" data-type="adults-hotel">+</button>
+                    </div>
+                </div>
+                <div class="traveler-type">
+                    <div class="traveler-label-hotel">
+                        <i class="fas fa-child icon-popup-hotel"></i> Enfants
+                    </div>
+                    <div class="traveler-counter">
+                        <button type="button" class="counter-btn" data-action="decrement" data-type="children-hotel">-</button>
+                        <input type="text" id="children-hotel-count" value="0" readonly class="counter-value">
+                        <button type="button" class="counter-btn" data-action="increment" data-type="children-hotel">+</button>
+                    </div>
+                </div>
+                <div class="traveler-type">
+                    <div class="traveler-label-hotel">
+                        <i class="fas fa-door-open icon-popup-hotel"></i> Chambres
+                    </div>
+                    <div class="traveler-counter">
+                        <button type="button" class="counter-btn" data-action="decrement" data-type="rooms-hotel">-</button>
+                        <input type="text" id="rooms-hotel-count" value="1" readonly class="counter-value">
+                        <button type="button" class="counter-btn" data-action="increment" data-type="rooms-hotel">+</button>
+                    </div>
+                </div>
+                <button type="button" id="done-guests-rooms-hotel" class="popup-done-btn">Terminé</button>
+            </div>
+        </div>
+    </section>
+    {# --- FIN DU MODULE DE RECHERCHE INTÉGRÉ --- #}
+  <div class="blocdon">
+    <div class="full-screen">
+      <div class="background">
+        <div class="overlay"></div>
+        <div class="content">
+          <h1 class="title">
+            Tous unis par le don
+          </h1>
+
+          <div class="quote">
+            <span class="quote-mark left">"</span>
+            <p class="quote-text">
+              La générosité ne diminue jamais ce que l'on possède, elle enrichit le coeur et change des
+              vies.
+            </p>
+            <span class="quote-mark right">"</span>
+          </div>
+
+          <button class="donate-button">
+            <span>Donner Don</span>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
+  {# NEW: Wrapper for the text section and navigation buttons #}
+<div class="events-header-with-navigation">
+   <div class="text-section1">
+    <div class="compare-prices">
+      Offres Evènements
+    </div>
+    <div class="choose-excellence">
+      Explorez le monde, chaque événement est une nouvelle découverte !
+    </div>
+  </div>
+<div class="event-navigation-buttons">
+
+    {# SVG for the PREVIOUS button #}
+    {# Give the <svg> tag itself the ID that JavaScript will use #}
+    <svg id="carousel-prev-btn" xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 90 90" fill="none" >
+      <g filter="url(#filter0_d_212_205)">
+      <g filter="url(#filter1_d_212_205)">
+      <path d="M45 12.5C58.531 12.5 69.5 23.469 69.5 37C69.5 50.531 58.531 61.5 45 61.5C31.469 61.5 20.5 50.531 20.5 37C20.5 23.469 31.469 12.5 45 12.5Z" stroke="#7D8C6D"/>
+      </g>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M50.0175 28.6937C50.0856 28.7616 50.1395 28.8422 50.1764 28.931C50.2132 29.0198 50.2322 29.115 50.2322 29.2111C50.2322 29.3072 50.2132 29.4024 50.1764 29.4912C50.1395 29.58 50.0856 29.6606 50.0175 29.7285L41.7652 37.9807L50.0175 46.2329C50.1547 46.3701 50.2318 46.5562 50.2318 46.7503C50.2318 46.9443 50.1547 47.1305 50.0175 47.2677C49.8803 47.4049 49.6942 47.482 49.5002 47.482C49.3062 47.482 49.1201 47.4049 48.9829 47.2677L40.2147 38.4981C40.1466 38.4302 40.0926 38.3496 40.0558 38.2608C40.019 38.172 40 38.0768 40 37.9807C40 37.8846 40.019 37.7894 40.0558 37.7006C40.0926 37.6118 40.1466 37.5312 40.2147 37.4633L48.9829 28.6937C49.0507 28.6256 49.1314 28.5717 49.2201 28.5348C49.3089 28.498 49.4041 28.479 49.5002 28.479C49.5963 28.479 49.6915 28.498 49.7802 28.5348C49.869 28.5717 49.9496 28.6256 50.0175 28.6937Z" fill="#013A71"/>
+      </g>
+      <defs>
+      <filter id="filter0_d_212_205" x="16" y="12" width="58" height="58" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="4"/>
+      <feGaussianBlur stdDeviation="2"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_212_205"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_212_205" result="shape"/>
+      </filter>
+      <filter id="filter1_d_212_205" x="0" y="0" width="90" height="90" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="8"/>
+      <feGaussianBlur stdDeviation="10"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.854902 0 0 0 0 0.196078 0 0 0 0.5 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_212_205"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_212_205" result="shape"/>
+      </filter>
+      </defs>
+    </svg>
+    {# SVG for the SUIVANT (NEXT) button #}
+    {# Give the <svg> tag itself the ID that JavaScript will use #}
+    <svg id="carousel-next-btn" xmlns="http://www.w3.org/2000/svg" width="58" height="58" viewBox="0 0 58 58" fill="none" > 
+        <g filter="url(#filter0_d_288_50)">
+         <circle cx="29" cy="25" r="25" fill="#7D8C6D"/>
+        </g>
+<g filter="url(#filter1_d_288_50)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M25.2149 16.2147C25.1469 16.2826 25.0929 16.3632 25.056 16.452C25.0192 16.5408 25.0002 16.636 25.0002 16.7321C25.0002 16.8282 25.0192 16.9234 25.056 17.0122C25.0929 17.101 25.1469 17.1816 25.2149 17.2495L33.4672 25.5017L25.2149 33.7539C25.0777 33.8911 25.0006 34.0772 25.0006 34.2713C25.0006 34.4653 25.0777 34.6515 25.2149 34.7887C25.3521 34.9259 25.5382 35.003 25.7322 35.003C25.9263 35.003 26.1124 34.9259 26.2496 34.7887L35.0178 26.0191C35.0858 25.9512 35.1398 25.8706 35.1766 25.7818C35.2135 25.693 35.2324 25.5978 35.2324 25.5017C35.2324 25.4056 35.2135 25.3104 35.1766 25.2216C35.1398 25.1328 35.0858 25.0522 35.0178 24.9843L26.2496 16.2147C26.1817 16.1466 26.101 16.0926 26.0123 16.0558C25.9235 16.019 25.8283 16 25.7322 16C25.6361 16 25.541 16.019 25.4522 16.0558C25.3634 16.0926 25.2828 16.1466 25.2149 16.2147V16.2147Z" fill="white"/>
+</g>
+<defs>
+<filter id="filter0_d_288_50" x="0" y="0" width="58" height="58" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_288_50"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_288_50" result="shape"/>
+</filter>
+<filter id="filter1_d_288_50" x="21" y="16" width="18.2324" height="27.0029" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_288_50"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_288_50" result="shape"/>
+</filter>
+</defs>
+    </svg>
+</div>
+</div> {# End of .events-header-with-navigation #}
+
+  <section class="trip-card-section-viewport">
+      <div class="events-track">
+    {% if evenements is not empty %}
+        {% for event in evenements %}
+            {#
+                If you didn't filter in the controller, you could do it here:
+                {% if event.estBloque == 0 %}
+            #}
+
+            <div class="trip-card">
+                <div class="trip-image-container">
+                    <img
+                        {# Adjust 'uploads/event_images/' to your actual public image path #}
+                        {# Check if event.imagename is not the string 'NULL' and not empty #}
+                        src="{{ (event.imagename and event.imagename != 'NULL') ? asset('uploads/event_images/' ~ event.imagename) : asset('images/placeholder-event.jpg') }}"
+                        alt="{{ (event.titre and event.titre != 'NULL') ? event.titre : 'Image de l\'événement' }}">
+                    <button class="favorite-btn">
+                        {# SVG Heart Icon - Ensure IDs like _event_{{ event.idEvenement }} are unique #}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
+                            <g clip-path="url(#clip0_212_363_event_{{ event.idEvenement }})">
+                                <g filter="url(#filter0_d_212_363_event_{{ event.idEvenement }})">
+                                    <path d="M19.9719 4.41796C19.4824 3.92825 18.9012 3.53978 18.2616 3.27475C17.6219 3.00971 16.9363 2.87329 16.2439 2.87329C15.5516 2.87329 14.866 3.00971 14.2263 3.27475C13.5867 3.53978 13.0055 3.92825 12.516 4.41796L11.5002 5.43379L10.4844 4.41796C9.49566 3.42925 8.15469 2.8738 6.75645 2.8738C5.35821 2.8738 4.01723 3.42925 3.02853 4.41796C2.03982 5.40666 1.48438 6.74763 1.48438 8.14587C1.48437 9.54411 2.03982 10.8851 3.02853 11.8738L11.5002 20.3455L19.9719 11.8738C20.4616 11.3843 20.85 10.8032 21.1151 10.1635C21.3801 9.52386 21.5165 8.83826 21.5165 8.14587C21.5165 7.45349 21.3801 6.76789 21.1151 6.12824C20.85 5.48859 20.4616 4.90743 19.9719 4.41796Z" fill="#81A8C5" fill-opacity="0.5" shape-rendering="crispEdges" />
+                                    <path d="M16.2441 3.37329C16.8708 3.37332 17.4914 3.4967 18.0703 3.73657C18.5769 3.94649 19.0429 4.2421 19.4482 4.60962L19.6182 4.77173C20.0059 5.15928 20.3236 5.61029 20.5576 6.10474L20.6533 6.31958C20.8932 6.89851 21.0166 7.51909 21.0166 8.14575C21.0166 8.69417 20.9217 9.23791 20.7373 9.75317L20.6533 9.97192C20.4434 10.4784 20.1477 10.9445 19.7803 11.3499L19.6182 11.5198L11.5 19.6379L3.38184 11.5198C2.48712 10.6249 1.98437 9.41122 1.98438 8.14575C1.98441 6.95921 2.42607 5.818 3.21875 4.94263L3.38184 4.77173C4.22077 3.9328 5.34017 3.43871 6.51953 3.38013L6.75684 3.37427C7.94321 3.37436 9.08369 3.81611 9.95898 4.60864L10.1309 4.77173L11.1465 5.78735C11.3417 5.98258 11.6582 5.98249 11.8535 5.78735L12.8691 4.77173H12.8701C13.2577 4.38397 13.7086 4.06633 14.2031 3.83228L14.418 3.73657C14.9246 3.52667 15.4632 3.40601 16.0098 3.37915L16.2441 3.37329Z" stroke="white" stroke-linecap="round" stroke-linejoin="round" shape-rendering="crispEdges" />
+                                </g>
+                            </g>
+                            <defs>
+                                <filter id="filter0_d_212_363_event_{{ event.idEvenement }}" x="-2.51562" y="2.87329" width="28.0322" height="25.4722" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                    <feOffset dy="4" />
+                                    <feGaussianBlur stdDeviation="2" />
+                                    <feComposite in2="hardAlpha" operator="out" />
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" />
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_212_363_event_{{ event.idEvenement }}" />
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_212_363_event_{{ event.idEvenement }}" result="shape_event_{{ event.idEvenement }}" />
+                                </filter>
+                                <clipPath id="clip0_212_363_event_{{ event.idEvenement }}">
+                                    <rect width="23" height="23" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                    </button>
+                </div>
+                <div class="trip-content">
+                    <h2 class="trip-title">{{ (event.titre and event.titre != 'NULL') ? event.titre : 'Titre non disponible' }}</h2>
+                    <div class="trip-date">
+                        <span class="date-icon">
+                            {# SVG Clock Icon #}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 0.539551C3.58182 0.539551 0 4.12193 0 8.54081C0 12.9597 3.58182 16.5421 8 16.5421C12.4182 16.5421 16 12.9597 16 8.54081C16 4.12193 12.4182 0.539551 8 0.539551ZM1.45455 8.54081C1.45455 7.68112 1.62385 6.82984 1.95279 6.03558C2.28173 5.24132 2.76386 4.51964 3.37166 3.91175C3.97947 3.30385 4.70103 2.82164 5.49516 2.49265C6.28929 2.16366 7.14044 1.99433 8 1.99433C8.85956 1.99433 9.71071 2.16366 10.5048 2.49265C11.299 2.82164 12.0205 3.30385 12.6283 3.91175C13.2361 4.51964 13.7183 5.24132 14.0472 6.03558C14.3762 6.82984 14.5455 7.68112 14.5455 8.54081C14.5455 10.277 13.8558 11.9422 12.6283 13.1699C11.4008 14.3976 9.73596 15.0873 8 15.0873C6.26404 15.0873 4.59918 14.3976 3.37166 13.1699C2.14415 11.9422 1.45455 10.277 1.45455 8.54081ZM8.72727 4.90387C8.72727 4.71096 8.65065 4.52595 8.51426 4.38953C8.37787 4.25312 8.19289 4.17649 8 4.17649C7.80712 4.17649 7.62213 4.25312 7.48574 4.38953C7.34935 4.52595 7.27273 4.71096 7.27273 4.90387V8.54081C7.27273 8.65374 7.29901 8.76511 7.34951 8.86611C7.4 8.96711 7.47331 9.05497 7.56364 9.12272L10.4727 11.3049C10.627 11.4206 10.821 11.4703 11.0119 11.4431C11.2029 11.4158 11.3752 11.3137 11.4909 11.1594C11.6066 11.0051 11.6563 10.8111 11.6291 10.6201C11.6018 10.4291 11.4998 10.2568 11.3455 10.1411L8.72727 8.17712V4.90387Z" fill="#495560"/></svg>
+                        </span>
+                        Date : {{ event.dateEvenement ? event.dateEvenement|date('d/m/Y') : 'N/A' }}
+                        {% if event.lieu and event.lieu != 'NULL' %} - {{ event.lieu }}{% endif %}
+                    </div>
+                    <p class="trip-description">
+                        {% set desc = (event.description and event.description != 'NULL') ? event.description : '' %}
+                        {{ desc|slice(0, 100) }}{% if desc|length > 100 %}...{% endif %}
+                    </p>
+                    <div class="button-container">
+                        <button class="apply-btn">Participer</button>
+                        <a href="{{ path('app_description', {'id': event.idEvenement}) }}" class="details-btn">Details</a>
+                    </div>
+                </div>
+            </div>
+            {#
+                {% endif %} End of estBloque condition from controller, if used here
+            #}
+        {% endfor %}
+    {% else %}
+        <p style="text-align: center; width: 100%;">Aucun événement à afficher pour le moment.</p>
+    {% endif %}
+        </div>
+</section>
+
+   <div class="about-section-include" style="width: 100%; min-height: 720px;">
+        {% include 'home/about.html.twig' %}
+    </div>
+    {# NEW TEXT SECTION FOR TESTIMONIALS INTRO #}
+    <div class="testimonial-intro-section">
+        <h2 class="testimonial-main-title">Les avis de ceux qui ont voyagé avec nous</h2>
+        <p class="testimonial-subtitle">Nous avons aidé plus de 3000 personnes comme vous à vivre des vacances de surf inoubliables.</p>
+    </div>
+    {# END OF NEW TEXT SECTION #}
+  <section class="review-section" >
+    <div class="container">
+      <div class="review-card">
+        <div class="header">
+          <img src="https://ui-avatars.com/api/?name=Yassine+B&size=70&background=013A71&color=fff" alt="Yassine B." class="profile-img">
+          <div class="name">Yassine B.</div>
+          <div class="rating">★★★★★</div>
+        </div>
+        <div class="review-text">"MiraVia m'a permis de trouver un hôtel parfait à un prix incroyable pour mes vacances
+          en Grèce. Simple et efficace !"</div>
+      </div>
+      <div class="review-card">
+        <div class="header">
+          <img src="https://ui-avatars.com/api/?name=Amina+B&size=70&background=013A71&color=fff" alt="Amina K." class="profile-img">
+          <div class="name">Amina K.</div>
+          <div class="rating">★★★★★</div>
+        </div>
+        <div class="review-text">"Grâce à MiraVia, j'ai comparé plusieurs agences et trouvé la meilleure pour mon voyage
+          en Amérique du Sud. Expérience fluide."</div>
+      </div>
+      <div class="review-card">
+        <div class="header">
+          <img src="https://ui-avatars.com/api/?name=Olivier+B&size=70&background=013A71&color=fff" alt="Olivier P." class="profile-img">
+          <div class="name">Olivier P.</div>
+          <div class="rating">★★★★★</div>
+        </div>
+        <div class="review-text">"J'adore la précision des avis et les recommandations personnalisées. MiraVia a rendu
+          ma planification de voyage bien plus facile."</div>
+      </div>
+      <div class="review-card">
+        <div class="header">
+          <img src="https://ui-avatars.com/api/?name=Ahmed+B&size=70&background=013A71&color=fff" alt="Ahmed A." class="profile-img">
+          <div class="name">Ahmed A.</div>
+          <div class="rating">★★★★★</div>
+        </div>
+        <div class="review-text">"J'ai tout organisé via MiraVia en quelques clics. Les avis m'ont aidé à faire de bons
+          choix. Super pratique !"</div>
+      </div>
+    </div>
+
+  </section>
+ 
+{% endblock %}
+{# At the end of your Twig file, e.g., home/index.html.twig or review.html.twig #}
+{% block javascripts %}
+    {# Scripts CDN nécessaires pour le module de recherche ET Flatpickr #}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
+    {# JS spécifique au module de recherche #}
+    <script src="{{ asset('javascript/vols.js') }}"></script> 
+    <script>
+       document.addEventListener('DOMContentLoaded', () => {
+    const prevButton = document.getElementById('carousel-prev-btn');
+    const nextButton = document.getElementById('carousel-next-btn');
+    const track = document.querySelector('.events-track');
+    
+    if (!track || !prevButton || !nextButton) {
+        console.warn('Carousel elements not found. Ensure track, prevButton, and nextButton have correct IDs.');
+        // Hide buttons if track isn't there or has no children
+        if (prevButton) prevButton.style.display = 'none';
+        if (nextButton) nextButton.style.display = 'none';
+        return;
+    }
+
+    const cards = Array.from(track.querySelectorAll('.trip-card'));
+    const cardsPerPage = 4;
+    const totalCards = cards.length;
+
+    if (totalCards === 0) {
+        prevButton.style.display = 'none';
+        nextButton.style.display = 'none';
+        return;
+    }
+    
+    const totalPages = Math.ceil(totalCards / cardsPerPage);
+    let currentPage = 0;
+
+    // Calculate the width to shift by (width of 4 cards + 3 gaps)
+    // This assumes the viewport is correctly sized by CSS to show 4 cards
+    const viewport = document.querySelector('.trip-card-section-viewport');
+    const slideWidth = viewport.offsetWidth; // The visible width of 4 cards area
+
+    function updateCarouselState() {
+        // Move the track
+        track.style.transform = `translateX(-${currentPage * slideWidth}px)`;
+
+        // Update Previous Button State
+        if (currentPage === 0) {
+            prevButton.setAttribute('data-disabled', 'true');
+        } else {
+            prevButton.removeAttribute('data-disabled');
+        }
+
+        // Update Next Button State
+        if (currentPage >= totalPages - 1) {
+            nextButton.setAttribute('data-disabled', 'true');
+        } else {
+            nextButton.removeAttribute('data-disabled');
+        }
+    }
+
+    nextButton.addEventListener('click', () => {
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            updateCarouselState();
+        }
+    });
+
+    prevButton.addEventListener('click', () => {
+        if (currentPage > 0) {
+            currentPage--;
+            updateCarouselState();
+        }
+    });
+
+    // Initial setup
+    if (totalCards <= cardsPerPage) {
+        // Not enough cards to need navigation
+        prevButton.style.display = 'none';
+        nextButton.style.display = 'none';
+    } else {
+        updateCarouselState(); // Set initial button states and position
+    }
+
+    // Optional: Recalculate on window resize if your layout is very fluid.
+    // window.addEventListener('resize', () => {
+    //    slideWidth = viewport.offsetWidth; // Re-calculate slideWidth
+    //    updateCarouselState(); // Re-apply transform, useful if number of visible cards changes (more complex)
+    // });
+});
+    </script>
 {% endblock %}

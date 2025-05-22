@@ -1,0 +1,470 @@
+
+.search-container {
+    background-color: rgba(255, 255, 255, 0.97); /* Légèrement moins transparent pour meilleure lisibilité */
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0,0,0,0.05); /* Ombre affinée */
+    width: 100%;
+    max-width: 900px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+            margin: 20px auto; /* 20px en haut/bas, auto à gauche/droite */
+}
+
+/* --- Onglets --- */
+.tabs {
+    display: flex;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #dde1e6; /* Bordure plus douce */
+}
+
+.tab-button {
+    background-color: transparent;
+    border: none;
+    padding: 14px 22px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #5a6773; /* Couleur de texte des onglets inactifs */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 3px solid transparent;
+    margin-right: 8px;
+    transition: color 0.3s ease, border-bottom-color 0.3s ease, background-color 0.3s ease;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    position: relative; /* Pour l'effet de la bordure active */
+}
+
+.tab-button:hover:not(.active) {
+    color: #007bff;
+    background-color: rgba(0, 123, 255, 0.04);
+}
+
+.tab-button.active {
+    color: #007bff;
+    border-bottom-color: #007bff;
+    background-color: rgba(0, 123, 255, 0.07);
+    font-weight: 600;
+}
+
+/* --- Formulaires de Recherche --- */
+.search-form {
+    display: none; /* Caché par défaut, JS gère l'affichage */
+    flex-direction: column;
+    gap: 25px;
+    animation: fadeInForm 0.4s ease-out forwards;
+}
+
+@keyframes fadeInForm {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.search-form.active-form {
+    display: flex;
+}
+
+.form-row {
+    display: flex;
+    gap: 25px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    flex-basis: 100%;
+}
+
+.form-group label {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #495057; /* Label plus contrasté */
+    font-weight: 500;
+}
+
+/* --- Champs de Saisie avec Icônes --- */
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 15px;
+    color: #adb5bd; /* Icônes plus douces */
+    font-size: 16px;
+    transition: color 0.3s ease;
+    pointer-events: none; /* Pour ne pas gêner le clic sur l'input */
+}
+
+.input-with-icon input[type="text"] {
+    padding: 12px 15px 12px 45px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+}
+
+.input-with-icon input[type="text"]::placeholder {
+    color: #9fa7af;
+    font-weight: 400;
+}
+
+.input-with-icon input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+.input-with-icon input[type="text"]:focus + i, /* Ne fonctionne pas car l'icône est avant l'input */
+.input-with-icon:focus-within i { /* Cette méthode est meilleure */
+    color: #007bff;
+}
+
+
+/* Inputs spécifiques pour déclencher les popups */
+#travelers-flight-input,
+#guests-rooms-hotel-input {
+    cursor: pointer;
+    background-color: #fdfdff; /* Fond très légèrement différent pour indiquer l'interactivité */
+}
+#travelers-flight-input:hover,
+#guests-rooms-hotel-input:hover {
+    border-color: #a3c9f3; /* Bordure plus indicative au survol */
+}
+
+/* --- Boutons d'Action --- */
+.action-buttons {
+    display: flex;
+    justify-content: center; /* Centrer si un seul bouton */
+    align-items: center;
+    margin-top: 15px;
+}
+
+.search-ai-button {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Pour centrer le texte/icône si width: 100% */
+    gap: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    width: 100%; /* Prend toute la largeur par défaut */
+}
+
+.search-ai-button:hover {
+    background-color: #004ea0; /* Couleur de survol un peu plus claire que la version active */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
+}
+
+.search-ai-button:active {
+    background-color: #004494; /* Plus foncé au clic */
+    transform: translateY(0px);
+    box-shadow: 0 2px 6px rgba(0, 86, 179, 0.2);
+}
+
+/* --- Styles pour les Pop-ups (Voyageurs et Hôtes/Chambres) --- */
+.travelers-popup {
+    display: none; /* Géré par JS avec la classe 'show' */
+    position: absolute; /* Positionné par JS */
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0,0,0,0.1);
+    padding: 25px;
+    width: 380px; /* Ajustez si nécessaire */
+    z-index: 1050;
+    opacity: 0;
+    transform: translateY(15px) scale(0.98); /* Animation de départ */
+    transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    pointer-events: none;
+}
+
+.travelers-popup.show {
+    display: block; /* Ou 'flex' pour le contenu si besoin */
+    opacity: 1;
+    transform: translateY(0) scale(1); /* Animation d'arrivée */
+    pointer-events: auto;
+}
+
+.travelers-popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.travelers-popup-content .form-group label { /* Pour "Classe de cabine" */
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.travelers-popup-content select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    box-sizing: border-box;
+    background-color: #f8f9fa;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+}
+.travelers-popup-content select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+.traveler-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f3f5; /* Séparateur plus fin */
+}
+.traveler-type:last-of-type { /* S'applique au dernier type de voyageur (Enfants pour vols, Chambres pour hotels) */
+    border-bottom: none;
+}
+
+.traveler-label, .traveler-label-hotel {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.traveler-label span:first-child, /* Pour "Adultes", "Enfants" dans le popup vols */
+.traveler-label-hotel { /* Pour "Adultes", "Enfants", "Chambres" dans le popup hôtels */
+    font-weight: 500;
+    color: #343a40; /* Texte plus foncé */
+    font-size: 16px;
+}
+.traveler-label-hotel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon-popup-hotel {
+    width: 18px;
+    text-align: center;
+    color: #495057;
+    font-size: 1.1em; /* Légèrement plus grand */
+}
+
+.age-range {
+    font-size: 0.8em; /* 12.8px si la base est 16px */
+    color: #6c757d;
+}
+
+.traveler-counter {
+    display: flex;
+    align-items: center;
+}
+
+.counter-btn {
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    font-size: 18px;
+    font-weight: 400;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 8px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    user-select: none; /* Empêcher la sélection de texte sur les boutons */
+}
+
+.counter-btn:hover {
+    background-color: #d8dfe5;
+    border-color: #cdd5db;
+}
+.counter-btn:active {
+    background-color: #ced4da;
+    transform: scale(0.95);
+}
+
+.counter-value {
+    width: 35px;
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #343a40;
+    background-color: transparent; /* Assurer qu'il n'a pas de fond */
+}
+
+.info-text { /* Pour le popup des vols */
+    font-size: 0.85em;
+    color: #6c757d;
+    line-height: 1.5;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid #f1f3f5; /* Séparateur avant les infos */
+}
+.info-text:first-of-type { /* Si plusieurs textes d'info, seul le premier a le séparateur */
+    margin-top: 15px; /* Un peu plus d'espace avant les infos */
+}
+
+.popup-done-btn {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    align-self: flex-end; /* Aligner à droite dans le flex container du popup-content */
+    margin-top: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.popup-done-btn:hover {
+    background-color: #004ea0;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 86, 179, 0.15);
+}
+
+/* --- Styles pour Flatpickr --- */
+.flatpickr-calendar {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12); /* Ombre plus douce */
+    border-radius: 8px;
+    border: 1px solid #e0e0e0; /* Bordure pour le calendrier */
+    z-index: 10000 !important; /* Pour être au-dessus de tout */
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+}
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected.inRange {
+    background: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+.flatpickr-day.today {
+    border-color: #007bff;
+    color: #007bff;
+    font-weight: 600;
+}
+.flatpickr-day.today:hover {
+    background: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+.flatpickr-months .flatpickr-month {
+    color: #333; /* Couleur du mois affiché */
+    fill: #333; /* Couleur des flèches du mois */
+}
+.flatpickr-current-month input.cur-year {
+    font-weight: 600;
+}
+span.flatpickr-weekday {
+    color: #555; /* Couleur des jours de la semaine */
+    font-weight: 500;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    body {
+        align-items: flex-start; /* Permettre au contenu de commencer en haut sur mobile */
+        padding-top: 20px; /* Espace en haut */
+    }
+    .search-container {
+        padding: 20px;
+        margin: 15px;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+    .form-row {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .tabs {
+        font-size: 14px;
+        /* Permettre aux onglets de scroller horizontalement si trop nombreux */
+        overflow-x: auto;
+        white-space: nowrap;
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    .tabs::-webkit-scrollbar { /* Chrome, Safari and Opera */
+        display: none;
+    }
+
+    .tab-button {
+        padding: 12px 15px;
+        gap: 6px;
+        flex-shrink: 0; /* Empêcher les onglets de rétrécir */
+    }
+    .action-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .search-ai-button, .popup-done-btn {
+        width: 100%;
+        margin-right: 0;
+        padding: 14px;
+    }
+    .travelers-popup {
+        width: calc(100vw - 40px); /* Prend presque toute la largeur avec un peu de marge */
+        left: 20px !important; /* Forcer la position gauche pour petits écrans */
+        right: 20px !important;
+        max-width: none; /* Enlever la largeur max fixe pour qu'il s'adapte */
+        box-sizing: border-box;
+        /* Le JS devra peut-être ajuster top en fonction de la hauteur du popup aussi */
+    }
+}
+
+@media (max-width: 480px) {
+    .search-container {
+        border-radius: 8px; /* Moins de border-radius sur très petits écrans */
+        padding: 15px;
+    }
+    .form-group label {
+        font-size: 13px;
+    }
+    .input-with-icon input[type="text"],
+    .travelers-popup-content select,
+    .counter-value {
+        font-size: 15px;
+    }
+    .tab-button {
+        font-size: 13px;
+        padding: 10px 12px;
+    }
+    .search-ai-button, .popup-done-btn {
+        font-size: 15px;
+    }
+    .travelers-popup {
+        padding: 20px;
+    }
+    .travelers-popup-content {
+        gap: 15px;
+    }
+}

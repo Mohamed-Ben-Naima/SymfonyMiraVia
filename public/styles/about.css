@@ -1,0 +1,157 @@
+
+
+/* About Section */
+.about-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: url('../images/propos.png') center / cover no-repeat; /* Use 'propos.png' as the background image */
+}
+
+/* Container */
+.containerabout {
+    max-width: 1200px;
+    height: 100%; /* Full height of the viewport */
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+
+@media (min-width: 768px) {
+    .containerabout {
+        padding: 0 4rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .containerabout {
+        padding: 0 6rem;
+    }
+}
+
+/* Navigation Buttons */
+.nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(4px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: background-color 0.2s ease-in-out;
+    z-index: 10;
+}
+
+.nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.nav-button.left {
+    left: 1rem;
+}
+
+@media (min-width: 768px) {
+    .nav-button.left {
+        left: 2rem;
+    }
+}
+
+.nav-button.right {
+    right: 1rem;
+}
+
+@media (min-width: 768px) {
+    .nav-button.right {
+        right: 2rem;
+    }
+}
+
+/* Content */
+.contentabout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center vertically */
+    gap: 2rem;
+    width: 100%;
+    max-width: 80rem;
+    margin: 0 auto;
+    height: 100%; /* Make content fill the container */
+}
+
+@media (min-width: 768px) {
+    .contentabout {
+        flex-direction: row;
+    }
+}
+
+/* Brand Section */
+.brand {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.brand-logo {
+    width: 498px; /* Fixed width */
+    height: 108px; /* Fixed height */
+    flex-shrink: 0;
+    background: url('../images/logo.png') center / contain no-repeat; /* Use 'logo.png' as the background */
+    box-shadow: 0px 4px 4px 0px rgba(255, 255, 255, 0.20);
+}
+
+/* About Section */
+.about {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Updated About Title */
+.about-title {
+    color: #013A71; /* Deep blue color */
+    text-shadow: 0px 5px 13px rgba(1, 58, 113, 0.50);
+    font-family: Volkhov, serif; /* Make sure Volkhov font is included in the project */
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 1.5rem;
+    text-align: center; /* Center text */
+}
+
+@media (min-width: 768px) {
+    .about-title {
+        text-align: left; /* Align left on larger screens */
+    }
+}
+
+/* Updated About Description */
+.about-description {
+    width: 650px;
+    height: 407px;
+    flex-shrink: 0;
+    color: var(--White, #FFF);
+    font-family: Raleway, sans-serif; /* Make sure Raleway font is included in the project */
+    font-size: 26px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 40px; /* 153.846% */
+    text-align: center; /* Center text */
+}
+
+@media (min-width: 768px) {
+    .about-description {
+        text-align: left; /* Align left on larger screens */
+    }
+}

@@ -1,0 +1,1782 @@
+:root {
+    /* --- Global Theme & Hero --- */
+    --hero-bg-image: url('https://images.unsplash.com/photo-1500835556837-99ac94a94552?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+
+    --top-nav-bg: #002446;
+
+    /* Modern Accent Color */
+    --accent-color-primary: #013A71; /* Vibrant Coral/Salmon - Used for in-card CTAs */
+    --accent-color-primary-hover: #013A71;
+    --accent-color-secondary: #5EAAA8;
+
+    /* Active Nav Button (Pills in Hero) */
+    --active-nav-pill-bg: #0078FF;
+    --active-nav-pill-text: #FFFFFF;
+
+    --inactive-nav-text: #E0E6F1;
+
+    /* Form Container - Light and Airy */
+    --form-container-bg: rgba(255, 255, 255, 0.95);
+    --form-container-bg-rgb: 255, 255, 255;
+
+    /* Text colors for light form background */
+    --form-text-primary: #1A202C;
+    --form-text-secondary: #4A5568;
+
+    --text-white: #FFFFFF;
+    --text-light-gray: #B0C4DE;
+    --main-font: 'Inter', sans-serif;
+    --page-bg: #f0f2f5;
+
+    /* --- Form Elements --- */
+    --input-bg: #FFFFFF;
+    --input-text-color: #212529;
+    --input-border-color: #D1D9E4;
+    --input-focus-border-color: var(--accent-color-primary);
+    --input-focus-shadow: 0 0 0 3px rgba(255, 107, 107, 0.25);
+
+    --radio-checkbox-border: #A0AEC0;
+    --radio-checkbox-checked-bg: var(--accent-color-primary);
+    --radio-checkbox-checked-border: var(--accent-color-primary);
+    --radio-checkbox-icon-color: var(--text-white);
+
+    --disabled-bg: #E9ECEF;
+    --disabled-text: #6C757D;
+    --form-element-height: 48px;
+    --form-element-border-radius: 8px; /* Consistent rounded corners for inputs and buttons */
+
+    /* --- Popover (Voyageurs et classe) --- */
+    --popover-bg: #FFFFFF;
+    --popover-text-primary: var(--form-text-primary);
+    --popover-text-secondary: var(--form-text-secondary);
+    --popover-border-color: #E0E6F1;
+    --popover-select-border: #CED4DA;
+    --popover-button-bg: #F8F9FA;
+    --popover-button-border: #CED4DA;
+    --popover-button-text: #495057;
+    --popover-done-button-bg: var(--accent-color-primary);
+    --popover-done-button-text: var(--text-white);
+    --popover-done-button-hover-bg: var(--accent-color-primary-hover);
+
+    /* --- Card & Filters Common --- */
+    --card-bg: #FFFFFF;
+    --card-border-color: #E8EDF3;
+    --card-text-primary: #1A202C;
+    --card-text-secondary: #4A5568;
+    --card-text-accent: var(--accent-color-primary);
+    --card-shadow: 0 6px 18px rgba(26, 32, 44, 0.08);
+    --card-hover-shadow: 0 10px 25px rgba(26, 32, 44, 0.12);
+    --card-border-radius: 16px; /* More modern, larger radius for cards */
+    --card-padding: 25px; /* Standardized card padding */
+    --card-gap: 20px; /* Standardized gap between card sections */
+
+
+    --filter-sidebar-bg: var(--card-bg);
+    --filter-section-border: #D1D9E4;
+    --filter-active-color: var(--accent-color-primary);
+    --filter-text-color: #334155;
+    --filter-price-color: #525F77;
+
+    /* --- Flight Specific Summary Filters --- */
+    --flight-summary-filter-active-bg: var(--accent-color-secondary);
+    --flight-summary-filter-active-text: #FFFFFF;
+    --flight-summary-filter-inactive-bg: #FFFFFF;
+    --flight-summary-filter-inactive-text: var(--accent-color-secondary);
+    --flight-summary-filter-border: var(--accent-color-secondary);
+
+    /* --- Main Search Button (outside cards) --- */
+    --search-button-bg: #013A71;
+    --search-button-text: var(--text-white);
+    --search-button-hover-bg: #012F5A;
+
+    /* --- Loader --- */
+    --loader-overlay-bg: rgba(255, 255, 255, 0.9);
+    --loader-spinner-color: var(--accent-color-primary);
+    --loader-spinner-color-rgb: 255, 107, 107;
+    --loader-text-color-results: var(--form-text-primary);
+    --loader-text-color-form: var(--form-text-primary);
+}
+
+.hero-section {
+    background-image: linear-gradient(rgba(0, 20, 40, 0.55), rgba(0, 30, 50, 0.35)), var(--hero-bg-image);
+    background-size: cover;
+    background-position: center center;
+    padding-top: 20px;
+    position: relative;
+    min-height: 580px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-white);
+    margin-bottom: 50px; /* Attempt to add space before footer */
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120"><path fill="%23f0f2f5" fill-opacity="1" d="M0,96L60,90.7C120,85,240,75,360,80C480,85,600,107,720,112C840,117,960,107,1080,90.7C1200,75,1320,53,1380,42.7L1440,32L1440,120L1380,120C1320,120,1200,120,1080,120C960,120,840,120,720,120C600,120,480,120,360,120C240,120,120,120,60,120L0,120Z"></path></svg>');
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 10;
+}
+
+.top-navigation {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    border-radius: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 45px;
+    width: fit-content;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.nav-button {
+    background-color: transparent;
+    color: var(--inactive-nav-text);
+    border: none;
+    padding: 10px 22px;
+    margin: 0 4px;
+    font-family: var(--main-font);
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+
+.nav-button .icon {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    transition: opacity 0.25s ease;
+}
+
+.nav-button:hover .icon {
+    opacity: 1;
+}
+
+.nav-button:hover {
+    color: var(--text-white);
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.nav-button.active {
+    background-color: var(--active-nav-pill-bg);
+    color: var(--active-nav-pill-text);
+    font-weight: 600;
+    box-shadow: 0 3px 8px rgba(0, 120, 255, 0.35);
+}
+
+.nav-button.active .icon {
+    opacity: 1;
+}
+
+.main-heading {
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    max-width: 850px;
+    margin-bottom: 40px;
+    line-height: 1.35;
+    text-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.6),
+        0 3px 8px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(0, 0, 0, 0.3);
+    min-height: 74px;
+    color: var(--text-white);
+}
+
+.search-form-wrapper {
+    background-color: var(--form-container-bg);
+    padding: 30px 35px 35px 35px;
+    border-radius: var(--card-border-radius);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1080px;
+    z-index: 20;
+    position: relative;
+}
+
+.search-form-content {}
+
+.trip-type-options {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 28px;
+}
+
+.trip-type-options label {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    cursor: pointer;
+    color: var(--form-text-primary);
+}
+
+.trip-type-options input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--radio-checkbox-border);
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    outline: none;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.trip-type-options input[type="radio"]:hover {
+    border-color: var(--input-focus-border-color);
+}
+
+.trip-type-options input[type="radio"]:checked {
+    border-color: var(--radio-checkbox-checked-border);
+    background-color: var(--radio-checkbox-checked-bg);
+}
+
+.trip-type-options input[type="radio"]:checked::before {
+    content: '✔';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    font-size: 12px;
+    color: var(--radio-checkbox-icon-color);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    align-items: flex-end;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.input-group.full-width {
+    flex-grow: 1;
+}
+
+.input-group.guests-rooms {
+    flex: 1 1 200px;
+}
+
+.input-group.times {
+    flex: 0 0 120px;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    color: var(--form-text-secondary);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.input-field,
+.input-field-passenger {
+    background-color: var(--input-bg);
+    color: var(--input-text-color);
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--form-element-border-radius);
+    padding: 0 15px;
+    font-size: 0.95rem;
+    font-family: var(--main-font);
+    width: 100%;
+    outline: none;
+    height: var(--form-element-height);
+    line-height: var(--form-element-height);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-field[type="date"],
+.input-field[type="time"] {
+    padding-right: 10px;
+}
+
+.input-field:focus,
+.input-field-passenger:focus {
+    border-color: var(--input-focus-border-color);
+    box-shadow: var(--input-focus-shadow);
+}
+
+.input-field:disabled,
+.input-field-passenger:disabled {
+    background-color: var(--disabled-bg) !important;
+    color: var(--disabled-text) !important;
+    cursor: not-allowed;
+    border-color: var(--input-border-color);
+}
+
+.input-field-passenger {
+    cursor: pointer;
+}
+
+.origin-destination-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-grow: 1;
+}
+
+.origin-destination-group .input-group {
+    flex: 1 1 200px;
+    min-width: 180px;
+}
+
+.swap-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--form-element-height);
+    align-self: flex-end;
+    margin: 0 3px;
+}
+
+.swap-button {
+    background-color: #F0F2F5;
+    border: 1px solid var(--input-border-color);
+    color: var(--form-text-secondary);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.2s ease;
+}
+
+.swap-button:hover {
+    background-color: #E9ECEF;
+    border-color: var(--input-focus-border-color);
+    color: var(--accent-color-primary);
+    transform: rotate(180deg);
+}
+
+.input-group.dates {
+    flex: 0 0 170px;
+}
+
+.input-group.passengers {
+    position: relative;
+    flex: 0 0 230px;
+}
+
+/* This rule targets the main search button in the form */
+.search-button {
+    background-color: var(--search-button-bg);
+    color: var(--search-button-text);
+    border: none;
+    border-radius: var(--form-element-border-radius);
+    padding: 0 30px;
+    height: var(--form-element-height);
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--main-font);
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    white-space: nowrap;
+    line-height: var(--form-element-height);
+    flex-shrink: 0;
+}
+
+.search-button:hover {
+    background-color: var(--search-button-hover-bg);
+    transform: translateY(-2px);
+}
+
+.form-options-wrapper {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    padding-left: 5px;
+}
+
+.form-options {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.checkbox-group label {
+    margin-bottom: 0;
+}
+
+.checkbox-group.left {
+    flex-basis: 40%;
+}
+
+.checkbox-group.right {
+    flex-basis: 30%;
+}
+
+.checkbox-group.direct-flight {
+    flex-basis: 30%;
+}
+
+.form-options label {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: var(--form-text-primary);
+}
+
+.form-options input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--radio-checkbox-border);
+    background-color: transparent;
+    border-radius: 4px;
+    margin-right: 10px;
+    position: relative;
+    outline: none;
+    transition: border-color 0.2s, background-color 0.2s;
+    flex-shrink: 0;
+}
+
+.form-options input[type="checkbox"]:hover {
+    border-color: var(--input-focus-border-color);
+}
+
+.form-options input[type="checkbox"]:checked {
+    background-color: var(--radio-checkbox-checked-bg);
+    border-color: var(--radio-checkbox-checked-border);
+}
+
+.form-options input[type="checkbox"]:checked::before {
+    content: '✔';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 0.95em;
+    color: var(--radio-checkbox-icon-color);
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    line-height: 1;
+}
+
+#passengers-popover {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    min-width: 330px;
+    background-color: var(--popover-bg);
+    color: var(--popover-text-primary);
+    border: 1px solid var(--popover-border-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    padding: 25px;
+    z-index: 100;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.popover-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--popover-text-primary);
+}
+
+.popover-select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border-radius: var(--form-element-border-radius);
+    border: 1px solid var(--popover-select-border);
+    background: var(--popover-bg);
+    font-size: 0.9rem;
+    color: var(--popover-text-primary);
+    margin-bottom: 18px;
+}
+
+.counter-group {
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--popover-border-color);
+}
+
+.counter-group:last-of-type {
+    margin-bottom: 25px;
+    border-bottom: none;
+}
+
+.counter-group .popover-label {
+    margin-bottom: 10px;
+}
+
+.counter-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.counter-btn {
+    background: var(--popover-button-bg);
+    border: 1px solid var(--popover-button-border);
+    color: var(--popover-button-text);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    font-weight: normal;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding-bottom: 2px;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+}
+
+.counter-btn:hover {
+    border-color: var(--accent-color-primary);
+    background-color: #e9ecef;
+    transform: scale(1.05);
+}
+.counter-btn:active {
+    transform: scale(0.95);
+}
+
+.count-display {
+    font-size: 1rem;
+    font-weight: 500;
+    min-width: 25px;
+    text-align: center;
+    color: var(--popover-text-primary);
+}
+
+.age-hint {
+    font-size: 0.85rem;
+    color: var(--popover-text-secondary);
+    margin-left: auto;
+    padding-left: 15px;
+}
+
+.popover-info-text {
+    font-size: 0.8rem;
+    color: var(--popover-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 25px;
+    padding-top: 15px;
+    border-top: 1px solid var(--popover-border-color);
+}
+
+.popover-info-text p {
+    margin-bottom: 10px;
+}
+
+.popover-info-text p:last-child {
+    margin-bottom: 0;
+}
+
+.popover-done-button {
+    background: var(--popover-done-button-bg);
+    color: var(--popover-done-button-text);
+    border: none;
+    border-radius: var(--form-element-border-radius);
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.popover-done-button:hover {
+    background-color: var(--popover-done-button-hover-bg);
+    transform: translateY(-1px);
+}
+
+/* --- Loaders --- */
+.form-loader-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(var(--form-container-bg-rgb), 0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    border-radius: var(--card-border-radius);
+}
+
+.results-loader-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--loader-overlay-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    border-radius: var(--card-border-radius);
+}
+
+.loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(var(--loader-spinner-color-rgb), 0.3);
+    border-top-color: var(--loader-spinner-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.form-loader-overlay .loader-text {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: var(--loader-text-color-form);
+    font-weight: 500;
+}
+
+.results-loader-overlay .loader-text {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: var(--loader-text-color-results);
+    font-weight: 500;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Results Area Layout (Common for Flights, Hotels, Cars) --- */
+.results-area-wrapper {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 15px;
+    display: flex;
+    gap: 30px;
+    color: var(--card-text-primary);
+    position: relative;
+}
+
+.filter-sidebar {
+    flex: 0 0 290px;
+    background-color: var(--filter-sidebar-bg);
+    padding: 25px;
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--card-shadow);
+    align-self: flex-start;
+    height: fit-content;
+}
+
+.filter-section {
+    margin-bottom: 28px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--filter-section-border);
+}
+
+.filter-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.filter-section h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--card-text-primary);
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-section h3 .toggle-icon {
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.filter-section h3 .toggle-icon.collapsed {
+    transform: rotate(-90deg);
+}
+
+.filter-option {
+    margin-bottom: 14px;
+}
+
+.filter-option label {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--filter-text-color);
+    cursor: pointer;
+}
+
+.filter-option input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--radio-checkbox-border);
+    border-radius: 4px;
+    margin-right: 12px;
+    position: relative;
+    outline: none;
+    transition: border-color 0.2s, background-color 0.2s;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+.filter-option input[type="checkbox"]:hover {
+    border-color: var(--filter-active-color);
+}
+.filter-option input[type="checkbox"]:checked {
+    background-color: var(--filter-active-color);
+    border-color: var(--filter-active-color);
+}
+.filter-option input[type="checkbox"]:checked::before {
+    content: '✔';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 0.9em;
+    color: var(--text-white);
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    line-height: 1;
+}
+
+.filter-option .price-hint {
+    font-size: 0.8rem;
+    color: var(--filter-price-color);
+    margin-left: auto;
+}
+
+.filter-range-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--filter-text-color);
+    margin-bottom: 5px;
+}
+
+.filter-range-display {
+    font-size: 0.85rem;
+    color: var(--card-text-secondary);
+    margin-bottom: 10px;
+}
+
+.filter-option input[type="range"] {
+    width: 100%;
+    accent-color: var(--filter-active-color);
+}
+
+.results-content-area {
+    flex: 1;
+    min-width: 0;
+}
+
+.flight-results-content .summary-filters-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 18px 20px;
+    background-color: var(--card-bg);
+    border-radius: var(--form-element-border-radius);
+    box-shadow: var(--card-shadow);
+}
+
+.flight-results-content .results-count {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--card-text-secondary);
+}
+
+.flight-results-content .summary-filter-options {
+    display: flex;
+}
+
+.flight-results-content .summary-filter-btn {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid var(--flight-summary-filter-border);
+    cursor: pointer;
+    background-color: var(--flight-summary-filter-inactive-bg);
+    color: var(--flight-summary-filter-inactive-text);
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    line-height: 1.3;
+    text-align: center;
+}
+
+.flight-results-content .summary-filter-options .summary-filter-btn:first-child {
+    border-top-left-radius: var(--form-element-border-radius);
+    border-bottom-left-radius: var(--form-element-border-radius);
+}
+.flight-results-content .summary-filter-options .summary-filter-btn:last-child {
+    border-top-right-radius: var(--form-element-border-radius);
+    border-bottom-right-radius: var(--form-element-border-radius);
+}
+.flight-results-content .summary-filter-btn:not(:first-child) {
+    border-left: none;
+}
+
+.flight-results-content .summary-filter-btn.active {
+    background-color: var(--flight-summary-filter-active-bg);
+    color: var(--flight-summary-filter-active-text);
+    border-color: var(--flight-summary-filter-active-bg);
+    z-index: 1;
+}
+
+.flight-results-content .summary-filter-btn:hover:not(.active) {
+    background-color: #f0f0f0;
+    border-color: var(--flight-summary-filter-active-bg);
+    color: var(--flight-summary-filter-active-bg);
+}
+
+.flight-results-content .summary-filter-btn .price-info {
+    font-size: 0.95em;
+    font-weight: bold;
+}
+
+.flight-results-content .summary-filter-btn .duration-info {
+    font-size: 0.8em;
+    display: block;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+.flight-results-content .sort-options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--card-text-secondary);
+}
+
+.flight-results-content .sort-options select {
+    padding: 10px 12px;
+    border-radius: var(--form-element-border-radius);
+    border: 1px solid var(--input-border-color);
+    background-color: var(--input-bg);
+    color: var(--input-text-color);
+    font-size: 0.9rem;
+}
+
+/* --- Flight Card Styling --- */
+.flight-card-modern {
+    background-color: var(--card-bg);
+    border-radius: var(--card-border-radius);
+    padding: var(--card-padding);
+    margin-bottom: 25px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    gap: var(--card-gap);
+    color: var(--card-text-primary);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    position: relative;
+}
+.flight-card-modern:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-hover-shadow);
+}
+
+.flight-details-modern {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.flight-segment-modern {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.airline-logo-modern img {
+    height: 28px;
+    width: auto;
+    object-fit: contain;
+    margin-right: 10px;
+    border-radius: 4px;
+}
+
+.time-airport-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.time-modern {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.airport-code-modern {
+    font-size: 0.9rem;
+    color: var(--card-text-secondary);
+}
+
+.journey-info-modern {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex-grow: 1;
+    padding: 0 10px;
+}
+
+.duration-modern {
+    font-size: 0.85rem;
+    color: var(--card-text-secondary);
+    margin-bottom: 4px;
+}
+
+.stops-modern {
+    font-size: 0.85rem;
+    color: var(--card-text-accent);
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+.journey-line {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 80px;
+    margin: 2px 0;
+}
+
+.journey-line .line {
+    flex-grow: 1;
+    height: 1.5px;
+    background-color: var(--card-border-color);
+}
+
+.journey-line .dot {
+    width: 7px;
+    height: 7px;
+    background-color: var(--card-text-secondary);
+    border-radius: 50%;
+    margin: 0 6px;
+}
+.journey-line .dot.accent {
+    background-color: var(--card-text-accent);
+}
+
+.journey-line .plane-icon {
+    font-size: 1rem;
+    color: var(--card-text-secondary);
+    transform: translateY(1px);
+}
+
+.flight-action-modern {
+    flex: 0 0 210px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.offers-price-modern .offers-count {
+    font-size: 0.8rem;
+    color: var(--card-text-secondary);
+    margin-bottom: 2px;
+}
+
+.price-modern {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--card-text-accent);
+    margin: 2px 0 10px 0;
+}
+
+.view-btn-modern {
+    background-color: var(--accent-color-primary);
+    color: var(--text-white);
+    border: none;
+    border-radius: var(--form-element-border-radius);
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.view-btn-modern:hover {
+    background-color: var(--accent-color-primary-hover);
+    transform: translateY(-2px);
+}
+
+.view-btn-modern .arrow-icon {
+    font-size: 0.9em;
+    transition: transform 0.2s ease;
+}
+.view-btn-modern:hover .arrow-icon {
+    transform: translateX(3px);
+}
+
+.flight-meta-info-modern {
+    margin-top: auto;
+    padding-top: 10px;
+    font-size: 0.8rem;
+    color: var(--card-text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+}
+
+.flight-meta-info-modern span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.flight-meta-info-modern .icon {
+    font-size: 1em;
+    color: var(--card-text-secondary);
+}
+
+.favorite-icon-modern {
+    font-size: 1.5rem;
+    color: var(--card-text-secondary);
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.favorite-icon-modern:hover {
+    color: #E53E3E;
+    transform: scale(1.15);
+}
+.favorite-icon-modern.active {
+    color: #E53E3E;
+    transform: scale(1.1);
+}
+
+
+/* --- NEW Hotel Card Styling --- */
+.hotel-card {
+    display: flex;
+    gap: var(--card-gap);
+    background-color: var(--card-bg);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 25px;
+    padding: var(--card-padding);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    position: relative; /* For favorite icon */
+}
+.hotel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-hover-shadow);
+}
+
+.hotel-card-image {
+    flex: 0 0 220px; /* Fixed width for image column */
+    align-self: stretch; /* Make image container stretch if card height varies */
+}
+.hotel-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: var(--form-element-border-radius); /* Softer edges for image */
+}
+
+.hotel-card-details {
+    flex: 1; /* Takes up remaining space */
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Space between detail items */
+}
+.hotel-card-name {
+    font-size: 1.25rem; /* Slightly larger */
+    font-weight: 600;
+    color: var(--card-text-primary);
+    margin-bottom: 4px;
+}
+.hotel-card-stars {
+    color: #FFB400; /* Gold for stars is fine */
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+}
+.hotel-card-stars .fas, .hotel-card-stars .far, .hotel-card-stars .fa-star-half-alt {
+    margin-right: 2px;
+}
+.hotel-card-location {
+    font-size: 0.85rem;
+    color: var(--card-text-secondary);
+}
+.hotel-card-reviews {
+    font-size: 0.85rem;
+    color: var(--card-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.hotel-card-reviews .score {
+    font-weight: 500;
+    color: var(--accent-color-secondary); /* Example using secondary accent for score */
+}
+.hotel-card-features {
+    font-size: 0.85rem;
+    color: var(--card-text-secondary);
+    margin-top: auto; /* Pushes to bottom if details column has extra space */
+    padding-top: 8px;
+}
+
+.hotel-card-action {
+    flex: 0 0 180px; /* Fixed width for action column */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 8px; /* Space between action items */
+}
+.hotel-card-favorite { /* Applied to the span containing the heart */
+    font-size: 1.5rem; /* Size of the heart character/icon */
+    color: var(--card-text-secondary); /* Default color */
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    align-self: flex-end;
+    margin-bottom: 5px; /* Space below favorite */
+    line-height: 1; /* Ensure proper alignment if it's just text */
+}
+.hotel-card-favorite:hover,
+.hotel-card-favorite.active { /* Assuming 'active' class is added by JS */
+    color: #E53E3E; /* Red for active favorite */
+    transform: scale(1.15);
+}
+.hotel-card-favorite.active .fa-heart { /* If using Font Awesome inside */
+    color: #E53E3E;
+}
+.hotel-card-price {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--card-text-primary); /* Main price color */
+}
+.hotel-card-price .per-night {
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: var(--card-text-secondary);
+    display: block;
+}
+.hotel-card-provider {
+    font-size: 0.8rem;
+    color: var(--card-text-secondary);
+}
+.hotel-card-cta { /* "Aller sur le site" button */
+    background-color: var(--accent-color-primary);
+    color: var(--text-white);
+    border: none;
+    border-radius: var(--form-element-border-radius);
+    padding: 10px 18px; /* Slightly smaller than main search button */
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s ease;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%; /* Make button full width in its column */
+    text-align: center;
+    margin-top: 5px;
+}
+.hotel-card-cta:hover {
+    background-color: var(--accent-color-primary-hover);
+    transform: translateY(-1px);
+}
+.hotel-card-other-offers {
+    font-size: 0.8rem;
+    color: var(--accent-color-primary);
+    text-decoration: none;
+    margin-top: 5px;
+}
+.hotel-card-other-offers:hover {
+    text-decoration: underline;
+}
+
+/* --- Partnership Info specific to Hotel Results --- */
+.hotel-results-content .hotel-top-filters {
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--card-border-color);
+    /* Add styles for buttons inside hotel-top-filters if not already covered */
+}
+.hotel-partnership-info {
+    font-size: 0.85rem;
+    color: var(--card-text-secondary);
+    line-height: 1.6;
+    background-color: #E6F7FF;
+    padding: 15px;
+    border-radius: var(--form-element-border-radius);
+    margin-bottom: 25px;
+}
+.hotel-partnership-info a {
+    color: var(--accent-color-primary);
+}
+
+/* --- NEW Car Card Styling --- */
+.car-card {
+    display: flex;
+    gap: var(--card-gap);
+    background-color: var(--card-bg);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 25px;
+    padding: var(--card-padding);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    position: relative; /* For favorite icon */
+}
+.car-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-hover-shadow);
+}
+
+.car-card-image-area {
+    flex: 0 0 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.car-card-image-area img {
+    max-width: 100%;
+    max-height: 120px; /* Control max image height */
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--form-element-border-radius);
+}
+
+.car-card-details-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Increased gap for better separation */
+}
+.car-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the start of the cross axis */
+    gap: 10px; /* Gap between name block and logo */
+    margin-bottom: 8px; /* Space below header */
+}
+.car-card-header > div { /* Wrapper for car name and similar text */
+    flex-grow: 1; /* Allow it to take available space */
+}
+.car-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--card-text-primary);
+    line-height: 1.3;
+}
+.car-name-similar {
+    font-size: 0.8rem;
+    color: var(--card-text-secondary);
+}
+.car-rental-logo img {
+    height: 24px;
+    max-width: 80px; /* Prevent logo from being too wide */
+    object-fit: contain;
+    flex-shrink: 0; /* Prevent logo from shrinking */
+}
+.car-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 15px; /* row-gap column-gap */
+    margin: 8px 0;
+    color: var(--card-text-secondary);
+}
+.car-features span {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+}
+.car-features .icon {
+    margin-right: 6px;
+    font-size: 1em; /* Match text size or slightly larger */
+    color: var(--card-text-secondary);
+}
+.car-pickup-info {
+    font-size: 0.85rem;
+    color: var(--card-text-secondary);
+    margin-top: auto; /* Push to bottom of details area */
+    padding-top: 10px;
+}
+.car-pickup-info .icon {
+    margin-right: 6px;
+}
+
+.car-card-action-area {
+    flex: 0 0 190px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 8px;
+}
+.car-card-favorite { /* Applied to the span containing the heart */
+    font-size: 1.5rem;
+    color: var(--card-text-secondary);
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    margin-bottom: 5px;
+    line-height: 1;
+}
+.car-card-favorite:hover,
+.car-card-favorite.active {
+    color: #E53E3E;
+    transform: scale(1.15);
+}
+.car-card-favorite.active .fa-heart { /* If using Font Awesome inside */
+    color: #E53E3E;
+}
+.car-offers-price .offers-count {
+    font-size: 0.8rem;
+    color: var(--card-text-secondary);
+    display: block; /* Ensure it's on its own line */
+}
+.car-total-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--card-text-primary);
+    margin: 2px 0;
+}
+.car-total-price .price-label {
+    font-weight: normal;
+    font-size: 0.8rem;
+    color: var(--card-text-secondary);
+    display: block;
+}
+.car-cancellation {
+    font-size: 0.8rem;
+    color: #28a745; /* Green for positive info */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 5px 0; /* Add some vertical spacing */
+}
+.car-cancellation .icon {
+    font-size: 0.9em;
+}
+.car-view-btn {
+    background-color: var(--accent-color-primary);
+    color: var(--text-white);
+    border: none;
+    border-radius: var(--form-element-border-radius);
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: auto; /* Push to bottom of action area */
+}
+.car-view-btn:hover {
+    background-color: var(--accent-color-primary-hover);
+    transform: translateY(-1px);
+}
+.car-view-btn .icon {
+    font-size: 0.8em;
+}
+
+
+.page-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-bottom: 50px; /* Attempt to create space above the footer */
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+    .search-form-wrapper { max-width: 95%; padding: 25px 20px; }
+    .flight-card-modern { flex-direction: column; gap: 15px; }
+    .flight-action-modern { align-items: stretch; text-align: center; }
+    .view-btn-modern { width: auto; }
+    .favorite-icon-modern { top: 15px; right: 15px; }
+
+    /* Adjust Hotel & Car cards for tablets if needed, current flex might be okay */
+     .hotel-card-image { flex: 0 0 180px; } /* Slightly smaller image */
+     .hotel-card-action { flex: 0 0 160px; }
+     .car-card-image-area { flex: 0 0 160px; }
+     .car-card-action-area { flex: 0 0 170px; }
+}
+
+@media (max-width: 768px) {
+    .hero-section { min-height: auto; padding-bottom: 100px; }
+    .top-navigation { max-width: 280px; }
+    .main-heading { font-size: 2.2rem; }
+    .search-form-wrapper { padding: 20px 15px; }
+    .form-row { flex-wrap: wrap; gap: 18px; }
+    .origin-destination-group { flex-basis: 100%; gap: 15px; }
+    .input-group.dates, .input-group.passengers { flex-grow: 1; flex-basis: calc(50% - 10px); }
+    #flight-search-form > .form-row:last-child { justify-content: flex-end; margin-top: 20px; }
+    #flight-search-form > .form-row:last-child > .search-button { flex-grow: 0; flex-basis: auto; }
+    #passengers-popover { width: calc(100vw - 30px); max-width: 380px; left: 50%; transform: translateX(-50%); }
+    .flight-segment-modern { gap: 10px; }
+    .flight-card-modern { padding: 20px; }
+    .flight-action-modern { padding-top: 15px; }
+    .results-area-wrapper { flex-direction: column; }
+    .filter-sidebar { flex: 0 0 auto; width: 100%; }
+
+    .hotel-card, .car-card {
+        flex-direction: column;
+        padding: var(--card-padding);
+    }
+    .hotel-card-image, .car-card-image-area {
+        flex-basis: auto;
+        width: 100%;
+        height: 180px;
+        margin-bottom: var(--card-gap);
+    }
+    .hotel-card-image img, .car-card-image-area img {
+        height: 100%;
+        object-fit: cover; /* Cover for fixed height image area */
+    }
+     .car-card-image-area img {
+        object-fit: contain; /* Cars might look better with contain */
+    }
+    .hotel-card-details, .hotel-card-action,
+    .car-card-details-area, .car-card-action-area {
+        flex-basis: auto;
+        width: 100%;
+        align-items: stretch;
+        text-align: left;
+    }
+     .hotel-card-action, .car-card-action-area {
+        align-items: stretch; /* Make buttons full width */
+        margin-top: 15px; /* Add space when stacked */
+    }
+    .hotel-card-favorite, .car-card-favorite { /* Reposition for stacked layout */
+        position: absolute;
+        top: var(--card-padding);
+        right: var(--card-padding);
+        margin-bottom: 0; /* Reset margin if absolutely positioned */
+    }
+    .car-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .car-rental-logo { margin-top: 5px; }
+}
+
+@media (max-width: 480px) {
+    .main-heading { font-size: 1.9rem; }
+    .top-navigation { padding: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+    .nav-button { padding: 8px 15px; font-size: .9rem; flex-grow: 1; text-align: center; margin: 3px; }
+    .search-form-wrapper { border-radius: 12px; }
+    .origin-destination-group .input-group { min-width: 0; flex-basis: calc(50% - 8px); }
+    .swap-button-container { flex-grow: 0; flex-shrink: 0; margin-left: -5px; margin-right: -5px; }
+    .input-group.dates, .input-group.passengers { flex-basis: 100%; }
+    #flight-search-form > .form-row:last-child { justify-content: stretch; }
+    #flight-search-form > .form-row:last-child > .search-button { flex-grow: 1; flex-basis: 100%; margin-top: 15px; }
+    .input-field, .input-field-passenger, .search-button, .popover-select, .popover-done-button { height: 44px; font-size: .9rem; }
+    .search-button { font-size: .95rem; }
+    .flight-results-content .summary-filters-bar { padding: 15px; flex-direction: column; gap: 10px; }
+    .flight-results-content .summary-filter-btn { padding: 8px 12px; font-size: .85rem; }
+    .flight-card-modern { border-radius: 12px; padding: 15px; }
+    .price-modern { font-size: 1.4rem; }
+    .view-btn-modern { padding: 10px 18px; font-size: .9rem; }
+    .filter-sidebar { padding: 20px; }
+    #passengers-popover { left: 10px; right: 10px; width: auto; transform: none; }
+
+    .hotel-card-image, .car-card-image-area {
+        height: 160px;
+    }
+    .hotel-card-details, .car-card-details-area {
+        gap: 5px;
+    }
+    .hotel-card-name, .car-name { font-size: 1.1rem; }
+}
+/* Styles for the "Demander à MiraBot" button */
+.ask-mirabot-button {
+    position: fixed; /* Positioned relative to the viewport */
+    bottom: 30px;    /* 30px from the bottom */
+    right: 30px;     /* 30px from the right */
+    background-color: #013A71; /* A vibrant purple, similar to the image. Adjust hex code as needed. */
+    color: white;
+    border: none;
+    border-radius: 50px; /* Creates the pill shape */
+    padding: 12px 24px; /* Adjust padding for size */
+    font-family: 'Inter', sans-serif; /* Uses the font already in your project */
+    font-size: 16px;   /* Adjust font size as needed */
+    font-weight: 600;  /* Medium-bold text */
+    display: flex;     /* For aligning icon and text */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); /* Subtle shadow for depth */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 100000; /* Increased z-index significantly */
+    text-decoration: none; /* If you change it to an <a> tag */
+}
+
+.ask-mirabot-button:hover {
+    background-color: #013A71; /* Slightly darker purple on hover */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+.ask-mirabot-button .mirabot-icon {
+    margin-right: 10px; /* Space between icon and text */
+    display: inline-flex;
+    align-items: center;
+}
+
+/* If you use an SVG or <img> for your icon, you might want to style it specifically */
+.ask-mirabot-button .mirabot-icon svg,
+.ask-mirabot-button .mirabot-icon img {
+    width: 20px;  /* Adjust size as needed */
+    height: 20px;
+    fill: white;  /* For SVG fill color */
+}
+
+/* Styling for Font Awesome icon if used as placeholder */
+.ask-mirabot-button .mirabot-icon i {
+    font-size: 18px; /* Adjust Font Awesome icon size if needed */
+}
+
+/* Styles for the MiraBot Chat Widget */
+.mirabot-chat-widget-container {
+    position: fixed;
+    bottom: 90px; /* Position above the "Demander à MiraBot" button */
+    right: 30px;
+    width: 370px; /* Adjust as needed */
+    max-height: 70vh; /* Max height, can also use fixed height like 600px */
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    display: none; /* Initially hidden */
+    flex-direction: column;
+    z-index: 99999; /* Below the main button's z-index if main button is used to toggle, but above other content */
+                     /* If main button hides, this can be higher (e.g. 100000) */
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    overflow: hidden; /* To ensure border-radius clips content */
+}
+
+.mirabot-chat-widget-container.active {
+    display: flex; /* Show the widget */
+}
+
+.mirabot-chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f8f9fa; /* Slightly different background for header */
+}
+
+.mirabot-chat-header-left,
+.mirabot-chat-header-right {
+    display: flex;
+    align-items: center;
+}
+
+.mirabot-chat-title {
+    font-weight: 600;
+    font-size: 18px;
+    margin-left: 8px;
+}
+
+.mirabot-chat-icon-btn {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 20px; /* Adjust icon size */
+    padding: 6px;
+    cursor: pointer;
+    margin-left: 8px;
+    line-height: 1; /* Prevents extra space around icons */
+}
+.mirabot-chat-header-left .mirabot-chat-icon-btn {
+    margin-left: 0;
+}
+
+
+.mirabot-chat-icon-btn:hover {
+    color: #000;
+}
+
+.mirabot-chat-body {
+    flex-grow: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background-color: #ffffff;
+}
+
+.mirabot-chat-message {
+    display: flex;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.mirabot-chat-message-assistant .mirabot-message-avatar {
+    /* Styles for MiraBot's avatar */
+    margin-right: 10px;
+    color: #6A1B9A; /* MiraBot's brand color for the icon */
+    font-size: 20px; /* Avatar icon size */
+    flex-shrink: 0; /* Prevent avatar from shrinking */
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.mirabot-message-content {
+    background-color: #f1f3f5; /* Light grey for assistant messages */
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 85%;
+}
+.mirabot-message-content p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+
+.mirabot-chat-input-area {
+    display: flex;
+    align-items: flex-end; /* Align items to bottom for textarea growing */
+    padding: 12px 16px;
+    border-top: 1px solid #e0e0e0;
+    background-color: #f8f9fa;
+}
+
+.mirabot-chat-input {
+    flex-grow: 1;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-size: 14px;
+    line-height: 1.4;
+    resize: none; /* Prevent manual resizing, JS can handle height */
+    margin-right: 8px;
+    min-height: 20px; /* For single line appearance initially */
+    max-height: 100px; /* Limit growth */
+    overflow-y: auto; /* Scroll if max-height exceeded */
+}
+
+.mirabot-chat-input:focus {
+    outline: none;
+    border-color: #6A1B9A; /* MiraBot's brand color */
+    box-shadow: 0 0 0 2px rgba(106, 27, 154, 0.2);
+}
+
+.mirabot-chat-send-btn,
+.mirabot-chat-mic-btn {
+    background-color: #6A1B9A;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: 5px;
+}
+
+.mirabot-chat-send-btn:hover,
+.mirabot-chat-mic-btn:hover {
+    background-color: #58167d;
+}
+.mirabot-chat-mic-btn { /* If you want a different style for the mic button */
+    background-color: #f0f0f0;
+    color: #555;
+}
+.mirabot-chat-mic-btn:hover {
+    background-color: #e0e0e0;
+}
+
+
+.mirabot-chat-disclaimer {
+    padding: 8px 16px;
+    background-color: #f8f9fa;
+    text-align: center;
+    font-size: 11px;
+    color: #6c757d;
+    border-top: 1px solid #e9ecef;
+}
+.mirabot-chat-disclaimer p {
+    margin:0;
+}
+/* In vol.css (assuming this means your main CSS file or where these specific styles are) */
+.mirabot-chat-message-user {
+    justify-content: flex-end; /* Aligns user messages to the right */
+    flex-direction: row-reverse; /* Puts content before avatar (if any) for user */
+}
+
+.mirabot-chat-message-user .mirabot-message-content {
+    background-color: #5D3FD3; /* Example: User message background - vibrant purple */
+    color: white;
+    /* If you add an avatar for the user, adjust margins */
+    /* margin-left: 10px; margin-right: 0; */
+}
+
+.mirabot-chat-message-assistant-thinking .mirabot-message-content {
+    font-style: italic;
+    color: #666;
+    background-color: #f8f9fa; /* Same as assistant for consistency */
+}
+.mirabot-chat-mic-btn.recording i {
+    color: red; /* Example: make icon red when recording */
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}

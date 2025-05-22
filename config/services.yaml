@@ -10,6 +10,10 @@ parameters:
     partners_logos_directory: '%kernel.project_dir%/public/uploads/logos'
     event_images_directory: '%kernel.project_dir%/public/uploads/event_images'
     benevolat_images_directory: '%kernel.project_dir%/public/uploads/benevolat_images'
+    amadeus_client_id: '%env(AMADEUS_CLIENT_ID)%'
+    amadeus_client_secret: '%env(AMADEUS_CLIENT_SECRET)%'
+    amadeus_api_base_url_test: '%env(AMADEUS_API_BASE_URL_TEST)%'
+    gemini_api_key: '%env(GEMINI_API_KEY)%'
 
 services:
     App\Security\Authenticator\PartnerAuthenticator:

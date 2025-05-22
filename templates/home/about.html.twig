@@ -1,0 +1,43 @@
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/about.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="about-section">
+        <div class="containerabout">
+            <button class="nav-button left" aria-label="Previous slide">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" x2="5" y1="12" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </button>
+
+            <div class="contentabout">
+                <div class="brand">
+                    <div class="brand-logo" style="background-image: url('{{ asset('images/logo.png') }}');"></div>
+                </div>
+
+                <div class="about">
+                    <h2 class="about-title">À propos de nous</h2>
+                    <p class="about-description">
+                        MiraVia est votre compagnon de voyage idéal, offrant une plateforme intuitive pour comparer hébergements,
+                        agences et services en fonction de vos besoins et de vos préférences. Grâce à des recommandations
+                        personnalisées basées sur l'intelligence artificielle, elle simplifie chaque étape de la planification,
+                        vous garantissant les meilleures options aux meilleurs prix. Avec MiraVia, organisez des voyages sur
+                        mesure en toute simplicité, tout en profitant d'une expérience fluide et sans stress.
+                    </p>
+                </div>
+            </div>
+
+            <button class="nav-button right" aria-label="Next slide">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" x2="19" y1="12" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+{% endblock %}

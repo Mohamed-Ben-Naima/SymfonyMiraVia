@@ -1,0 +1,627 @@
+ /* CSS Variables and Font Imports */
+        @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;900&family=Volkhov:wght@700&display=swap');
+
+        :root {
+            --Main-Dark: #1C2B38;
+            --dark-60: #778088;
+            --dark-80: #495560;
+            --Verified-Blue: #007bff; 
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Mulish', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: var(--dark-80, #495560);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        /* Header */
+        .page-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .page-header h1 {
+            width: 1005px;
+            max-width: 100%;
+            color: var(--Main-Dark, #1C2B38);
+            font-family: 'Volkhov', serif;
+            font-size: 36px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            margin-bottom: 10px;
+        }
+
+        .header-meta {
+            font-family: 'Mulish', sans-serif;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            color: var(--dark-60, #778088);
+        }
+
+        .header-meta .location {
+            margin-right: 15px;
+        }
+
+        .header-meta .rating {
+            color: #f39c12; 
+        }
+        .header-meta .rating .review-text {
+            color: var(--dark-60, #778088);
+        }
+
+        /* Gallery */
+        .gallery {
+            margin-bottom: 20px;
+        }
+
+        .main-image img {
+            width: 100%;
+            min-height: 300px; 
+            background-color: #f0f0f0; 
+            display: block;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .thumbnail-images {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .thumbnail-images img {
+            width: calc(20% - 8px);
+            min-width: 80px;
+            height: 100px; 
+            background-color: #f0f0f0; 
+            object-fit: cover;
+            cursor: pointer;
+            border: 1px solid #ddd;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+        }
+
+        .tabs ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .tabs ul li a {
+            text-decoration: none;
+            color: var(--Main-Dark, #1C2B38); 
+            font-family: 'Mulish', sans-serif;
+            font-size: 15px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 18px;
+            text-transform: capitalize;
+            padding: 10px 15px;
+            display: block;
+            border-bottom: 3px solid transparent; 
+            transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tabs ul li a:not(.active):hover {
+            color: var(--Main-Dark, #1C2B38); 
+            border-bottom-color: var(--dark-60, #778088); 
+        }
+
+        .tabs ul li a.active {
+            color: var(--Verified-Blue, #007bff); 
+            font-weight: 700; 
+            border-bottom: 3px solid var(--Verified-Blue, #007bff); 
+        }
+      
+        .tab-actions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tab-actions .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            margin-left: 10px;
+            color: var(--dark-60, #778088);
+        }
+        .tab-actions .icon-button svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .share-button-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .share-popup {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 100;
+            width: max-content;
+            padding: 5px 0;
+        }
+
+        .share-popup.visible {
+            display: block;
+        }
+
+        .share-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: var(--Main-Dark, #1C2B38);
+            font-family: 'Mulish', sans-serif;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .share-option svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .share-option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .content-area {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .description {
+            flex: 3;
+        }
+
+        .description h2 {
+            color: #1C2B38;
+            font-family: 'Volkhov', serif;
+            font-size: 22px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            text-transform: capitalize;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .description p {
+            color: var(--dark-80, #495560);
+            font-family: 'Mulish', sans-serif;
+            font-size: 15px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px;
+            width: 770px;
+            max-width: 100%;
+            margin-bottom: 15px;
+        }
+
+        /* --- Profile Info Sidebar - Enhanced CSS --- */
+        .profile-info {
+            flex: 1;
+            background-color: #ffffff; /* Changed to white for better contrast with shadow */
+            padding: 25px; /* Slightly increased padding */
+            border: 1px solid #e0e0e0; /* Slightly softer border */
+            border-radius: 10px; /* Slightly more rounded */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07); /* Softer, more diffused shadow */
+        }
+
+        .profile-info h3 { 
+            color: var(--Main-Dark, #1C2B38);
+            font-family: 'Volkhov', serif; /* Make title more prominent */
+            font-size: 20px; /* Slightly larger title */
+            font-weight: 700;
+            text-transform: capitalize;
+            margin-top: 0;
+            margin-bottom: 25px; 
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 15px;
+        }
+
+        .profile-details { 
+            display: flex;
+            flex-direction: column;
+            gap: 25px; 
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px; 
+        }
+
+        .company-logo {
+            width: 65px;  /* Slightly larger */
+            height: 65px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 3px solid #fff; /* White border to lift it from background if any */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for the logo itself */
+            background-color: #f0f0f0;
+        }
+
+        .company-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .company-name {
+            font-family: 'Volkhov', serif; 
+            font-size: 19px; 
+            font-weight: 700;
+            color: var(--Main-Dark, #1C2B38);
+            margin: 0 0 5px 0; 
+            display: flex; 
+            align-items: center;
+        }
+
+        .verified-badge {
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+            color: var(--Verified-Blue); 
+        }
+
+        .verified-badge svg {
+            width: 20px; /* Slightly larger verified icon */
+            height: 20px;
+        }
+        
+        .contact-info {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Slightly more space between items */
+        }
+
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            gap: 12px; 
+            font-size: 14px;
+            color: var(--dark-80, #495560);
+        }
+
+        .contact-info .info-icon { /* Wrapper for SVG for consistent alignment */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+
+        .contact-info .info-icon svg {
+            width: 18px; /* Increased icon size */
+            height: 18px;
+            fill: var(--dark-60, #778088); 
+        }
+        
+        .contact-info a {
+            text-decoration: none;
+            color: var(--Verified-Blue); 
+            transition: color 0.2s ease;
+            word-break: break-all; /* Prevent long URLs from breaking layout */
+        }
+        .contact-info a:hover {
+            color: var(--Main-Dark, #1C2B38);
+            text-decoration: underline;
+        }
+        .contact-info .address-text {
+             line-height: 1.4; /* Improve readability for multi-line addresses */
+        }
+        /* --- End of Profile Info Sidebar CSS --- */
+
+
+        .sustainable-goals {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #eafaf1;
+            border: 1px solid #d1f0e1;
+        }
+
+        .sustainable-goals-heading-image {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sustainable-goals-heading-image img { 
+            display: block;
+            width: 60%;
+            max-width: 350px;
+            height: auto;
+            margin: 0 auto 20px auto;
+            background-color: #f0f0f0; 
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .goal-item img {
+            width: 100%;
+            max-width: 100px; 
+            height: 100px; 
+            background-color: #f0f0f0; 
+            object-fit: cover; 
+            display: block;
+            border: 1px solid #ccc;
+        }
+
+        .client-reviews {
+            margin-bottom: 30px;
+        }
+
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .reviews-header h2 {
+            color: #1C2B38;
+            font-family: 'Volkhov', serif;
+            font-size: 22px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            text-transform: capitalize;
+            margin: 0;
+        }
+
+        .overall-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .overall-rating .rating-score {
+            color: var(--Main-Dark, #1C2B38);
+            font-family: 'Mulish', sans-serif;
+            font-size: 48px;
+            font-style: normal;
+            font-weight: 900;
+            line-height: normal;
+            text-transform: capitalize;
+        }
+
+        .overall-rating .rating-stars {
+            font-size: 18px;
+            color: #f39c12;
+            line-height: 1;
+        }
+
+        .overall-rating .reviews-count {
+            font-family: 'Mulish', sans-serif;
+            font-size: 13px;
+            color: var(--dark-60, #778088);
+            line-height: 1;
+            align-self: flex-end;
+            margin-bottom: 5px;
+        }
+
+        .review-item {
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .review-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap:10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+            background-color: #f0f0f0; 
+        }
+
+        .reviewer-info {
+            flex-grow: 1;
+        }
+
+        .reviewer-name {
+            display: block;
+            font-weight: bold;
+            font-family: 'Mulish', sans-serif;
+            color: var(--Main-Dark, #1C2B38);
+            font-size:14px;
+        }
+
+        .review-date {
+            display: block;
+            font-size: 12px;
+            font-family: 'Mulish', sans-serif;
+            color: var(--dark-60, #778088);
+        }
+
+        .review-progress {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .progress-bar-background {
+            width: 100px;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 8px;
+        }
+
+        .progress-bar-foreground {
+            height: 100%;
+            background-color: #e74c3c;
+            border-radius: 4px;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #e74c3c;
+            min-width: 25px;
+            text-align: right;
+            font-family: 'Mulish', sans-serif;
+        }
+        .progress-label-alt {
+            font-size: 12px;
+            font-weight: bold;
+            color: #3498db;
+            background-color: #eaf6ff;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .review-content p {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--dark-80, #495560);
+            font-family: 'Mulish', sans-serif;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .review-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .review-content strong {
+            color: var(--Main-Dark, #1C2B38);
+            font-family: 'Mulish', sans-serif;
+            font-weight: 700;
+        }
+
+        #mapPlaceholder {
+            width: 100%;
+            height: 500px;
+            background-color: #e9e9e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #777;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            box-sizing: border-box;
+        }
+        #mapPlaceholder iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        @media (max-width: 1024px) {
+            .page-header h1 { width: auto; font-size: 30px; }
+            .description p { width: auto; }
+            .overall-rating .rating-score { font-size: 40px; }
+            .sustainable-goals-heading-image img { width: 70%; max-width: 300px; }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .page-header h1 { font-size: 26px; }
+            .header-meta { font-size: 13px; }
+            .thumbnail-images img { width: calc(33.333% - 7px); min-width: 60px; height: 80px;}
+            .tabs { flex-direction: column; align-items: flex-start; }
+            .tabs ul { margin-bottom: 10px; }
+            .tabs ul li a { padding: 8px 10px; font-size: 14px; }
+            .tab-actions { margin-top: 10px; align-self: flex-end; }
+            .content-area { flex-direction: column; gap: 20px; }
+            .description h2, .reviews-header h2 { font-size: 20px; }
+            .description p { font-size: 14px; line-height: 22px; }
+            .profile-info h3 { font-size: 18px; } /* Adjusted title */
+            .company-name { font-size: 17px;} 
+            .contact-info li {font-size: 13px;} 
+            .sustainable-goals-heading-image img { width: 80%; max-width: 280px; }
+            .goals-grid { grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 10px; }
+            .goal-item img { height: 60px; }
+            .reviews-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .overall-rating .rating-score { font-size: 32px; }
+            .overall-rating .rating-stars { font-size: 16px; }
+            .review-meta { flex-wrap: wrap; }
+            .review-progress { margin-left: 0; margin-top: 5px; width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 10px; }
+            .page-header h1 { font-size: 22px; }
+            .header-meta { font-size: 12px; }
+            .thumbnail-images img { width: calc(50% - 5px); min-width: 50px; height: 70px; }
+            .tabs ul li a { font-size: 13px; padding: 6px 8px; }
+            .description h2, .reviews-header h2 { font-size: 18px; }
+            .description p { font-size: 13px; line-height: 20px; }
+            .profile-info h3 { font-size: 17px; } /* Adjusted title */
+            .company-name { font-size: 16px;}
+            .profile-header { flex-direction: column; align-items: flex-start;} 
+            .sustainable-goals-heading-image img { width: 90%; max-width: 250px; }
+            .goals-grid { grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); gap: 8px; }
+            .goal-item img { height: 50px; }
+            .overall-rating .rating-score { font-size: 28px; }
+            .overall-rating .rating-stars { font-size: 14px; }
+            .overall-rating .reviews-count { font-size: 12px; }
+            .review-content p { font-size: 12px; }
+            .share-option { padding: 8px 15px; }
+        }

@@ -1,102 +1,410 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-    <style>
-        .event-card {
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: none;
-            border-radius: 10px;
-            overflow: hidden;
-            height: 100%;
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary: #4361ee;
+        --primary-light: #eef2ff;
+        --secondary: #3f37c9;
+        --dark: #1e293b;
+        --medium: #64748b;
+        --light: #f8fafc;
+        --border: #e2e8f0;
+    }
+
+    body {
+        background-color: var(--light);
+        font-family: 'Inter', sans-serif;
+        color: var(--dark);
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 1400px;
+    }
+
+    .main-content {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 2rem;
+        padding: 2rem 0;
+    }
+
+    @media (max-width: 992px) {
+        .main-content {
+            grid-template-columns: 1fr;
         }
-        .event-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        .event-img {
-            height: 200px;
-            object-fit: cover;
-            width: 100%;
-        }
-        .filter-section {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            height: fit-content;
-        }
-        .btn-event {
-            background: linear-gradient(45deg, #6c63ff, #4a3ff2);
-            border: none;
-            width: 100%;
-        }
-    </style>
+    }
+
+    .filter-section {
+        background-color: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border);
+        position: sticky;
+        top: 1rem;
+        height: fit-content;
+    }
+
+    .filter-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .filter-icon {
+        background-color: var(--primary-light);
+        color: var(--primary);
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+    }
+
+    .filter-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--dark);
+    }
+
+    .form-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.625rem 0.875rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+        margin-bottom: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        outline: none;
+    }
+
+    .btn-apply {
+        width: 100%;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 0.5rem;
+    }
+
+    .btn-apply:hover {
+        background-color: var(--secondary);
+    }
+
+    .events-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .events-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin: 0;
+    }
+
+    .events-count {
+        font-size: 0.875rem;
+        color: var(--medium);
+        background-color: var(--primary-light);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+    }
+
+    .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .event-card {
+        background-color: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border);
+        transition: all 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .event-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .event-image-container {
+        position: relative;
+        height: 180px;
+        overflow: hidden;
+    }
+
+    .event-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .event-card:hover .event-image {
+        transform: scale(1.05);
+    }
+
+    .event-date-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .event-content {
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .event-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.75rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .event-description {
+        font-size: 0.875rem;
+        color: var(--medium);
+        margin-bottom: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .event-meta {
+        margin-top: auto;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        font-size: 0.8125rem;
+    }
+
+    .meta-icon {
+        color: var(--primary);
+        margin-right: 0.5rem;
+        width: 16px;
+        text-align: center;
+    }
+
+    .btn-details {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        text-align: center;
+        flex-grow: 1;
+    }
+
+    .btn-details:hover {
+        background-color: var(--secondary);
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3rem 0;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        color: var(--medium);
+        margin-bottom: 1rem;
+    }
+
+    .empty-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-text {
+        color: var(--medium);
+        max-width: 500px;
+        margin: 0 auto 1.5rem;
+    }
+
+    a:focus, button:focus, input:focus {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+    }
+</style>
 {% endblock %}
 
 {% block body %}
-<div class="container py-5">
-    <div class="row">
-        <!-- Filter Section (Left) -->
-        <div class="col-md-3 mb-4">
-            <div class="filter-section sticky-top">
-                <h4 class="mb-4">🔍 Filters</h4>
-                <form>
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select name="status" class="form-select">
-                            <option value="">All</option>
-                            <option value="actif">Active</option>
-                            <option value="inactif">Inactive</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Apply</button>
-                </form>
+<div class="container">
+    <div class="main-content">
+        <!-- Filters Section -->
+        <aside class="filter-section">
+            <div class="filter-header">
+                <div class="filter-icon">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
+                <h2 class="filter-title">Filtrer les événements</h2>
             </div>
-        </div>
+            
+            <form method="get" role="search">
+                <div class="form-group">
+                    <label for="search" class="form-label">Recherche</label>
+                    <input type="text" id="search" name="q" class="form-control" 
+                           value="{{ searchTerm }}" 
+                           placeholder="Titre, description..." 
+                           aria-label="Rechercher des événements">
+                </div>
+                
+                <div class="form-group">
+                    <label for="location" class="form-label">Lieu</label>
+                    <input type="text" id="location" name="lieu" class="form-control" 
+                           value="{{ location }}" 
+                           placeholder="Ville ou adresse"
+                           aria-label="Filtrer par lieu">
+                </div>
+                
+                <div class="form-group">
+                    <label for="date" class="form-label">Date</label>
+                    <select id="date" name="date" class="form-control" aria-label="Filtrer par date">
+                        <option value="">Toutes les dates</option>
+                        <option value="today" {{ dateFilter == 'today' ? 'selected' }}>Aujourd'hui</option>
+                        <option value="week" {{ dateFilter == 'week' ? 'selected' }}>Cette semaine</option>
+                        <option value="month" {{ dateFilter == 'month' ? 'selected' }}>Ce mois</option>
+                        <option value="future" {{ dateFilter == 'future' ? 'selected' }}>Futurs événements</option>
+                        <option value="past" {{ dateFilter == 'past' ? 'selected' }}>Événements passés</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-apply">
+                    <i class="fas fa-filter mr-2"></i> Appliquer les filtres
+                </button>
 
-        <!-- Events Grid (Right) -->
-        <div class="col-md-9">
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                {% for event in evenements %}
-                    <div class="col">
-                        <div class="card event-card h-100">
-                            <!-- Event Image -->
-                            <img 
-                                src="{{ event.imagename ? asset('uploads/events/' ~ event.imagename) : 'https://via.placeholder.com/300x200?text=No+Image' }}" 
-                                class="card-img-top event-img" 
-                                alt="{{ event.titre }}"
-                            >
+                {% if searchTerm or location or dateFilter %}
+                    <a href="{{ path('app_evenement') }}" class="btn btn-outline-secondary w-100 mt-2">
+                        <i class="fas fa-times mr-2"></i> Réinitialiser
+                    </a>
+                {% endif %}
+            </form>
+        </aside>
 
-                            <!-- Card Body -->
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ event.titre }}</h5>
-                                <p class="card-text text-muted">{{ event.description|u.truncate(100, '...') }}</p>
-                                
-                                <!-- Event Meta -->
-                                <div class="mt-auto">
-                                    <p class="mb-1">
-                                        <i class="fas fa-calendar-alt"></i> 
-                                        {{ event.dateEvenement|date('d M Y, H:i') }}
-                                    </p>
-                                    <p class="mb-3">
-                                        <i class="fas fa-map-marker-alt"></i> 
-                                        {{ event.lieu ?? 'Online' }}
-                                    </p>
-                                </div>
-
-                                <!-- Button -->
-                                <a href="#" class="btn btn-event btn-primary mt-auto">
-                                    View Details
-                                </a>
+        <!-- Main Content -->
+        <main>
+            <div class="events-header">
+                <h1 class="events-title">Événements</h1>
+                <span class="events-count">{{ evenements|length }} événement(s)</span>
+            </div>
+            
+            {% if evenements|length > 0 %}
+                <div class="events-grid">
+                    {% for event in evenements %}
+                        <article class="event-card">
+                            <div class="event-image-container">
+                                <img src="{{ event.imagename ? asset('uploads/events/' ~ event.imagename) : 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80' }}" 
+                                     class="event-image" 
+                                     alt="{{ event.titre }}"
+                                     loading="lazy">
+                                <span class="event-date-badge">
+                                    {{ event.dateEvenement|date('d M') }}
+                                </span>
                             </div>
-                        </div>
+                            
+                            <div class="event-content">
+                                <h2 class="event-title">{{ event.titre }}</h2>
+                                <p class="event-description">
+                                    {{ event.description|u.truncate(120, '...') }}
+                                </p>
+                                
+                                <div class="event-meta">
+                                    <div class="meta-item">
+                                        <span class="meta-icon"><i class="far fa-calendar-alt"></i></span>
+                                        <span>{{ event.dateEvenement|date('d M Y, H:i') }}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-icon"><i class="fas fa-map-marker-alt"></i></span>
+                                        <span>{{ event.lieu ?? 'En ligne' }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="event-actions">
+                                    <a href="#" class="btn-details">
+                                        <i class="fas fa-info-circle mr-2"></i> Détails
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="far fa-calendar-times"></i>
                     </div>
-                {% else %}
-                    <div class="col-12">
-                        <div class="alert alert-info">No events found.</div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+                    <h2 class="empty-title">Aucun événement trouvé</h2>
+                    <p class="empty-text">
+                        Nous n'avons trouvé aucun événement correspondant à vos critères. 
+                        Essayez d'ajuster vos filtres ou revenez plus tard.
+                    </p>
+                    <a href="{{ path('app_evenement') }}" class="btn-apply">
+                        <i class="fas fa-times mr-2"></i> Réinitialiser les filtres
+                    </a>
+                </div>
+            {% endif %}
+        </main>
     </div>
 </div>
 {% endblock %}

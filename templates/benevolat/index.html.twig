@@ -2,195 +2,475 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        .filter-section {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        :root {
+            --primary: #4361ee;
+            --primary-light: #eef2ff;
+            --primary-lighter: #f5f7ff;
+            --secondary: #3f37c9;
+            --dark: #1e293b;
+            --medium: #64748b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius: 12px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
+        
+        /* Base styles */
+        body {
+            background-color: var(--light);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+        }
+        
+        /* Typography */
+        h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        /* Card styles */
         .benevolat-card {
             border: none;
-            border-radius: 10px;
+            border-radius: var(--radius);
             overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
             height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            position: relative;
         }
+        
         .benevolat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-lg);
         }
+        
+        .card-img-container {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
         .card-img-top {
-            height: 180px;
-            object-fit: cover;
-        }
-        .card-body {
-            padding: 20px;
-        }
-        .card-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        .card-text {
-            color: #6c757d;
-            margin-bottom: 15px;
-        }
-        .date-badge {
-            background: #e9ecef;
-            color: #495057;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        .btn-apply {
-            background: linear-gradient(135deg, #6c63ff, #4a3ff2);
-            border: none;
             width: 100%;
-            font-weight: 500;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
         }
-        .filter-title {
+        
+        .benevolat-card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-title {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+        
+        .card-text {
+            color: var(--medium);
+            margin-bottom: 1.25rem;
+            flex-grow: 1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* Status badge */
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 15px;
-            color: #495057;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            z-index: 1;
+            box-shadow: var(--shadow-sm);
         }
+        
+        .status-open {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .status-closed {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        /* Meta information */
+        .card-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--medium);
+        }
+        
+        .meta-icon {
+            width: 20px;
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+        
+        /* Buttons */
+        .btn-apply {
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 0.75rem;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-apply:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Filter section */
+        .filter-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            position: sticky;
+            top: 1rem;
+        }
+        
+        .filter-title {
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: var(--dark);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .filter-title i {
+            background: var(--primary-light);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+        
         .filter-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
+        
         .filter-group h6 {
             font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+        
+        .filter-group h6 i {
+            color: var(--primary);
+        }
+        
+        /* Form elements */
+        .form-control, .form-select {
+            border-radius: var(--radius);
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        .form-check-input {
+            width: 1.1em;
+            height: 1.1em;
+            margin-top: 0.15em;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
         .form-check-label {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-left: 0.5rem;
         }
+        
+        /* Search header */
         .search-header {
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
         }
+        
+        .search-header h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+        }
+        
+        .input-group-text {
+            background: white;
+            border-right: none;
+        }
+        
+        .input-group .form-control {
+            border-left: none;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        
+        .empty-icon {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+        
+        .empty-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-text {
+            color: var(--medium);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            font-size: 1rem;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .filter-section {
+                position: static;
+                margin-bottom: 2rem;
+            }
+            
+            .search-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .benevolat-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Delay animation for each card */
+        .benevolat-card:nth-child(1) { animation-delay: 0.1s; }
+        .benevolat-card:nth-child(2) { animation-delay: 0.2s; }
+        .benevolat-card:nth-child(3) { animation-delay: 0.3s; }
+        .benevolat-card:nth-child(4) { animation-delay: 0.4s; }
+        .benevolat-card:nth-child(5) { animation-delay: 0.5s; }
+        .benevolat-card:nth-child(6) { animation-delay: 0.6s; }
     </style>
 {% endblock %}
 
 {% block body %}
-<div class="container py-4">
+<div class="container py-5">
+    <!-- Search Header -->
     <div class="search-header">
-        <h2 class="mb-3">Offres Bénévolat</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="fas fa-search"></i></span>
-                    <input type="text" class="form-control" placeholder="Recherche...">
-                </div>
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <h2 class="mb-0">Découvrez des opportunités de bénévolat</h2>
             </div>
             <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-6">
-                        <input type="date" class="form-control" name="date_from" value="{{ filters.date_from }}">
+                <form method="get" class="search-form">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" name="search" placeholder="Rechercher une mission..." value="{{ filters.search }}">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-search me-2"></i>Rechercher
+                        </button>
                     </div>
-                    <div class="col-md-6">
-                        <input type="date" class="form-control" name="date_to" value="{{ filters.date_to }}">
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 
     <div class="row">
         <!-- Filter Section -->
-        <div class="col-lg-3">
-            <div class="filter-section sticky-top" style="top: 20px;">
-                <h4 class="filter-title">Filtres</h4>
+        <div class="col-lg-3 mb-4 mb-lg-0">
+            <form method="get" class="filter-form">
+                <input type="hidden" name="search" value="{{ filters.search }}">
                 
-                <div class="filter-group">
-                    <h6>Thème</h6>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="theme1" name="theme" value="social">
-                        <label class="form-check-label" for="theme1">Avec des coposages</label>
+                <div class="filter-section">
+                    <h4 class="filter-title">
+                        <i class="fas fa-sliders-h"></i>
+                        Filtres
+                    </h4>
+                    
+                    <!-- Status Filter -->
+                    <div class="filter-group">
+                        <h6><i class="fas fa-tag"></i>Statut</h6>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="status" id="status-all" value="" {{ filters.status == '' ? 'checked' }}>
+                            <label class="form-check-label" for="status-all">Tous les statuts</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="status" id="status-open" value="ouvert" {{ filters.status == 'ouvert' ? 'checked' }}>
+                            <label class="form-check-label" for="status-open">Disponible</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="status" id="status-closed" value="ferme" {{ filters.status == 'ferme' ? 'checked' }}>
+                            <label class="form-check-label" for="status-closed">Complet</label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="theme2" name="theme" value="nature">
-                        <label class="form-check-label" for="theme2">Nature</label>
+
+                    <!-- Date Range -->
+                    <div class="filter-group">
+                        <h6><i class="far fa-calendar-alt"></i>Date</h6>
+                        <div class="mb-3">
+                            <label for="date_from" class="form-label small">À partir du</label>
+                            <input type="date" class="form-control" id="date_from" name="date_from" value="{{ filters.date_from }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="date_to" class="form-label small">Jusqu'au</label>
+                            <input type="date" class="form-control" id="date_to" name="date_to" value="{{ filters.date_to }}">
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="theme3" name="theme" value="culture">
-                        <label class="form-check-label" for="theme3">Culture</label>
+
+                    <!-- Location Filter -->
+                    <div class="filter-group">
+                        <h6><i class="fas fa-map-marker-alt"></i>Lieu</h6>
+                        <input type="text" class="form-control" name="lieu" placeholder="Ville, région..." value="{{ filters.lieu }}">
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-apply">
+                            <i class="fas fa-filter me-2"></i>Appliquer les filtres
+                        </button>
+                        {% if filters.status or filters.lieu or filters.date_from or filters.date_to %}
+                            <a href="{{ path('app_benevolat') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-undo me-2"></i>Réinitialiser
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
-
-                <div class="filter-group">
-                    <h6>Durée</h6>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="duree1" name="duree" value="3-5">
-                        <label class="form-check-label" for="duree1">3-5 heures</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="duree2" name="duree" value="7-9">
-                        <label class="form-check-label" for="duree2">7-9 heures</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="duree3" name="duree" value="journee">
-                        <label class="form-check-label" for="duree3">Journée complète</label>
-                    </div>
-                </div>
-
-                <div class="filter-group">
-                    <h6>Destination</h6>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="dest1" name="destination" value="biscayne">
-                        <label class="form-check-label" for="dest1">Bleu de Biscayne</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="dest2" name="destination" value="mont">
-                        <label class="form-check-label" for="dest2">Gauche-dès-de-Mont</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="dest3" name="destination" value="veyn">
-                        <label class="form-check-label" for="dest3">Couette dès-net de Veynevold</label>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100 mt-3">Appliquer les filtres</button>
-            </div>
+            </form>
         </div>
 
         <!-- Benevolat List -->
         <div class="col-lg-9">
-            <div class="row">
-                {% if benevolats|length > 0 %}
+            {% if benevolats|length > 0 %}
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                     {% for benevolat in benevolats %}
-                        <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="col">
                             <div class="card benevolat-card">
-                                <img src="{{ benevolat.imagename ? asset('uploads/benevolat/' ~ benevolat.imagename) : 'https://via.placeholder.com/300x200?text=No+Image' }}" 
-                                     class="card-img-top" 
-                                     alt="{{ benevolat.titre }}">
+                                <div class="card-img-container">
+                                    <img src="{{ benevolat.imagename ? asset('uploads/benevolat/' ~ benevolat.imagename) : 'https://images.unsplash.com/photo-1524179091875-bf99a9a6af57?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80' }}" 
+                                         class="card-img-top" 
+                                         alt="{{ benevolat.titre }}"
+                                         loading="lazy">
+                                    <span class="status-badge status-{{ benevolat.status == 'ouvert' ? 'open' : 'closed' }}">
+                                        {{ benevolat.status == 'ouvert' ? 'Disponible' : 'Complet' }}
+                                    </span>
+                                </div>
                                 <div class="card-body">
                                     <h5 class="card-title">{{ benevolat.titre }}</h5>
                                     <p class="card-text">{{ benevolat.description|u.truncate(120, '...') }}</p>
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <span class="date-badge">
-                                            <i class="far fa-calendar-alt me-1"></i>
+                                    
+                                    <div class="card-meta">
+                                        <div class="meta-item">
+                                            <i class="far fa-calendar-alt meta-icon"></i>
                                             {{ benevolat.dateBenevolat|date('d/m/Y') }}
-                                        </span>
-                                        <span class="badge bg-{{ benevolat.status == 'ouvert' ? 'success' : 'secondary' }}">
-                                            {{ benevolat.status }}
-                                        </span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <i class="fas fa-map-marker-alt meta-icon"></i>
+                                            {{ benevolat.lieu }}
+                                        </div>
                                     </div>
-                                    <a href="#" class="btn btn-apply">Voir l'offre</a>
+                                    
+                                    <a href="#" class="btn btn-apply mt-auto">
+                                        <i class="fas fa-info-circle me-1"></i>Voir les détails
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
-                {% else %}
-                    <div class="col-12">
-                        <div class="alert alert-info">Aucune offre de bénévolat trouvée.</div>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="far fa-calendar-times"></i>
                     </div>
-                {% endif %}
-            </div>
+                    <h3 class="empty-title">Aucune mission trouvée</h3>
+                    <p class="empty-text">
+                        Nous n'avons trouvé aucune mission correspondant à vos critères. Essayez d'ajuster vos filtres ou revenez plus tard.
+                    </p>
+                    <a href="{{ path('app_benevolat') }}" class="btn btn-primary px-4">
+                        <i class="fas fa-undo me-2"></i>Réinitialiser les filtres
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

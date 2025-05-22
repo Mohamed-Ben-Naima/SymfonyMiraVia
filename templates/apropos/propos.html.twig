@@ -1,0 +1,430 @@
+{% block stylesheets %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            /* Ensure body takes full page if base.html.twig doesn't enforce bg color */
+            background-color: #E8E7DE; 
+            color: #013A71;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #81A8C5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7D8C6D; 
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card-hover-effect {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .btn-primary {
+            background-color: #81A8C5; 
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #7D8C6D; 
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #013A71; 
+            border: 2px solid #013A71; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #013A71; 
+            color: white;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #81A8C5; 
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .prose h4 {
+            color: #013A71;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            color: #374151;
+        }
+        .prose p {
+            color: #374151;
+        }
+
+        /* Keyframe animations for hero text (moved from JS to CSS for better separation) */
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-down { animation: fadeInDown 0.8s ease-out forwards; }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+    </style>
+{% endblock %}
+
+{% block body %}
+		{% include 'partials/_navbar.html.twig' %}
+
+<div class="bodypropo"> 
+    <section id="hero" class="bg-gradient-to-br from-[#013A71] to-[#81A8C5] text-white py-20 md:py-32">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in-down">
+                Bienvenue sur Miravia
+            </h1>
+            <p class="text-lg md:text-2xl mb-10 max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.3s;">
+                La plateforme où la générosité rencontre l'action. Nous connectons les bénévoles, les donateurs et les organisateurs d'événements pour amplifier l'impact social.
+            </p>
+            <a href="#mission" class="btn-primary py-3 px-8 rounded-lg text-lg font-semibold shadow-lg transform hover:scale-105 animate-fade-in-up" style="animation-delay: 0.6s;">
+                Découvrir Notre Mission
+            </a>
+        </div>
+    </section>
+
+    <section id="mission" class="py-16 md:py-24 bg-white fade-in-section"> 
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#013A71] mb-4">Notre Mission</h2> 
+                <p class="text-lg text-gray-700 max-w-2xl mx-auto"> 
+                    Chez Miravia, nous croyons au pouvoir de la collaboration pour transformer les intentions en actions concrètes et positives.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="https://placehold.co/600x400/81A8C5/FFFFFF?text=Impact+Collectif" alt="Illustration de l'impact collectif" class="rounded-lg shadow-xl" onerror="this.onerror=null; this.src='https://placehold.co/600x400/cccccc/333333?text=Image+Indisponible';">
+                </div>
+                <div class="text-gray-700 space-y-4"> 
+                    <p class="text-xl leading-relaxed">
+                        Notre objectif principal est de <strong class="text-[#81A8C5]">simplifier et dynamiser l'engagement social</strong>. Nous offrons un espace unique où les individus désireux d'aider, les philanthropes souhaitant contribuer et les organisations cherchant à mobiliser peuvent se rencontrer et collaborer efficacement.
+                    </p>
+                    <p class="leading-relaxed">
+                        Nous voulons briser les barrières, faciliter les connexions et permettre à chaque initiative, petite ou grande, de trouver les ressources et le soutien nécessaires pour s'épanouir et générer un véritable changement.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="fonctionnement" class="py-16 md:py-24 bg-[#f7f7f3] fade-in-section">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#013A71] mb-4">Comment Miravia Transforme l'Engagement Social</h2> 
+                <p class="text-lg text-gray-700 max-w-2xl mx-auto"> 
+                    Une plateforme intuitive pour chaque acteur du changement.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-lg card-hover-effect"> 
+                    <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-[#E8E7DE] text-[#013A71]"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v11.494m0 0A8.991 8.991 0 0012 21a8.991 8.991 0 000-14.747m0 11.494A8.997 8.997 0 0112 6.253M15 9.75M9 9.75M15 12.75M9 12.75m6-6v6m-6-6v6m6-6H9m6 6H9" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-[#013A71] mb-3">Pour les Bénévoles</h3> 
+                    <p class="text-gray-700 leading-relaxed"> 
+                        Trouvez des missions qui résonnent avec vos valeurs. Inscrivez-vous facilement à des événements et mettez vos compétences au service de causes qui vous passionnent.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg card-hover-effect">
+                    <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-[#E8E7DE] text-[#013A71]"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-[#013A71] mb-3">Pour les Donateurs</h3> 
+                    <p class="text-gray-700 leading-relaxed"> 
+                        Soutenez des projets et des causes qui ont un impact direct. Faites des dons en toute sécurité et suivez la progression des initiatives que vous financez.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg card-hover-effect">
+                    <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-[#E8E7DE] text-[#013A71]"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-[#013A71] mb-3">Pour les Organisateurs</h3> 
+                    <p class="text-gray-700 leading-relaxed"> 
+                        Créez, gérez et promouvez vos événements solidaires. Recrutez des bénévoles, collectez des fonds et mobilisez votre communauté avec nos outils simples et efficaces.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ia-event-inspiration" class="py-16 md:py-24 bg-white fade-in-section"> 
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#013A71] mb-4">✨ Inspirez-vous avec l'IA pour votre Événement</h2> 
+            <p class="text-lg text-gray-700 max-w-2xl mx-auto mb-10"> 
+                Organisateurs, décrivez brièvement votre cause ou le type d'événement, et laissez notre IA vous suggérer des pistes créatives !
+            </p>
+            <div class="max-w-xl mx-auto">
+                <div class="mb-4">
+                    <label for="eventIdeaInput" class="sr-only">Décrivez votre idée d'événement</label>
+                    <input type="text" id="eventIdeaInput" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#81A8C5] focus:border-[#81A8C5]" placeholder="Ex: Collecte de jouets, atelier écologique...">
+                </div>
+                <button id="generateEventIdeasBtn" class="btn-primary py-3 px-8 rounded-lg text-lg font-semibold shadow-md w-full sm:w-auto mb-6">
+                    Générer des Idées d'Engagement ✨
+                </button>
+                <div id="eventLoadingSpinner" class="hidden flex justify-center items-center my-4">
+                    <div class="spinner"></div>
+                    <p class="ml-3 text-gray-700">Génération des idées en cours...</p> 
+                </div>
+                <div id="eventIdeasResult" class="mt-6 p-6 bg-[#E8E7DE] rounded-lg shadow text-left hidden prose max-w-none"> 
+                </div>
+                <div id="eventErrorMessage" class="mt-4 text-red-600 hidden"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="valeurs" class="py-16 md:py-24 bg-white fade-in-section"> 
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#013A71] mb-4">Nos Valeurs Fondamentales</h2> 
+                <p class="text-lg text-gray-700 max-w-2xl mx-auto"> 
+                    Ce qui guide chacune de nos actions et décisions.
+                </p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div class="p-6">
+                    <div class="flex items-center justify-center w-20 h-20 mx-auto mb-4 rounded-full bg-[#013A71] text-white text-3xl">🤝</div> 
+                    <h3 class="text-xl font-semibold text-[#013A71] mb-2">Collaboration</h3> 
+                    <p class="text-gray-700">Unir les forces pour un plus grand impact.</p> 
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center justify-center w-20 h-20 mx-auto mb-4 rounded-full bg-[#013A71] text-white text-3xl">🔍</div> 
+                    <h3 class="text-xl font-semibold text-[#013A71] mb-2">Transparence</h3> 
+                    <p class="text-gray-700">Agir avec intégrité et clarté.</p> 
+                </div>
+                <div class="p-6">
+                     <div class="flex items-center justify-center w-20 h-20 mx-auto mb-4 rounded-full bg-[#013A71] text-white text-3xl">🌱</div> 
+                    <h3 class="text-xl font-semibold text-[#013A71] mb-2">Impact</h3> 
+                    <p class="text-gray-700">Viser des résultats concrets et durables.</p> 
+                </div>
+                <div class="p-6">
+                     <div class="flex items-center justify-center w-20 h-20 mx-auto mb-4 rounded-full bg-[#013A71] text-white text-3xl">💡</div>
+                    <h3 class="text-xl font-semibold text-[#013A71] mb-2">Innovation</h3> 
+                    <p class="text-gray-700">Repenser l'engagement pour le bien commun.</p> 
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="fade-in-section">
+        <div class="h-64 md:h-96 bg-cover bg-center" style="background-image: url('https://placehold.co/1200x400/013A71/E8E7DE?text=Ensemble+pour+le+Changement');">
+            <div class="bg-black bg-opacity-50 h-full flex items-center justify-center">
+                <h3 class="text-3xl md:text-4xl text-white font-bold text-center px-4">
+                    Chaque geste compte. Chaque connexion inspire.
+                </h3>
+            </div>
+        </div>
+    </section>
+
+    <section id="join-us" class="py-16 md:py-24 bg-[#f7f7f3] fade-in-section">  
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#013A71] mb-6">Prêt à Faire la Différence avec Miravia ?</h2>
+            <p class="text-lg text-gray-700 max-w-xl mx-auto mb-10"> 
+                Rejoignez notre communauté grandissante et contribuez à un monde plus solidaire. Votre engagement est précieux.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                {# Replace # with actual Symfony routes using path() function later #}
+                <a href="#" class="btn-primary py-3 px-8 rounded-lg text-lg font-semibold shadow-md w-full sm:w-auto">
+                    Je veux être Bénévole
+                </a>
+                <a href="#" class="btn-secondary py-3 px-8 rounded-lg text-lg font-semibold shadow-md w-full sm:w-auto">
+                    Faire un Don
+                </a>
+                <a href="#" class="btn-secondary py-3 px-8 rounded-lg text-lg font-semibold shadow-md w-full sm:w-auto">
+                    Organiser un Événement
+                </a>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // Intersection Observer API animations
+        const sections = document.querySelectorAll('.fade-in-section');
+        const observerOptions = {
+            root: null, 
+            rootMargin: '0px',
+            threshold: 0.1 
+        };
+
+        const observer = new IntersectionObserver((entries, obs) => { 
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: unobserve after animation to save resources
+                    // obs.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Gemini API Integration for Event Inspiration
+        const generateEventIdeasBtn = document.getElementById('generateEventIdeasBtn');
+        const eventIdeaInput = document.getElementById('eventIdeaInput');
+        const eventIdeasResultDiv = document.getElementById('eventIdeasResult');
+        const eventLoadingSpinner = document.getElementById('eventLoadingSpinner');
+        const eventErrorMessageDiv = document.getElementById('eventErrorMessage');
+
+        // API Key passed from Symfony Controller
+        // The |e('js') filter is crucial for security to escape characters for JavaScript context.
+        const apiKey = "{{ gemini_api_key|e('js') }}"; 
+
+        // Check if API key is provided. If not, you might want to disable the feature or show a message.
+        if (!apiKey) {
+            console.warn("Gemini API Key is not configured. Event inspiration feature might not work.");
+            // Optionally disable the button or show a message to the user
+            // if (generateEventIdeasBtn) generateEventIdeasBtn.disabled = true;
+        }
+        
+        // The API URL already has `?key=${apiKey}` at the end.
+        // Make sure your full API URL including the model is correct.
+        // Example: https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY
+        // For gemini-2.0-flash it would be:
+        const modelName = "gemini-1.5-flash-latest"; // Or "gemini-pro" or the specific model you intend to use
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+
+        if (generateEventIdeasBtn) { // Check if the button exists on the page
+            generateEventIdeasBtn.addEventListener('click', async () => {
+                const userEventIdea = eventIdeaInput.value.trim();
+                if (!userEventIdea) {
+                    eventErrorMessageDiv.textContent = "Veuillez entrer une description de votre idée d'événement.";
+                    eventErrorMessageDiv.classList.remove('hidden');
+                    eventIdeasResultDiv.classList.add('hidden');
+                    return;
+                }
+
+                if (!apiKey) {
+                    eventErrorMessageDiv.textContent = "La fonctionnalité de génération d'idées n'est pas disponible (clé API manquante).";
+                    eventErrorMessageDiv.classList.remove('hidden');
+                    eventIdeasResultDiv.classList.add('hidden');
+                    return;
+                }
+
+                eventIdeasResultDiv.classList.add('hidden');
+                eventErrorMessageDiv.classList.add('hidden');
+                eventLoadingSpinner.classList.remove('hidden');
+                generateEventIdeasBtn.disabled = true;
+                
+                const eventPrompt = `En tant qu'expert en communication pour des causes sociales, suggère 3 idées créatives et engageantes pour un événement basé sur la description suivante : "${userEventIdea}". 
+                Pour chaque idée, propose :
+                1. Un titre accrocheur pour l'événement.
+                2. Une courte description (2-3 phrases) pour promouvoir l'événement.
+                3. Une suggestion d'activité principale.
+                4. Une idée pour engager les bénévoles.
+                5. Une idée pour encourager les dons (si applicable).
+                Formate la réponse en HTML avec des titres (h4) pour chaque idée et des listes à puces pour les détails. Assure-toi que le HTML est valide et bien structuré.`;
+
+                // Using the simpler generateContent structure for Gemini API
+                const eventPayload = {
+                    contents: [{
+                        parts: [{ text: eventPrompt }]
+                    }]
+                    // You can add generationConfig if needed, e.g.:
+                    // generationConfig: {
+                    //   temperature: 0.7,
+                    //   topK: 1,
+                    //   topP: 1,
+                    //   maxOutputTokens: 8192,
+                    // },
+                    // safetySettings: [ /* configure as needed */ ]
+                };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(eventPayload)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Error from API (Event Ideas):', errorData);
+                        let errorMessage = `Erreur de l'API: ${response.statusText}.`;
+                        if (errorData && errorData.error && errorData.error.message) {
+                            errorMessage += ` ${errorData.error.message}`;
+                        }
+                        // Check for specific API key related errors
+                        if (response.status === 400 && errorData?.error?.message?.toLowerCase().includes("api key not valid")) {
+                             errorMessage = "La clé API fournie n'est pas valide. Veuillez contacter l'administrateur.";
+                        } else if (response.status === 403) {
+                            errorMessage = "L'accès à l'API a été refusé. Vérifiez les permissions de la clé API.";
+                        }
+                        throw new Error(errorMessage);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0 &&
+                        result.candidates[0].content.parts[0].text) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        eventIdeasResultDiv.innerHTML = text; // Make sure 'text' is safe HTML or sanitize it
+                        eventIdeasResultDiv.classList.remove('hidden');
+                    } else {
+                        console.error('Unexpected response structure (Event Ideas):', result);
+                        if (result.promptFeedback && result.promptFeedback.blockReason) {
+                             throw new Error(`La réponse de l'IA a été bloquée: ${result.promptFeedback.blockReason}. Veuillez ajuster votre demande.`);
+                        } else {
+                             throw new Error("La réponse de l'IA (Idées d'événement) n'a pas pu être traitée. Structure inattendue.");
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Failed to generate event ideas:', error);
+                    eventErrorMessageDiv.textContent = `Une erreur est survenue : ${error.message}. Veuillez réessayer.`;
+                    eventErrorMessageDiv.classList.remove('hidden');
+                } finally {
+                    eventLoadingSpinner.classList.add('hidden');
+                    generateEventIdeasBtn.disabled = false;
+                }
+            });
+        } else {
+            console.warn("Element with ID 'generateEventIdeasBtn' not found.");
+        }
+    </script>
+    </div>
+{% endblock %}

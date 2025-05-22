@@ -1,0 +1,223 @@
+{# templates/search/index.html.twig #}
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ asset('styles/volss.css') }}"> 
+{% endblock %}
+
+{% block body %}
+    {# Ici, vous collez la structure HTML du search-container ET les popups #}
+    {# Assurez-vous que l'image de fond est gérée par le CSS du body ou un conteneur global si besoin #}
+    <div class="search-container">
+        <div class="tabs">
+            <button class="tab-button active" data-form="flights-form"><i class="fas fa-plane"></i> Vols</button>
+            <button class="tab-button" data-form="hotels-form"><i class="fas fa-hotel"></i> Hôtels</button>
+            <button class="tab-button" data-form="cars-form"><i class="fas fa-car"></i> Voitures</button>
+        </div>
+
+        <div id="flights-form" class="search-form active-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="from-flight">De</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {# Pour les formulaires Symfony, vous utiliserez {{ form_widget(form.from_flight) }} #}
+                        {# Pour l'instant, on garde l'HTML statique pour le design #}
+                        <input type="text" id="from-flight" placeholder="Ville ou aéroport de départ">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="to-flight">À</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <input type="text" id="to-flight" placeholder="Ville ou aéroport d'arrivée">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="departure-flight">Départ</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="text" id="departure-flight" class="datepicker" placeholder="Sélectionnez une date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="return-flight">Retour</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="text" id="return-flight" class="datepicker" placeholder="Sélectionnez une date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="travelers-flight-input">Voyageurs</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="travelers-flight-input" value="1 Adulte, Économie" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                {# Pour un formulaire Symfony, ce serait un bouton de soumission #}
+                <button type="submit" class="search-ai-button"><i class="fas fa-search"></i> Recherche IA Vols</button>
+            </div>
+        </div>
+
+        <div id="hotels-form" class="search-form">
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="destination-hotel">Destination</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-city"></i>
+                        <input type="text" id="destination-hotel" placeholder="Ville, région ou hôtel spécifique">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="checkin-hotel">Arrivée</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="text" id="checkin-hotel" class="datepicker" placeholder="Sélectionnez une date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="checkout-hotel">Départ</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="text" id="checkout-hotel" class="datepicker" placeholder="Sélectionnez une date">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="guests-rooms-hotel-input">Nb de personnes et chambres</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-users"></i>
+                        <input type="text" id="guests-rooms-hotel-input" value="1 Adulte, 1 Chambre" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button type="submit" class="search-ai-button"><i class="fas fa-concierge-bell"></i> Recherche Hôtels</button>
+            </div>
+        </div>
+
+        <div id="cars-form" class="search-form">
+             <div class="form-row">
+                <div class="form-group">
+                    <label for="pickup-car">Lieu de prise en charge</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <input type="text" id="pickup-car" placeholder="Ville ou aéroport">
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label for="dropoff-car">Lieu de restitution (si différent)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <input type="text" id="dropoff-car" placeholder="Ville ou aéroport">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pickup-date-car">Date de prise en charge</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="text" id="pickup-date-car" class="datepicker" placeholder="Sélectionnez une date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dropoff-date-car">Date de restitution</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="text" id="dropoff-date-car" class="datepicker" placeholder="Sélectionnez une date">
+                    </div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button type="submit" class="search-ai-button"><i class="fas fa-car-side"></i> Recherche Voitures</button>
+            </div>
+        </div>
+    </div> {# FIN de .search-container #}
+
+    <div id="travelers-popup-flights" class="travelers-popup">
+        <div class="travelers-popup-content">
+            <div class="form-group">
+                <label for="cabin-class-flights">Classe de cabine</label>
+                <select id="cabin-class-flights" name="cabin-class-flights">
+                    <option value="Economie" selected>Économie</option>
+                    <option value="Premium Economie">Premium Économie</option>
+                    <option value="Affaires">Affaires</option>
+                    <option value="Premiere">Première</option>
+                </select>
+            </div>
+            <div class="traveler-type">
+                <div class="traveler-label">
+                    <span>Adultes</span>
+                    <span class="age-range">18 ans et plus</span>
+                </div>
+                <div class="traveler-counter">
+                    <button type="button" class="counter-btn" data-action="decrement" data-type="adults-flights">-</button>
+                    <input type="text" id="adults-flights-count" value="1" readonly class="counter-value">
+                    <button type="button" class="counter-btn" data-action="increment" data-type="adults-flights">+</button>
+                </div>
+            </div>
+            <div class="traveler-type">
+                <div class="traveler-label">
+                    <span>Enfants</span>
+                    <span class="age-range">0 à 17 ans</span>
+                </div>
+                <div class="traveler-counter">
+                    <button type="button" class="counter-btn" data-action="decrement" data-type="children-flights">-</button>
+                    <input type="text" id="children-flights-count" value="0" readonly class="counter-value">
+                    <button type="button" class="counter-btn" data-action="increment" data-type="children-flights">+</button>
+                </div>
+            </div>
+            <p class="info-text">Votre âge à la date du voyage doit être valide pour la catégorie d’âge réservée. Les compagnies aériennes ont des restrictions pour les passagers de moins de 18 ans voyageant seuls.</p>
+            <p class="info-text">Les limites d’âge et les politiques en matière de voyage avec des enfants peuvent varier, veuillez vérifier avec la compagnie aérienne avant la réservation.</p>
+            <button type="button" id="done-travelers-flights" class="popup-done-btn">Terminer</button>
+        </div>
+    </div>
+
+    <div id="guests-rooms-popup-hotel" class="travelers-popup">
+        <div class="travelers-popup-content">
+            <div class="traveler-type">
+                <div class="traveler-label-hotel">
+                    <i class="fas fa-male icon-popup-hotel"></i> Adultes
+                </div>
+                <div class="traveler-counter">
+                    <button type="button" class="counter-btn" data-action="decrement" data-type="adults-hotel">-</button>
+                    <input type="text" id="adults-hotel-count" value="1" readonly class="counter-value">
+                    <button type="button" class="counter-btn" data-action="increment" data-type="adults-hotel">+</button>
+                </div>
+            </div>
+            <div class="traveler-type">
+                <div class="traveler-label-hotel">
+                    <i class="fas fa-child icon-popup-hotel"></i> Enfants
+                </div>
+                <div class="traveler-counter">
+                    <button type="button" class="counter-btn" data-action="decrement" data-type="children-hotel">-</button>
+                    <input type="text" id="children-hotel-count" value="0" readonly class="counter-value">
+                    <button type="button" class="counter-btn" data-action="increment" data-type="children-hotel">+</button>
+                </div>
+            </div>
+            <div class="traveler-type">
+                <div class="traveler-label-hotel">
+                    <i class="fas fa-door-open icon-popup-hotel"></i> Chambres
+                </div>
+                <div class="traveler-counter">
+                    <button type="button" class="counter-btn" data-action="decrement" data-type="rooms-hotel">-</button>
+                    <input type="text" id="rooms-hotel-count" value="1" readonly class="counter-value">
+                    <button type="button" class="counter-btn" data-action="increment" data-type="rooms-hotel">+</button>
+                </div>
+            </div>
+            <button type="button" id="done-guests-rooms-hotel" class="popup-done-btn">Terminé</button>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
+    <script src="{{ asset('javascript/vols.js') }}"></script> {# Chemin vers votre JS spécifique #}
+{% endblock %}

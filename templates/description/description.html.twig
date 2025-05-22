@@ -1,0 +1,196 @@
+{# templates/description/description.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ event.titre ? event.titre|e : 'Détails de l\'événement' }} - MiraVia{% endblock %}
+
+{% block stylesheets %}
+    {# Link to CSS specific to THIS page #}
+    <link rel="stylesheet" href="{{ asset('styles/description.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container"> {# Main content wrapper #}
+    <header class="page-header">
+        <h1>{{ event.titre|default('Titre de l\'événement')|e }}</h1>
+        <div class="header-meta">
+            <span class="location">{{ event.lieu|default('Lieu non spécifié')|e }}</span>
+            {# Rating can be made dynamic if you have a rating system for events/partners #}
+            <span class="rating">★★★★★ <span class="review-text">(Avis indicatifs)</span></span>
+        </div>
+    </header>
+
+    <section class="gallery">
+        <div class="main-image">
+            {# Check if imagename is not null and not the string 'NULL' before using it #}
+            <img src="{{ (event.imagename and event.imagename != 'NULL') ? asset('uploads/event_images/' ~ event.imagename|e) : asset('images/placeholder-event.jpg') }}" 
+                 alt="Image pour {{ event.titre|default('l\'événement')|e }}">
+        </div>
+        {# Add thumbnail images here if your design includes them for the event gallery #}
+    </section>
+
+    <nav class="tabs">
+        <ul>
+            <li><a id="apercuLink" class="active" href="#">Aperçu</a></li>
+            <li><a id="mapLink" href="#">Map</a></li>
+            <li><a id="avisLink" href="#client-reviews-section">Avis</a></li>
+        </ul>
+        <div class="tab-actions">
+            <button class="icon-button" aria-label="Like">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+            <div class="share-button-container">
+                <button class="icon-button" aria-label="Share" id="shareButton" aria-haspopup="true" aria-expanded="false">
+                    <svg viewBox="0 0 24 24"> <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 8.39C7.5 7.89 6.79 7.59 6 7.59c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.3 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg>
+                </button>
+                <div class="share-popup" id="sharePopup">
+                    <a href="#" id="shareFacebook" class="share-option facebook" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.407.593 24 1.324 24h11.494v-9.294H9.689v-3.621h3.129V8.41c0-3.1 1.894-4.785 4.66-4.785 1.324 0 2.463.099 2.795.142v3.24H17.88c-1.502 0-1.794.714-1.794 1.762v2.31h3.584l-.467 3.622h-3.117V24h6.115C23.407 24 24 23.407 24 22.676V1.324C24 .593 23.407 0 22.676 0z"/></svg>
+                        Facebook
+                    </a>
+                    <a href="#" id="shareInstagram" class="share-option instagram" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.268.058 2.148.244 2.91.536.803.313 1.46.706 2.123 1.37.662.662 1.055 1.32 1.368 2.123.292.762.478 1.642.536 2.91.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.058 1.268-.244 2.148-.536 2.91-.313.803-.706 1.46-1.368 2.123-.663.662-1.32 1.055-2.123 1.368-.762.292-1.642.478-2.91.536-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.268-.058-2.148-.244-2.91-.536-.803-.313-1.46-.706-2.123-1.368-.662-.663-1.055-1.32-1.368 2.123-.292-.762-.478-1.642-.536-2.91-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.058-1.268.244-2.148.536-2.91.313-.803.706-1.46 1.368-2.123.663-.662 1.32-1.055 2.123-1.368.762-.292 1.642.478 2.91-.536C8.416 2.175 8.796 2.163 12 2.163m0-2.163C8.74 0 8.324.012 7.053.072 5.77.133 4.824.327 3.98.695 3.112 1.078 2.35 1.557 1.636 2.27c-.715.715-1.194 1.474-1.578 2.342C.012 5.484 0 5.9 0 7.254 0 8.74-.012 9.156.072 10.427c.06 1.27.255 2.217.622 3.06.385.87.864 1.628 1.578 2.342.715.715 1.474 1.194 2.342 1.578.843.368 1.79.562 3.06.622C8.324 23.988 8.74 24 12 24s3.676-.012 4.947-.072c1.27-.06 2.217-.255 3.06-.622.87-.385 1.628-.864 2.342-1.578.715-.715 1.194-1.474 1.578-2.342.368-.843.562-1.79.622-3.06.084-1.27.072-1.686.072-4.947s.012-3.676-.072-4.947c-.06-1.27-.255-2.217-.622-3.06-.385-.87-.864-1.628-1.578-2.342C21.652 1.194 20.893.715 20.025.33c-.843-.368-1.79-.562-3.06-.622C15.676.012 15.26 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
+                        Instagram
+                    </a>
+                    <a href="#" id="shareGmail" class="share-option gmail" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 5.889V5c0-1.103-.897-2-2-2H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V9.159c0-.021-.006-.041-.007-.062L13.03 14.58c-.49.334-1.083.5-1.69.5s-1.2-.166-1.69-.5L.007 9.097C.006 9.118 0 9.138 0 9.159V19c0 1.103.897 2 2 2h20c1.103 0 2-.897 2-2V5.889zM3.305 4h17.39l-8.695 5.8L3.305 4zM22 5.889l-8.938 6.025L22 17.825V5.889zM2 5.889v11.936l8.938-5.912L2 5.889z"/></svg>
+                        Gmail
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="tabContentWrapper">
+        <div id="overviewTabContent">
+            <main class="content-area">
+                <article class="description">
+                    <h2>Description de l'Événement</h2>
+                    <p>
+                        <strong>Date:</strong> {{ event.dateEvenement ? event.dateEvenement|date('d/m/Y à H:i') : 'Non spécifiée' }}
+                    </p>
+                    <p>
+                        {{ (event.description and event.description != 'NULL') ? event.description|nl2br : 'Aucune description détaillée disponible pour cet événement.' }}
+                    </p>
+                </article>
+
+                <aside class="profile-info">
+                    <h3>Informations sur l'Organisateur</h3>
+                    {% if partner %}
+                        <div class="profile-details">
+                            <div class="profile-header">
+                                <img src="{{ (partner.logo and partner.logo != 'NULL') ? asset('uploads/partner_logos/' ~ partner.logo|e) : asset('images/placeholder-logo.png') }}" 
+                                     alt="Logo de {{ partner.nomEntreprise|default('')|e }}" class="company-logo">
+                                <div class="company-info">
+                                    <h4 class="company-name">
+                                        {{ partner.nomEntreprise|default('Nom du Partenaire')|e }}
+                                        {# You can add a verified badge logic if partner has a 'verified' status #}
+                                        {# <span class="verified-badge" title="Vérifié">...</span> #}
+                                    </h4>
+                                    {% if partner.typeActivite and partner.typeActivite != 'NULL' %}
+                                        <p class="company-activity" style="font-size: 0.9em; color: #555;">{{ partner.typeActivite|e }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <ul class="contact-info">
+                                {% if partner.siteWeb and partner.siteWeb != 'NULL' %}
+                                <li>
+                                    <span class="info-icon">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" class="contact-svg-icon"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm4.09-10.396c-.196-.816-.6-1.565-1.178-2.142s-1.326-.982-2.142-1.178L12 5.72V3.5c0-.276-.224-.5-.5-.5s-.5.224-.5.5v2.22l-.77.284c-.816.196-1.565.6-2.142 1.178S4.435 8.486 4.24 9.302L2.016 9.698c-.26.096-.384.39-.256.635l.93 1.852c.103.205.324.315.55.315.073 0 .147-.016.218-.05L5.72 12l.284.77c.196.816.6 1.565 1.178 2.142s1.326.982 2.142 1.178L10.195 17v1.5c0 .276.224.5.5.5s.5-.224.5-.5V17l.87-.316c.816-.196 1.565-.6 2.142-1.178s.982-1.326 1.178-2.142l.316-.87h2.224c.276 0 .5-.224.5-.5s-.224-.5-.5-.5h-2.224l-.316-.87zM15 12c0 .833-.367 1.6-.96 2.121S12.833 15 12 15s-1.6-.367-2.121-.96S9 12.833 9 12s.367-1.6.96-2.121S11.167 9 12 9s1.6.367 2.121.96S15 11.167 15 12z"/></svg>
+                                    </span>
+                                    <a href="{{ (partner.siteWeb starts with 'http://' or partner.siteWeb starts with 'https://') ? partner.siteWeb : 'http://' ~ partner.siteWeb }}" target="_blank" rel="noopener noreferrer" class="website-link">{{ partner.siteWeb|e }}</a>
+                                </li>
+                                {% endif %}
+                                {% if partner.adresse and partner.adresse != 'NULL' %}
+                                <li>
+                                    <span class="info-icon">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" class="contact-svg-icon"><path d="M12 2C8.13 2 5 5.13 5 9c0 4.25 7 13 7 13s7-8.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                    </span>
+                                    <span class="address-text">{{ partner.adresse|e }}</span>
+                                </li>
+                                {% endif %}
+                                {% if partner.telephone and partner.telephone != 'NULL' %}
+                                <li>
+                                    <span class="info-icon">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" class="contact-svg-icon"><path d="M6.62 10.79c1.44 2.83 3.76 5.15 6.59 6.59l2.2-2.2c.28-.28.67-.36 1.02-.25 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                                    </span>
+                                    <a href="tel:{{ partner.telephone|replace({' ': ''})|e }}" class="phone-link">{{ partner.telephone|e }}</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <p>Les informations sur l'organisateur ne sont pas disponibles pour cet événement.</p>
+                    {% endif %}
+                </aside>
+            </main>
+
+            <section class="sustainable-goals">
+                <div class="sustainable-goals-heading-image">
+                    <img src="{{ asset('images/sustanible.svg') }}" alt="Sustainable Goals"> 
+                </div>
+            </section>
+        </div> {# End of overviewTabContent #}
+
+        <div id="mapTabContent" style="display: none;">
+            <div id="mapPlaceholder">
+                Map of <span id="mapLocationName">{{ event.lieu|default('Lieu non spécifié')|e }}</span> will appear here.
+                <br><br>
+                <em>(Pour intégrer une carte en direct, vous remplaceriez ce placeholder.
+                Par exemple, avec un iframe Google Maps centré sur {{ event.lieu|default('Ghana')|e }} - obtenez le code actuel depuis Google Maps):</em>
+                <pre style="font-size: 10px; text-align: left; background: #f0f0f0; padding: 5px; margin-top:10px; overflow-x:auto;">
+&lt;iframe
+    src="YOUR_GOOGLE_MAPS_EMBED_URL_FOR_{{ event.lieu|url_encode|default('Ghana') }}_HERE"
+    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"&gt;
+&lt;/iframe&gt;</pre>
+                <em>Vous pourriez avoir besoin d'une clé API pour certains services de cartographie.</em>
+            </div>
+        </div> {# End of mapTabContent #}
+    </div> {# End of tabContentWrapper #}
+
+    <section class="client-reviews" id="client-reviews-section">
+        <div class="reviews-header">
+            <h2>Avis des Clients (Exemples)</h2>
+            <div class="overall-rating">
+                <span class="rating-score">4,30</span>
+                <span class="rating-stars">★★★★★</span>
+                <span class="reviews-count">854 Avis</span>
+            </div>
+        </div>
+
+        {# Static review items for now. You would fetch and loop through reviews for this event/partner #}
+        <div class="review-item">
+            <div class="review-meta">
+                <img src="{{ asset('images/photoprofil.svg') }}" alt="Avatar Jeanne McCay" class="avatar">
+                <div class="reviewer-info">
+                    <span class="reviewer-name">Jeanne McCay</span>
+                    <span class="review-date">16 Mai 2012</span>
+                </div>
+            </div>
+            <div class="review-content">
+                <p><strong>Good Tour, Really Well Organised</strong></p>
+                <p>The tour was very well organised. One minus is that you get completely bombarded with information. You also have to stand up for too long at the private entrance to the Tower of London, which leads to a lack of time later on, which was the same, but stress the quality was great but you couldn't enjoy it, no like to ask the organisers please</p>
+            </div>
+        </div>
+        <div class="review-item">
+            <div class="review-meta">
+                <img src="{{ asset('images/photoprofil.svg') }}" alt="Avatar Jonny Wilcox" class="avatar">
+                <div class="reviewer-info">
+                    <span class="reviewer-name">Jonny Wilcox</span>
+                    <span class="review-date">8 Octobre 2012</span>
+                </div>
+            </div>
+            <div class="review-content">
+                <p><strong>Informative But Disappointed Not Seeing Changing Of The Guards</strong></p>
+                <p>The tour was very well organised. One minus is that you get completely bombarded with information. You also have to stand up for too long at the private entrance to the Tower of London, which leads to a lack of time later on, which was the same, but stress the quality was great but you couldn't enjoy it, I'd like to ask the organisers please</p>
+            </div>
+        </div>
+    </section>
+</div> {# End of .container #}
+{% endblock %} {# End of block body #}
+
+{% block javascripts %}
+    {{ parent() }} {# Includes scripts from base.html.twig's javascripts block (if any defined there) #}
+    {# Link to JS specific to THIS page, if any. The global script.js should handle tabs/share. #}
+    <script src="{{ asset('javascript/description.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,448 @@
+{# templates/vols/vol.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Vols{% endblock %}
+
+
+    {% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> {# Example FA 6 link, update if needed #}
+    {# Link to your CSS file in the public directory #}
+    <link rel="stylesheet" href="{{ asset('styles/vol.css') }}">
+{% endblock %}
+{% block body %}
+    <section class="hero-section">
+        <nav class="top-navigation">
+            <button class="nav-button active" data-form="flight-search-form" data-results="flights-results-content"
+                data-heading="Les meilleures offres de vols sur tous les itinéraires">
+                <span class="icon"><i class="fa-solid fa-plane"></i></span> Vols
+            </button>
+            <button class="nav-button" data-form="hotel-search-form" data-results="hotels-results-content"
+                data-heading="Trouvez l'hôtel de vos rêves dès aujourd'hui">
+                <span class="icon"><i class="fa-solid fa-hotel"></i></span> Hôtels
+            </button>
+            <button class="nav-button" data-form="car-rental-search-form" data-results="cars-results-content"
+                data-heading="Trouvez les meilleures offres pour louer une voiture">
+                <span class="icon"><i class="fa-solid fa-car"></i></span> Location de voiture
+            </button>
+        </nav>
+
+        <h1 class="main-heading">Les meilleures offres de vols sur tous les itinéraires</h1>
+
+        <div class="search-form-wrapper">
+            <div id="form-loader" class="form-loader-overlay d-none">
+                <div class="loader-spinner"></div>
+                <p class="loader-text">Recherche en cours...</p>
+            </div>
+
+            <div id="flight-search-form" class="search-form-content">
+                <div class="trip-type-options">
+                    <label><input type="radio" name="trip-type" id="round-trip" value="round-trip" checked>
+                        Aller-retour</label>
+                    <label><input type="radio" name="trip-type" id="one-way" value="one-way"> Aller simple</label>
+                </div>
+                <div class="form-row">
+                    <div class="origin-destination-group">
+                        <div class="input-group"> <label for="from">De</label>
+                         {# --- MODIFIED "FROM" FIELD --- #}
+                            <select id="from" name="from_airport" class="input-field">
+                                <option value="">Sélectionnez un aéroport</option>
+                                {% for aeroport in aeroports %}
+                                    <option value="{{ aeroport.iataCode }}">{{ aeroport.nom }} ({{ aeroport.iataCode }})</option>
+                                {% endfor %}
+                            </select>
+                            {# --- END OF MODIFIED "FROM" FIELD --- #}
+                                </div>
+                        <div class="swap-button-container"> <button class="swap-button" title="Inverser">⇄</button>
+                        </div>
+                        <div class="input-group"> <label for="to">À</label> 
+                         {# --- MODIFIED "TO" FIELD --- #}
+                            <select id="to" name="to_airport" class="input-field">
+                                <option value="">Sélectionnez un aéroport</option>
+                                {% for aeroport in aeroports %}
+                                    <option value="{{ aeroport.iataCode }}">{{ aeroport.nom }} ({{ aeroport.iataCode }})</option>
+                                {% endfor %}
+                            </select>
+                            {# --- END OF MODIFIED "TO" FIELD --- #}
+                            </div>
+                    </div>
+                    <div class="input-group dates"> <label for="depart-date">Départ</label> <input type="date"
+                            id="depart-date" class="input-field" value="2025-05-15"> </div>
+                    <div class="input-group dates"> <label for="return-date">Retour</label> <input type="date"
+                            id="return-date" class="input-field" value="2025-05-20"> </div>
+                    <div class="input-group passengers">
+                        <label for="passengers-input">Voyageurs et classe</label>
+                        <input type="text" id="passengers-input" class="input-field-passenger"
+                            value="1 adulte, Économie" readonly>
+                        <div id="passengers-popover" class="d-none">
+                            <div class="popover-section"> <label for="cabin-class-select" class="popover-label">Classe
+                                    de cabine</label> <select id="cabin-class-select" class="popover-select">
+                                    <option value="ECONOMY">Économie</option>
+                                    <option value="PREMIUM_ECONOMY">Économie Premium</option>
+                                    <option value="BUSINESS">Affaires</option>
+                                    <option value="FIRST">Première Classe</option>
+                                </select> </div>
+                            <div class="popover-section">
+                                <div class="counter-group"> <label class="popover-label">Adultes</label>
+                                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                                        <div class="counter-controls"> <button type="button" class="counter-btn"
+                                                id="adults-minus">-</button> <span id="adults-count"
+                                                class="count-display">1</span> <button type="button" class="counter-btn"
+                                                id="adults-plus">+</button> </div> <span class="age-hint">18 ans et
+                                            plus</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="popover-section">
+                                <div class="counter-group"> <label class="popover-label">Enfants</label>
+                                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                                        <div class="counter-controls"> <button type="button" class="counter-btn"
+                                                id="children-minus">-</button> <span id="children-count"
+                                                class="count-display">0</span> <button type="button" class="counter-btn"
+                                                id="children-plus">+</button> </div><span class="age-hint">0 à 17
+                                            ans</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="popover-info-text">
+                                <p>Votre âge à la date du voyage doit être valide pour la catégorie d'âge réservée...
+                                </p>
+                                <p>Les limites d'âge et les politiques en matière de voyage...</p>
+                            </div>
+                            <button type="button" id="popover-done-btn" class="popover-done-button">Terminer</button>
+                        </div>
+                    </div>
+                    <button type="button" id="search-flights-btn" class="search-button">Rechercher</button>
+                </div>
+                {# This form-options-wrapper was missing in your latest vol.html but present in earlier versions. Add if needed. #}
+                {# <div id="form-options-checkboxes" class="form-options-wrapper"> 
+                    <div class="form-options"> <div class="checkbox-group left"><label><input type="checkbox"> Ajouter des aéroports à proximité</label></div> <div class="checkbox-group right"><label><input type="checkbox"> Ajouter des aéroports à proximité</label></div> </div>
+                    <div class="form-options" style="margin-top: -2px;"> <div class="checkbox-group direct-flight"><label><input type="checkbox"> Vols directs uniquement</label></div> </div>
+                </div> #}
+            </div>
+
+            <div id="hotel-search-form" class="search-form-content d-none">
+                <div class="form-row">
+                    <div class="input-group full-width"> <label for="hotel-location">Où souhaitez-vous séjourner
+                            ?</label> <input type="text" id="hotel-location" class="input-field"
+                            placeholder="Ville, hôtel, lieu d'intérêt..."> </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group dates"> <label for="checkin-date">Arrivée</label> <input type="date"
+                            id="checkin-date" class="input-field"> </div>
+                    <div class="input-group dates"> <label for="checkout-date">Départ</label> <input type="date"
+                            id="checkout-date" class="input-field"> </div>
+                    <div class="input-group guests-rooms"> <label for="hotel-guests-rooms">Nb de personnes et
+                            chambres</label> <input type="text" id="hotel-guests-rooms" class="input-field"
+                            value="2 adultes, 1 chambre"> </div>
+                    <button type="button" id="search-hotels-btn" class="search-button">Chercher des hôtels</button>
+                </div>
+            </div>
+
+            <div id="car-rental-search-form" class="search-form-content d-none">
+                <div class="form-row">
+                    <div class="input-group full-width"> <label for="pickup-location">Lieu de prise en charge</label>
+                        <input type="text" id="pickup-location" class="input-field" placeholder="Ville, aéroport...">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group full-width"> <label for="dropoff-location">Lieu de restitution (si
+                            différent)</label> <input type="text" id="dropoff-location" class="input-field"
+                            placeholder="Ville, aéroport..."> </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group dates"> <label for="pickup-date">Date de prise en charge</label> <input
+                            type="date" id="pickup-date" class="input-field"> </div>
+                    <div class="input-group times"> <label for="pickup-time">Heure</label> <input type="time"
+                            id="pickup-time" class="input-field" value="10:00"> </div>
+                    <div class="input-group dates"> <label for="dropoff-date">Date de restitution</label> <input
+                            type="date" id="dropoff-date" class="input-field"> </div>
+                    <div class="input-group times"> <label for="dropoff-time">Heure</label> <input type="time"
+                            id="dropoff-time" class="input-field" value="10:00"> </div>
+                </div>
+                <div class="form-row" style="justify-content: flex-end; margin-top:20px;"> <button type="button"
+                        id="search-cars-btn" class="search-button">Rechercher une voiture</button> </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="results-area" class="results-area-wrapper ">
+        <div id="results-loader" class="results-loader-overlay d-none">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Chargement...</p>
+        </div>
+
+        <aside id="filter-sidebar-area" class="filter-sidebar">
+            <div class="filter-category" data-category="flights">
+                <div class="filter-section">
+                    <h3>Escales <span class="toggle-icon">▲</span></h3>
+                    <div class="filter-option"> <label><input type="checkbox" name="stops" value="direct" checked>
+                            Direct <span class="price-hint">d</span></label> </div>
+                    <div class="filter-option"> <label><input type="checkbox" name="stops" value="1stop" checked> 1
+                            escale <span class="price-hint"></span></label> </div>
+                    <div class="filter-option"> <label><input type="checkbox" name="stops" value="2plusstops" checked>
+                            2+ escales <span class="price-hint"></span></label> </div>
+                </div>
+                <div class="filter-section">
+                    <h3>Heures de départ <span class="toggle-icon">▲</span></h3>
+                    <div class="filter-option"> <label class="filter-range-label">Aller</label>
+                        <div class="filter-range-display">00:00 - 23:59</div> <input type="range"
+                            class="time-slider-placeholder"> <input type="range" class="time-slider-placeholder">
+                    </div>
+                    <div class="filter-option"> <label class="filter-range-label">Retour</label>
+                        <div class="filter-range-display">00:00 - 23:59</div> <input type="range"
+                            class="time-slider-placeholder"> <input type="range" class="time-slider-placeholder">
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <h3>Durée du voyage <span class="toggle-icon">▲</span></h3>
+                    <div class="filter-option">
+                        <div class="filter-range-display">3,5h - 31,0h</div> <input type="range"
+                            class="duration-slider-placeholder"> <input type="range"
+                            class="duration-slider-placeholder">
+                    </div>
+                </div>
+            </div>
+            <div class="filter-category d-none" data-category="hotels">
+                <div class="filter-section">
+                    <h3>Étoiles <span class="toggle-icon">▲</span></h3>
+                    <div class="filter-option"><label><input type="checkbox"> 5 étoiles</label></div>
+                    <div class="filter-option"><label><input type="checkbox"> 4 étoiles</label></div>
+                    <div class="filter-option"><label><input type="checkbox"> 3 étoiles</label></div>
+                </div>
+                <div class="filter-section">
+                    <h3>Type d'hébergement <span class="toggle-icon">▲</span></h3>
+                    <div class="filter-option"><label><input type="checkbox"> Hôtel</label></div>
+                    <div class="filter-option"><label><input type="checkbox"> Appartement</label></div>
+                </div>
+                <div class="filter-section">
+                    <h3>Services <span class="toggle-icon">▲</span></h3>
+                    <div class="filter-option"><label><input type="checkbox"> Wifi gratuit</label></div>
+                    <div class="filter-option"><label><input type="checkbox"> Piscine</label></div>
+                    <div class="filter-option"><label><input type="checkbox"> Petit déjeuner inclus</label></div>
+                </div>
+            </div>
+            <div class="filter-category d-none" data-category="cars">
+                <div class="filter-section">
+                    <h3>Type de voiture <span class="toggle-icon">▲</span></h3>
+                    <div class="filter-option"><label><input type="checkbox"> Mini</label></div>
+                    <div class="filter-option"><label><input type="checkbox"> Économique</label></div>
+                    <div class="filter-option"><label><input type="checkbox"> SUV</label></div>
+                </div>
+                <div class="filter-section">
+                    <h3>Politiques <span class="toggle-icon">▲</span></h3>
+                    <div class="filter-option"><label><input type="checkbox"> Annulation gratuite</label></div>
+                </div>
+                <div class="filter-section">
+                    <h3>Transmission <span class="toggle-icon">▲</span></h3>
+                    <div class="filter-option"><label><input type="checkbox"> Manuelle</label></div>
+                    <div class="filter-option"><label><input type="checkbox"> Automatique</label></div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="results-content-area">
+            <div id="flights-results-content" class="search-results-specific-content d-none">
+                {# Re-inserting the summary-filters-bar here based on previous context #}
+                <div class="summary-filters-bar">
+                    <div class="results-count">626 résultats</div>  
+                </div>
+                <div id="flight-cards-container">
+                    <article class="flight-card-modern">
+                        <div class="flight-details-modern">
+                            <div class="flight-segment-modern"> <span class="airline-logo-modern"><img
+                                        src="https://logo.clearbit.com/egyptair.com" alt="Egyptair"
+                                        onerror="this.style.display='none'"></span>
+                                <div class="time-airport-group"> <span class="time-modern">11:15</span><span
+                                        class="airport-code-modern">TUN</span></div>
+                                <div class="journey-info-modern"> <span class="duration-modern">3 h 05</span>
+                                    <div class="journey-line"><span class="dot"></span><span class="line"></span><span
+                                            class="plane-icon">✈</span><span class="line"></span><span
+                                            class="dot"></span></div> <span class="stops-modern">Direct</span>
+                                </div>
+                                <div class="time-airport-group" style="text-align: right;"> <span
+                                        class="time-modern">16:20</span><span class="airport-code-modern">CAI</span>
+                                </div>
+                            </div>
+                            <div class="flight-segment-modern"> <span class="airline-logo-modern"><img
+                                        src="https://logo.clearbit.com/rj.com" alt="Royal Jordanian"
+                                        onerror="this.style.display='none'"></span>
+                                <div class="time-airport-group"> <span class="time-modern">07:30</span><span
+                                        class="airport-code-modern">CAI</span></div>
+                                <div class="journey-info-modern"> <span class="duration-modern">7 h 05</span>
+                                    <div class="journey-line"><span class="dot"></span><span class="line"></span><span
+                                            class="plane-icon">✈</span><span class="line"></span><span class="dot"
+                                            style="background-color: #FF6B6B;"></span><span class="line"></span><span
+                                            class="plane-icon">✈</span><span class="line"></span><span
+                                            class="dot"></span></div> <span class="stops-modern">1 escale AMM</span>
+                                </div>
+                                <div class="time-airport-group" style="text-align: right;"> <span
+                                        class="time-modern">12:35</span><span class="airport-code-modern">TUN</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flight-action-modern"> <span class="favorite-icon-modern" role="button">♡</span>
+                            <div class="offers-price-modern"><span class="offers-count">11 offres dès</span><span
+                                    class="price-modern">406 €</span></div> <button class="view-btn-modern">Voir <span
+                                    class="arrow-icon">→</span></button>
+                            <div class="flight-meta-info-modern"> <span><i class="fas fa-suitcase icon"></i> Aucun
+                                    bagage en soute inclus</span> 
+                                    
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <div id="hotels-results-content" class="search-results-specific-content d-none">
+                <div class="hotel-top-filters">
+                    <button class="active">Recommandé <i class="fas fa-info-circle info-icon"></i></button>
+                    <button>Meilleurs commentaires</button>
+                    <button>Le moins cher</button>
+                    <button>Les plus étoilés</button>
+                    <button>Du plus proche au plus éloigné <i class="fas fa-caret-down dropdown-arrow"></i></button>
+                </div>
+                <div class="hotel-partnership-info">
+                    Nous travaillons en partenariat avec différents prestataires pour proposer un large éventail
+                    d'hébergements... <a href="#">Découvrir le fonctionnement de Skyscanner</a>
+                </div>
+                <div id="hotel-cards-container">
+                    <article class="hotel-card">
+                        <div class="hotel-card-image"> <img
+                                src="https://placehold.co/250x250/EBF4FF/769FCD?text=Hôtel+Lac+Leman"
+                                alt="Hotel Lac Leman"> </div>
+                        <div class="hotel-card-details">
+                            <h3 class="hotel-card-name">Hotel Lac Leman, les Berges du Lac</h3>
+                            <div class="hotel-card-stars"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                    class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                    class="fas fa-star-half-alt"></i> </div>
+                            <p class="hotel-card-location">À 1.95 km de Tunis Carthage</p>
+                            <div class="hotel-card-reviews"> <span class="score">4,5/5 Excellent</span> <span>10
+                                    commentaires</span> </div>
+                            <p class="hotel-card-features">Petit déjeuner inclus</p>
+                        </div>
+                        <div class="hotel-card-action">
+                            <span class="hotel-card-favorite" role="button">♡</span>
+                            <div class="hotel-card-price">117 € <span class="per-night">par nuit</span></div>
+                            <p class="hotel-card-provider">Trip.com</p>
+                            <a href="#" class="hotel-card-cta">Aller sur le site</a>
+                            <a href="#" class="hotel-card-other-offers">8 autres offres à partir de 106 €</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <div id="cars-results-content" class="search-results-specific-content d-none">
+                <div id="car-cards-container">
+                    <article class="car-card">
+                        <div class="car-card-main-info">
+                            <div class="car-card-header">
+                                <div>
+                                    <h3 class="car-name">Hyundai i10</h3>
+                                    <p class="car-name-similar">ou autre mini véhicule similaire</p>
+                                </div>
+                                <span class="car-rental-logo"><img src="https://logo.clearbit.com/budget.com"
+                                        alt="Budget"
+                                        onerror="this.style.display='none'; this.parentElement.innerHTML='Budget';"></span>
+                            </div>
+                            <div class="car-card-body">
+                                <div class="car-features">
+                                    <span><i class="fas fa-users icon"></i> 5</span>
+                                    <span><i class="fas fa-suitcase icon"></i> 1</span>
+                                    <span><i class="fas fa-snowflake icon"></i> Clim</span>
+                                    <span><i class="fas fa-cogs icon"></i> Manuelle</span>
+                                </div>
+                                <div class="car-image-container">
+                                    <img src="https://placehold.co/200x120/EBF4FF/769FCD?text=Hyundai+i10"
+                                        alt="Hyundai i10">
+                                </div>
+                            </div>
+                            <p class="car-pickup-info"><i class="fas fa-map-marker-alt icon"></i> Prise en charge :
+                                Terminal (TUN)</p>
+                        </div>
+                        <div class="car-card-action">
+                            <span class="car-card-favorite" role="button">♡</span>
+                            <div class="car-offers-price">
+                                <span class="offers-count">2 offres à partir de</span>
+                                <div class="car-total-price"><span class="price-label">Prix total :</span> 61 €</div>
+                            </div>
+                            <p class="car-cancellation"><i class="fas fa-check-circle icon"></i> Annulation gratuite</p>
+                            <a href="#" class="car-view-btn">Voir <i class="fas fa-chevron-down icon"></i></a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </main>
+    </div>
+{# --- START: ADD MIRABOT BUTTON HTML HERE --- #}
+    <button id="ask-mirabot-btn" class="ask-mirabot-button">
+        <span class="mirabot-icon">
+            {# IMPORTANT: This is a placeholder icon. 
+                Replace with your actual SVG or image logo for "MiraBot". 
+                For example, if you have an SVG:
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="your-logo-path-here"/>
+                </svg>
+                Or an image:
+                <img src="{{ asset('path/to/your/mirabot-logo.svg') }}" alt="MiraBot Logo">
+            #}
+            <i class="fa-solid fa-fan"></i> {# Placeholder icon, resembles the structure slightly #}
+        </span>
+        Demander à MiraBot
+    </button>
+    {# --- END: ADD MIRABOT BUTTON HTML HERE --- #}
+
+    {# --- START: MIRABOT CHAT WIDGET HTML --- #}
+<div id="mirabot-chat-widget" class="mirabot-chat-widget-container">
+    <div class="mirabot-chat-header">
+        <div class="mirabot-chat-header-left">
+            <button class="mirabot-chat-icon-btn" aria-label="History">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+            </button>
+            <span class="mirabot-chat-title">MiraBot</span>
+        </div>
+        <div class="mirabot-chat-header-right">
+            <button class="mirabot-chat-icon-btn" aria-label="New Chat">
+                {# Using two icons to create the "plus in speech bubble" effect more easily #}
+                {# Or find a single Font Awesome icon that matches better if available e.g., fa-solid fa-comment-medical #}
+                <i class="fa-solid fa-square-plus"></i>
+            </button>
+            <button id="mirabot-chat-close-btn" class="mirabot-chat-icon-btn" aria-label="Close Chat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="mirabot-chat-body">
+        <div class="mirabot-chat-message mirabot-chat-message-assistant">
+            <span class="mirabot-message-avatar">
+                {# Replace with your actual logo SVG/img if different from the button #}
+                <i class="fa-solid fa-fan"></i>
+            </span>
+            <div class="mirabot-message-content">
+                <p>Bonjour 👋 Veuillez décrire brièvement votre problème afin que nous puissions mieux vous aider.</p>
+            </div>
+        </div>
+        {# Future messages will be appended here #}
+    </div>
+
+    <div class="mirabot-chat-input-area">
+        <textarea id="mirabot-chat-input" class="mirabot-chat-input" placeholder="Écrivez votre question" rows="1"></textarea>
+        <button id="mirabot-chat-send-btn" class="mirabot-chat-send-btn" aria-label="Send message">
+            <i class="fa-solid fa-paper-plane"></i> {# Send icon, changed from mic for clarity, can be mic too #}
+        </button>
+        <button id="mirabot-chat-mic-btn" class="mirabot-chat-mic-btn" aria-label="Voice input">
+            <i class="fa-solid fa-microphone"></i>
+        </button>
+    </div>
+
+    <div class="mirabot-chat-disclaimer">
+        <p>MiraBot peut produire des informations inexactes.</p>
+    </div>
+</div>
+{# --- END: MIRABOT CHAT WIDGET HTML --- #}
+   
+{% endblock %}
+{% block javascripts %}
+ {# Link to your JS file in the public directory, deferred for better performance #}
+    <script src="{{ asset('javascript/vol.js') }}" defer></script>
+{% endblock %}
