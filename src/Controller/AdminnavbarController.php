@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -60,6 +61,7 @@ class AdminnavbarController extends AbstractController
 
             $formattedNotifications = array_map(function ($notification) {
                 return [
+                    'idNotification' => $notification->getIdNotification(),
                     'type' => $notification->getTypeNotification(),
                     'message' => $notification->getMessage(),
                     'sender' => 'System',
@@ -112,12 +114,12 @@ class AdminnavbarController extends AbstractController
 
             // Query to count unread notifications for the admin
             $count = $this->entityManager->createQueryBuilder()
-                ->select('COUNT(n.id)')
+                ->select('COUNT(n.idNotification)')
                 ->from(Notifications::class, 'n')
                 ->where('n.idUtilisateur = :adminId')
-                ->andWhere('n.is_read = :isRead')
+                ->andWhere('n.isRead = :isRead')
                 ->setParameter('adminId', $adminId)
-                ->setParameter('isRead', 0)
+                ->setParameter('isRead', false)
                 ->getQuery()
                 ->getSingleScalarResult();
 
@@ -155,12 +157,12 @@ class AdminnavbarController extends AbstractController
                 return new JsonResponse(['success' => false, 'message' => 'User not found'], 404);
             }
 
-            // Update all notifications for the user to is_read = 1
+            // Update all notifications for the user to isRead = true
             $this->entityManager->createQueryBuilder()
                 ->update(Notifications::class, 'n')
-                ->set('n.is_read', ':isRead')
+                ->set('n.isRead', ':isRead')
                 ->where('n.idUtilisateur = :adminId')
-                ->setParameter('isRead', 1)
+                ->setParameter('isRead', true)
                 ->setParameter('adminId', $adminId)
                 ->getQuery()
                 ->execute();
@@ -174,7 +176,7 @@ class AdminnavbarController extends AbstractController
                 'adminId' => $adminId ?? 'none',
                 'trace' => $e->getTraceAsString(),
             ]);
-            return new JsonResponse(['success' => false, 'message' => 'Unable to mark notifications as read'], 200);
+            return new JsonResponse(['success' => false, 'message' => 'Unable to mark notifications as read'], 500);
         }
     }
 
@@ -215,7 +217,75 @@ class AdminnavbarController extends AbstractController
                 'adminId' => $adminId ?? 'none',
                 'trace' => $e->getTraceAsString(),
             ]);
-            return new JsonResponse(['nom' => '', 'prenom' => '', 'error' => 'Unable to fetch user data'], 200);
+            return new JsonResponse(['nom' => '', 'prenom' => '', 'error' => 'Unable to fetch user data'], 500);
+        }
+    }
+
+    #[Route('/_fragment/delete-notification', name: 'admin_delete_notification', methods: ['POST'])]
+    public function deleteNotification(Request $request, SessionInterface $session): JsonResponse
+    {
+        try {
+            // Get the admin ID from the session
+            $admin = $session->get('admin');
+            $adminId = $admin['id'] ?? null;
+            $this->logger->info('Delete notification: Fetching admin ID from session', ['adminId' => $adminId]);
+
+            if (!$adminId || !is_int($adminId)) {
+                $this->logger->warning('Delete notification: No valid admin ID in session', ['admin' => $admin]);
+                return new JsonResponse(['success' => false, 'message' => 'No valid session'], 401);
+            }
+
+            // Verify user exists
+            $user = $this->entityManager->find(Utilisateurs::class, $adminId);
+            if (!$user) {
+                $this->logger->error('Delete notification: User not found for admin ID', ['adminId' => $adminId]);
+                return new JsonResponse(['success' => false, 'message' => 'User not found'], 404);
+            }
+
+            // Decode the request body
+            $data = json_decode($request->getContent(), true);
+            if (!isset($data['id'])) {
+                $this->logger->warning('Delete notification: Missing notification ID', ['adminId' => $adminId]);
+                return new JsonResponse(['success' => false, 'message' => 'ID de notification manquant'], 400);
+            }
+
+            // Find the notification
+            $notification = $this->entityManager->getRepository(Notifications::class)->find($data['id']);
+            if (!$notification) {
+                $this->logger->warning('Delete notification: Notification not found', [
+                    'notificationId' => $data['id'],
+                    'adminId' => $adminId
+                ]);
+                return new JsonResponse(['success' => false, 'message' => 'Notification introuvable'], 404);
+            }
+
+            // Verify the notification belongs to the user
+            if ($notification->getIdUtilisateur() !== $adminId) {
+                $this->logger->warning('Delete notification: Unauthorized attempt to delete notification', [
+                    'notificationId' => $data['id'],
+                    'adminId' => $adminId
+                ]);
+                return new JsonResponse(['success' => false, 'message' => 'Non autorisé à supprimer cette notification'], 403);
+            }
+
+            // Delete the notification
+            $this->entityManager->remove($notification);
+            $this->entityManager->flush();
+
+            $this->logger->info('Delete notification: Notification deleted successfully', [
+                'notificationId' => $data['id'],
+                'adminId' => $adminId
+            ]);
+
+            return new JsonResponse(['success' => true, 'message' => 'Notification supprimée avec succès'], 200);
+        } catch (\Exception $e) {
+            $this->logger->error('Delete notification: Error deleting notification', [
+                'error' => $e->getMessage(),
+                'adminId' => $adminId ?? 'none',
+                'notificationId' => $data['id'] ?? 'none',
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return new JsonResponse(['success' => false, 'message' => 'Erreur lors de la suppression de la notification'], 500);
         }
     }
 }

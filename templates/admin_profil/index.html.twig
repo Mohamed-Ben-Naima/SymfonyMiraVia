@@ -62,12 +62,13 @@
     }
 
     .edit-icon {
+        position: absolute;
         bottom: 0;
         right: 0;
         transform: translate(50%, 50%);
         color: #0c2f5a;
-        width: 15px;
-        height: 15px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         display: flex;
         justify-content: center;
@@ -216,7 +217,16 @@
     }
 
     #upload-input {
-        display: none;
+        /* Removed display: none to make input visible */
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+    }
+
+    body.dark-mode #upload-input {
+        background-color: #4a5568;
+        border-color: #718096;
     }
 
     .toggle-dark-mode {
@@ -249,12 +259,13 @@
 <div class="main-content">
     <div class="main-wrapper">
         <div class="profile-header">
-            <img id="profile-image" alt="Photo de profil" class="profile-image"
-                 src="{{ userData.avatar ?: asset('images/user.JPG') }}" />
-            <div class="edit-icon" onclick="document.getElementById('upload-input').click();">
-                <i class="fas fa-edit"></i>
+            <div style="position: relative;">
+                <img id="profile-image" alt="Photo de profil" class="profile-image"
+                     src="{{ asset('uploads/avatars/' ~ userData.avatar) ?: asset('images/user.JPG') }}" />
+                <div class="edit-icon" onclick="document.getElementById('upload-input').click();">
+                    <i class="fas fa-edit"></i>
+                </div>
             </div>
-            <input type="file" id="upload-input" accept="image/*" onchange="updateProfileImage(event)" />
             <h3>{{ userData.prenom }} {{ userData.nom }}</h3>
             <div class="info">
                 <div>
@@ -268,12 +279,20 @@
             </div>
         </div>
 
-        <form class="form-container" action="{{ path('app_admin_profil_update') }}" method="post">
+        <form class="form-container" action="{{ path('app_admin_profil_update') }}" method="post" enctype="multipart/form-data">
             <h4>Informations Personnelles</h4>
             <input type="hidden" name="idUtilisateur" value="{{ userData.idUtilisateur }}">
             <div>
+                <label for="upload-input">Photo de profil :</label>
+                <input type="file" id="upload-input" name="avatar" accept="image/*" onchange="updateProfileImage(event)" />
+            </div>
+            <div>
                 <label for="nom">Nom :</label>
                 <input id="nom" name="nom" type="text" value="{{ userData.nom }}" />
+            </div>
+            <div>
+                <label for="prenom">Prénom :</label>
+                <input id="prenom" name="prenom" type="text" value="{{ userData.prenom }}" />
             </div>
             <div>
                 <label for="dateNaissance">Date de Naissance :</label>
@@ -287,7 +306,6 @@
                 <label for="emplacement">Emplacement :</label>
                 <input id="emplacement" name="adresseUtilisateur" type="text" value="{{ userData.adresseUtilisateur }}" />
             </div>
-            <button type="submit">Enregistrer</button>
 
             <h4>Sécurité</h4>
             <div>
@@ -296,11 +314,11 @@
             </div>
             <div>
                 <label for="password">Mot de Passe :</label>
-                <input id="password" name="password" type="password" value="********" />
+                <input id="password" name="password" type="password" placeholder="Laissez vide pour ne pas modifier" />
             </div>
             <div>
                 <label for="confirmPassword">Confirmez le Mot de Passe :</label>
-                <input id="confirmPassword" name="confirmPassword" type="password" value="********" />
+                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Laissez vide pour ne pas modifier" />
             </div>
             <button type="submit">Enregistrer</button>
         </form>

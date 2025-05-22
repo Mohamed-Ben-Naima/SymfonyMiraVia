@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="{{ asset('styles/partials/navbar.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
 <style>
 .navbar {
     background-color: #ffffff;
@@ -175,6 +175,8 @@ body.dark-mode .notification-list::-webkit-scrollbar-thumb {
     margin-bottom: 8px;
     background: rgba(245, 245, 245, 0.5);
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    padding-right: 40px;
 }
 
 body.dark-mode .notification-box .notification-item {
@@ -243,6 +245,33 @@ body.dark-mode .notification-details strong {
 
 body.dark-mode .notification-time {
     color: #68d391;
+}
+
+.delete-notification-btn {
+    background: none;
+    border: none;
+    color: #e53e3e;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+    margin-left: auto;
+}
+
+body.dark-mode .delete-notification-btn {
+    color: #f56565;
+}
+
+.delete-notification-btn:hover {
+    color: #c53030;
+    background-color: rgba(200, 200, 200, 0.2);
+    transform: scale(1.1);
+}
+
+body.dark-mode .delete-notification-btn:hover {
+    color: #e53e3e;
+    background-color: rgba(100, 116, 139, 0.3);
 }
 
 .profile-container {
@@ -318,6 +347,67 @@ body.dark-mode .toggle-dark-mode:hover {
     }
 }
 
+/* Styles pour le toast */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 250px;
+    max-width: 350px;
+    background: #28a745;
+    color: #ffffff;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+body.dark-mode .toast {
+    background: #38b260;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.toast.error {
+    background: #dc3545;
+}
+
+body.dark-mode .toast.error {
+    background: #e4606d;
+}
+
+.toast .toast-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.toast .toast-message {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
 @media (max-width: 992px) {
     .navbar-text h4 {
         margin-left: 0;
@@ -328,6 +418,11 @@ body.dark-mode .toggle-dark-mode:hover {
     .profile-container,
     .toggle-dark-mode {
         margin-left: 10px;
+    }
+
+    .toast {
+        right: 10px;
+        min-width: 200px;
     }
 }
 </style>
@@ -368,7 +463,7 @@ body.dark-mode .toggle-dark-mode:hover {
                     </div>
                     <div class="notification-list">
                         {% for notif in notifications %}
-                            <div class="notification-item">
+                            <div class="notification-item" data-notification-id="{{ notif.idNotification }}">
                                 <div>
                                     <i class="bi {{ notif.icon }}"></i>
                                     {{ notif.message }}
@@ -376,6 +471,9 @@ body.dark-mode .toggle-dark-mode:hover {
                                 <div class="notification-details">
                                 </div>
                                 <div class="notification-time">{{ notif.time }}</div>
+                                <button class="delete-notification-btn" onclick="deleteNotification({{ notif.idNotification }})" title="Supprimer la notification">
+                                    <i class="bi bi-trash"></i>
+                                </button>
                             </div>
                         {% else %}
                             <div class="notification-item text-muted">Aucune notification</div>
@@ -386,10 +484,12 @@ body.dark-mode .toggle-dark-mode:hover {
                 <!-- Profile Section -->
                 <div class="profile-container">
                     <a href="{{ path('app_admin_profil') }}" class="profile-sphere">
-                        <img src="{{ asset('images/user.JPG') }}" alt="Default Profile">
+                        <img src="{{ user.avatar ? asset('Uploads/avatars/' ~ user.avatar) : asset('images/user.JPG') }}" alt="Profile Picture">
                     </a>
                     <a href="{{ path('app_admin_profil') }}" class="user-name">{{ user.nom }} {{ user.prenom }}</a>
                 </div>
+
+                <!-- Dark Mode Toggle -->
             </div>
         </div>
     </div>
@@ -397,6 +497,9 @@ body.dark-mode .toggle-dark-mode:hover {
 
 <!-- Audio for Notifications -->
 <audio id="notificationSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
+
+<!-- Conteneur pour les toasts -->
+<div id="toastContainer"></div>
 
 <script>
 let lastNotificationCount = {{ notifications|length }};
@@ -433,7 +536,6 @@ function toggleNotificationBox() {
         .then(data => {
             console.log('Mark notifications read:', data);
             if (data.success) {
-                // Update badge to reflect 0 unread notifications
                 const badge = document.querySelector('.notification-icon .badge');
                 if (badge) {
                     badge.remove();
@@ -477,20 +579,96 @@ function playNotificationSound() {
     }
 }
 
+function showToast(message, isError = false) {
+    const toastContainer = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${isError ? 'error' : ''}`;
+    toast.innerHTML = `
+        <i class="bi ${isError ? 'bi-x-circle' : 'bi-check-circle'} toast-icon"></i>
+        <span class="toast-message">${message}</span>
+    `;
+    toastContainer.appendChild(toast);
+
+    // Afficher le toast
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+
+    // Cacher le toast après 3 secondes
+    setTimeout(() => {
+        toast.style.animation = 'fade-out 0.3s ease forwards';
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
+}
+
+function deleteNotification(notificationId) {
+    console.log('Attempting to delete notification with ID:', notificationId);
+
+    fetch('{{ path('admin_delete_notification') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ id: notificationId })
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.error('Delete notification: Error, status:', response.status);
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Delete notification response:', data);
+        if (data.success) {
+            const notificationItem = document.querySelector(`.notification-item[data-notification-id="${notificationId}"]`);
+            if (notificationItem) {
+                notificationItem.remove();
+                console.log('Notification removed from UI');
+            }
+            lastNotificationCount--;
+            const badge = document.querySelector('.notification-icon .badge');
+            if (lastNotificationCount > 0) {
+                if (badge) {
+                    badge.textContent = lastNotificationCount;
+                }
+            } else {
+                if (badge) {
+                    badge.remove();
+                }
+                const notificationList = document.querySelector('.notification-list');
+                if (!notificationList.querySelector('.notification-item')) {
+                    notificationList.innerHTML = '<div class="notification-item text-muted">Aucune notification</div>';
+                }
+            }
+            // Afficher le toast de succès
+            showToast(data.message);
+        } else {
+            console.error('Failed to delete notification:', data.message);
+            showToast('Erreur : ' + data.message, true);
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting notification:', error);
+        showToast('Une erreur est survenue lors de la suppression.', true);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Apply dark mode if previously selected
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
         console.log('Dark mode applied from localStorage');
     }
 
-    // Expose functions globally
     window.toggleNotificationBox = toggleNotificationBox;
     window.closeNotificationBox = closeNotificationBox;
     window.toggleDarkMode = toggleDarkMode;
     window.toggleSidebar = toggleSidebar;
+    window.deleteNotification = deleteNotification;
 
-    // Hide notification box when clicking outside
     document.addEventListener('click', function(event) {
         const notificationBox = document.getElementById('notificationBox');
         const notificationIcon = document.querySelector('.notification-icon');
@@ -501,7 +679,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Check for new notifications periodically
     function checkNotifications() {
         fetch('{{ path('admin_notification_count') }}')
             .then(response => {
@@ -517,7 +694,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (newNotificationCount > lastNotificationCount) {
                     playNotificationSound();
                     lastNotificationCount = newNotificationCount;
-                    // Update badge count
                     const badge = document.querySelector('.notification-icon .badge');
                     if (badge) {
                         badge.textContent = newNotificationCount;
@@ -533,22 +709,20 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Error fetching notification count:', error);
-                let retryDelay = 10000; // Default retry delay (10 seconds)
+                let retryDelay = 10000;
                 if (error.message.includes('Network response was not ok')) {
-                    console.warn('Server error (e.g., 500). Check server logs for issues with /_fragment/notification-count endpoint. Retrying in 30 seconds...');
-                    retryDelay = 30000; // Longer delay for server errors
+                    console.warn('Server error. Retrying in 30 seconds...');
+                    retryDelay = 30000;
                 } else if (error.message.includes('Failed to fetch')) {
-                    console.warn('Network error or server unreachable. Ensure http://127.0.0.1:8000 is running. Retrying in 30 seconds...');
-                    retryDelay = 30000; // Longer delay for network errors
+                    console.warn('Network error. Retrying in 30 seconds...');
+                    retryDelay = 30000;
                 }
                 setTimeout(checkNotifications, retryDelay);
             });
     }
 
-    // Initial check and set interval
     checkNotifications();
-    setInterval(checkNotifications, 10000); // Check every 10 seconds
-
+    setInterval(checkNotifications, 10000);
     console.log('Navbar script loaded');
 });
 </script>
